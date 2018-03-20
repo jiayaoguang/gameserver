@@ -9,13 +9,13 @@ import io.netty.channel.Channel;
  * created by jiayaoguang at 2017年12月6日
  * @param <T>
  */
-public class LogicEvent{
+public class LogicEvent<T>{
 
 	private Channel channel;
 	
 	private EventType channelEventType;
 
-	private Object data;
+	private T data;
 	
 	public Channel getChannel() {
 		return channel;
@@ -36,13 +36,13 @@ public class LogicEvent{
 	}
 
 	
-	public Object getData() {
+	public T getData() {
 		// TODO Auto-generated method stub
 		return data;
 	}
 
 	
-	public void setData(Object data) {
+	public void setData(T data) {
 		this.data = data;
 		
 	}

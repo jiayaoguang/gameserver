@@ -9,6 +9,7 @@ import com.jyg.session.Session;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
+import io.netty.handler.codec.http.HttpRequest;
 
 /**
  * created by jiayaoguang at 2017年12月17日
@@ -26,21 +27,31 @@ public class EventDispatcher{
 		return dispatcher;
 	}
 
-	private  final Map<Integer, Processor> logicEventMap = new HashMap<>();
+	private  final Map<Integer, ProtoProcessor> logicEventMap = new HashMap<>();
 	private  final Map<String, Processor> httpPathMap = new HashMap<>();
 	private  final Map<Integer, ProtoProcessor> rpcEventMap = new HashMap<>();
 	
 	private final Map<Channel,Session> channelMap = new HashMap<>();
 	
-	//注册rpc事件
-	public void registerLogicEvent(int eventid, Processor processor) throws Exception {
+	/**
+	 * 注册游戏逻辑事件
+	 * @param eventid
+	 * @param processor
+	 * @throws Exception
+	 */
+	public void registerLogicEvent(int eventid, ProtoProcessor processor) throws Exception {
 		if(logicEventMap.containsKey(eventid)) {
 			throw new Exception("dupilcated eventid");
 		}
 		logicEventMap.put(eventid, processor);
 	}
 	
-	
+	/**
+	 * 注册rpc事件
+	 * @param eventid
+	 * @param processor
+	 * @throws Exception
+	 */
 	public void registerRpcEvent(int eventid, ProtoProcessor processor) throws Exception {
 		if(rpcEventMap.containsKey(eventid)) {
 			throw new Exception("dupilcated eventid");
@@ -48,41 +59,65 @@ public class EventDispatcher{
 		rpcEventMap.put(eventid, processor);
 	}
 	
-	public ProtoProcessor getRpcProcessor(int i) {
-		return rpcEventMap.get(i);
+	public ProtoProcessor getRpcProcessor(int id) {
+		return rpcEventMap.get(id);
+	}
+	
+	/**
+	 * 注册http事件
+	 * @param id
+	 * @return
+	 */
+	public void registerHttpEvent(String path, HttpProcessor processor) throws Exception {
+		if(httpPathMap.containsKey(path)) {
+			throw new Exception("dupilcated path");
+		}
+		httpPathMap.put(path, processor);
 	}
 	
 	private long uid = 1L;
 
-	public void as_on_game_client_come(LogicEvent event) {
+	public void as_on_game_client_come(LogicEvent<Object> event) {
 		channelMap.put(event.getChannel(),new Session(event.getChannel(), uid++ ));
 		// event.getChannel().writeAndFlush(new TextWebSocketFrame(""));
 	}
 
-	public void as_on_game_client_leave(LogicEvent event) {
+	public void as_on_game_client_leave(LogicEvent<Object> event) {
 		channelMap.remove(event.getChannel());
 	}
 
-	public ByteBuf webSocketProcess(LogicEvent event) throws Exception {
-		ByteBuf buf = (ByteBuf) event.getData();
+	public void webSocketProcess(LogicEvent<ByteBuf> event) throws Exception {
+		ByteBuf buf = event.getData();
 		int eventid = buf.readInt();
 		Processor processor = logicEventMap.get(eventid);
-		processor.process(event);
-		eventTimes++;
-		if(eventTimes == 1000) {
-			eventTimes = 0;
-			dispatcher.loop();
+		if(processor==null) {
+			System.out.println("unknown logic eventid");
+			return;
 		}
-		return buf;
+		processor.process(event);
+			eventTimes++;
+			if(eventTimes == 1000) {
+				eventTimes = 0;
+				dispatcher.loop();
+			}
 	}
 
-	int eventTimes = 0;
+	private int eventTimes = 0;
+	
 	public void loop() {
 		
 		
 	}
 	
-	public void httpProcess(LogicEvent event) {
+	public void httpProcess(LogicEvent<HttpRequest> event) throws Exception {
+		HttpRequest httpRequest = event.getData();
+		
+		Processor processor = httpPathMap.get(httpRequest.uri());
+		if(processor!=null) {
+			processor.process(event);
+		}
+		event.getChannel().flush();
+		event.getChannel().close();
 		
 	}
 

@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 /**
  * created by jiayaoguang at 2017年12月16日
  */
-public interface ProtoProcessor extends Processor {
+public interface ProtoProcessor<T> extends Processor<T> {
 	
 	Parser<MessageLite> getProtoParser();
 	

@@ -8,9 +8,9 @@ import io.netty.buffer.ByteBuf;
 /**
  * created by jiayaoguang at 2017年12月16日
  */
-public interface Processor {
+public interface Processor<T> {
 	
-	ByteBuf process(LogicEvent event)throws Exception;
+	void process(LogicEvent<T> event)throws Exception;
 	
 }
 

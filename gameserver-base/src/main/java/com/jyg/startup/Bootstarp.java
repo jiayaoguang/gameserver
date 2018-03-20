@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.jyg.net.EventDispatcher;
-import com.jyg.net.Processor;
+import com.jyg.net.HttpProcessor;
+import com.jyg.net.ProtoProcessor;
 import com.jyg.net.Service;
-import com.jyg.net.WebSocketService;
 import com.jyg.util.GlobalQueue;
 
 /**
@@ -20,8 +20,16 @@ public class Bootstarp {
 		services.add(service); 
 	}
 	
-	public void register(short eventid, Processor processor) throws Exception {
+	public void registerLogicEvent(short eventid, ProtoProcessor processor) throws Exception {
 		EventDispatcher.getInstance().registerLogicEvent(eventid, processor);
+	}
+	
+	public void registerRpcEvent(short eventid, ProtoProcessor protoprocessor) throws Exception {
+		EventDispatcher.getInstance().registerRpcEvent(eventid, protoprocessor);
+	}
+	
+	public void registerHttpEvent(String path, HttpProcessor processor) throws Exception {
+		EventDispatcher.getInstance().registerHttpEvent(path, processor);
 	}
 
     public void start() throws Exception {
