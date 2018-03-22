@@ -22,7 +22,7 @@ import io.netty.handler.logging.LoggingHandler;
 
 public class WebSocketService extends Service {
 
-	public WebSocketService(int port) {
+	public WebSocketService(int port) throws Exception {
 		super(port , new WebSocketServerInitializer());
 	}
 }

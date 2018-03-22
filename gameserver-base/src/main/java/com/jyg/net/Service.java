@@ -25,13 +25,14 @@ public abstract class Service {
 
 	protected static final EventLoopGroup workGroup = new NioEventLoopGroup(8, new ThreadFactory() {
 
-		int threadIndex = 1;
+		private int threadIndex = 1;
 
 		@Override
 		public Thread newThread(Runnable r) {
 
 			return new Thread(r, "IO_THREAD_" + threadIndex++);
 		}
+		
 	});
 
 	
@@ -40,9 +41,9 @@ public abstract class Service {
 	private final int port;
 
 
-	public Service(int port, ChannelInitializer<SocketChannel> initializer) {
+	public Service(int port, ChannelInitializer<SocketChannel> initializer) throws Exception {
 		if (port < 0) {
-			port = 10086;
+			throw new Exception("port number cannot be negative ");
 		}
 		this.port = port;
 		this.initializer = initializer;
@@ -90,7 +91,7 @@ public abstract class Service {
 
 		b.option(ChannelOption.SO_SNDBUF, 64 * 1024);
 
-		b.childOption(ChannelOption.SO_LINGER, 0);
+		b.childOption(ChannelOption.SO_LINGER, 1000);
 
 		b.childOption(ChannelOption.SO_KEEPALIVE, false);
 

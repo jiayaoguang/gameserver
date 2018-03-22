@@ -9,6 +9,7 @@ import com.jyg.session.Session;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
+import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpRequest;
 
 /**
@@ -18,7 +19,9 @@ import io.netty.handler.codec.http.HttpRequest;
 public class EventDispatcher{
 
 	private static final EventDispatcher dispatcher = new EventDispatcher();
-
+	
+	private final HttpProcessor notFOundProcessor = new NotFoundHttpProcessor();
+	
 	private EventDispatcher() {
 
 	}
@@ -28,7 +31,7 @@ public class EventDispatcher{
 	}
 
 	private  final Map<Integer, ProtoProcessor> logicEventMap = new HashMap<>();
-	private  final Map<String, Processor> httpPathMap = new HashMap<>();
+	private  final Map<String, HttpProcessor> httpPathMap = new HashMap<>();
 	private  final Map<Integer, ProtoProcessor> rpcEventMap = new HashMap<>();
 	
 	private final Map<Channel,Session> channelMap = new HashMap<>();
@@ -69,6 +72,7 @@ public class EventDispatcher{
 	 * @return
 	 */
 	public void registerHttpEvent(String path, HttpProcessor processor) throws Exception {
+		path = "/" + path;
 		if(httpPathMap.containsKey(path)) {
 			throw new Exception("dupilcated path");
 		}
@@ -89,7 +93,7 @@ public class EventDispatcher{
 	public void webSocketProcess(LogicEvent<ByteBuf> event) throws Exception {
 		ByteBuf buf = event.getData();
 		int eventid = buf.readInt();
-		Processor processor = logicEventMap.get(eventid);
+		Processor<ByteBuf> processor = logicEventMap.get(eventid);
 		if(processor==null) {
 			System.out.println("unknown logic eventid");
 			return;
@@ -109,16 +113,26 @@ public class EventDispatcher{
 		
 	}
 	
-	public void httpProcess(LogicEvent<HttpRequest> event) throws Exception {
-		HttpRequest httpRequest = event.getData();
-		
-		Processor processor = httpPathMap.get(httpRequest.uri());
-		if(processor!=null) {
-			processor.process(event);
+	public void httpProcess(LogicEvent<Request> event) throws Exception {
+		Request request = event.getData();
+		String realPath = this.getNoParamPath( request.uri() );
+		System.out.println(realPath);
+		HttpProcessor processor = httpPathMap.get(realPath );
+		if(processor==null) {
+			processor = notFOundProcessor;
 		}
-		event.getChannel().flush();
-		event.getChannel().close();
-		
+		processor.process(event);
 	}
+	
+	
+	public String getNoParamPath(String uri) {
+		int endIndex = uri.indexOf('?');
+		if(endIndex==-1) {
+			return uri;
+		}
+		
+		return uri.substring(0, endIndex);
+	}
+	
 
 }

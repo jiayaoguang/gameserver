@@ -14,7 +14,7 @@ import io.netty.channel.socket.SocketChannel;
 public class RpcService extends Service {
 
 	
-	public RpcService(int port) {
+	public RpcService(int port) throws Exception {
 		super(port , new ChannelInitializer<SocketChannel>() {
 
 			@Override

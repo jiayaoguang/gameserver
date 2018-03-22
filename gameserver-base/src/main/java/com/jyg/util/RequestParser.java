@@ -6,13 +6,16 @@ package com.jyg.util;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
+import io.netty.handler.codec.http.multipart.Attribute;
 import io.netty.handler.codec.http.multipart.DefaultHttpDataFactory;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
@@ -20,10 +23,8 @@ import io.netty.handler.codec.http.multipart.InterfaceHttpData.HttpDataType;
 import io.netty.handler.codec.http.multipart.MemoryAttribute;
 
 
-
 /**
  * HTTP请求参数解析器, 支持GET, POST
- * Created by whf on 12/23/15.
  */
 public class RequestParser {
 
@@ -39,8 +40,8 @@ public class RequestParser {
         // 处理get请求  
         if (req.method() == HttpMethod.GET) {
             QueryStringDecoder decoder = new QueryStringDecoder(req.uri());  
-            Map<String, List<String>> parame = decoder.parameters();  
-            Iterator<Entry<String, List<String>>> iterator = parame.entrySet().iterator();
+            Map<String, List<String>> param = decoder.parameters();  
+            Iterator<Entry<String, List<String>>> iterator = param.entrySet().iterator();
             while(iterator.hasNext()){
                 Entry<String, List<String>> next = iterator.next();
                 requestParams.put(next.getKey(), next.getValue().get(0));
@@ -49,14 +50,23 @@ public class RequestParser {
          // 处理POST请求  
         else if (req.method() == HttpMethod.POST) {
             HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(  
-                    new DefaultHttpDataFactory(false), req);  
-            List<InterfaceHttpData> postData = decoder.getBodyHttpDatas(); //
-            for(InterfaceHttpData data:postData){
-                if (data.getHttpDataType() == HttpDataType.Attribute) {  
-                    MemoryAttribute attribute = (MemoryAttribute) data;  
-                    requestParams.put(attribute.getName(), attribute.getValue());
-                }
-            }
+                    new DefaultHttpDataFactory(false), req);
+        	try{
+				while (decoder.hasNext()) {
+					InterfaceHttpData httpData = decoder.next();
+					if (httpData.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute) {
+						Attribute attribute = (Attribute) httpData;
+						if (!requestParams.containsKey(attribute.getName())) {
+							requestParams.put(attribute.getName(), attribute.getValue());
+						}
+						attribute.release();
+					}
+	        	}
+        	}catch(Exception e){
+//        		e.printStackTrace();
+        	}
+        	
+        	decoder.destroy();
         }
         return requestParams;
     }

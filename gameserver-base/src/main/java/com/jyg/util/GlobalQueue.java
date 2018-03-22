@@ -19,13 +19,13 @@ import com.lmax.disruptor.dsl.ProducerType;
 public class GlobalQueue {
 
 	
-	private static  Disruptor<LogicEvent> disruptor;
+	private static  Disruptor<LogicEvent<Object>> disruptor;
 	private static  int bufferSize = 1024;
-	public static  RingBuffer<LogicEvent> ringBuffer;
+	public static  RingBuffer<LogicEvent<Object>> ringBuffer;
 	
 	static {
 
-		EventFactory<LogicEvent> eventFactory = () -> new LogicEvent() ;
+		EventFactory<LogicEvent<Object>> eventFactory = () -> new LogicEvent<Object>() ;
 		
 		
 		ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -37,7 +37,7 @@ public class GlobalQueue {
 				new BusySpinWaitStrategy());
 		
 		try {
-			EventHandlerGroup<LogicEvent> handleEventsWith = disruptor.handleEventsWith(eventConsumerFactory.newEventConsumer());
+			EventHandlerGroup<LogicEvent<Object>> handleEventsWith = disruptor.handleEventsWith(eventConsumerFactory.newEventConsumer());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

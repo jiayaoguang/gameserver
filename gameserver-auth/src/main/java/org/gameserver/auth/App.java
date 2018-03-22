@@ -1,6 +1,9 @@
 package org.gameserver.auth;
 
+import com.jyg.net.HttpProcessor;
 import com.jyg.net.HttpService;
+import com.jyg.net.Request;
+import com.jyg.net.Response;
 import com.jyg.startup.Bootstarp;
 
 /**
@@ -14,9 +17,19 @@ public class App
     	
         Bootstarp bootstarp = new Bootstarp();
         
-        bootstarp.registerHttpEvent("index", null);
+        bootstarp.registerHttpEvent("index", new HttpProcessor() {
+			
+			@Override
+			public void service(Request request, Response response) {
+				response.write("<html><head></head><body>welcome to index<body></html>");
+			}
+			
+		});
         
-        bootstarp.addService(new HttpService(8080));
+        bootstarp.registerHttpEvent("login", new LoginHttpProcessor());
+        
+        
+        bootstarp.addService(new HttpService(8080,true));
         bootstarp.start();
     }
 }
