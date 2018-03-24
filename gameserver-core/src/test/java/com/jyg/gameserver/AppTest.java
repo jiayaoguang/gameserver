@@ -1,4 +1,4 @@
-package com.jyg.websocketserver;
+package com.jyg.gameserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

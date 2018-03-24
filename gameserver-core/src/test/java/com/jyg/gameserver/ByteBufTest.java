@@ -1,4 +1,4 @@
-package com.jyg.websocketserver;
+package com.jyg.gameserver;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
