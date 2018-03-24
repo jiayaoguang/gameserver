@@ -26,4 +26,8 @@ message p_sm_scene_request_ping {
 //场景服回复sm服
 message p_scene_sm_response_pong {  
 	
-}  
+}
+//聊天信息
+message p_sm_scene_chat {  
+	string msg = 1; 
+}

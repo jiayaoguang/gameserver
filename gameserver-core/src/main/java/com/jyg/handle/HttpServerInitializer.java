@@ -1,0 +1,44 @@
+package com.jyg.handle;
+
+/**
+ * created by jiayaoguang at 2017年12月6日
+ */
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.HttpRequest;
+import io.netty.handler.codec.http.HttpRequestDecoder;
+import io.netty.handler.codec.http.HttpResponseEncoder;
+import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.util.concurrent.DefaultEventExecutorGroup;
+
+public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
+	
+	//是否是
+	private boolean isSynHttp;
+
+	public HttpServerInitializer() {
+		isSynHttp = true;
+	}
+
+	public HttpServerInitializer(boolean isSynHttp) {
+		this.isSynHttp = isSynHttp;
+	}
+
+	public boolean isSynHttp() {
+		return isSynHttp;
+	}
+	
+	@Override
+	public void initChannel(SocketChannel ch) throws Exception {
+		ChannelPipeline pipeline = ch.pipeline();
+		pipeline.addLast(new HttpServerCodec());
+		// 处理过长的请求
+		pipeline.addLast(new HttpObjectAggregator(64 * 1024));
+		// pipeline.addLast(new ChunkedWriteHandler());//主要用于处理大数据流,比如一个1G大小的文件
+		pipeline.addLast(new HttpStaticFileServerHandler());
+		pipeline.addLast(new HttpServerHandler(isSynHttp));
+
+	}
+}

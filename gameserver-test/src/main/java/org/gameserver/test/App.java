@@ -19,17 +19,17 @@ public class App
     public static void main( String[] args ) throws Exception
     {
     	Bootstarp bootstarp = new Bootstarp();
-    	bootstarp.registerRpcEvent((short)0, new ProtoProcessor<ByteBuf>() {
-
-			public void process(LogicEvent<ByteBuf> event) throws Exception {
-				
-			}
-			
-			public Parser<MessageLite> getProtoParser() {
-				return null;
-			}
-    		
-    	});
+//    	bootstarp.registerRpcEvent((short)0, new ProtoProcessor<ByteBuf>() {
+//
+//			public void process(LogicEvent<ByteBuf> event) {
+//				
+//			}
+//			
+//			public Parser<MessageLite> getProtoParser() {
+//				return null;
+//			}
+//    		
+//    	});
     	
         
         Service service = new WebSocketService(8000);

@@ -23,7 +23,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.jyg.gameserver</groupId>
-			<artifactId>gameserver-base</artifactId>
+			<artifactId>gameserver-core</artifactId>
 			<version>${gameserver.version}</version>
 		</dependency>
 		<dependency>

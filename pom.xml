@@ -17,12 +17,12 @@
 	</properties>
 
 	<modules>
-		<module>gameserver-base</module>
-		<module>gameserver-test</module>
+		<module>gameserver-core</module>
 		<module>gameserver-auth</module>
 		<module>gameserver-sm</module>
 		<module>gameserver-scene</module>
 		<module>gameserver-proto</module>
+		<module>gameserver-test</module>
 	</modules>
 
 	<dependencies>
