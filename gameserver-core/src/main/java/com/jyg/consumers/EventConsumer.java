@@ -46,7 +46,7 @@ public class EventConsumer implements EventHandler<LogicEvent>, WorkHandler<Logi
 				process.webSocketProcess(event);
 				break;
 			case RPC_MSG_COME:
-				process.rpcProcess(event);
+				process.socketProcess(event);
 				break;
 			default:
 				throw new Exception("unknown channelEventType <"+event.getChannelEventType()+">");

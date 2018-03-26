@@ -35,16 +35,12 @@ public abstract class ProtoProcessor<T extends GeneratedMessageV3> implements Pr
 	
 
 	public void process(LogicEvent<T> event) {
-		MessageLiteOrBuilder messageLiteOrBuilder = createResponseMessage(event.getData());
-		event.getChannel().writeAndFlush(messageLiteOrBuilder);
+//		System.out.println("eventid : "+event.getEventId());
+		ProtoResponse response = new ProtoResponse(event.getChannel());
+		processProtoMessage(event.getData(),response);
 	}
 	
-	public abstract MessageLiteOrBuilder createResponseMessage(T msg );
+	public abstract void processProtoMessage(T msg ,ProtoResponse response);
 	
-	public static class ProtoResponse{
-		
-		
-		
-	}
 
 }

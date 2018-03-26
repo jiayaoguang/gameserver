@@ -29,6 +29,8 @@ import java.util.regex.Pattern;
 
 import javax.activation.MimetypesFileTypeMap;
 
+import com.jyg.util.Constants;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
@@ -128,14 +130,17 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 			return;
 		}
 
-		final String uri = request.uri();
+		final String uri = Constants.HTTP_ROOT_DIR+ request.uri();
+		
 		final String path = sanitizeUri(uri);
 		if (path == null) {
 			sendError(ctx, FORBIDDEN);
 			return;
 		}
 
-		File file = new File(path);
+		System.out.println(uri);
+		
+		File file = new File( path);
 		if (file.isHidden() || !file.exists()) {
 			sendError(ctx, NOT_FOUND);
 			return;

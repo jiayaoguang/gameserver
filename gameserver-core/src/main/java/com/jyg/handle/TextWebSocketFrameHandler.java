@@ -54,17 +54,17 @@ public class TextWebSocketFrameHandler extends
 			return;
 		}
 		
-		if(frame instanceof PingWebSocketFrame) {
+//		if(frame instanceof PingWebSocketFrame) {
 //			incoming.write(new PongWebSocketFrame(frame.content().retain()));
-			return;
-		}
+//			return;
+//		}
+//		
+//		if(frame instanceof CloseWebSocketFrame) {
+//			
+//			return;
+//		}
 		
-		if(frame instanceof CloseWebSocketFrame) {
-			
-			return;
-		}
-		
-		System.out.println("other frame.........");
+		throw new Exception("other frame.........");
 		
 	}
 	//------------------------start-----------------------------

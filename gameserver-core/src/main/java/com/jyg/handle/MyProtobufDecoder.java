@@ -31,7 +31,7 @@ public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
 	public ByteBuf extractFrame(ChannelHandlerContext ctx, ByteBuf buffer, int index, int length) {
 		ByteBuf buf = buffer.slice(index, length);
 		int eventId = buf.readInt();
-		Parser<? extends MessageLite> parser = dis.getRpcProcessor(eventId).getProtoParser();
+		Parser<? extends MessageLite> parser = dis.getSocketProcessor(eventId).getProtoParser();
 		
 		try (ByteBufInputStream bis = new ByteBufInputStream(buf)) {
 			MessageLite messageLite = parser.parseFrom(bis);

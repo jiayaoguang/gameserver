@@ -1,4 +1,4 @@
-package org.gameserver.sm;
+package com.jyg.test01.chat;
 
 import com.jyg.net.ProtoProcessor;
 import com.jyg.net.ProtoResponse;
@@ -50,6 +50,7 @@ public class ServerTest01
         
         
         bootstarp.registerSocketEvent(3, chatProcessor);
+        
         bootstarp.registerSendEventIdByProto(4, p_sm_scene_chat.class);
         
         

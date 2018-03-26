@@ -7,7 +7,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 
-public class RpcServerInitializer extends
+public class SocketServerInitializer extends
 		ChannelInitializer<SocketChannel> { 
 
 	@Override

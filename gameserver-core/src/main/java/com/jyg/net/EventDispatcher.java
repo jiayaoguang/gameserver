@@ -34,7 +34,7 @@ public class EventDispatcher{
 
 	private  final Int2ObjectMap< ProtoProcessor<GeneratedMessageV3>> logicEventMap = new Int2ObjectOpenHashMap<>();
 	private  final Map<String, HttpProcessor> httpPathMap = new HashMap<>();
-	private  final Int2ObjectMap< ProtoProcessor<? extends GeneratedMessageV3>> rpcEventMap = new Int2ObjectOpenHashMap<>();
+	private  final Int2ObjectMap< ProtoProcessor<? extends GeneratedMessageV3>> socketEventMap = new Int2ObjectOpenHashMap<>();
 	
 	private final Object2IntMap<String> eventidToProtoNameMap = new Object2IntOpenHashMap<>();
 	
@@ -54,28 +54,30 @@ public class EventDispatcher{
 	}
 	//================================ rpc start =========================================
 	/**
-	 * 注册rpc事件
-	 * @param eventid
-	 * @param processor
-	 * @throws Exception
+	 * 注册普通socket事件
+	 * @param eventid 事件id
+	 * @param processor 事件处理器
 	 */
-	public void registerRpcEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> processor) throws Exception {
-		if(rpcEventMap.containsKey(eventid)) {
+	public void registerSocketEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> processor) throws Exception {
+		if(socketEventMap.containsKey(eventid)) {
 			throw new Exception("dupilcated eventid");
 		}
-		eventidToProtoNameMap.put(processor.getProtoClassName(), eventid);
-		rpcEventMap.put(eventid, processor);
+//		eventidToProtoNameMap.put(processor.getProtoClassName(), eventid);
+		socketEventMap.put(eventid, processor);
 	}
 	
-	public ProtoProcessor<? extends GeneratedMessageV3> getRpcProcessor(int id) {
-		return rpcEventMap.get(id);
+	public ProtoProcessor<? extends GeneratedMessageV3> getSocketProcessor(int id) {
+		return socketEventMap.get(id);
 	}
 	
-	public void rpcProcess(LogicEvent<? extends GeneratedMessageV3> event) throws Exception {
+	/**
+	 * 处理普通socket事件
+	 */
+	public void socketProcess(LogicEvent<? extends GeneratedMessageV3> event) throws Exception {
 //		MessageLite msg = event.getData();
-		ProtoProcessor processor = rpcEventMap.get(event.getEventId());
+		ProtoProcessor processor = socketEventMap.get(event.getEventId());
 		if(processor==null) {
-			System.out.println("unknown rpc eventid :" + event.getEventId());
+			System.out.println("unknown socket eventid :" + event.getEventId());
 			return;
 		}
 		processor.process((LogicEvent<? extends GeneratedMessageV3>) event);
@@ -85,7 +87,16 @@ public class EventDispatcher{
 	public Integer getEventIdByProtoName(String protoName) {
 		return eventidToProtoNameMap.get(protoName);
 	}
-	
+	/**
+	 * 绑定事件id到proto类，用于发送protobuf消息时，获得对应的eventId，并一起发送给对方
+	 * @throws Exception 
+	 */
+	public void registerSendEventIdByProto(int eventId,Class<? extends GeneratedMessageV3> protoClazz) throws Exception {
+		if(eventidToProtoNameMap.containsKey(protoClazz.getName())) {
+			throw new Exception("dupilcated protoClazz");
+		}
+		eventidToProtoNameMap.put(protoClazz.getName(), eventId);
+	}
 	
 	//================================ rpc end =========================================
 	
@@ -101,7 +112,7 @@ public class EventDispatcher{
 	}
 
 	public void webSocketProcess(LogicEvent<? extends GeneratedMessageV3> event) throws Exception {
-		ProtoProcessor processor = rpcEventMap.get(event.getEventId());
+		ProtoProcessor processor = socketEventMap.get(event.getEventId());
 		if(processor==null) {
 			System.out.println("unknown logic eventid");
 			return;

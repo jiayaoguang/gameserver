@@ -31,3 +31,6 @@ message p_scene_sm_response_pong {
 message p_sm_scene_chat {  
 	string msg = 1; 
 }
+message p_scene_sm_chat {  
+	string msg = 1; 
+}

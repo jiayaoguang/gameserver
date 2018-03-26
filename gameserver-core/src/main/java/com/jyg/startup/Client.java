@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.MessageLiteOrBuilder;
-import com.jyg.handle.RpcServerInitializer;
+import com.jyg.handle.SocketServerInitializer;
 import com.jyg.net.EventDispatcher;
 import com.jyg.net.ProtoProcessor;
 
@@ -33,7 +33,7 @@ public class Client {
 	private Channel channel;
 
 	public Client() {
-		this(new RpcServerInitializer());
+		this(new SocketServerInitializer());
 	}
 
 	public Client(ChannelInitializer<SocketChannel> channelInitializer) {
@@ -56,8 +56,12 @@ public class Client {
 	}
 	
 	
-	public void registerRpcEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoprocessor) throws Exception {
-		EventDispatcher.getInstance().registerRpcEvent(eventid, protoprocessor);
+	public void registerSocketEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoprocessor) throws Exception {
+		EventDispatcher.getInstance().registerSocketEvent(eventid, protoprocessor);
+	}
+	
+	public void registerSendEventIdByProto(int eventId,Class<? extends GeneratedMessageV3> protoClazz) throws Exception {
+		EventDispatcher.getInstance().registerSendEventIdByProto( eventId, protoClazz);
 	}
 
 	public void write( MessageLiteOrBuilder msg) throws IOException {

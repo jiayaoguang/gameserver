@@ -1,4 +1,4 @@
-package org.gameserver.scene;
+package com.jyg.test01.chat;
 
 import com.google.protobuf.MessageLiteOrBuilder;
 import com.jyg.net.ProtoProcessor;

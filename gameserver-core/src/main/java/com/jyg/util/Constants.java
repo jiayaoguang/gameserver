@@ -10,9 +10,11 @@ import java.util.Properties;
 public class Constants {
 
 	//websocket端口
-	public static final int SERVER_WEBSOCKET_PORT;
-	//http端口
-	public static final int SERVER_PORT;
+//	public static final int SERVER_WEBSOCKET_PORT;
+//	//http端口
+//	public static final int SERVER_PORT;
+	
+	public static final String HTTP_ROOT_DIR; 
 	
 	
 	static {
@@ -24,9 +26,14 @@ public class Constants {
 			e.printStackTrace();
 		}
 		
-		SERVER_PORT = Integer.parseInt(pro.getProperty("server.port"));
-		
-		SERVER_WEBSOCKET_PORT = Integer.parseInt(pro.getProperty("server.websocket.port"));
+//		SERVER_PORT = Integer.parseInt(pro.getProperty("server.port"));
+//		
+//		SERVER_WEBSOCKET_PORT = Integer.parseInt(pro.getProperty("server.websocket.port"));
+		String dir = pro.getProperty("http.root.dir");
+		if(!dir.startsWith("/")) {
+			dir = "/" + dir;
+		}
+		HTTP_ROOT_DIR = dir;
 	}
 	
 	

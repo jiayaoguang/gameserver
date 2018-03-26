@@ -25,18 +25,22 @@ public class Bootstarp {
 		EventDispatcher.getInstance().registerLogicEvent(eventid, processor);
 	}
 	
-	public void registerRpcEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoprocessor) throws Exception {
-		EventDispatcher.getInstance().registerRpcEvent(eventid, protoprocessor);
+	public void registerSocketEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoprocessor) throws Exception {
+		EventDispatcher.getInstance().registerSocketEvent(eventid, protoprocessor);
 	}
 	
 	public void registerHttpEvent(String path, HttpProcessor processor) throws Exception {
 		EventDispatcher.getInstance().registerHttpEvent(path, processor);
 	}
+	
+	public void registerSendEventIdByProto(int eventId,Class<? extends GeneratedMessageV3> protoClazz) throws Exception {
+		EventDispatcher.getInstance().registerSendEventIdByProto( eventId, protoClazz);
+	}
 
     public void start() throws Exception {
     	GlobalQueue.class.newInstance();
     	if(services.size()==0) {
-    		throw new Exception("no port to listen");
+    		throw new Exception("no port is listening");
     	}
     	for(Service service:services) {
     		service.start();
