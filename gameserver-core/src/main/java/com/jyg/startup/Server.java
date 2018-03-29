@@ -13,7 +13,7 @@ import com.jyg.util.GlobalQueue;
 /**
  * Created by jiayaoguang on 2017/3/30
  */
-public class Bootstarp {
+public class Server {
 	
 	List<Service> services = new ArrayList<>(1);
 	
@@ -21,7 +21,7 @@ public class Bootstarp {
 		services.add(service); 
 	}
 	
-	public void registerLogicEvent(int eventid, ProtoProcessor processor) throws Exception {
+	public void registerLogicEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> processor) throws Exception {
 		EventDispatcher.getInstance().registerLogicEvent(eventid, processor);
 	}
 	

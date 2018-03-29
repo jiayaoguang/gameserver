@@ -1,4 +1,4 @@
-package org.gameserver.sm;
+package com.jyg.test01.ping;
 
 import com.jyg.net.ProtoProcessor;
 import com.jyg.net.ProtoResponse;
@@ -15,7 +15,7 @@ import com.jyg.startup.Server;
  * Hello world!
  *
  */
-public class ServerTest01 
+public class PingServer 
 {
     public static void main( String[] args ) throws Exception{
         Server bootstarp = new Server();
@@ -24,33 +24,16 @@ public class ServerTest01
         ProtoProcessor<p_sm_scene_request_ping> processor = new ProtoProcessor<p_sm_scene_request_ping>(p_sm_scene_request_ping.getDefaultInstance()) {
         	@Override
 			public void processProtoMessage(p_sm_scene_request_ping msg, ProtoResponse response) {
-        		System.out.println("i just think so");
+        		System.out.println("ok , i see ping");
         		response.writeMsg( p_scene_sm_response_pong.newBuilder());
         	}
 			
         };
         
-        ProtoProcessor<p_scene_sm_chat> chatProcessor = new ProtoProcessor<p_scene_sm_chat>(p_scene_sm_chat.getDefaultInstance()) {
-        	@Override
-			public void processProtoMessage(p_scene_sm_chat msg, ProtoResponse response) {
-        		
-        		System.out.println(msg.getMsg() );
-        		if("bye".equals(msg.getMsg())) {
-        			return;
-        		}
-        		
-        		response.writeMsg(p_sm_scene_chat.newBuilder().setMsg("i just think so ,hello world too"));
-        	}
-			
-        };
-        
-		System.out.println(processor.getProtoClassName());
         
         bootstarp.registerSocketEvent(1, processor);
         
-        
-        bootstarp.registerSocketEvent(3, chatProcessor);
-        bootstarp.registerSendEventIdByProto(4, p_sm_scene_chat.class);
+        bootstarp.registerSendEventIdByProto(2, p_scene_sm_response_pong.class);
         
         
 //        

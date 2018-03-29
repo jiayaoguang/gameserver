@@ -5,7 +5,6 @@ import java.util.concurrent.ThreadFactory;
 import com.jyg.handle.WebSocketServerInitializer;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -96,7 +95,7 @@ public abstract class Service {
 		b.childOption(ChannelOption.SO_KEEPALIVE, false);
 
 		b.childOption(ChannelOption.TCP_NODELAY, true);
-		Channel channel = b.bind(port).sync().channel();
+		b.bind(port).sync().channel();
 		System.out.println("正在开启端口监听，端口号 :" + port);
 	}
 

@@ -8,7 +8,7 @@ import com.jyg.proto.p_sm_scene.p_scene_sm_chat;
 import com.jyg.proto.p_sm_scene.p_scene_sm_response_pong;
 import com.jyg.proto.p_sm_scene.p_sm_scene_chat;
 import com.jyg.proto.p_sm_scene.p_sm_scene_request_ping;
-import com.jyg.startup.Bootstarp;
+import com.jyg.startup.Server;
 
 
 /**
@@ -18,7 +18,7 @@ import com.jyg.startup.Bootstarp;
 public class ServerTest01 
 {
     public static void main( String[] args ) throws Exception{
-        Bootstarp bootstarp = new Bootstarp();
+        Server bootstarp = new Server();
         
         
         ProtoProcessor<p_sm_scene_request_ping> processor = new ProtoProcessor<p_sm_scene_request_ping>(p_sm_scene_request_ping.getDefaultInstance()) {

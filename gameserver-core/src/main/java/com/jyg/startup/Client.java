@@ -28,8 +28,8 @@ public class Client {
 //	public int port = 6789; // 端口
 	
 	/// 通过nio方式来接收连接和处理连接
-	private EventLoopGroup group = new NioEventLoopGroup();
-	private Bootstrap bootstrap = new Bootstrap();
+	private static EventLoopGroup group = new NioEventLoopGroup();
+	private Bootstrap bootstrap = new Bootstrap();//TODO
 	private Channel channel;
 
 	public Client() {
@@ -66,7 +66,7 @@ public class Client {
 
 	public void write( MessageLiteOrBuilder msg) throws IOException {
 		channel.writeAndFlush( msg);
-		System.out.println("客户端发送数据>>>>");
+//		System.out.println("客户端发送数据>>>>");
 	}
 	
 	public void close() {

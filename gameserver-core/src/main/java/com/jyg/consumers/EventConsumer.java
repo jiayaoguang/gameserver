@@ -16,7 +16,7 @@ import com.lmax.disruptor.WorkHandler;
 public class EventConsumer implements EventHandler<LogicEvent>, WorkHandler<LogicEvent> {
 
 
-	private final EventDispatcher process = EventDispatcher.getInstance();
+	private final EventDispatcher dispatcher = EventDispatcher.getInstance();
 	
 
 	public EventConsumer() {
@@ -26,31 +26,41 @@ public class EventConsumer implements EventHandler<LogicEvent>, WorkHandler<Logi
 	public void onEvent(LogicEvent event, long sequence, boolean endOfBatch) throws Exception {
 		this.onEvent(event);
 	}
-
+	
+	private int eventTimes = 0;
+	
 	public void onEvent(LogicEvent event) throws Exception {
 
 		// System.out.println(event.getChannel());
-		
-		switch (event.getChannelEventType()) {
-			
-			case ACTIVE:
-				process.as_on_game_client_come(event);
-				break;
-			case INACTIVE:
-				process.as_on_game_client_leave(event);
-				break;
-			case HTTP_MSG_COME:
-				process.httpProcess(event);
-				break;
-			case ON_MESSAGE_COME:
-				process.webSocketProcess(event);
-				break;
-			case RPC_MSG_COME:
-				process.socketProcess(event);
-				break;
-			default:
-				throw new Exception("unknown channelEventType <"+event.getChannelEventType()+">");
+		try {
+			switch (event.getChannelEventType()) {
+				
+				case ACTIVE:
+					dispatcher.as_on_game_client_come(event);
+					break;
+				case INACTIVE:
+					dispatcher.as_on_game_client_leave(event);
+					break;
+				case HTTP_MSG_COME:
+					dispatcher.httpProcess(event);
+					break;
+				case ON_MESSAGE_COME:
+					dispatcher.webSocketProcess(event);
+					break;
+				case RPC_MSG_COME:
+					dispatcher.socketProcess(event);
+					break;
+				default:
+					throw new Exception("unknown channelEventType <"+event.getChannelEventType()+">");
+			}
+		}finally {
+			eventTimes++;
+			if (eventTimes == 10000) {
+				eventTimes = 0;
+				dispatcher.loop();
+			}
 		}
+		
 		
 	}
 	

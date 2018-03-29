@@ -4,9 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.protobuf.GeneratedMessageV3;
-import com.google.protobuf.MessageLite;
 import com.jyg.bean.LogicEvent;
 import com.jyg.session.Session;
+import com.jyg.timer.Timer;
+import com.jyg.timer.TimerTrigger;
 
 import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -32,7 +33,7 @@ public class EventDispatcher{
 		return dispatcher;
 	}
 
-	private  final Int2ObjectMap< ProtoProcessor<GeneratedMessageV3>> logicEventMap = new Int2ObjectOpenHashMap<>();
+	private  final Int2ObjectMap< ProtoProcessor<? extends GeneratedMessageV3>> logicEventMap = new Int2ObjectOpenHashMap<>();
 	private  final Map<String, HttpProcessor> httpPathMap = new HashMap<>();
 	private  final Int2ObjectMap< ProtoProcessor<? extends GeneratedMessageV3>> socketEventMap = new Int2ObjectOpenHashMap<>();
 	
@@ -46,7 +47,7 @@ public class EventDispatcher{
 	 * @param processor
 	 * @throws Exception
 	 */
-	public void registerLogicEvent(int eventid, ProtoProcessor<GeneratedMessageV3> processor) throws Exception {
+	public void registerLogicEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> processor) throws Exception {
 		if(logicEventMap.containsKey(eventid)) {
 			throw new Exception("dupilcated eventid");
 		}
@@ -98,7 +99,7 @@ public class EventDispatcher{
 		eventidToProtoNameMap.put(protoClazz.getName(), eventId);
 	}
 	
-	//================================ rpc end =========================================
+	//================================ socket end =========================================
 	
 	private long uid = 1L;
 
@@ -118,24 +119,30 @@ public class EventDispatcher{
 			return;
 		}
 		processor.process(event);
-			eventTimes++;
-			if(eventTimes == 1000) {
-				eventTimes = 0;
-				dispatcher.loop();
-			}
+//			eventTimes++;
+//			if(eventTimes == 1000) {
+//				eventTimes = 0;
+//				dispatcher.loop();
+//			}
 	}
 
-	private int eventTimes = 0;
+//	private int eventTimes = 0;
+	
+	TimerTrigger trigger = new TimerTrigger();
+	
+	public void addTimer(Timer timer) {
+		trigger.addTimer(timer);
+	}
 	
 	public void loop() {
 		
+		trigger.tickTigger();
 		
 	}
 	//============================= http start ===========================================
 	/**
 	 * 注册http事件
 	 * @param id
-	 * @return
 	 */
 	public void registerHttpEvent(String path, HttpProcessor processor) throws Exception {
 //		path = "/" + path;

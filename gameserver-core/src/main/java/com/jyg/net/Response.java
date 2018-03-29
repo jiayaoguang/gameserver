@@ -22,7 +22,10 @@ import io.netty.util.CharsetUtil;
  */
 public class Response {
 	//要发给客户端的内容
-	private final ByteBuf content = Unpooled.directBuffer(100, 2000);
+	private final ByteBuf content = Unpooled.directBuffer(2000, 20000);
+	
+	StringBuilder sb = new StringBuilder(2000);
+	
 	//要发给客户端的cookis
 	private List<Cookie> cookies = new ArrayList<>(5);
 	

@@ -23,7 +23,7 @@ public class CLientTest01
 
 			@Override
 			public void processProtoMessage(p_sm_scene_request_ping msg, ProtoResponse response) {
-				System.out.println("i just think so");
+				System.out.println("receive ping msg");
 				response.writeMsg(p_scene_sm_response_pong.newBuilder());
 				
 			}
@@ -58,7 +58,6 @@ public class CLientTest01
         
         client.connect("localhost",8080);
         
-//        EventDispatcher.getInstance().registerRpcEvent(1, processor);
         
         client.write(p_scene_sm_chat.newBuilder().setMsg("hello world!"));
         
