@@ -90,5 +90,9 @@ public class Timer implements Comparable<Timer> {
 	public void writeAndFlush(MessageLiteOrBuilder msg) {
 		channel.writeAndFlush(msg);
 	}
+	
+	public Channel getChannel() {
+		return channel;
+	}
 
 }

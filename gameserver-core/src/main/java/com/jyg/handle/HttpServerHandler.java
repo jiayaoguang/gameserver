@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import com.jyg.bean.LogicEvent;
+import com.jyg.consumers.EventConsumerFactory;
 import com.jyg.enums.EventType;
 import com.jyg.net.EventDispatcher;
 import com.jyg.net.Request;
@@ -17,7 +18,6 @@ import io.netty.handler.codec.http.HttpRequest;
 
 public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
-	EventDispatcher processor = EventDispatcher.getInstance();
 
 	// 是否是线程同步的http
 	private final boolean isSynHttp;
@@ -59,7 +59,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 				event.setData(request);
 				event.setChannel(ctx.channel());
 				event.setChannelEventType(EventType.HTTP_MSG_COME);
-				processor.httpProcess(event);
+				EventConsumerFactory.newEventConsumer().onEvent(event);
 			}
 
 			// HttpRequest request = (HttpRequest) msg;

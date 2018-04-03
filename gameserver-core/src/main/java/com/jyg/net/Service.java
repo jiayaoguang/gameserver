@@ -89,8 +89,8 @@ public abstract class Service {
 		b.option(ChannelOption.SO_RCVBUF, 64 * 1024);
 
 		b.option(ChannelOption.SO_SNDBUF, 64 * 1024);
-
-		b.childOption(ChannelOption.SO_LINGER, 1000);
+		//指定等待时间为0，此时调用主动关闭时不会发送FIN来结束连接，而是直接将连接设置为CLOSE状态，清除套接字中的发送和接收缓冲区，直接对对端发送RST包。
+		b.childOption(ChannelOption.SO_LINGER, 0);
 
 		b.childOption(ChannelOption.SO_KEEPALIVE, false);
 

@@ -4,7 +4,7 @@
 
 	<parent>
 		<groupId>com.jyg.gameserver</groupId>
-		<artifactId>gameserver-parent</artifactId>
+		<artifactId>gameserver</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 

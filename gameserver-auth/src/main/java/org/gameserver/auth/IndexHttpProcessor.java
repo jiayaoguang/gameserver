@@ -10,10 +10,12 @@ import com.jyg.net.Response;
  * created by jiayaoguang at 2018年3月20日
  */
 public class IndexHttpProcessor extends HttpProcessor{
+	TokenMrg token = new TokenMrg();
 
 	@Override
 	public void service(Request request, Response response) {
-		response.write("<html><head></head><body>welcome user "+ request.getParameter("username") +" to index<body></html>");
+		
+		response.write("<html><head></head><body>welcome user "+ request.getParameter("username") +" to index,"+ " token :" +token.getToken()+"<body></html>");
 	}
 
 }

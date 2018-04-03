@@ -13,7 +13,8 @@ import io.netty.handler.codec.http.cookie.DefaultCookie;
  * created by jiayaoguang at 2018年3月20日
  */
 public class LoginHttpProcessor extends HttpProcessor{
-
+	TokenMrg token = new TokenMrg();
+	
 	@Override
 	public void service(Request request, Response response) {
 		String username = request.getParameter("username");
@@ -28,7 +29,12 @@ public class LoginHttpProcessor extends HttpProcessor{
 			System.out.println(c.maxAge());
 		}
 		if("admin".equals(username)) {
-			getDispatcher("/index").service(request, response);
+			response.write("<html><head></head><body>welcome user "+ request.getParameter("username") +" to index,"+ " token :" +token.getToken()+"<body></html>");
+//			response.setContentType(Response.CONTENT_TYPE_JSON);
+			
+			String json = "{"+"";
+			
+//			getDispatcher("/index").service(request, response);
 		}else {
 			getDispatcher("/404").service(request, response);
 		}

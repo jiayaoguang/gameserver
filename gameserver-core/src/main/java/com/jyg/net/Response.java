@@ -1,6 +1,6 @@
 package com.jyg.net;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,14 +26,24 @@ public class Response {
 	
 	StringBuilder sb = new StringBuilder(2000);
 	
+	private String contentType =  "text/html; charset=UTF-8";
+	
+	public static final String CONTENT_TYPE_JSON = "application/json";
+	
+	public static final String CONTENT_TYPE_TEXT_PLAIN = "text/plain";
+	
 	//要发给客户端的cookis
-	private List<Cookie> cookies = new ArrayList<>(5);
+	private List<Cookie> cookies = new LinkedList<>();
 	
 	// 500错误提示信息
 	private static final byte[] internalServerErrorBytes = 
 			"<html><head></head><body><div align='center'><h1>500 Internal Server Error</h1></div><body></html>"
 			.getBytes();
 
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+	
 	public void write(String msg) {
 		content.writeBytes(msg.getBytes(CharsetUtil.UTF_8));
 	}
@@ -67,7 +77,7 @@ public class Response {
 		DefaultFullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
 				HttpResponseStatus.OK, this.getContent());
 		HttpHeaders headers = fullHttpResponse.headers();
-		headers.set(HttpHeaderNames.CONTENT_TYPE, "text/html; charset=UTF-8");
+		headers.set(HttpHeaderNames.CONTENT_TYPE, this.contentType);
 		headers.set(HttpHeaderNames.CONNECTION, HttpHeaderValues.CLOSE);
 		headers.set(HttpHeaderNames.CONTENT_LENGTH, getContent().readableBytes());
 		headers.set(HttpHeaderNames.CONTENT_ENCODING, CharsetUtil.UTF_8);
@@ -99,7 +109,7 @@ public class Response {
 		headers.set(HttpHeaderNames.CONTENT_LENGTH, this.getContent().readableBytes());
 		return fullHttpResponse;
 	}
-	
+	  
 	/**
 	 * 创建500错误的http回复
 	 * @return 500 error response

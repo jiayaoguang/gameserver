@@ -6,7 +6,7 @@ import com.jyg.net.ProtoProcessor;
 import com.jyg.net.ProtoResponse;
 import com.jyg.proto.p_sm_scene.p_scene_sm_response_pong;
 import com.jyg.proto.p_sm_scene.p_sm_scene_request_ping;
-import com.jyg.startup.Client;
+import com.jyg.startup.InnerClient;
 import com.jyg.timer.Timer;
 import com.jyg.timer.TimerCallBack;
 import com.jyg.timer.TimerTrigger;
@@ -32,7 +32,7 @@ public class PingCLient {
 
 		};
 
-		final Client client = new Client();
+		final InnerClient client = new InnerClient();
 
 		client.registerSendEventIdByProto(1, p_sm_scene_request_ping.class);
 		client.registerSocketEvent(2, pongProcessor);

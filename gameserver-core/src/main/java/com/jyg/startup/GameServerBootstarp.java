@@ -13,7 +13,7 @@ import com.jyg.util.GlobalQueue;
 /**
  * Created by jiayaoguang on 2017/3/30
  */
-public class Server {
+public class GameServerBootstarp {
 	
 	List<Service> services = new ArrayList<>(1);
 	
