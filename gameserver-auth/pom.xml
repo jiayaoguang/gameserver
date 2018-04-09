@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.jyg.gameserver</groupId>
-		<artifactId>gameserver-parent</artifactId>
+		<artifactId>gameserver</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>gameserver-auth</artifactId>
@@ -18,6 +18,11 @@
 		<dependency>
 			<groupId>com.jyg.gameserver</groupId>
 			<artifactId>gameserver-core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.jyg.gameserver</groupId>
+			<artifactId>gameserver-proto</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>

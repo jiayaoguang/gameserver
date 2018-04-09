@@ -22,7 +22,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  * 远程端口连接
  */
 
-public class Client {
+public class InnerClient {
 
 //	public String host = "127.0.0.1"; // ip地址
 //	public int port = 6789; // 端口
@@ -32,11 +32,11 @@ public class Client {
 	private Bootstrap bootstrap = new Bootstrap();//TODO
 	private Channel channel;
 
-	public Client() {
+	public InnerClient() {
 		this(new SocketServerInitializer());
 	}
 
-	public Client(ChannelInitializer<SocketChannel> channelInitializer) {
+	public InnerClient(ChannelInitializer<SocketChannel> channelInitializer) {
 		System.out.println("客户端成功启动...");
 		bootstrap.group(group);
 		bootstrap.channel(NioSocketChannel.class);

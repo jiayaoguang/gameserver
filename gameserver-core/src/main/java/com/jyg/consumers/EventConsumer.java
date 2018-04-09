@@ -6,6 +6,8 @@ import java.util.Map;
 import com.jyg.bean.LogicEvent;
 import com.jyg.enums.EventType;
 import com.jyg.net.Processor;
+import com.jyg.timer.Timer;
+import com.jyg.timer.TimerCallBack;
 import com.jyg.net.EventDispatcher;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.WorkHandler;
@@ -43,6 +45,15 @@ public class EventConsumer implements EventHandler<LogicEvent>, WorkHandler<Logi
 					break;
 				case HTTP_MSG_COME:
 					dispatcher.httpProcess(event);
+					//五秒后关闭
+					dispatcher.addTimer(new Timer(1 , 10*1000L, event.getChannel(),new TimerCallBack() {
+						public void call(Timer timer) {
+							if(timer.getChannel().isOpen()){
+								System.out.println("out of time,just close it");
+								timer.getChannel().close();
+							}
+						}
+					}));
 					break;
 				case ON_MESSAGE_COME:
 					dispatcher.webSocketProcess(event);

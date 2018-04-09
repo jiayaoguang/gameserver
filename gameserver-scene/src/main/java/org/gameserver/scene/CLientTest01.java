@@ -7,7 +7,7 @@ import com.jyg.proto.p_sm_scene.p_scene_sm_chat;
 import com.jyg.proto.p_sm_scene.p_scene_sm_response_pong;
 import com.jyg.proto.p_sm_scene.p_sm_scene_chat;
 import com.jyg.proto.p_sm_scene.p_sm_scene_request_ping;
-import com.jyg.startup.Client;
+import com.jyg.startup.InnerClient;
 
 
 /**
@@ -46,7 +46,7 @@ public class CLientTest01
         
         
     	
-        Client client = new Client();
+        InnerClient client = new InnerClient();
         
         client.registerSocketEvent(1, pingProcessor);
         

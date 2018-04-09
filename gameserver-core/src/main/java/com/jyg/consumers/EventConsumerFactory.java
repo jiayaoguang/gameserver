@@ -7,7 +7,7 @@ import com.jyg.net.EventDispatcher;
  */
 public class EventConsumerFactory {
 
-	public EventConsumer newEventConsumer() {
+	public static EventConsumer newEventConsumer() {
 		return new EventConsumer();
 	}
 

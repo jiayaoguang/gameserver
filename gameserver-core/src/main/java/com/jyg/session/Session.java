@@ -33,6 +33,14 @@ public class Session {
 	public void setChannel(Channel channel) {
 		this.channel = channel;
 	}
+
+	public long getLastContactMill() {
+		return lastContactMill;
+	}
+
+	public void setLastContactMill(long lastContactMill) {
+		this.lastContactMill = lastContactMill;
+	}
 	
 	
 	

@@ -12,6 +12,8 @@ import com.jyg.timer.TimerTrigger;
 import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 
@@ -24,6 +26,13 @@ public class EventDispatcher{
 	private static final EventDispatcher dispatcher = new EventDispatcher();
 	
 	private final HttpProcessor notFOundProcessor = new NotFoundHttpProcessor();
+	
+	
+	private final Long2ObjectMap<Channel> requestidTohttpChannelMap = new Long2ObjectOpenHashMap<>();
+	
+	public Long2ObjectMap<Channel> getRequestidTohttpChannelMap() {
+		return requestidTohttpChannelMap;
+	}
 	
 	private EventDispatcher() {
 
@@ -150,7 +159,7 @@ public class EventDispatcher{
 			throw new Exception("dupilcated path");
 		}
 		if(path.charAt(0)!='/'||path.contains(".")) {
-			throw new Exception("path cannot contain char:'.' and must start with cahr:'/' ");
+			throw new Exception("path cannot contain char:'.' and must start with char:'/' ");
 		}
 		
 		httpPathMap.put(path, processor);

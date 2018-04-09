@@ -1,0 +1,13 @@
+syntax = "proto3";
+package com.jyg.proto;
+option java_package = "com.jyg.proto";
+option java_outer_classname = "p_auth_sm";
+//auth 给sm服 发送token
+message p_auth_sm_request_send_token {  
+	int64 requestId = 1;  
+	string token = 2;  
+}  
+//场景服回复sm服
+message p_sm_auth_response_receive_token {  
+	int64 requestId = 1;
+}

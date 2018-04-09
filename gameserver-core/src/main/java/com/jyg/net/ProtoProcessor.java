@@ -14,7 +14,8 @@ public abstract class ProtoProcessor<T extends GeneratedMessageV3> implements Pr
 	private final Parser<? extends GeneratedMessageV3> parser;
 	private final Class clazz;
 
-	public ProtoProcessor(Class<GeneratedMessageV3> protoClazz) throws InstantiationException, IllegalAccessException {
+	@Deprecated
+	public ProtoProcessor(Class<? extends GeneratedMessageV3> protoClazz) throws InstantiationException, IllegalAccessException {
 		parser = protoClazz.newInstance().getParserForType();
 		clazz = protoClazz;
 	}
@@ -23,6 +24,10 @@ public abstract class ProtoProcessor<T extends GeneratedMessageV3> implements Pr
 		parser = messageLite.getParserForType();
 		clazz = messageLite.getClass();
 	}
+	
+//	public ProtoProcessor(GeneratedMessageV3.Builder<T> messageLite) {
+//		this(messageLite.build());
+//	}
 	
 	public String getProtoClassName() {
 		return clazz.getName();

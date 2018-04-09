@@ -29,6 +29,15 @@ public class Timer implements Comparable<Timer> {
 		return startTime + delayTime;
 	}
 
+	public Timer(int exeNum, long delayTime,Channel channel , TimerCallBack timerCallBack) {
+		super();
+		this.exeNum = exeNum;
+		this.startTime = System.currentTimeMillis();
+		this.delayTime = delayTime;
+		this.channel = channel;
+		this.callBack = timerCallBack;
+	}
+	
 	public Timer(int exeNum, long startTime, long delayTime,Channel channel , TimerCallBack timerCallBack) {
 		super();
 		this.exeNum = exeNum;
@@ -89,6 +98,10 @@ public class Timer implements Comparable<Timer> {
 	
 	public void writeAndFlush(MessageLiteOrBuilder msg) {
 		channel.writeAndFlush(msg);
+	}
+	
+	public Channel getChannel() {
+		return channel;
 	}
 
 }
