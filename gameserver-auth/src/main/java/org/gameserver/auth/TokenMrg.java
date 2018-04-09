@@ -7,7 +7,7 @@ import java.util.UUID;
  */
 public class TokenMrg {
 	
-	String getToken() {
+	static String getToken() {
 		return UUID.randomUUID().toString();
 	}
 	

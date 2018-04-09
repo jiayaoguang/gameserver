@@ -15,7 +15,7 @@ import io.netty.util.concurrent.DefaultEventExecutorGroup;
 
 public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
 	
-	//是否是
+	//是否是同步的http
 	private boolean isSynHttp;
 
 	public HttpServerInitializer() {

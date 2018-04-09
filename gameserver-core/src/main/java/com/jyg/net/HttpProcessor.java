@@ -10,10 +10,10 @@ import io.netty.handler.codec.http.DefaultFullHttpResponse;
  */
 public abstract class HttpProcessor implements Processor<Request> {
 
-	public final void process(LogicEvent<Request> event) {
+	public void process(LogicEvent<Request> event) {
 
 		Request request = event.getData();
-		Response response = this.createResponse(event);
+		Response response = this.createResponse();
 		DefaultFullHttpResponse fullHttpResponse = null;
 		try {
 			this.service(request, response);
@@ -27,7 +27,7 @@ public abstract class HttpProcessor implements Processor<Request> {
 		// .addListener(ChannelFutureListener.CLOSE);//关闭连接由客户端关闭或者timer
 	}
 
-	Response createResponse(LogicEvent<Request> event) {
+	Response createResponse() {
 
 		Response response = new Response();
 

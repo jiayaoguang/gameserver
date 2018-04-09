@@ -23,10 +23,11 @@ public class TimerTrigger {
 				return;
 			}
 			if(timer.getTriggerTime() > System.currentTimeMillis()) {
-				continue;
+				return;
 			}
 			timerQueue.poll();
 			if(timer.getExeNum() <= 0) {
+				
 				continue;
 			}
 			timer.setStartTime(System.currentTimeMillis());
@@ -37,7 +38,6 @@ public class TimerTrigger {
 			timerQueue.offer(timer);
 			
 		}
-		
 		
 	}
 }

@@ -32,7 +32,7 @@ public class GlobalQueue {
 		
 		disruptor = new Disruptor<>(
 				eventFactory, bufferSize, executor, ProducerType.MULTI,
-				new BusySpinWaitStrategy());
+				new FreeSleepWaitStrategy());
 		
 		try {
 			EventHandlerGroup<LogicEvent<Object>> handleEventsWith = disruptor.handleEventsWith(EventConsumerFactory.newEventConsumer());

@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+import org.junit.Test;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
@@ -73,7 +75,7 @@ public class Response {
 	 * 创建一个返回给客户端的回复
 	 * @return 给客户端的回复
 	 */
-	DefaultFullHttpResponse createDefaultFullHttpResponse() {
+	public DefaultFullHttpResponse createDefaultFullHttpResponse() {
 		DefaultFullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
 				HttpResponseStatus.OK, this.getContent());
 		HttpHeaders headers = fullHttpResponse.headers();
@@ -124,5 +126,6 @@ public class Response {
 	private String genericSessionId() {
 		return UUID.randomUUID().toString();
 	}
-
+	
+	
 }

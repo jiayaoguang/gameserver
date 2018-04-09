@@ -16,6 +16,8 @@ import io.netty.handler.codec.http.cookie.ServerCookieDecoder;
  */
 public class Request {
 
+	private long requestid = 0;
+	
 	private Map<String, String> parametersMap;
 
 	private final HttpRequest httpRequest;
@@ -64,7 +66,8 @@ public class Request {
 		
 		return uri.substring(0, endIndex);
 	}
-	final Set<Cookie> nullSet = new HashSet<>();
+	
+	private static final Set<Cookie> nullSet = new HashSet<>();
 	
 	public Set<Cookie> decodeCookies() {
 		String cookiesValue = httpRequest.headers().get(HttpHeaderNames.COOKIE);
@@ -75,4 +78,13 @@ public class Request {
 		return ServerCookieDecoder.STRICT.decode(cookiesValue);
 	}
 
+	public long getRequestid() {
+		return requestid;
+	}
+
+	public void setRequestid(long requestid) {
+		this.requestid = requestid;
+	}
+	
+	
 }
