@@ -2,7 +2,8 @@ package com.jyg.net;
 
 import java.util.concurrent.ThreadFactory;
 
-import com.jyg.handle.WebSocketServerInitializer;
+import com.jyg.handle.initializer.WebSocketServerInitializer;
+import com.jyg.util.Constants;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;

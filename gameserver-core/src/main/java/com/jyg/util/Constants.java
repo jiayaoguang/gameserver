@@ -16,7 +16,7 @@ public class Constants {
 	
 	public static final String HTTP_ROOT_DIR; 
 	
-	
+	//public static final int SOCKET_SO_LINGER;
 	static {
 		Properties pro = new Properties();
 		
@@ -33,7 +33,11 @@ public class Constants {
 		if(!dir.startsWith("/")) {
 			dir = "/" + dir;
 		}
+		
 		HTTP_ROOT_DIR = dir;
+		
+		//SOCKET_SO_LINGER = Integer.parseInt(pro.getProperty("socket.so_linger"));
+		
 	}
 	
 	

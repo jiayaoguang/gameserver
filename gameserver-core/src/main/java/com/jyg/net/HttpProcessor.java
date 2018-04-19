@@ -2,7 +2,7 @@ package com.jyg.net;
 
 import com.jyg.bean.LogicEvent;
 
-import io.netty.handler.codec.http.DefaultFullHttpResponse;
+import io.netty.buffer.ByteBuf;
 
 /**
  * created by jiayaoguang at 2017年12月16日 
@@ -10,27 +10,32 @@ import io.netty.handler.codec.http.DefaultFullHttpResponse;
  */
 public abstract class HttpProcessor implements Processor<Request> {
 
-	public void process(LogicEvent<Request> event) {
+	public final void process(LogicEvent<Request> event) {
 
 		Request request = event.getData();
-		Response response = this.createResponse();
-		DefaultFullHttpResponse fullHttpResponse = null;
+		Response response = this.createResponse(event);
 		try {
 			this.service(request, response);
-			fullHttpResponse = response.createDefaultFullHttpResponse();
+//			fullHttpResponse = response.createDefaultFullHttpResponse();
 		}catch(Exception e){
 			e.printStackTrace();
-			fullHttpResponse = response.create500FullHttpResponse();
+			event.getChannel().writeAndFlush( response.create500FullHttpResponse() );
+		}finally {
+			//TODO
+			ByteBuf buf = response.getContent();
+			if(buf.readableBytes()==0) {
+				buf.release(response.getContent().refCnt());
+				System.out.println("buf.refCnt()" + buf.refCnt());
+			}
 		}
 
-		event.getChannel().writeAndFlush(fullHttpResponse);
 		// .addListener(ChannelFutureListener.CLOSE);//关闭连接由客户端关闭或者timer
 	}
 
-	Response createResponse() {
+	Response createResponse(LogicEvent<Request> event) {
 
 		Response response = new Response();
-
+		response.setChannel(event.getChannel());
 		return response;
 	}
 

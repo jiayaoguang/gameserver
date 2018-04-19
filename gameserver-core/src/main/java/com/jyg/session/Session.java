@@ -13,9 +13,12 @@ public class Session {
 	
 	private long lastContactMill = 0;
 	
+	private Object data;
+	
 	public Session(Channel channel,long sessionId){
 		this.channel = channel;
 		this.sessionId = sessionId;
+		setLastContactMill(System.currentTimeMillis());
 	}
 
 	public long getSessionId() {

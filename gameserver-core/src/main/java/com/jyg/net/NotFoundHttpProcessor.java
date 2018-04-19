@@ -47,7 +47,7 @@ public class NotFoundHttpProcessor extends HttpProcessor {
 
 	@Override
 	public void service(Request request, Response response) {
-		response.write(bytes);
+		response.writeAndFlush(bytes);
 	}
 
 }

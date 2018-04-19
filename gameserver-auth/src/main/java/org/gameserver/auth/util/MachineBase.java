@@ -1,4 +1,4 @@
-package org.gameserver.auth;
+package org.gameserver.auth.util;
 
 /**
  * created by jiayaoguang at 2018年3月13日

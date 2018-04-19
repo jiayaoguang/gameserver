@@ -1,0 +1,12 @@
+syntax = "proto3";
+package com.jyg.proto;
+option java_package = "com.jyg.proto";
+option java_outer_classname = "p_sm_client";
+
+message p_client_sm_login{
+	
+}
+
+message p_client_sm_login_success{
+	
+}

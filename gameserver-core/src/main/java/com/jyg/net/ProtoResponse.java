@@ -4,7 +4,6 @@ package com.jyg.net;
  */
 
 import com.google.protobuf.MessageLiteOrBuilder;
-import com.jyg.bean.EventIdAndMessage;
 
 import io.netty.channel.Channel;
 
@@ -17,6 +16,16 @@ public class ProtoResponse {
 	}
 	
 	
+	
+	
+	public Channel getChannel() {
+		return channel;
+	}
+
+
+
+
+
 	public void writeMsg( MessageLiteOrBuilder message) {
 		this.channel.writeAndFlush(message);
 		

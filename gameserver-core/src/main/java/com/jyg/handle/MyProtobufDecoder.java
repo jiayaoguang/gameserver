@@ -2,11 +2,13 @@ package com.jyg.handle;
 
 import java.io.IOException;
 
+import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.MessageLite;
 import com.google.protobuf.Parser;
 import com.jyg.bean.LogicEvent;
 import com.jyg.enums.EventType;
 import com.jyg.net.EventDispatcher;
+import com.jyg.net.ProtoProcessor;
 import com.jyg.util.GlobalQueue;
 
 import io.netty.buffer.ByteBuf;
@@ -31,20 +33,18 @@ public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
 	public ByteBuf extractFrame(ChannelHandlerContext ctx, ByteBuf buffer, int index, int length) {
 		ByteBuf buf = buffer.slice(index, length);
 		int eventId = buf.readInt();
-		Parser<? extends MessageLite> parser = dis.getSocketProcessor(eventId).getProtoParser();
+		ProtoProcessor<? extends GeneratedMessageV3> protProcessor = dis.getSocketProcessor(eventId);
+		
+		if(protProcessor==null) {
+			return Unpooled.EMPTY_BUFFER;
+		}
+		
+		Parser<? extends MessageLite> parser = protProcessor.getProtoParser();
 		
 		try (ByteBufInputStream bis = new ByteBufInputStream(buf)) {
 			MessageLite messageLite = parser.parseFrom(bis);
-			long sequence = GlobalQueue.ringBuffer.next();
-			try {
-				LogicEvent<Object> event = GlobalQueue.ringBuffer.get(sequence);
-				event.setEventId(eventId);
-				event.setData(messageLite);
-				event.setChannel(ctx.channel());
-				event.setChannelEventType(EventType.RPC_MSG_COME);
-			} finally {
-				GlobalQueue.ringBuffer.publish(sequence);
-			}
+			
+			GlobalQueue.publicEvent(EventType.RPC_MSG_COME, messageLite, ctx.channel() , eventId );
 			
 		} catch (IOException e) {
 			e.printStackTrace();

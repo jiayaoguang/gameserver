@@ -62,14 +62,21 @@
 	</properties>
 
 	<dependencies>
-		
+
 		<!-- <dependency> <groupId>log4j</groupId> <artifactId>log4j</artifactId> 
 			<version>1.2.17</version> </dependency> -->
 
 		<dependency>
-		    <groupId>com.google.protobuf</groupId>
-		    <artifactId>protobuf-java</artifactId>
-		    <version>3.5.1</version>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>3.5.1</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.jyg.gameserver</groupId>
+			<artifactId>gameserver-proto</artifactId>
+			<version>${gameserver.version}</version>
+		</dependency>
+		
 	</dependencies>
 </project>

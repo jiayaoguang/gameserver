@@ -1,4 +1,4 @@
-package org.gameserver.auth;
+package org.gameserver.auth.useless;
 
 import java.util.Random;
 import java.util.Set;
@@ -103,7 +103,7 @@ public class LoginHtmlHttpProcessor extends HttpProcessor{
 	@Override
 	public void service(Request request, Response response) {
 		String msg = html.replace("$random", ""+new Random().nextInt());
-		response.write(msg);
+		response.writeAndFlush(msg);
 	}
 
 }

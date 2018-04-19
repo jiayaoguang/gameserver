@@ -1,5 +1,7 @@
 package com.jyg.net;
 
+import java.lang.reflect.InvocationTargetException;
+
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.MessageLite;
 import com.google.protobuf.MessageLiteOrBuilder;
@@ -15,8 +17,11 @@ public abstract class ProtoProcessor<T extends GeneratedMessageV3> implements Pr
 	private final Class clazz;
 
 	@Deprecated
-	public ProtoProcessor(Class<? extends GeneratedMessageV3> protoClazz) throws InstantiationException, IllegalAccessException {
-		parser = protoClazz.newInstance().getParserForType();
+	public ProtoProcessor(Class<? extends GeneratedMessageV3> protoClazz) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		Object newBuilder = protoClazz.getMethod("newBuilder").invoke(null);
+		GeneratedMessageV3 build = (GeneratedMessageV3)protoClazz.getMethod("build").invoke(newBuilder);
+		parser = build.getParserForType();
+//				protoClazz.newInstance().getParserForType();
 		clazz = protoClazz;
 	}
 

@@ -3,11 +3,11 @@ package com.jyg.test01.chat;
 import com.jyg.net.ProtoProcessor;
 import com.jyg.net.ProtoResponse;
 import com.jyg.net.SocketService;
+import com.jyg.proto.p_test.p_scene_sm_chat;
+import com.jyg.proto.p_test.p_scene_sm_response_pong;
+import com.jyg.proto.p_test.p_sm_scene_chat;
+import com.jyg.proto.p_test.p_sm_scene_request_ping;
 import com.jyg.net.Service;
-import com.jyg.proto.p_sm_scene.p_scene_sm_chat;
-import com.jyg.proto.p_sm_scene.p_scene_sm_response_pong;
-import com.jyg.proto.p_sm_scene.p_sm_scene_chat;
-import com.jyg.proto.p_sm_scene.p_sm_scene_request_ping;
 import com.jyg.startup.GameServerBootstarp;
 
 

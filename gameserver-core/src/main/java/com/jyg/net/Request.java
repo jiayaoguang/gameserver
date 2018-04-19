@@ -1,9 +1,12 @@
 package com.jyg.net;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import io.netty.channel.Channel;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpMethod;
@@ -23,6 +26,7 @@ public class Request {
 	private final HttpRequest httpRequest;
 	
 	private final String noParamUri;
+	
 	
 	
 	
@@ -59,6 +63,12 @@ public class Request {
 	}
 	
 	public String getNoParamPath(String uri) {
+		try {
+			uri = URLDecoder.decode(uri, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new Error(e);
+		}
+		
 		int endIndex = uri.indexOf('?');
 		if(endIndex==-1) {
 			return uri;
@@ -85,6 +95,6 @@ public class Request {
 	public void setRequestid(long requestid) {
 		this.requestid = requestid;
 	}
-	
+
 	
 }

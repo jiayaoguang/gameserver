@@ -14,6 +14,35 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.ftl</include>
+				</includes>
+				<excludes>
+					<exclude>**/*.properties</exclude>
+					<exclude>**/*.xml</exclude>
+				</excludes>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
+
+	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.jyg.gameserver</groupId>
@@ -25,6 +54,13 @@
 			<artifactId>gameserver-proto</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.23</version>
+		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

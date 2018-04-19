@@ -1,5 +1,9 @@
 package org.gameserver.auth;
 
+import java.io.IOException;
+
+import com.jyg.startup.HttpClient;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -33,6 +37,14 @@ public class AppTest
      */
     public void testApp()
     {
-        assertTrue( true );
+       HttpClient http = new HttpClient();
+       
+       try {
+		String s = http.get("http://127.0.0.1:8080/login.html");
+		System.out.println(s);
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
     }
 }

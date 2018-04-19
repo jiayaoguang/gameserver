@@ -1,10 +1,17 @@
 package com.jyg.net;
 
+import java.net.InetSocketAddress;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import com.google.protobuf.GeneratedMessageV3;
 import com.jyg.bean.LogicEvent;
+import com.jyg.enums.ProtoEnum;
+import com.jyg.process.PingProtoProcessor;
+import com.jyg.process.PongProtoProcessor;
+import com.jyg.proto.p_common.p_common_request_ping;
+import com.jyg.proto.p_common.p_common_response_pong;
 import com.jyg.session.Session;
 import com.jyg.timer.Timer;
 import com.jyg.timer.TimerTrigger;
@@ -12,8 +19,6 @@ import com.jyg.timer.TimerTrigger;
 import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 
@@ -27,29 +32,39 @@ public class EventDispatcher{
 	
 	private final HttpProcessor notFOundProcessor = new NotFoundHttpProcessor();
 	
+	private  final Int2ObjectMap< ProtoProcessor<? extends GeneratedMessageV3>> logicEventMap = new Int2ObjectOpenHashMap<>();
+	private  final Map<String, HttpProcessor> httpPathMap = new HashMap<>();
+	private  final Int2ObjectMap< ProtoProcessor<? extends GeneratedMessageV3>> socketEventMap = new Int2ObjectOpenHashMap<>();
 	
-	private final Long2ObjectMap<Channel> requestidTohttpChannelMap = new Long2ObjectOpenHashMap<>();
+	private final Object2IntMap<String> protoNameToEventidMap = new Object2IntOpenHashMap<>();
 	
-	public Long2ObjectMap<Channel> getRequestidTohttpChannelMap() {
-		return requestidTohttpChannelMap;
-	}
+	private final Map<Channel,Session> channelMap = new HashMap<>();
+	
 	
 	private EventDispatcher() {
-
+		this.addTimer(new Timer(Integer.MAX_VALUE , 20*1000L, null ) {
+			public void call() {
+					EventDispatcher.getInstance().removeOutOfTimeChannels();
+			}
+		});
+		
+		try {
+			this.registerSendEventIdByProto(ProtoEnum.P_COMMON_REQUEST_PING.getEventId(), p_common_request_ping.class);
+			//注册pong处理器
+			this.registerSocketEvent(ProtoEnum.P_COMMON_RESPONSE_PONG.getEventId() , new PongProtoProcessor());
+		
+			this.registerSendEventIdByProto(ProtoEnum.P_COMMON_RESPONSE_PONG.getEventId(), p_common_response_pong.class);
+			this.registerSocketEvent(ProtoEnum.P_COMMON_REQUEST_PING.getEventId() , new PingProtoProcessor());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	public static EventDispatcher getInstance() {
 		return dispatcher;
 	}
 
-	private  final Int2ObjectMap< ProtoProcessor<? extends GeneratedMessageV3>> logicEventMap = new Int2ObjectOpenHashMap<>();
-	private  final Map<String, HttpProcessor> httpPathMap = new HashMap<>();
-	private  final Int2ObjectMap< ProtoProcessor<? extends GeneratedMessageV3>> socketEventMap = new Int2ObjectOpenHashMap<>();
-	
-	private final Object2IntMap<String> eventidToProtoNameMap = new Object2IntOpenHashMap<>();
-	
-	private final Map<Channel,Session> channelMap = new HashMap<>();
-	
 	/**
 	 * 注册游戏逻辑事件
 	 * @param eventid
@@ -95,31 +110,73 @@ public class EventDispatcher{
 
 	
 	public Integer getEventIdByProtoName(String protoName) {
-		return eventidToProtoNameMap.get(protoName);
+		return protoNameToEventidMap.get(protoName);
 	}
 	/**
 	 * 绑定事件id到proto类，用于发送protobuf消息时，获得对应的eventId，并一起发送给对方
 	 * @throws Exception 
 	 */
 	public void registerSendEventIdByProto(int eventId,Class<? extends GeneratedMessageV3> protoClazz) throws Exception {
-		if(eventidToProtoNameMap.containsKey(protoClazz.getName())) {
-			throw new Exception("dupilcated protoClazz");
+		if(protoNameToEventidMap.containsKey(protoClazz.getName())) {
+			throw new Exception("dupilcated protoClazz:" + protoClazz.getName());
 		}
-		eventidToProtoNameMap.put(protoClazz.getName(), eventId);
+		protoNameToEventidMap.put(protoClazz.getName(), eventId);
 	}
 	
 	//================================ socket end =========================================
 	
 	private long uid = 1L;
 
-	public void as_on_game_client_come(LogicEvent<Object> event) {
+	public void as_on_client_active(LogicEvent<Object> event) {
 		channelMap.put(event.getChannel(),new Session(event.getChannel(), uid++ ));
 		// event.getChannel().writeAndFlush(new TextWebSocketFrame(""));
 	}
 
-	public void as_on_game_client_leave(LogicEvent<Object> event) {
+	public void as_on_client_inactive(LogicEvent<Object> event) {
 		channelMap.remove(event.getChannel());
 	}
+	
+	public void as_on_inner_server_active(LogicEvent<Object> event){
+		InetSocketAddress address = (InetSocketAddress)event.getChannel().remoteAddress();
+		
+		System.out.println("name connect:" + address.getHostString());
+		
+	}
+	
+	public void as_on_inner_server_inactive(LogicEvent<Object> event){
+		InetSocketAddress address = (InetSocketAddress)event.getChannel().remoteAddress();
+		
+		System.out.println("name disconnect:" + address.getHostString());
+		
+	}
+	
+	public Session getSession(Channel channel) {
+		return channelMap.get(channel);
+	}
+	
+	//检测并移除超时的channel
+	public void removeOutOfTimeChannels() {
+		System.out.println("检测并移除超时的channel");
+		Iterator<Map.Entry<Channel, Session>> it = channelMap.entrySet().iterator();
+		for(;it.hasNext();) {
+			Map.Entry<Channel, Session> entry = it.next();
+			Channel channel = entry.getKey();
+			Session session = entry.getValue();
+			if(!channel.isOpen()) {
+				it.remove();
+				continue;
+			}
+			if(session==null) {
+				it.remove();
+				continue;
+			}
+			if( (session.getLastContactMill() + 60*1000) < System.currentTimeMillis()) {
+				channel.close();
+				it.remove();
+			}
+		}
+	}
+	
 
 	public void webSocketProcess(LogicEvent<? extends GeneratedMessageV3> event) throws Exception {
 		ProtoProcessor processor = socketEventMap.get(event.getEventId());

@@ -40,12 +40,12 @@ public class PingCLient {
 		Channel channel = client.connect("localhost", 8080);
 
 		TimerTrigger tigger = new TimerTrigger();
-		tigger.addTimer(new Timer(10, System.currentTimeMillis(), 1000, channel, new TimerCallBack() {
+		tigger.addTimer(new Timer(10, System.currentTimeMillis(), 1000, channel) {
 
-			public void call(Timer timer) {
-				timer.writeAndFlush(p_sm_scene_request_ping.newBuilder());
+			public void call() {
+				this.writeAndFlush(p_sm_scene_request_ping.newBuilder());
 			}
-		}));
+		});
 
 		tigger.tickTigger();
 

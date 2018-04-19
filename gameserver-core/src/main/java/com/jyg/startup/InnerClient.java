@@ -1,12 +1,19 @@
 package com.jyg.startup;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.MessageLiteOrBuilder;
-import com.jyg.handle.SocketServerInitializer;
+import com.jyg.enums.ProtoEnum;
+import com.jyg.handle.initializer.SocketClientInitializer;
 import com.jyg.net.EventDispatcher;
 import com.jyg.net.ProtoProcessor;
+import com.jyg.process.PongProtoProcessor;
+import com.jyg.proto.p_common;
+import com.jyg.session.ServerSession;
+import com.jyg.session.Session;
+import com.jyg.timer.IdleTimer;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -27,13 +34,26 @@ public class InnerClient {
 //	public String host = "127.0.0.1"; // ip地址
 //	public int port = 6789; // 端口
 	
-	/// 通过nio方式来接收连接和处理连接
+	// 通过nio方式来接收连接和处理连接
 	private static EventLoopGroup group = new NioEventLoopGroup();
 	private Bootstrap bootstrap = new Bootstrap();//TODO
 	private Channel channel;
-
-	public InnerClient() {
-		this(new SocketServerInitializer());
+	private Session session;
+	public InnerClient()  {
+		this(new SocketClientInitializer());
+//		try {
+//			this.registerSendEventIdByProto(ProtoEnum.P_COMMON_REQUEST_PING.getEventId(), p_common.p_common_request_ping.class);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//		//注册pong处理器
+//		try {
+//			this.registerSocketEvent(ProtoEnum.P_COMMON_RESPONSE_PONG.getEventId() , new PongProtoProcessor());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+		
 	}
 
 	public InnerClient(ChannelInitializer<SocketChannel> channelInitializer) {
@@ -52,8 +72,12 @@ public class InnerClient {
 	// 连接服务端
 	public Channel connect(String host,int port) throws InterruptedException {
 		channel = bootstrap.connect(host, port).sync().channel();
+		
+		EventDispatcher.getInstance().addTimer( new IdleTimer(channel) );
+		
 		return channel;
 	}
+	
 	
 	
 	public void registerSocketEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoprocessor) throws Exception {
@@ -69,8 +93,14 @@ public class InnerClient {
 //		System.out.println("客户端发送数据>>>>");
 	}
 	
+	public Channel getChannel() {
+		return channel;
+	}
+	
 	public void close() {
-		channel.close();
+		if(channel !=null && channel.isOpen()) {
+			channel.close();
+		}
 		group.shutdownGracefully();
 	}
 

@@ -1,13 +1,13 @@
-package org.gameserver.auth;
+package com.jyg.util;
 
 import java.util.UUID;
 
 /**
  * created by jiayaoguang at 2018年4月2日
  */
-public class TokenMrg {
+public class TokenUtil {
 	
-	static String getToken() {
+	public static String getToken() {
 		return UUID.randomUUID().toString();
 	}
 	

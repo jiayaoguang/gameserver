@@ -1,14 +1,9 @@
 package com.jyg.consumers;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.jyg.bean.LogicEvent;
-import com.jyg.enums.EventType;
-import com.jyg.net.Processor;
-import com.jyg.timer.Timer;
-import com.jyg.timer.TimerCallBack;
 import com.jyg.net.EventDispatcher;
+import com.jyg.net.Request;
+import com.jyg.timer.DelayCloseTimer;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.WorkHandler;
 
@@ -25,41 +20,63 @@ public class EventConsumer implements EventHandler<LogicEvent>, WorkHandler<Logi
 
 	}
 
-	public void onEvent(LogicEvent event, long sequence, boolean endOfBatch) throws Exception {
-		this.onEvent(event);
+	@Override
+	public void onEvent(LogicEvent event, long sequence, boolean endOfBatch) {
+		
+		try {
+			this.onEvent(event);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	private int eventTimes = 0;
 	
+	private long requestId = 1;
+	
+	@Override
 	public void onEvent(LogicEvent event) throws Exception {
 
 		// System.out.println(event.getChannel());
 		try {
 			switch (event.getChannelEventType()) {
 				
-				case ACTIVE:
-					dispatcher.as_on_game_client_come(event);
+//				case ACTIVE:
+//					dispatcher.as_on_client_active(event);
+//					break;
+//				case INACTIVE:
+//					dispatcher.as_on_client_inactive(event);
+//					break;
+				case CLIENT_SOCKET_CONNECT_ACTIVE:
+					dispatcher.as_on_client_active(event);
 					break;
-				case INACTIVE:
-					dispatcher.as_on_game_client_leave(event);
+				case CLIENT_SOCKET_CONNECT_INACTIVE:
+					dispatcher.as_on_client_inactive(event);
 					break;
+					
+				case INNER_SOCKET_CONNECT_ACTIVE:
+					dispatcher.as_on_inner_server_active(event);
+					break;
+				case INNER_SOCKET_CONNECT_INACTIVE:
+					dispatcher.as_on_inner_server_inactive(event);
+					break;
+					
 				case HTTP_MSG_COME:
+					((Request)event.getData()).setRequestid(requestId++);;
 					dispatcher.httpProcess(event);
-					//五秒后关闭
-					dispatcher.addTimer(new Timer(1 , 10*1000L, event.getChannel(),new TimerCallBack() {
-						public void call(Timer timer) {
-							if(timer.getChannel().isOpen()){
-								System.out.println("out of time,just close it");
-								timer.getChannel().close();
-							}
-						}
-					}));
+					//10秒后关闭
+					dispatcher.addTimer(new DelayCloseTimer(event.getChannel()));
 					break;
 				case ON_MESSAGE_COME:
 					dispatcher.webSocketProcess(event);
 					break;
 				case RPC_MSG_COME:
 					dispatcher.socketProcess(event);
+					break;
+					
+				case ON_TEXT_MESSAGE_COME:
+					System.out.println(event.getData());
 					break;
 				default:
 					throw new Exception("unknown channelEventType <"+event.getChannelEventType()+">");
