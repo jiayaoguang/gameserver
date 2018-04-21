@@ -23,16 +23,19 @@ public class Request {
 	
 	private Map<String, String> parametersMap;
 
-	private final HttpRequest httpRequest;
 	
 	private final String noParamUri;
 	
+	private final HttpHeaders headers;
+	
+	private final HttpMethod method;
 	
 	
 	
 	public Request(HttpRequest httpRequest) {
-		this.httpRequest = httpRequest;
 		noParamUri = getNoParamPath(httpRequest.uri());
+		headers = httpRequest.headers();
+		method = httpRequest.method();
 	}
 
 	public void setParametersMap(Map<String, String> parametersMap) {
@@ -54,12 +57,12 @@ public class Request {
 
 	public HttpMethod method() {
 
-		return httpRequest.method();
+		return method;
 	}
 	
 	public HttpHeaders getHeaders() {
 
-		return httpRequest.headers();
+		return headers;
 	}
 	
 	public String getNoParamPath(String uri) {
@@ -80,7 +83,7 @@ public class Request {
 	private static final Set<Cookie> nullSet = new HashSet<>();
 	
 	public Set<Cookie> decodeCookies() {
-		String cookiesValue = httpRequest.headers().get(HttpHeaderNames.COOKIE);
+		String cookiesValue = headers.get(HttpHeaderNames.COOKIE);
 		System.out.println("cookiesValue : " + cookiesValue);
 		if(cookiesValue==null) {
 			return nullSet;

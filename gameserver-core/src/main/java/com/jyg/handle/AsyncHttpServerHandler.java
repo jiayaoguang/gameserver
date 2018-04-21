@@ -2,26 +2,25 @@ package com.jyg.handle;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
 import com.jyg.bean.LogicEvent;
 import com.jyg.consumers.EventConsumerFactory;
 import com.jyg.enums.EventType;
 import com.jyg.net.Request;
-import com.jyg.util.GlobalQueue;
 import com.jyg.util.RequestParser;
 
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpRequest;
+import io.netty.util.ReferenceCountUtil;
 /**
  * created by jiayaoguang at 2018年4月12日
  * 异步http
  */
 @Deprecated
-public class AsyncHttpServerHandler extends ChannelInboundHandlerAdapter {
+public class AsyncHttpServerHandler extends SimpleChannelInboundHandler {
 
 
 
@@ -50,7 +49,7 @@ public class AsyncHttpServerHandler extends ChannelInboundHandlerAdapter {
 	
 
 	@Override
-	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+	public void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
 		if (msg instanceof HttpRequest) {
 
 			System.out.println(((FullHttpRequest) msg).content().refCnt() + " ," + Thread.currentThread().getName()
@@ -65,6 +64,7 @@ public class AsyncHttpServerHandler extends ChannelInboundHandlerAdapter {
 			EventConsumerFactory.newEventConsumer().onEvent(event);
 
 		}
+//		ReferenceCountUtil.release(msg);
 	}
 
 	@Override
@@ -83,5 +83,6 @@ public class AsyncHttpServerHandler extends ChannelInboundHandlerAdapter {
 //		request.setRequestid(requestid.getAndIncrement());
 		return request;
 	}
-	
+
+
 }

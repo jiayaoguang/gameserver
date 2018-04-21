@@ -1,25 +1,22 @@
 package com.jyg.startup;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.MessageLiteOrBuilder;
-import com.jyg.enums.ProtoEnum;
 import com.jyg.handle.initializer.SocketClientInitializer;
 import com.jyg.net.EventDispatcher;
 import com.jyg.net.ProtoProcessor;
-import com.jyg.process.PongProtoProcessor;
-import com.jyg.proto.p_common;
-import com.jyg.session.ServerSession;
 import com.jyg.session.Session;
 import com.jyg.timer.IdleTimer;
+import com.jyg.util.RemotingUtil;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -36,7 +33,7 @@ public class InnerClient {
 	
 	// 通过nio方式来接收连接和处理连接
 	private static EventLoopGroup group = new NioEventLoopGroup();
-	private Bootstrap bootstrap = new Bootstrap();//TODO
+	private Bootstrap bootstrap = new Bootstrap();
 	private Channel channel;
 	private Session session;
 	public InnerClient()  {
@@ -59,9 +56,8 @@ public class InnerClient {
 	public InnerClient(ChannelInitializer<SocketChannel> channelInitializer) {
 		System.out.println("客户端成功启动...");
 		bootstrap.group(group);
-		bootstrap.channel(NioSocketChannel.class);
+		bootstrap.channel( RemotingUtil.useEpoll() ? EpollSocketChannel.class : NioSocketChannel.class);
 		bootstrap.handler(channelInitializer);
-		
 		bootstrap.option(ChannelOption.SO_KEEPALIVE, false);
 		bootstrap.option(ChannelOption.TCP_NODELAY, true);
 		bootstrap.option(ChannelOption.SO_RCVBUF, 8*1024);

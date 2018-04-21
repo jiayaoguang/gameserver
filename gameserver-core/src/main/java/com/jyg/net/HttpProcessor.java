@@ -21,7 +21,7 @@ public abstract class HttpProcessor implements Processor<Request> {
 			e.printStackTrace();
 			event.getChannel().writeAndFlush( response.create500FullHttpResponse() );
 		}finally {
-			//TODO
+			//TODO 修改bytebuf释放
 			ByteBuf buf = response.getContent();
 			if(buf.readableBytes()==0) {
 				buf.release(response.getContent().refCnt());

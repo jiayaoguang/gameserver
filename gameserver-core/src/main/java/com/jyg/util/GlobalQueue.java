@@ -46,6 +46,12 @@ public class GlobalQueue {
 		disruptor.start();
 	}
 	
+	public static void shutdown() {
+		
+		disruptor.shutdown();
+		
+	}
+	
 	
 	public static void publicEvent(EventType evenType, Object data,Channel channel) {
 		long sequence = GlobalQueue.ringBuffer.next();

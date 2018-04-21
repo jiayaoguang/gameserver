@@ -115,6 +115,8 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 			sendError(ctx, BAD_REQUEST);
 			return;
 		}
+		
+		System.out.println("static :" + request.content().refCnt());
 
 //		String s = request.headers().get(HttpHeaderNames.CONTENT_TYPE);
 //
@@ -122,6 +124,7 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 		//包含点字符的当做静态文件请求处理
 		if (request.uri().indexOf('.')==-1) {
 			ctx.fireChannelRead(request);
+			request.content().retain();
 			return;
 		}
 

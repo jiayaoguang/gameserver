@@ -2,24 +2,20 @@ package com.jyg.handle;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
-import com.jyg.bean.LogicEvent;
-import com.jyg.consumers.EventConsumerFactory;
 import com.jyg.enums.EventType;
 import com.jyg.net.Request;
 import com.jyg.util.GlobalQueue;
 import com.jyg.util.RequestParser;
 
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpRequest;
 
-public class SyncHttpServerHandler extends ChannelInboundHandlerAdapter {
+public class SyncHttpServerHandler extends SimpleChannelInboundHandler {
 
-
+	
 	// 是否是线程同步的http
 //	private final boolean isSynHttp;
 //
@@ -56,7 +52,7 @@ public class SyncHttpServerHandler extends ChannelInboundHandlerAdapter {
 	
 
 	@Override
-	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+	public void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
 		
 		if (msg instanceof HttpRequest) {
 
@@ -99,6 +95,8 @@ public class SyncHttpServerHandler extends ChannelInboundHandlerAdapter {
 			// ctx.write(response);
 			// }
 		}
+		//TODO 去掉静态文件处理器，记得释放request
+		System.out.println(((FullHttpRequest) msg).content().refCnt());
 	}
 
 	@Override

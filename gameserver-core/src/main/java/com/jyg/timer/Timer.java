@@ -54,6 +54,14 @@ public abstract class Timer implements Comparable<Timer> {
 	public void setExeNum(int exeNum) {
 		this.exeNum = exeNum;
 	}
+	
+	public void incExeNum() {
+		if(exeNum==0) {
+			
+			return;
+		}
+		this.exeNum++;
+	}
 
 	public long getStartTime() {
 		return startTime;
@@ -110,5 +118,7 @@ public abstract class Timer implements Comparable<Timer> {
 	public void setChannel(Channel channel) {
 		this.channel = channel;
 	}
+	
+	
 
 }

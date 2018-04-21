@@ -3,7 +3,6 @@ package com.jyg.handle;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.jyg.bean.LogicEvent;
 import com.jyg.enums.EventType;
 import com.jyg.util.GlobalQueue;
 
@@ -13,6 +12,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
+import io.netty.util.ReferenceCountUtil;
 
 /**
  * created by jiayaoguang at 2017年12月6日
@@ -51,9 +51,11 @@ public class TextWebSocketFrameHandler extends
 			
 			GlobalQueue.publicEvent(EventType.ON_TEXT_MESSAGE_COME, text, ctx.channel() );
 			
-			return;
 		}else if(frame instanceof BinaryWebSocketFrame) {
 			System.out.println("this frame is BinaryWebSocketFrame");
+			
+		}else {
+			System.out.println("this frame is unkonwn");
 		}
 		
 //		if(frame instanceof PingWebSocketFrame) {
@@ -66,7 +68,7 @@ public class TextWebSocketFrameHandler extends
 //			return;
 //		}
 		
-		throw new Exception("other frame.........");
+		return;
 		
 	}
 	
