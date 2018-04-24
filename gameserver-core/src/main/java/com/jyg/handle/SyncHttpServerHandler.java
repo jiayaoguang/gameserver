@@ -12,6 +12,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpRequest;
+import io.netty.util.ReferenceCountUtil;
 
 public class SyncHttpServerHandler extends SimpleChannelInboundHandler {
 
@@ -95,8 +96,7 @@ public class SyncHttpServerHandler extends SimpleChannelInboundHandler {
 			// ctx.write(response);
 			// }
 		}
-		//TODO 去掉静态文件处理器，记得释放request
-		System.out.println(((FullHttpRequest) msg).content().refCnt());
+		ReferenceCountUtil.release(msg);
 	}
 
 	@Override

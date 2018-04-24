@@ -4,28 +4,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.gameserver.auth.bean.UserLoginInfo;
-import org.gameserver.auth.util.FTLLoader;
 
 import com.google.inject.Inject;
 import com.jyg.net.ProtoProcessor;
 import com.jyg.net.ProtoResponse;
 import com.jyg.net.Response;
 import com.jyg.proto.p_auth_sm.p_sm_auth_response_receive_token;
+import com.jyg.util.FTLLoader;
 
 /**
  * created by jiayaoguang at 2018年4月9日
  */
 public class TokenReceiveSuccessProtoProcessor extends ProtoProcessor<p_sm_auth_response_receive_token> {
 
-	private FTLLoader ftlLoader;
 	
 	TokenSendHttpProcessor tokenSendHttpProcessor;
 	
 	
 	@Inject
-	public TokenReceiveSuccessProtoProcessor(FTLLoader ftlLoader,TokenSendHttpProcessor tokenSendHttpProcessor) throws InstantiationException, IllegalAccessException {
+	public TokenReceiveSuccessProtoProcessor(TokenSendHttpProcessor tokenSendHttpProcessor) throws InstantiationException, IllegalAccessException {
 		super(p_sm_auth_response_receive_token.newBuilder().build());
-		this.ftlLoader = ftlLoader;
 		this.tokenSendHttpProcessor =tokenSendHttpProcessor;
 	}
 

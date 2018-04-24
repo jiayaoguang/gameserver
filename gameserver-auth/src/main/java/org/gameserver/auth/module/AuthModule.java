@@ -4,7 +4,6 @@ import org.gameserver.auth.processor.TokenReceiveSuccessProtoProcessor;
 import org.gameserver.auth.processor.TokenSendHttpProcessor;
 import org.gameserver.auth.util.AuthToSMChannelMrg;
 import org.gameserver.auth.util.AuthToSMChannelPool;
-import org.gameserver.auth.util.FTLLoader;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
@@ -20,7 +19,6 @@ public class AuthModule extends AbstractModule{
 		this.bind(AuthToSMChannelMrg.class).in(Scopes.SINGLETON);
 		this.bind(TokenSendHttpProcessor.class).in(Scopes.SINGLETON);
 		this.bind(AuthToSMChannelPool.class).in(Scopes.SINGLETON);
-		this.bind(FTLLoader.class).in(Scopes.SINGLETON);
 		
 		this.bind(TokenReceiveSuccessProtoProcessor.class).in(Scopes.SINGLETON);
 		this.bind(TokenSendHttpProcessor.class).in(Scopes.SINGLETON);

@@ -1,6 +1,7 @@
 package com.jyg.net;
 
 import com.jyg.bean.LogicEvent;
+import com.jyg.util.FTLLoader;
 
 import io.netty.buffer.ByteBuf;
 
@@ -41,6 +42,10 @@ public abstract class HttpProcessor implements Processor<Request> {
 
 	public HttpProcessor getDispatcher(String path) {
 		return EventDispatcher.getInstance().getHttpProcessor(path);
+	}
+	
+	public FTLLoader getFTLLoader() {
+		return ftlLoader;
 	}
 	
 	public abstract void service(Request request, Response response);

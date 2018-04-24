@@ -1,4 +1,4 @@
-package org.gameserver.auth.util;
+package com.jyg.util;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;

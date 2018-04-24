@@ -116,15 +116,14 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 			return;
 		}
 		
-		System.out.println("static :" + request.content().refCnt());
-
 //		String s = request.headers().get(HttpHeaderNames.CONTENT_TYPE);
 //
 //		System.out.println("CONTENT_TYPE: " + s + "," + request.headers());
 		//包含点字符的当做静态文件请求处理
 		if (request.uri().indexOf('.')==-1) {
+			request.retain();
 			ctx.fireChannelRead(request);
-			request.content().retain();
+			System.out.println("static :" + request.refCnt());
 			return;
 		}
 
