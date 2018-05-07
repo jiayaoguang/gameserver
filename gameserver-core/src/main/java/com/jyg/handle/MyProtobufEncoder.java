@@ -7,22 +7,24 @@ import com.google.protobuf.GeneratedMessageV3.Builder;
 import com.google.protobuf.MessageLite;
 import com.google.protobuf.MessageLiteOrBuilder;
 import com.jyg.net.EventDispatcher;
+import com.jyg.util.UnknowMessageTypeException;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.handler.codec.MessageToMessageEncoder;
 
 /**
  * created by jiayaoguang at 2018年3月13日
  * protobuf编码器
  */
-public class MyProtobufEncoder extends MessageToMessageEncoder<MessageLiteOrBuilder> {
+public class MyProtobufEncoder extends MessageToByteEncoder<MessageLiteOrBuilder> {
 
 	EventDispatcher dis = EventDispatcher.getInstance();
 
 	@Override
-	protected void encode(ChannelHandlerContext ctx, MessageLiteOrBuilder msg, List<Object> out)
-			throws Exception {
+	protected void encode(ChannelHandlerContext ctx, MessageLiteOrBuilder msg, ByteBuf buf)
+			throws UnknowMessageTypeException {
 		String protoName;
 		
 		byte[] bytes = null;
@@ -34,23 +36,23 @@ public class MyProtobufEncoder extends MessageToMessageEncoder<MessageLiteOrBuil
 			bytes = messageLite.toByteArray();
 			protoName = messageLite.getClass().getName();
 		}else {
-			throw new Exception("unknow message type");
+			throw new UnknowMessageTypeException("Unknow message type");
 		}
 
 		if (bytes == null) {
-			throw new Exception("not MessageLiteOrBuilder");
+			throw new UnknowMessageTypeException("not MessageLiteOrBuilder");
 		}
 		Integer eventid = dis.getEventIdByProtoName(protoName);
 		
 		if(eventid == null) {
-			throw new Exception("unknow eventid");
+			throw new UnknowMessageTypeException("unknow eventid");
 		}
 		
 		int protoLen = 4 + bytes.length;
-		ByteBuf buf = ctx.alloc().directBuffer(protoLen);
+//		ByteBuf buf = ctx.alloc().directBuffer(protoLen);
 		buf.writeInt(protoLen);
-		buf.writeInt(eventid);
+		buf.writeInt(eventid.intValue());
 		buf.writeBytes(bytes);
-		out.add(buf);
+//		out.add(buf);
 	}
 }

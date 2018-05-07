@@ -8,11 +8,10 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.gameserver.auth.util.FTLLoader;
+import com.jyg.util.FTLLoader;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import freemarker.template.Version;
 
 /**
  * 最常见的问题： 

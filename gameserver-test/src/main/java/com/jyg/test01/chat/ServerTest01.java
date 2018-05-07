@@ -49,7 +49,7 @@ public class ServerTest01
         bootstarp.registerSocketEvent(1, processor);
         
         
-        bootstarp.registerSocketEvent(3, chatProcessor);
+        bootstarp.registerSocketEvent(11, chatProcessor);
         
         bootstarp.registerSendEventIdByProto(4, p_sm_scene_chat.class);
         

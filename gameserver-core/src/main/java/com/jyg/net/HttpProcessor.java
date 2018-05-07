@@ -20,14 +20,9 @@ public abstract class HttpProcessor implements Processor<Request> {
 //			fullHttpResponse = response.createDefaultFullHttpResponse();
 		}catch(Exception e){
 			e.printStackTrace();
-			event.getChannel().writeAndFlush( response.create500FullHttpResponse() );
+			response.write500Error();
 		}finally {
-			//TODO 修改bytebuf释放
-			ByteBuf buf = response.getContent();
-			if(buf.readableBytes()==0) {
-				buf.release(response.getContent().refCnt());
-				System.out.println("buf.refCnt()" + buf.refCnt());
-			}
+			
 		}
 
 		// .addListener(ChannelFutureListener.CLOSE);//关闭连接由客户端关闭或者timer

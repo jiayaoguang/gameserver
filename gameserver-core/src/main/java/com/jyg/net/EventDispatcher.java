@@ -15,6 +15,7 @@ import com.jyg.proto.p_common.p_common_response_pong;
 import com.jyg.session.Session;
 import com.jyg.timer.Timer;
 import com.jyg.timer.TimerTrigger;
+import com.jyg.util.DupilcateEventIdException;
 
 import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -29,17 +30,13 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 public class EventDispatcher{
 
 	private static final EventDispatcher dispatcher = new EventDispatcher();
-	
 	private final HttpProcessor notFOundProcessor = new NotFoundHttpProcessor();
-	
 	private  final Int2ObjectMap< ProtoProcessor<? extends GeneratedMessageV3>> logicEventMap = new Int2ObjectOpenHashMap<>();
 	private  final Map<String, HttpProcessor> httpPathMap = new HashMap<>();
 	private  final Int2ObjectMap< ProtoProcessor<? extends GeneratedMessageV3>> socketEventMap = new Int2ObjectOpenHashMap<>();
 	
 	private final Object2IntMap<String> protoNameToEventidMap = new Object2IntOpenHashMap<>();
-	
 	private final Map<Channel,Session> channelMap = new HashMap<>();
-	
 	
 	private EventDispatcher() {
 		this.addTimer(new Timer(Integer.MAX_VALUE , 20*1000L, null ) {
@@ -64,16 +61,15 @@ public class EventDispatcher{
 	public static EventDispatcher getInstance() {
 		return dispatcher;
 	}
-
 	/**
 	 * 注册游戏逻辑事件
 	 * @param eventid
 	 * @param processor
 	 * @throws Exception
 	 */
-	public void registerLogicEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> processor) throws Exception {
+	public void registerLogicEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> processor) throws DupilcateEventIdException {
 		if(logicEventMap.containsKey(eventid)) {
-			throw new Exception("dupilcated eventid");
+			throw new DupilcateEventIdException();
 		}
 		logicEventMap.put(eventid, processor);
 	}
@@ -83,9 +79,9 @@ public class EventDispatcher{
 	 * @param eventid 事件id
 	 * @param processor 事件处理器
 	 */
-	public void registerSocketEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> processor) throws Exception {
+	public void registerSocketEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> processor) throws DupilcateEventIdException {
 		if(socketEventMap.containsKey(eventid)) {
-			throw new Exception("dupilcated eventid");
+			throw new DupilcateEventIdException();
 		}
 //		eventidToProtoNameMap.put(processor.getProtoClassName(), eventid);
 		socketEventMap.put(eventid, processor);

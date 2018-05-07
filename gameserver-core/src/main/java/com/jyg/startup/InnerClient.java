@@ -26,7 +26,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  * 远程端口连接
  */
 
-public class InnerClient {
+public class InnerClient extends AbstractBootstrap {
 
 //	public String host = "127.0.0.1"; // ip地址
 //	public int port = 6789; // 端口
@@ -76,13 +76,13 @@ public class InnerClient {
 	
 	
 	
-	public void registerSocketEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoprocessor) throws Exception {
-		EventDispatcher.getInstance().registerSocketEvent(eventid, protoprocessor);
-	}
-	
-	public void registerSendEventIdByProto(int eventId,Class<? extends GeneratedMessageV3> protoClazz) throws Exception {
-		EventDispatcher.getInstance().registerSendEventIdByProto( eventId, protoClazz);
-	}
+//	public void registerSocketEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoprocessor) throws Exception {
+//		EventDispatcher.getInstance().registerSocketEvent(eventid, protoprocessor);
+//	}
+//	
+//	public void registerSendEventIdByProto(int eventId,Class<? extends GeneratedMessageV3> protoClazz) throws Exception {
+//		EventDispatcher.getInstance().registerSendEventIdByProto( eventId, protoClazz);
+//	}
 
 	public void write( MessageLiteOrBuilder msg) throws IOException {
 		channel.writeAndFlush( msg);

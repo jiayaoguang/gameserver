@@ -19,7 +19,7 @@ import com.jyg.util.GlobalQueue;
 /**
  * Created by jiayaoguang on 2017/3/30
  */
-public class GameServerBootstarp {
+public class GameServerBootstarp extends AbstractBootstrap {
 	
 	List<Service> services = new ArrayList<>(1);
 	public GameServerBootstarp(){
@@ -32,13 +32,13 @@ public class GameServerBootstarp {
 	}
 	
 	
-	public void registerLogicEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> processor) throws Exception {
-		EventDispatcher.getInstance().registerLogicEvent(eventid, processor);
-	}
-	
-	public void registerSocketEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoprocessor) throws Exception {
-		EventDispatcher.getInstance().registerSocketEvent(eventid, protoprocessor);
-	}
+//	public void registerLogicEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> processor) throws Exception {
+//		EventDispatcher.getInstance().registerLogicEvent(eventid, processor);
+//	}
+//	
+//	public void registerSocketEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoprocessor) throws Exception {
+//		EventDispatcher.getInstance().registerSocketEvent(eventid, protoprocessor);
+//	}
 	
 	public void registerHttpEvent(String path, HttpProcessor processor) throws Exception {
 		EventDispatcher.getInstance().registerHttpEvent(path, processor);

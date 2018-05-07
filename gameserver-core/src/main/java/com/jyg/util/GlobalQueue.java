@@ -20,9 +20,9 @@ import io.netty.channel.Channel;
 public class GlobalQueue {
 
 	
-	private static  Disruptor<LogicEvent<Object>> disruptor;
-	private static  int bufferSize = 4096;
-	private static  RingBuffer<LogicEvent<Object>> ringBuffer;
+	private static final Disruptor<LogicEvent<Object>> disruptor;
+	private static final int bufferSize = 4096;
+	private static final RingBuffer<LogicEvent<Object>> ringBuffer;
 	
 	static {
 

@@ -36,7 +36,7 @@ public class QueueTest {
 		// 三个线程的情况下(时间) concurrentLinkedQueue > SynLinked > ArrayBlockingQueue
 		//单个线程的情况下 (时间)  ArrayBlockingQueue > SynLinked > concurrentLinkedQueue
 		
-		T t = new T( block );
+		T t = new T( synlinked );
 		for(int i = 0;i<1 ; i++){
 			new Thread( t  ).start();
 		}

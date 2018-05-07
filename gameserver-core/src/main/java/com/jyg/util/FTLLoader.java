@@ -14,13 +14,6 @@ import com.google.inject.Inject;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
-/**
- * 最常见的问题： 
- *     java.io.FileNotFoundException: xxx does not exist. 解决方法：要有耐心
- *     FreeMarker jar 最新的版本（2.3.23）提示 Configuration 方法被弃用
- * 代码自动生产基本原理：
- *     数据填充 freeMarker 占位符
- */
 
 public class FTLLoader {
     

@@ -61,6 +61,15 @@
 		<slf4j.version>1.7.5</slf4j.version>
 	</properties>
 
+	<developers>
+		<developer>
+			<id>jiayaoguang</id>
+			<name>jiayaoguang</name>
+			<url>www.jiayaoguang.com</url>
+		</developer>
+		
+	</developers>
+
 	<dependencies>
 
 		<!-- <dependency> <groupId>log4j</groupId> <artifactId>log4j</artifactId> 
@@ -85,4 +94,5 @@
 		</dependency>
 		
 	</dependencies>
+	
 </project>

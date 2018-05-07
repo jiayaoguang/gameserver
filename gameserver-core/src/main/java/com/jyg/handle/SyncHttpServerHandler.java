@@ -96,7 +96,6 @@ public class SyncHttpServerHandler extends SimpleChannelInboundHandler {
 			// ctx.write(response);
 			// }
 		}
-		ReferenceCountUtil.release(msg);
 	}
 
 	@Override

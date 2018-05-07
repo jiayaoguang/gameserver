@@ -22,12 +22,6 @@ import io.netty.util.CharsetUtil;
 public class Response {
 	
 	
-	//要发给客户端的内容
-	//TODO
-	private final ByteBuf content = Unpooled.directBuffer(2000, 20000);
-	
-	StringBuilder sb = new StringBuilder(2000);
-	
 	private String contentType =  "text/html; charset=UTF-8";
 	
 	public static final String CONTENT_TYPE_JSON = "application/json";
@@ -43,7 +37,6 @@ public class Response {
 			.getBytes();
 
 	private Channel channel;
-	
 	
 	public Response() {
 		
@@ -62,18 +55,15 @@ public class Response {
 		this.channel = channel;
 	}
 	
-	public void flush() {
-		this.getChannel().writeAndFlush(this.createDefaultFullHttpResponse());
-	}
 	
 	public void writeAndFlush(String msg) {
-		this.write(msg);
-		this.getChannel().writeAndFlush(this.createDefaultFullHttpResponse());
+		this.writeAndFlush(msg.getBytes());
 	}
 	
 	public void writeAndFlush(byte[] bs) {
-		this.write(bs);
-		this.getChannel().writeAndFlush(this.createDefaultFullHttpResponse());
+		ByteBuf content = this.createContent(bs.length);
+		content.writeBytes(bs);
+		this.getChannel().writeAndFlush(this.createDefaultFullHttpResponse(content));
 	}
 	
 	
@@ -81,23 +71,14 @@ public class Response {
 		this.contentType = contentType;
 	}
 	
-	public void write(String msg) {
-		content.writeBytes(msg.getBytes(CharsetUtil.UTF_8));
+
+
+	ByteBuf createContent(int initialCapacity) {
+		return Unpooled.directBuffer(initialCapacity);
 	}
-
-	public void write(byte[] bytes) {
-		content.writeBytes(bytes);
-	}
-
-	// public void setContent(ByteBuf content) {
-	//
-	// this.content = content;
-	// }
-
-	ByteBuf getContent() {
-
-		return content;
-	}
+	
+	
+	
 	/**
 	 * 添加一个cookie
 	 */
@@ -110,13 +91,13 @@ public class Response {
 	 * 创建一个返回给客户端的回复
 	 * @return 给客户端的回复
 	 */
-	public DefaultFullHttpResponse createDefaultFullHttpResponse() {
+	private DefaultFullHttpResponse createDefaultFullHttpResponse(ByteBuf content) {
 		DefaultFullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
-				HttpResponseStatus.OK, this.getContent());
+				HttpResponseStatus.OK, content);
 		HttpHeaders headers = fullHttpResponse.headers();
 		headers.set(HttpHeaderNames.CONTENT_TYPE, this.contentType);
 		headers.set(HttpHeaderNames.CONNECTION, HttpHeaderValues.CLOSE);
-		headers.set(HttpHeaderNames.CONTENT_LENGTH, getContent().readableBytes());
+		headers.set(HttpHeaderNames.CONTENT_LENGTH, content.readableBytes());
 		headers.set(HttpHeaderNames.CONTENT_ENCODING, CharsetUtil.UTF_8);
 		// cookie
 //		Cookie cookie = new DefaultCookie("jygsessionid", genericSessionId());
@@ -138,14 +119,13 @@ public class Response {
 	 * @return 指定返回码的回复
 	 */
 	private DefaultFullHttpResponse createStatuHttpResponse(HttpResponseStatus responseStatus, byte[] bytes) {
-		this.getContent().clear();
-		this.getContent().writeBytes(bytes);
+		ByteBuf content = this.createContent(bytes.length).writeBytes(bytes);
 		DefaultFullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, responseStatus,
-				this.getContent());
+				content);
 		HttpHeaders headers = fullHttpResponse.headers();
 		headers.set(HttpHeaderNames.CONTENT_TYPE, "text/html; charset=UTF-8");
 		headers.set(HttpHeaderNames.CONNECTION, HttpHeaderValues.CLOSE);
-		headers.set(HttpHeaderNames.CONTENT_LENGTH, this.getContent().readableBytes());
+		headers.set(HttpHeaderNames.CONTENT_LENGTH, content.readableBytes());
 		return fullHttpResponse;
 	}
 	  
@@ -153,10 +133,14 @@ public class Response {
 	 * 创建500错误的http回复
 	 * @return 500 error response
 	 */
-	public DefaultFullHttpResponse create500FullHttpResponse() {
+	private DefaultFullHttpResponse create500FullHttpResponse() {
 		return this.createStatuHttpResponse(HttpResponseStatus.INTERNAL_SERVER_ERROR,
 				internalServerErrorBytes);
 	}
 	
+	
+	void write500Error() {
+		this.channel.writeAndFlush( create500FullHttpResponse() );
+	}
 	
 }
