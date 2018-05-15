@@ -26,9 +26,6 @@ public class WebSocketServerInitializer extends
 //		pipeline.addLast(new HttpStaticFileServerHandler());
 		
 		pipeline.addLast(new WebSocketServerProtocolHandler("/"));
-		
-		
-		
 		pipeline.addLast(new TextWebSocketFrameHandler());
 		
 	}

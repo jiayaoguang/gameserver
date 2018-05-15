@@ -4,10 +4,12 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.jyg.handle.initializer.WebSocketServerInitializer;
+import com.jyg.proto.p_common.p_common_response_pong;
 import com.jyg.util.GlobalQueue;
 import com.jyg.util.RemotingUtil;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -84,34 +86,31 @@ public abstract class Service {
 			throw new Exception("initializer must is not null");
 		}
 
-		ServerBootstrap b = new ServerBootstrap();
+		ServerBootstrap bootstrap = new ServerBootstrap();
 
-		b.group(bossGroup, workGroup);
-
-		b.channel(RemotingUtil.useEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class);
-
-		b.handler(new LoggingHandler(LogLevel.INFO));
-
-		b.childHandler(initializer);
-
-		b.option(ChannelOption.SO_REUSEADDR, true);
+		bootstrap.group(bossGroup, workGroup);
+		
+		bootstrap.channel(RemotingUtil.useEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class);
+		bootstrap.handler(new LoggingHandler(LogLevel.INFO));
+		bootstrap.childHandler(initializer);
+		
+		bootstrap.option(ChannelOption.SO_REUSEADDR, true);
 		// tcp等待三次握手队列的长度
-		b.option(ChannelOption.SO_BACKLOG, 400);
-
-		b.option(ChannelOption.SO_KEEPALIVE, false);
-
-		b.option(ChannelOption.TCP_NODELAY, true);
-
-		b.option(ChannelOption.SO_RCVBUF, 64 * 1024);
-
-		b.option(ChannelOption.SO_SNDBUF, 64 * 1024);
-		// 指定等待时间为0，此时调用主动关闭时不会发送FIN来结束连接，而是直接将连接设置为CLOSE状态，清除套接字中的发送和接收缓冲区，直接对对端发送RST包。
-		b.childOption(ChannelOption.SO_LINGER, 0);
-
-		b.childOption(ChannelOption.SO_KEEPALIVE, false);
-
-		b.childOption(ChannelOption.TCP_NODELAY, true);
-		b.bind(port).sync().channel();
+		bootstrap.option(ChannelOption.SO_BACKLOG, 400);
+		bootstrap.option(ChannelOption.SO_KEEPALIVE, false);
+		bootstrap.option(ChannelOption.TCP_NODELAY, true);
+		bootstrap.option(ChannelOption.SO_RCVBUF, 64 * 1024);
+		bootstrap.option(ChannelOption.SO_SNDBUF, 64 * 1024);
+		bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
+		
+		// 指定等待时间为0，此时调用主动关闭时不会发送FIN来结束连接，而是直接将连接设置为CLOSE状态，
+		//清除套接字中的发送和接收缓冲区，直接对对端发送RST包。
+		bootstrap.childOption(ChannelOption.SO_LINGER, 0);
+		bootstrap.childOption(ChannelOption.SO_KEEPALIVE, false);
+		bootstrap.childOption(ChannelOption.TCP_NODELAY, true);
+		bootstrap.childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
+		
+		bootstrap.bind(port).sync().channel().writeAndFlush(p_common_response_pong.getDefaultInstance());
 		System.out.println("正在开启端口监听，端口号 :" + port);
 	}
 

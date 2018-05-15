@@ -7,23 +7,24 @@ import io.netty.channel.epoll.Epoll;
  */
 public class RemotingUtil {
 
-	public static final String OS_NAME = System.getProperty("os.name");
-	
-	
-	public static final boolean isLinuxPlatform;
-	
-	static{
-		if(OS_NAME!=null&& OS_NAME.toLowerCase().contains("linux")) {
-			isLinuxPlatform = true;
-		}else {
-			isLinuxPlatform = false;
+
+	public static final boolean IS_LINUX_PLATFORM;
+
+	private RemotingUtil() {
+		
+	}
+	static {
+		final String OS_NAME = System.getProperty("os.name");
+		if (OS_NAME != null && OS_NAME.toLowerCase().contains("linux")) {
+			IS_LINUX_PLATFORM = true;
+		} else {
+			IS_LINUX_PLATFORM = false;
 		}
 	}
-	
-	//TODO
-	public static boolean useEpoll() {
-		return RemotingUtil.isLinuxPlatform&&Epoll.isAvailable();
-	}
-	
-}
 
+	// TODO
+	public static boolean useEpoll() {
+		return RemotingUtil.IS_LINUX_PLATFORM && Epoll.isAvailable();
+	}
+
+}

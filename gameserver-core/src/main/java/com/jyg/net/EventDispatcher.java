@@ -152,7 +152,7 @@ public class EventDispatcher{
 	
 	//检测并移除超时的channel
 	public void removeOutOfTimeChannels() {
-		System.out.println("检测并移除超时的channel");
+//		System.out.println("检测并移除超时的channel");
 		Iterator<Map.Entry<Channel, Session>> it = channelMap.entrySet().iterator();
 		for(;it.hasNext();) {
 			Map.Entry<Channel, Session> entry = it.next();
@@ -169,6 +169,7 @@ public class EventDispatcher{
 			if( (session.getLastContactMill() + 60*1000) < System.currentTimeMillis()) {
 				channel.close();
 				it.remove();
+				System.out.println("移除超时的channel"+channel);
 			}
 		}
 	}

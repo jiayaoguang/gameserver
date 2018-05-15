@@ -26,6 +26,7 @@ public class WebSocketClientInitializer extends
 //		pipeline.addLast(new ChunkedWriteHandler());
 //		pipeline.addLast(new HttpStaticFileServerHandler());
 		
+		//WebSocketClientProtocolHandler TODO
 		pipeline.addLast(new WebSocketServerProtocolHandler("/"));
 		pipeline.addLast(new TextWebSocketFrameHandler());
 		

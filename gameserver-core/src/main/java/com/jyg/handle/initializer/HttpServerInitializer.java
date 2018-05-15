@@ -33,13 +33,15 @@ public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
 //	public boolean isSynHttp() {
 //		return isSynHttp;
 //	}
+	//TODO
+//	private final HttpServerCodec httpCodec= new HttpServerCodec();
 	
 	@Override
 	public void initChannel(SocketChannel ch) throws Exception {
 		ChannelPipeline pipeline = ch.pipeline();
 		
 //		pipeline.addLast(new InnerSocketHandler());
-		pipeline.addLast(new HttpServerCodec());
+		pipeline.addLast( new HttpServerCodec());
 		// 处理过长的请求
 		pipeline.addLast(new HttpObjectAggregator(64 * 1024));
 		// pipeline.addLast(new ChunkedWriteHandler());//主要用于处理大数据流,比如一个1G大小的文件

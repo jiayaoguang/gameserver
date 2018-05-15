@@ -18,10 +18,8 @@ public abstract class ProtoProcessor<T extends GeneratedMessageV3> implements Pr
 
 	@Deprecated
 	public ProtoProcessor(Class<? extends GeneratedMessageV3> protoClazz) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		Object newBuilder = protoClazz.getMethod("newBuilder").invoke(null);
-		GeneratedMessageV3 build = (GeneratedMessageV3)protoClazz.getMethod("build").invoke(newBuilder);
-		parser = build.getParserForType();
-//				protoClazz.newInstance().getParserForType();
+		GeneratedMessageV3 defaultInstance = (GeneratedMessageV3)protoClazz.getMethod("getDefaultInstance").invoke(null);
+		parser = defaultInstance.getParserForType();
 		clazz = protoClazz;
 	}
 

@@ -25,7 +25,10 @@ public class AuthToSMChannelMrg {
 		System.out.println("get channel <" + channel);
 	}
 	
-
+	/**
+	 * 连接失败会返回空
+	 * @return channel
+	 */
 	public Channel checkoutAndGetChannel() {
 		if(channel != null && channel.isOpen()) {
 			delayCloseChannelTimer.setRecentUseTime(System.currentTimeMillis());

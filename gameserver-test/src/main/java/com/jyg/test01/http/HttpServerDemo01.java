@@ -23,7 +23,7 @@ public class HttpServerDemo01
 			@Override
 			public void service(Request request, Response response) {
 
-				response.write( "<html><head></head><body><div align='center'><h1>Hello world!</h1></div><body></html>" );
+				response.writeAndFlush( "<html><head></head><body><div align='center'><h1>Hello world!</h1></div><body></html>" );
 				
 			}
 		} );

@@ -1,6 +1,7 @@
 package com.jyg.test01.chat;
 
-import com.google.protobuf.MessageLiteOrBuilder;
+import org.junit.Test;
+
 import com.jyg.net.ProtoProcessor;
 import com.jyg.net.ProtoResponse;
 import com.jyg.proto.p_sm_scene.p_scene_sm_chat;
@@ -61,5 +62,11 @@ public class CLientTest01
         client.write(p_scene_sm_chat.newBuilder().setMsg("hello world!"));
         
 //        client.close();
+    }
+    
+    @Test
+    public void test01() {
+    	char u = '　';
+    	System.out.println((int)(char)(u*100));
     }
 }

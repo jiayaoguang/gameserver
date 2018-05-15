@@ -9,7 +9,7 @@ import org.junit.Test;
  */
 public class Md5Util {
 
-	public Md5Util() {
+	private Md5Util() {
 
 	}
 

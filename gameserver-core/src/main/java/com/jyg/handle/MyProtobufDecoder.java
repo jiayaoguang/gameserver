@@ -64,7 +64,7 @@ public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
 	@Override
 	public Object decode(ChannelHandlerContext ctx, ByteBuf in) {
 		ByteBuf frame = null;
-
+		//TODO crc
 		try {
 			frame = (ByteBuf) super.decode(ctx, in);
 			
