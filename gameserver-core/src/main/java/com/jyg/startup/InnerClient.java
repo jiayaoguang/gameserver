@@ -12,6 +12,7 @@ import com.jyg.timer.IdleTimer;
 import com.jyg.util.RemotingUtil;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -63,6 +64,7 @@ public class InnerClient extends AbstractBootstrap {
 		bootstrap.option(ChannelOption.SO_RCVBUF, 8*1024);
 		bootstrap.option(ChannelOption.SO_SNDBUF, 8*1024);
 		bootstrap.option(ChannelOption.SO_LINGER, 0);
+		bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 	}
 	
 	// 连接服务端

@@ -89,27 +89,27 @@ public abstract class Service {
 		ServerBootstrap bootstrap = new ServerBootstrap();
 
 		bootstrap.group(bossGroup, workGroup);
-		
+
 		bootstrap.channel(RemotingUtil.useEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class);
 		bootstrap.handler(new LoggingHandler(LogLevel.INFO));
 		bootstrap.childHandler(initializer);
-		
+
 		bootstrap.option(ChannelOption.SO_REUSEADDR, true);
 		// tcp等待三次握手队列的长度
-		bootstrap.option(ChannelOption.SO_BACKLOG, 400);
+		bootstrap.option(ChannelOption.SO_BACKLOG, 1024);
 		bootstrap.option(ChannelOption.SO_KEEPALIVE, false);
-		bootstrap.option(ChannelOption.TCP_NODELAY, true);
-		bootstrap.option(ChannelOption.SO_RCVBUF, 64 * 1024);
-		bootstrap.option(ChannelOption.SO_SNDBUF, 64 * 1024);
+		bootstrap.option(ChannelOption.TCP_NODELAY, true);// maybe useless
 		bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
-		
+
 		// 指定等待时间为0，此时调用主动关闭时不会发送FIN来结束连接，而是直接将连接设置为CLOSE状态，
-		//清除套接字中的发送和接收缓冲区，直接对对端发送RST包。
+		// 清除套接字中的发送和接收缓冲区，直接对对端发送RST包。
 		bootstrap.childOption(ChannelOption.SO_LINGER, 0);
-		bootstrap.childOption(ChannelOption.SO_KEEPALIVE, false);
+		bootstrap.childOption(ChannelOption.SO_RCVBUF, 64 * 1024);
+		bootstrap.childOption(ChannelOption.SO_SNDBUF, 64 * 1024);
+		bootstrap.childOption(ChannelOption.SO_KEEPALIVE, false);// maybe useless
 		bootstrap.childOption(ChannelOption.TCP_NODELAY, true);
 		bootstrap.childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
-		
+
 		bootstrap.bind(port).sync().channel().writeAndFlush(p_common_response_pong.getDefaultInstance());
 		System.out.println("正在开启端口监听，端口号 :" + port);
 	}
@@ -118,8 +118,12 @@ public abstract class Service {
 	 * 停止服务
 	 */
 	public static void shutdown() {
-		bossGroup.shutdownGracefully();
-		workGroup.shutdownGracefully();
+		if (bossGroup != null) {
+			bossGroup.shutdownGracefully();
+		}
+		if (workGroup != null) {
+			workGroup.shutdownGracefully();
+		}
 		GlobalQueue.shutdown();
 	}
 }

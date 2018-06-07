@@ -1,6 +1,8 @@
 package com.jyg.util;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import org.junit.Test;
 
@@ -13,7 +15,7 @@ public class Md5Util {
 
 	}
 
-	public final static String getMD5String(String s) {
+	public static String getMD5String(String s) {
 		char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 		try {
 			byte[] btInput = s.getBytes();
@@ -37,6 +39,28 @@ public class Md5Util {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	
+	private static MessageDigest md5;
+	{
+		try {
+			md5 = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e) {
+			throw new IllegalStateException(e.getMessage(), e);
+		}
+	}
+	public static byte[] md5(String value) {
+		
+		md5.reset();
+		byte[] bytes = null;
+		try {
+			bytes = value.getBytes("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new IllegalStateException(e.getMessage(), e);
+		}
+		md5.update(bytes);
+		return md5.digest();
 	}
 	
 	@Test

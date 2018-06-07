@@ -32,10 +32,6 @@ public abstract class AbstractBootstrap {
 	public AbstractBootstrap()  {
 		
 	}
-
-	
-	
-	
 	
 	public void registerSocketEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoprocessor) throws Exception {
 		EventDispatcher.getInstance().registerSocketEvent(eventid, protoprocessor);

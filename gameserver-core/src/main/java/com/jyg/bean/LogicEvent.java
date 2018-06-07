@@ -60,6 +60,10 @@ public class LogicEvent<T>{
 	}
 
 	
+	@Override
+	public String toString() {
+		return ""+channelEventType+","+this.eventId+data;
+	}
 	
 }
 

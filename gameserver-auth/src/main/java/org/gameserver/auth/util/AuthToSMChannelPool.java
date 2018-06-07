@@ -20,7 +20,7 @@ import io.netty.channel.Channel;
 public class AuthToSMChannelPool {
 
 	//如果同时登陆玩家会过多，则可以增加连接
-	private ArrayBlockingQueue<Tuple<Channel,FreeChannelDelayCloseTimer>> smChannelQueue = new ArrayBlockingQueue<>(10);
+	private ArrayBlockingQueue<Tuple<Channel,FreeChannelDelayCloseTimer>> smChannelQueue = new ArrayBlockingQueue<>(1000);
 	
 	private InnerClient client = new InnerClient();
 	

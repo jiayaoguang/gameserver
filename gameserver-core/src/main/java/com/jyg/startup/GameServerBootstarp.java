@@ -49,7 +49,7 @@ public class GameServerBootstarp extends AbstractBootstrap {
 	}
 
     public void start() throws Exception {
-    	GlobalQueue.class.newInstance();
+    	GlobalQueue.start();
     	if(services.size()==0) {
     		throw new Exception("no port is listening");
     	}
