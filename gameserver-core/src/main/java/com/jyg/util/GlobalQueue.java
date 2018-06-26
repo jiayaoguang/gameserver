@@ -27,23 +27,20 @@ public class GlobalQueue {
 	private static RingBuffer<LogicEvent<Object>> ringBuffer;
 	private static ThreadPoolExecutor executor;
 	static {
-		
+
 	}
 
 	public static void start() {
 		EventFactory<LogicEvent<Object>> eventFactory = () -> new LogicEvent<Object>();
-		ArrayBlockingQueue<Runnable> fairBlockingQueue = new ArrayBlockingQueue<Runnable>(bufferSize,true);
-		executor = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS,fairBlockingQueue, new AbortPolicy());
+		ArrayBlockingQueue<Runnable> fairBlockingQueue = new ArrayBlockingQueue<Runnable>(bufferSize, true);
+		executor = new ThreadPoolExecutor(1, 1, 5000L, TimeUnit.MILLISECONDS, fairBlockingQueue, new AbortPolicy());
 		executor.allowCoreThreadTimeOut(true);
-		
+
 		disruptor = new Disruptor<>(eventFactory, bufferSize, executor, ProducerType.MULTI,
 				new FreeSleepWaitStrategy());
-		try {
-			EventHandlerGroup<LogicEvent<Object>> handleEventsWith = disruptor
-					.handleEventsWith(EventConsumerFactory.newEventConsumer());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
+		EventHandlerGroup<LogicEvent<Object>> handleEventsWith = disruptor
+				.handleEventsWith(EventConsumerFactory.newEventConsumer());
 
 		ringBuffer = disruptor.getRingBuffer();
 		disruptor.start();
