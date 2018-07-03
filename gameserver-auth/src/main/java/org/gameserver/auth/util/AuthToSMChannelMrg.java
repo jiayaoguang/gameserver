@@ -44,9 +44,9 @@ public class AuthToSMChannelMrg {
 			System.out.println("just create new channel <" + channel);
 			return channel;
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("获取 SM 连接超时");
 		}
-		System.out.println("获取 SM 连接超时");
 //		try {
 //			Thread.sleep(1000);
 //		} catch (InterruptedException e1) {
