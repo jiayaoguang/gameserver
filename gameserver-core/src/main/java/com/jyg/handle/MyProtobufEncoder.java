@@ -26,7 +26,7 @@ public class MyProtobufEncoder extends MessageToByteEncoder<MessageLiteOrBuilder
 	protected void encode(ChannelHandlerContext ctx, MessageLiteOrBuilder msg, ByteBuf buf)
 			throws UnknowMessageTypeException {
 		String protoName;
-		
+		System.out.println("111threadName : "+Thread.currentThread().getName());
 		byte[] bytes = null;
 		if (msg instanceof MessageLite) {
 			bytes = ((MessageLite) msg).toByteArray();

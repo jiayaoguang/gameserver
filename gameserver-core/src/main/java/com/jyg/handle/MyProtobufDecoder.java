@@ -2,7 +2,6 @@ package com.jyg.handle;
 
 import java.io.IOException;
 
-import org.junit.Test;
 
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.MessageLite;
@@ -21,6 +20,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import org.junit.Test;
 
 /**
  * created by jiayaoguang at 2018年3月13日 protobuf解码器

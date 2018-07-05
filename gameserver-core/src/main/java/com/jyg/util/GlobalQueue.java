@@ -27,8 +27,8 @@ public class GlobalQueue {
 	private static ThreadPoolExecutor executor;
 
 	public static void start() {
-		EventFactory<LogicEvent<Object>> eventFactory = () -> new LogicEvent<Object>();
-		ArrayBlockingQueue<Runnable> fairBlockingQueue = new ArrayBlockingQueue<Runnable>(BUFFER_SIZE, true);
+		EventFactory<LogicEvent<Object>> eventFactory = () -> new LogicEvent<>();
+		ArrayBlockingQueue<Runnable> fairBlockingQueue = new ArrayBlockingQueue<>(BUFFER_SIZE, true);
 		executor = new ThreadPoolExecutor(1, 1, 3*60*1000L, TimeUnit.MILLISECONDS, fairBlockingQueue, new AbortPolicy());
 		executor.allowCoreThreadTimeOut(true);
 	
