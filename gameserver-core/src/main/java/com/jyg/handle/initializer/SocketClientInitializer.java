@@ -10,9 +10,25 @@ import com.jyg.handle.MyProtobufEncoder;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.util.concurrent.DefaultEventExecutorGroup;
+
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SocketClientInitializer extends
-		ChannelInitializer<SocketChannel> { 
+		ChannelInitializer<SocketChannel> {
+
+	DefaultEventExecutorGroup defaultEventExecutorGroup = new DefaultEventExecutorGroup(
+			3,
+            new ThreadFactory() {
+
+		private AtomicInteger threadIndex = new AtomicInteger(0);
+
+		@Override
+		public Thread newThread(Runnable r) {
+			return new Thread(r, "NettyServerCodecThread_" + this.threadIndex.incrementAndGet());
+		}
+	});
 
 	@Override
 	public void initChannel(SocketChannel ch) throws Exception {

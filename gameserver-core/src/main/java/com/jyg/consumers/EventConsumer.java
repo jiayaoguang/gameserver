@@ -42,12 +42,6 @@ public class EventConsumer implements EventHandler<LogicEvent>, WorkHandler<Logi
 		try {
 			switch (event.getChannelEventType()) {
 				
-//				case ACTIVE:
-//					dispatcher.as_on_client_active(event);
-//					break;
-//				case INACTIVE:
-//					dispatcher.as_on_client_inactive(event);
-//					break;
 				case CLIENT_SOCKET_CONNECT_ACTIVE:
 					dispatcher.as_on_client_active(event);
 					break;
@@ -65,6 +59,8 @@ public class EventConsumer implements EventHandler<LogicEvent>, WorkHandler<Logi
 				case HTTP_MSG_COME:
 					((Request)event.getData()).setRequestid(requestId++);;
 					dispatcher.httpProcess(event);
+					// 5秒后关闭
+					EventDispatcher.getInstance().addTimer(new DelayCloseTimer(event.getChannel(), 5));
 					break;
 				case ON_MESSAGE_COME:
 					dispatcher.webSocketProcess(event);

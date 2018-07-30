@@ -6,7 +6,7 @@ import com.jyg.handle.initializer.HttpServerInitializer;
  * create by jiayaoguang at 2018年3月1日
  */
 
-public class HttpService extends Service {
+public class HttpService extends TcpService {
 
 	/**
 	 * @param port

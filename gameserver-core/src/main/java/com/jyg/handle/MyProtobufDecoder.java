@@ -18,6 +18,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.buffer.UnpooledDirectByteBuf;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import org.junit.Test;
@@ -25,6 +26,7 @@ import org.junit.Test;
 /**
  * created by jiayaoguang at 2018年3月13日 protobuf解码器
  */
+@Sharable
 public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
 
 	public MyProtobufDecoder() {

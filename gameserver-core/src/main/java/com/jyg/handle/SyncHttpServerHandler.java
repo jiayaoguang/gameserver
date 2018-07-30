@@ -38,8 +38,6 @@ public class SyncHttpServerHandler extends SimpleChannelInboundHandler<HttpReque
 		// TODO Auto-generated method stub
 		// super.channelActive(ctx);
 		// httpChannels.put(id.getAndIncrement(), ctx.channel());
-		// 5秒后关闭
-		EventDispatcher.getInstance().addTimer(new DelayCloseTimer(ctx.channel(), 5));
 	}
 
 	@Override

@@ -4,16 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.protobuf.GeneratedMessageV3;
-import com.jyg.enums.ProtoEnum;
 import com.jyg.net.EventDispatcher;
 import com.jyg.net.HttpProcessor;
-import com.jyg.net.ProtoProcessor;
 import com.jyg.net.Service;
-import com.jyg.process.PingProtoProcessor;
-import com.jyg.process.PongProtoProcessor;
-import com.jyg.proto.p_common;
-import com.jyg.proto.p_common.p_common_request_ping;
-import com.jyg.timer.IdleTimer;
+import com.jyg.net.TcpService;
 import com.jyg.util.GlobalQueue;
 
 /**
@@ -21,13 +15,13 @@ import com.jyg.util.GlobalQueue;
  */
 public class GameServerBootstarp extends AbstractBootstrap {
 	
-	List<Service> services = new ArrayList<>(1);
+	List<TcpService> services = new ArrayList<>(1);
 	public GameServerBootstarp(){
 		
 		
 	}
 	
-	public void addService(Service service) {
+	public void addService(TcpService service) {
 		services.add(service); 
 	}
 	

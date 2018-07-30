@@ -7,7 +7,7 @@ import com.jyg.proto.p_test.p_scene_sm_chat;
 import com.jyg.proto.p_test.p_scene_sm_response_pong;
 import com.jyg.proto.p_test.p_sm_scene_chat;
 import com.jyg.proto.p_test.p_sm_scene_request_ping;
-import com.jyg.net.Service;
+import com.jyg.net.TcpService;
 import com.jyg.startup.GameServerBootstarp;
 
 
@@ -55,7 +55,7 @@ public class ServerTest01
         
         
 //        
-        Service socketService = new SocketService(8080);
+        TcpService socketService = new SocketService(8080);
         
         bootstarp.addService(socketService);
         

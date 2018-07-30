@@ -73,7 +73,7 @@ public class Response {
 	
 
 
-	ByteBuf createContent(int initialCapacity) {
+	private ByteBuf createContent(int initialCapacity) {
 		return Unpooled.buffer(initialCapacity);
 	}
 	

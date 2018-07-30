@@ -10,6 +10,7 @@ import com.jyg.net.EventDispatcher;
 import com.jyg.util.UnknowMessageTypeException;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.handler.codec.MessageToMessageEncoder;
@@ -18,6 +19,7 @@ import io.netty.handler.codec.MessageToMessageEncoder;
  * created by jiayaoguang at 2018年3月13日
  * protobuf编码器
  */
+@Sharable
 public class MyProtobufEncoder extends MessageToByteEncoder<MessageLiteOrBuilder> {
 
 	EventDispatcher dis = EventDispatcher.getInstance();

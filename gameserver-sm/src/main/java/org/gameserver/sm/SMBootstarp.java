@@ -6,7 +6,7 @@ import java.util.Map;
 import com.jyg.enums.ProtoEnum;
 import com.jyg.net.ProtoProcessor;
 import com.jyg.net.ProtoResponse;
-import com.jyg.net.Service;
+import com.jyg.net.TcpService;
 import com.jyg.net.SocketService;
 import com.jyg.net.WebSocketService;
 import com.jyg.proto.p_auth_sm.p_auth_sm_request_send_token;
@@ -53,9 +53,9 @@ public class SMBootstarp {
 				p_sm_auth_response_receive_token.class);
 
 		//
-		Service socketService = new SocketService(9001);
+		TcpService socketService = new SocketService(9001);
 
-		Service wssocketService = new WebSocketService(wsport);
+		TcpService wssocketService = new WebSocketService(wsport);
 
 		bootstarp.addService(socketService);
 

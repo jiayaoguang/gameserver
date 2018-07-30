@@ -1,6 +1,7 @@
 package com.jyg.util;
 
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor.AbortPolicy;
 import java.util.concurrent.TimeUnit;
@@ -28,7 +29,7 @@ public class GlobalQueue {
 
 	public static void start() {
 		EventFactory<LogicEvent<Object>> eventFactory = () -> new LogicEvent<>();
-		ArrayBlockingQueue<Runnable> fairBlockingQueue = new ArrayBlockingQueue<>(BUFFER_SIZE, true);
+		BlockingQueue<Runnable> fairBlockingQueue = new ArrayBlockingQueue<>(BUFFER_SIZE, true);
 		executor = new ThreadPoolExecutor(1, 1, 3*60*1000L, TimeUnit.MILLISECONDS, fairBlockingQueue, new AbortPolicy());
 		executor.allowCoreThreadTimeOut(true);
 	
