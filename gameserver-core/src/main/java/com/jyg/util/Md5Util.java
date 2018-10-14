@@ -43,7 +43,7 @@ public class Md5Util {
 	
 	
 	private static MessageDigest md5;
-	{
+	static {
 		try {
 			md5 = MessageDigest.getInstance("MD5");
 		} catch (NoSuchAlgorithmException e) {

@@ -11,6 +11,8 @@
 使用protobuf3.5.1作为发送消息序列化格式,
 使用disruptor3.3.2框架去做端口消息的多线程同步
 
+能够处理http，protobuf类型的数据
+
 http例子代码:
 >
     GameServerBootstarp bootstarp = new GameServerBootstarp();
@@ -19,7 +21,9 @@ http例子代码:
     
         @Override
         public void service(Request request, Response response) {
-            response.writeAndFlush( "<html><head></head><body><div align='center'><h1>Hello world!</h1></div><body></html>" ); 
+            response.writeAndFlush( 
+                "<html><head></head><body><div align='center'><h1>Hello world!</h1></div><body></html>"
+                 ); 
         }
         
     } );

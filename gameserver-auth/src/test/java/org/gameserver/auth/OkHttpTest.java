@@ -2,7 +2,6 @@ package org.gameserver.auth;
 
 import java.io.IOException;
 
-import org.junit.Test;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -11,6 +10,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.junit.Test;
 
 /**
  * created by jiayaoguang at 2018年4月3日

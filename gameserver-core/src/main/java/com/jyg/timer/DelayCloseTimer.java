@@ -15,7 +15,7 @@ public class DelayCloseTimer extends Timer{
 	}
 	
 	public void call() {
-		
+		//open -> register ->active
 		if(this.getChannel().isOpen()){
 			System.out.println("out of time,just close it");
 			this.getChannel().close();

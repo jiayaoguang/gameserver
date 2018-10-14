@@ -10,7 +10,7 @@ public class FixedLinkedHashMap extends LinkedHashMap {
 	protected int maxElements;
 
 	public FixedLinkedHashMap(int maxSize) {
-		super(maxSize);
+		super(maxSize,0.75f,true);
 		this.maxElements = maxSize;
 	}
 	protected boolean removeEldestEntry(Map.Entry eldest) {
