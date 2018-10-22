@@ -26,7 +26,6 @@ import org.junit.Test;
 /**
  * created by jiayaoguang at 2018年3月13日 protobuf解码器
  */
-@Sharable
 public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
 
 	public MyProtobufDecoder() {
