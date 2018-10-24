@@ -1,10 +1,8 @@
 package com.jyg.util;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.*;
 import java.util.concurrent.ThreadPoolExecutor.AbortPolicy;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.jyg.bean.LogicEvent;
 import com.jyg.consumers.EventConsumerFactory;
@@ -25,15 +23,18 @@ public class GlobalQueue {
 	private static Disruptor<LogicEvent<Object>> disruptor;
 	private static final int BUFFER_SIZE = 4096;
 	private static RingBuffer<LogicEvent<Object>> ringBuffer;
-	private static ThreadPoolExecutor executor;
+//	private static ThreadPoolExecutor executor;
 
 	public static void start() {
 		EventFactory<LogicEvent<Object>> eventFactory = () -> new LogicEvent<>();
-		BlockingQueue<Runnable> fairBlockingQueue = new ArrayBlockingQueue<>(BUFFER_SIZE, true);
-		executor = new ThreadPoolExecutor(1, 1, 3*60*1000L, TimeUnit.MILLISECONDS, fairBlockingQueue, new AbortPolicy());
-		executor.allowCoreThreadTimeOut(true);
+//		BlockingQueue<Runnable> fairBlockingQueue = new ArrayBlockingQueue<>(BUFFER_SIZE, true);
+//		executor = new ThreadPoolExecutor(1, 1, 3*60*1000L, TimeUnit.MILLISECONDS, fairBlockingQueue, new AbortPolicy());
+//		executor.allowCoreThreadTimeOut(true);
 	
-		disruptor = new Disruptor<>(eventFactory, BUFFER_SIZE, executor, ProducerType.MULTI,
+//		disruptor = new Disruptor<>(eventFactory, BUFFER_SIZE, executor, ProducerType.MULTI,
+//				new FreeSleepWaitStrategy());
+
+		disruptor = new Disruptor<>(eventFactory, BUFFER_SIZE, new RingBufferThreadFactory(), ProducerType.MULTI,
 				new FreeSleepWaitStrategy());
 
 		EventHandlerGroup<LogicEvent<Object>> handleEventsWith = disruptor
@@ -46,7 +47,7 @@ public class GlobalQueue {
 	public static void shutdown() {
 
 		disruptor.shutdown();
-		executor.shutdown();
+//		executor.shutdown();
 
 	}
 
@@ -64,6 +65,21 @@ public class GlobalQueue {
 			event.setChannelEventType(evenType);
 		} finally {
 			GlobalQueue.ringBuffer.publish(sequence);
+		}
+	}
+
+
+	static class RingBufferThreadFactory implements ThreadFactory {
+
+		AtomicInteger threadId = new AtomicInteger(0);
+
+		@Override
+		public Thread newThread(Runnable r) {
+			Thread thread = new Thread(r);
+			thread.setDaemon(false);
+			thread.setName("ringbuffer_consumer_thread_"+threadId.getAndIncrement());
+			System.out.println(">>>>>>>>>. "+thread.getName());
+			return thread;
 		}
 	}
 
