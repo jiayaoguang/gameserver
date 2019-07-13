@@ -1,4 +1,4 @@
-package org.gameserver.sm;
+package org.gameserver.center;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +18,7 @@ import com.jyg.util.TokenUtil;
  * Hello world!
  *
  */
-public class SMBootstarp {
+public class CenterBootstarp {
 	public static void main(String[] args) throws Exception {
 
 		final int wsport = 8088;

@@ -8,7 +8,7 @@ import org.gameserver.auth.bean.Tuple;
 
 import com.google.inject.Inject;
 import com.jyg.net.EventDispatcher;
-import com.jyg.startup.InnerClient;
+import com.jyg.startup.TcpClient;
 import com.jyg.timer.FreeChannelDelayCloseTimer;
 
 import io.netty.channel.Channel;
@@ -22,14 +22,14 @@ public class AuthToSMChannelPool {
 	//如果同时登陆玩家会过多，则可以增加连接
 	private ArrayBlockingQueue<Tuple<Channel,FreeChannelDelayCloseTimer>> smChannelQueue = new ArrayBlockingQueue<>(1000);
 	
-	private InnerClient client = new InnerClient();
+	private TcpClient client = new TcpClient();
 	
 	AtomicInteger channelNum = new AtomicInteger(0);
 	
 	@Inject
 	public AuthToSMChannelPool() {
 		checkoutAndGetChannel();
-		System.out.println("just get  sm channel " + smChannelQueue.peek());
+		System.out.println("just get  center channel " + smChannelQueue.peek());
 	}
 	
 

@@ -1,13 +1,12 @@
 package org.gameserver.scene;
 
-import com.google.protobuf.MessageLiteOrBuilder;
 import com.jyg.net.ProtoProcessor;
 import com.jyg.net.ProtoResponse;
 import com.jyg.proto.p_sm_scene.p_scene_sm_chat;
 import com.jyg.proto.p_sm_scene.p_scene_sm_response_pong;
 import com.jyg.proto.p_sm_scene.p_sm_scene_chat;
 import com.jyg.proto.p_sm_scene.p_sm_scene_request_ping;
-import com.jyg.startup.InnerClient;
+import com.jyg.startup.TcpClient;
 
 
 /**
@@ -46,7 +45,7 @@ public class CLientTest01
         
         
     	
-        InnerClient client = new InnerClient();
+        TcpClient client = new TcpClient();
         
         client.registerSocketEvent(1, pingProcessor);
         

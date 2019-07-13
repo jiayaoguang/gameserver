@@ -10,6 +10,7 @@ import com.jyg.util.RemotingUtil;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -54,23 +55,23 @@ public abstract class TcpService implements Service{
         }
     }
 
-    private ChannelInitializer<SocketChannel> initializer = new WebSocketServerInitializer();
+    private ChannelInitializer<Channel> initializer = new WebSocketServerInitializer();
 
     private final int port;
 
-    public TcpService(int port, ChannelInitializer<SocketChannel> initializer) throws Exception {
+    public TcpService(int port, ChannelInitializer<Channel> initializer){
         if (port < 0) {
-            throw new Exception("port number cannot be negative ");
+            throw new IllegalArgumentException("port number cannot be negative ");
         }
         this.port = port;
         this.initializer = initializer;
     }
 
-    public ChannelInitializer<SocketChannel> getInitializer() {
+    public ChannelInitializer<Channel> getInitializer() {
         return initializer;
     }
 
-    public void setInitializer(ChannelInitializer<SocketChannel> initializer) {
+    public void setInitializer(ChannelInitializer<Channel> initializer) {
         this.initializer = initializer;
     }
 

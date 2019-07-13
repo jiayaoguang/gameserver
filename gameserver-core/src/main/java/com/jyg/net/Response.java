@@ -61,6 +61,10 @@ public class Response {
 	}
 	
 	public void writeAndFlush(byte[] bs) {
+		if(bs == null){
+			write500Error();
+			return;
+		}
 		ByteBuf content = this.createContent(bs.length);
 		content.writeBytes(bs);
 		this.getChannel().writeAndFlush(this.createDefaultFullHttpResponse(content));

@@ -8,7 +8,7 @@ import com.jyg.handle.initializer.WebSocketServerInitializer;
 
 public class WebSocketService extends TcpService {
 
-	public WebSocketService(int port) throws Exception {
-		super(port , new WebSocketServerInitializer());
-	}
+    public WebSocketService(int port) {
+        super(port, new WebSocketServerInitializer());
+    }
 }

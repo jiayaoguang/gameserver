@@ -1,4 +1,4 @@
-package org.gameserver.sm;
+package org.gameserver.center;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

@@ -27,7 +27,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  * 远程端口连接
  */
 
-public class InnerClient extends AbstractBootstrap {
+public class TcpClient {
 
 //	public String host = "127.0.0.1"; // ip地址
 //	public int port = 6789; // 端口
@@ -37,7 +37,7 @@ public class InnerClient extends AbstractBootstrap {
 	private Bootstrap bootstrap = new Bootstrap();
 	private Channel channel;
 	private Session session;
-	public InnerClient()  {
+	public TcpClient()  {
 		this(new SocketClientInitializer());
 //		try {
 //			this.registerSendEventIdByProto(ProtoEnum.P_COMMON_REQUEST_PING.getEventId(), p_common.p_common_request_ping.class);
@@ -54,7 +54,7 @@ public class InnerClient extends AbstractBootstrap {
 		
 	}
 
-	public InnerClient(ChannelInitializer<SocketChannel> channelInitializer) {
+	public TcpClient(ChannelInitializer<SocketChannel> channelInitializer) {
 		System.out.println("客户端成功启动...");
 		bootstrap.group(group);
 		bootstrap.channel( RemotingUtil.useEpoll() ? EpollSocketChannel.class : NioSocketChannel.class);
@@ -78,13 +78,13 @@ public class InnerClient extends AbstractBootstrap {
 	
 	
 	
-//	public void registerSocketEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoprocessor) throws Exception {
-//		EventDispatcher.getInstance().registerSocketEvent(eventid, protoprocessor);
-//	}
-//	
-//	public void registerSendEventIdByProto(int eventId,Class<? extends GeneratedMessageV3> protoClazz) throws Exception {
-//		EventDispatcher.getInstance().registerSendEventIdByProto( eventId, protoClazz);
-//	}
+	public void registerSocketEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoprocessor) throws Exception {
+		EventDispatcher.getInstance().registerSocketEvent(eventid, protoprocessor);
+	}
+
+	public void registerSendEventIdByProto(int eventId,Class<? extends GeneratedMessageV3> protoClazz) throws Exception {
+		EventDispatcher.getInstance().registerSendEventIdByProto( eventId, protoClazz);
+	}
 
 	public void write( MessageLiteOrBuilder msg) throws IOException {
 		channel.writeAndFlush( msg);

@@ -9,7 +9,7 @@ import com.jyg.handle.initializer.InnerSocketServerInitializer;
 public class SocketService extends TcpService {
 
 	
-	public SocketService(int port) throws Exception {
+	public SocketService(int port) {
 		super(port ,new InnerSocketServerInitializer());
 	}
 

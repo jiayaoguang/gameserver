@@ -106,11 +106,4 @@ public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
     }
 
 	
-	@Test
-	public void test() {
-		ByteBuf buf = Unpooled.buffer(1000);
-		ByteBuf sbuf =  buf.retainedSlice(1, 10);
-		System.out.println( buf.refCnt() );
-	}
-	
 }

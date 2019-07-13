@@ -13,7 +13,7 @@ public class HttpService extends TcpService {
 	 * @throws Exception
 	 */
 	
-	public HttpService(int port) throws Exception {
+	public HttpService(int port) {
 		super(port , new HttpServerInitializer());
 	}
 

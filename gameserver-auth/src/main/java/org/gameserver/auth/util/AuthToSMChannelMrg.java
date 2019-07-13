@@ -2,7 +2,7 @@ package org.gameserver.auth.util;
 
 import com.google.inject.Inject;
 import com.jyg.net.EventDispatcher;
-import com.jyg.startup.InnerClient;
+import com.jyg.startup.TcpClient;
 import com.jyg.timer.FreeChannelDelayCloseTimer;
 
 import io.netty.channel.Channel;
@@ -15,7 +15,7 @@ public class AuthToSMChannelMrg {
 	//如果同时登陆玩家会过多，则可以增加连接
 	private Channel channel;
 	
-	private InnerClient client = new InnerClient();
+	private TcpClient client = new TcpClient();
 	
 	private FreeChannelDelayCloseTimer delayCloseChannelTimer;
 	

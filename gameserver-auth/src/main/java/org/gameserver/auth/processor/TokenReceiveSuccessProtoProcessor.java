@@ -35,7 +35,7 @@ public class TokenReceiveSuccessProtoProcessor extends ProtoProcessor<p_sm_auth_
 		
 		Response httpResponse = new Response( userLoginInfo.getChannel() );
 		
-		Map<String,String> map = new HashMap();
+		Map<String,String> map = new HashMap<>();
 		
 		map.put("username", userLoginInfo.getUsername());
 		map.put("host", msg.getIp());

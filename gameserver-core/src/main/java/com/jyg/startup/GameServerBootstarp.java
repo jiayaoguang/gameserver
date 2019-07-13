@@ -15,13 +15,13 @@ import com.jyg.util.GlobalQueue;
  */
 public class GameServerBootstarp extends AbstractBootstrap {
 	
-	List<TcpService> services = new ArrayList<>(1);
+	List<Service> services = new ArrayList<>(1);
 	public GameServerBootstarp(){
 		
 		
 	}
 	
-	public void addService(TcpService service) {
+	public void addService(Service service) {
 		services.add(service); 
 	}
 	
@@ -42,10 +42,10 @@ public class GameServerBootstarp extends AbstractBootstrap {
 		EventDispatcher.getInstance().registerSendEventIdByProto( eventId, protoClazz);
 	}
 
-    public void start() throws Exception {
+    public void start() throws InterruptedException {
     	GlobalQueue.start();
     	if(services.size()==0) {
-    		throw new Exception("no port is listening");
+    		throw new IllegalArgumentException("services list is empty");
     	}
     	
     	for(Service service:services) {
