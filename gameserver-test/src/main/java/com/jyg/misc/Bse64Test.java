@@ -1,4 +1,4 @@
-package com.jyg;
+package com.jyg.misc;
 
 import java.util.Base64;
 

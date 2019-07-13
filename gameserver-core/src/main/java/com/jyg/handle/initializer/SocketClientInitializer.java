@@ -7,6 +7,7 @@ import com.jyg.handle.MyProtobufEncoder;
 /**
  * created by jiayaoguang at 2017年12月6日
  */
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -16,7 +17,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SocketClientInitializer extends
-		ChannelInitializer<SocketChannel> {
+		ChannelInitializer<Channel> {
 
 	DefaultEventExecutorGroup defaultEventExecutorGroup = new DefaultEventExecutorGroup(
 			3,
@@ -31,7 +32,7 @@ public class SocketClientInitializer extends
 	});
 
 	@Override
-	public void initChannel(SocketChannel ch) throws Exception {
+	public void initChannel(Channel ch) throws Exception {
 		ChannelPipeline pipeline = ch.pipeline();
 //		pipeline.addLast(new ProtobufVarint32FrameDecoder());
 		

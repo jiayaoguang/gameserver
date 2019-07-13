@@ -31,6 +31,8 @@ public class UdpService implements Service {
 
     protected static final EventLoopGroup workGroup;
 
+    private Channel serverChannel;
+
     static {
         bossGroup = new NioEventLoopGroup(1,
             (Runnable r) -> new Thread(r, "ACCEPT_THREAD"));
@@ -74,7 +76,7 @@ public class UdpService implements Service {
     @Override
     public void start() throws InterruptedException {
         if (initializer == null) {
-//            throw new Exception("initializer must is not null");
+            throw new IllegalArgumentException("initializer must is not null");
         }
 
         Bootstrap bootstrap = new Bootstrap();
@@ -84,21 +86,18 @@ public class UdpService implements Service {
         bootstrap.channel(RemotingUtil.useEpoll() ? EpollDatagramChannel.class : NioDatagramChannel.class);
         bootstrap.handler(initializer);
 //        bootstrap.childHandler(initializer);
-
+        bootstrap.option(ChannelOption.SO_BROADCAST, true);
         bootstrap.option(ChannelOption.SO_REUSEADDR, true);
-        // tcp等待三次握手队列的长度
         bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 
-        // 指定等待时间为0，此时调用主动关闭时不会发送FIN来结束连接，而是直接将连接设置为CLOSE状态，
-        // 清除套接字中的发送和接收缓冲区，直接对对端发送RST包。
-//        bootstrap.childOption(ChannelOption.SO_LINGER, 0);
-//        bootstrap.childOption(ChannelOption.SO_RCVBUF, 64 * 1024);
-//        bootstrap.childOption(ChannelOption.SO_SNDBUF, 64 * 1024);
-//        bootstrap.childOption(ChannelOption.SO_KEEPALIVE, false);// maybe useless
-//        bootstrap.childOption(ChannelOption.TCP_NODELAY, true);
-//        bootstrap.childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 
-        bootstrap.bind(port).sync().channel().writeAndFlush(p_common.p_common_response_pong.getDefaultInstance());
+        serverChannel = bootstrap.bind(port).sync().channel();
+
+        System.out.print("bind port : " + port);
+    }
+
+    public Channel getChannel(){
+        return serverChannel;
     }
 
     @Override

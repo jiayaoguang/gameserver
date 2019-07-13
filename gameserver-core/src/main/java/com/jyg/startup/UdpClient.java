@@ -42,13 +42,12 @@ public class UdpClient {
 		this(new SocketClientInitializer());
 	}
 
-	public UdpClient(ChannelInitializer<SocketChannel> channelInitializer) {
+	public UdpClient(ChannelInitializer<Channel> channelInitializer) {
 		System.out.println("客户端成功启动...");
 		bootstrap.group(group);
 		bootstrap.channel( RemotingUtil.useEpoll() ? EpollDatagramChannel.class : NioDatagramChannel.class);
 		bootstrap.handler(channelInitializer);
-		bootstrap.option(ChannelOption.SO_KEEPALIVE, false);
-		bootstrap.option(ChannelOption.TCP_NODELAY, true);
+        bootstrap.option(ChannelOption.SO_REUSEADDR, true);
 		bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 	}
 	
@@ -56,8 +55,12 @@ public class UdpClient {
 	public Channel connect(String host,int port) throws InterruptedException {
 		channel = bootstrap.connect(host, port).sync().channel();
 		
-		EventDispatcher.getInstance().addTimer( new IdleTimer(channel) );
-		
+		return channel;
+	}
+
+	public Channel bind(int port) throws InterruptedException {
+		channel = bootstrap.bind( port).sync().channel();
+
 		return channel;
 	}
 	

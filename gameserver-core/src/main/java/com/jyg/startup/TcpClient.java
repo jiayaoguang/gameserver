@@ -34,7 +34,7 @@ public class TcpClient {
 	
 	// 通过nio方式来接收连接和处理连接
 	private static EventLoopGroup group = new NioEventLoopGroup();
-	private Bootstrap bootstrap = new Bootstrap();
+	private final Bootstrap bootstrap = new Bootstrap();
 	private Channel channel;
 	private Session session;
 	public TcpClient()  {

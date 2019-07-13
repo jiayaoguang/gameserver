@@ -32,7 +32,7 @@ public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
 		super(1024 * 64, 0, 4, 0, 4);
 	}
 
-	EventDispatcher dis = EventDispatcher.getInstance();
+	private EventDispatcher dis = EventDispatcher.getInstance();
 
 	// @Override
 	// public ByteBuf extractFrame(ChannelHandlerContext ctx, ByteBuf buffer, int

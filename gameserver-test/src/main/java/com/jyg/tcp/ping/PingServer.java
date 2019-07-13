@@ -1,4 +1,4 @@
-package com.jyg.test01.ping;
+package com.jyg.tcp.ping;
 
 import com.jyg.net.ProtoProcessor;
 import com.jyg.net.ProtoResponse;
