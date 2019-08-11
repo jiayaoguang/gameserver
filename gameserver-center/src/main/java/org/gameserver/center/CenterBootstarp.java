@@ -53,13 +53,9 @@ public class CenterBootstarp {
 				p_sm_auth_response_receive_token.class);
 
 		//
-		TcpService socketService = new SocketService(9001);
 
-		TcpService wssocketService = new WebSocketService(wsport);
-
-		bootstarp.addService(socketService);
-
-		bootstarp.addService(wssocketService);
+		bootstarp.addTcpService(9001);
+		bootstarp.addWebSocketService(8088);
 
 		bootstarp.start();
 	}

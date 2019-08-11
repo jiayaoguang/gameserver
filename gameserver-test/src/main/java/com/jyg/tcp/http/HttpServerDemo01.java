@@ -28,7 +28,7 @@ public class HttpServerDemo01
 			}
 		} );
         
-        bootstarp.addService(new HttpService(8080));
+        bootstarp.addHttpService(8080);
         
         bootstarp.start();
     }

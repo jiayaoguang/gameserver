@@ -54,10 +54,7 @@ public class ServerTest01
         bootstarp.registerSendEventIdByProto(4, p_sm_scene_chat.class);
         
         
-//        
-        TcpService socketService = new SocketService(8080);
-        
-        bootstarp.addService(socketService);
+		bootstarp.addTcpService(8080);
         
         bootstarp.start();
     }

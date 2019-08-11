@@ -1,11 +1,11 @@
 ## 分布式游戏服务器框架 <font color=#f1986d size=3>更新中...</font>
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 ------
-* core项目-主要的网络库
-* auth项目-登录服
-* sm项目-场景服管理
-* scene项目-场景服
-* proto项目-传送的相关协议
+* core模块-主要的网络库
+* auth模块-登录服
+* center模块-场景服管理
+* scene模块-场景服
+* proto模块-传送的相关协议
 	
 服务器主要采用了netty4.1.19.Final框架处理socket连接,
 使用protobuf3.5.1作为发送消息序列化格式,

@@ -57,7 +57,7 @@ public class AppTest
 		}
     	System.out.println(queue.poll().get());
     	System.out.println(r.get());
-		
+
 	}
     
 }

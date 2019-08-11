@@ -22,9 +22,16 @@ public enum ProtoEnum {
 	;
 	
 	private final int eventId;
+
+	public ServerRoleType getDealMsgServerRoleType() {
+		return dealMsgServerRoleType;
+	}
+
+	private final ServerRoleType dealMsgServerRoleType;
 	
 	ProtoEnum(int eventId){
 		this.eventId = eventId;
+		dealMsgServerRoleType = ServerRoleType.UNKNOWN;
 	}
 	
 	public int getEventId() {

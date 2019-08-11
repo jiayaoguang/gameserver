@@ -6,9 +6,15 @@ public enum ServerRoleType {
 	
 	UNKNOWN,
 	
-	AUTH,
+	AUTH_SERVER,
 	
-	SCENE,
+	SCENE_SERVER,
+
+	GATE_SERVER,
+
+	CENTER_SERVER,
+
+
 	
 	;
 	

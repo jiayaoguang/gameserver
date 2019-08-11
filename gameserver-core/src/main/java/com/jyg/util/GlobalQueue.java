@@ -14,11 +14,15 @@ import com.lmax.disruptor.dsl.EventHandlerGroup;
 import com.lmax.disruptor.dsl.ProducerType;
 
 import io.netty.channel.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * created by jiayaoguang at 2017年12月18日
  */
 public class GlobalQueue {
+
+	private static Logger logger = LoggerFactory.getLogger(GlobalQueue.class);
 
 	private static Disruptor<LogicEvent<Object>> disruptor;
 	private static final int BUFFER_SIZE = 4096;
@@ -76,9 +80,10 @@ public class GlobalQueue {
 		@Override
 		public Thread newThread(Runnable r) {
 			Thread thread = new Thread(r);
+//			thread.setPriority(Thread.MAX_PRIORITY);
 			thread.setDaemon(false);
 			thread.setName("ringbuffer_consumer_thread_"+threadId.getAndIncrement());
-			System.out.println(">>>>>>>>>. "+thread.getName());
+			logger.info("create conusmer thread : {} ", thread.getName());
 			return thread;
 		}
 	}

@@ -54,7 +54,7 @@ public class TcpClient {
 		
 	}
 
-	public TcpClient(ChannelInitializer<SocketChannel> channelInitializer) {
+	public TcpClient(ChannelInitializer<Channel> channelInitializer) {
 		System.out.println("客户端成功启动...");
 		bootstrap.group(group);
 		bootstrap.channel( RemotingUtil.useEpoll() ? EpollSocketChannel.class : NioSocketChannel.class);

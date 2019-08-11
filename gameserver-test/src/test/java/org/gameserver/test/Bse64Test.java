@@ -1,6 +1,7 @@
-package com.jyg.misc;
+package org.gameserver.test;
 
 import java.util.Base64;
+import java.util.concurrent.locks.LockSupport;
 
 /**
  * Created by jiayaoguang on 2019/7/13.
@@ -13,6 +14,9 @@ public class Bse64Test {
         String targetStr = decodeBase64(src);
 
         System.out.println(targetStr);
+        long now = System.currentTimeMillis();
+        LockSupport.parkNanos(3000000L);
+        System.out.println("cost : "+ (System.currentTimeMillis() - now));
 
     }
 

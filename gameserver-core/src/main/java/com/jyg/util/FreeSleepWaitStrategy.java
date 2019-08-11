@@ -24,13 +24,17 @@ public final class FreeSleepWaitStrategy implements WaitStrategy {
 		this.retries = retries;
 	}
 
+
 	@Override
-	public long waitFor(final long sequence, Sequence cursor, final Sequence dependentSequence,
-			final SequenceBarrier barrier) throws AlertException, InterruptedException {
+	public long waitFor(
+			final long sequence, Sequence cursor, final Sequence dependentSequence, final SequenceBarrier barrier)
+			throws AlertException
+	{
 		long availableSequence;
 		int counter = retries;
 
-		while ((availableSequence = dependentSequence.get()) < sequence) {
+		while ((availableSequence = dependentSequence.get()) < sequence)
+		{
 			EventDispatcher.getInstance().loop();
 			counter = applyWaitMethod(barrier, counter);
 		}
@@ -44,14 +48,14 @@ public final class FreeSleepWaitStrategy implements WaitStrategy {
 
 	private int applyWaitMethod(final SequenceBarrier barrier, int counter) throws AlertException {
 		barrier.checkAlert();
-
+		System.out.println("cost : "+ counter);
 		if (counter > 100) {
 			--counter;
 		} else if (counter > 0) {
 			--counter;
 			Thread.yield();
 		} else {
-			LockSupport.parkNanos(3000L);
+			LockSupport.parkNanos(3*1000000L);
 		}
 
 		return counter;

@@ -34,7 +34,7 @@ public class AuthBootstarp
         bootstarp.registerSendEventIdByProto(ProtoEnum.P_AUTH_SM_REQUEST_SEND_TOKEN.getEventId(), 
         		p_auth_sm_request_send_token.class);
         
-        bootstarp.addService(new HttpService(8080));
+        bootstarp.addHttpService(8080);
         
         bootstarp.registerSocketEvent(ProtoEnum.P_SM_AUTH_RESPONSE_RECEIVE_TOKEN.getEventId(), 
         		injector.getInstance(TokenReceiveSuccessProtoProcessor.class));
