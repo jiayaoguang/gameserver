@@ -1,7 +1,6 @@
 package com.jyg.util;
 
 import java.util.concurrent.*;
-import java.util.concurrent.ThreadPoolExecutor.AbortPolicy;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.jyg.bean.LogicEvent;
@@ -36,10 +35,10 @@ public class GlobalQueue {
 //		executor.allowCoreThreadTimeOut(true);
 	
 //		disruptor = new Disruptor<>(eventFactory, BUFFER_SIZE, executor, ProducerType.MULTI,
-//				new FreeSleepWaitStrategy());
+//				new LoopAndSleepWaitStrategy());
 
 		disruptor = new Disruptor<>(eventFactory, BUFFER_SIZE, new RingBufferThreadFactory(), ProducerType.MULTI,
-				new FreeSleepWaitStrategy());
+				new LoopAndSleepWaitStrategy());
 
 		EventHandlerGroup<LogicEvent<Object>> handleEventsWith = disruptor
 				.handleEventsWith(EventConsumerFactory.newEventConsumer());

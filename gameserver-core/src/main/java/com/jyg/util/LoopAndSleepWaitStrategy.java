@@ -11,16 +11,16 @@ import com.lmax.disruptor.WaitStrategy;
 /**
  * created by jiayaoguang at 2018年4月9日
  */
-public final class FreeSleepWaitStrategy implements WaitStrategy {
+public final class LoopAndSleepWaitStrategy implements WaitStrategy {
 	private static final int DEFAULT_RETRIES = 200;
 
 	private final int retries;
 
-	public FreeSleepWaitStrategy() {
+	public LoopAndSleepWaitStrategy() {
 		this(DEFAULT_RETRIES);
 	}
 
-	public FreeSleepWaitStrategy(int retries) {
+	public LoopAndSleepWaitStrategy(int retries) {
 		this.retries = retries;
 	}
 
@@ -35,7 +35,6 @@ public final class FreeSleepWaitStrategy implements WaitStrategy {
 
 		while ((availableSequence = dependentSequence.get()) < sequence)
 		{
-			EventDispatcher.getInstance().loop();
 			counter = applyWaitMethod(barrier, counter);
 		}
 
@@ -48,13 +47,14 @@ public final class FreeSleepWaitStrategy implements WaitStrategy {
 
 	private int applyWaitMethod(final SequenceBarrier barrier, int counter) throws AlertException {
 		barrier.checkAlert();
-		System.out.println("cost : "+ counter);
+
 		if (counter > 100) {
 			--counter;
 		} else if (counter > 0) {
 			--counter;
 			Thread.yield();
 		} else {
+            EventDispatcher.getInstance().loop();
 			LockSupport.parkNanos(3*1000000L);
 		}
 
