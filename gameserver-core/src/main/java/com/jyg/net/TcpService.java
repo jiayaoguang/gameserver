@@ -1,13 +1,8 @@
 package com.jyg.net;
 
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.jyg.handle.initializer.WebSocketServerInitializer;
-import com.jyg.proto.p_common.p_common_response_pong;
 import com.jyg.util.GlobalQueue;
 import com.jyg.util.RemotingUtil;
-
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
@@ -17,10 +12,12 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * create by jiayaoguang at 2018年3月6日
@@ -111,7 +108,7 @@ public abstract class TcpService implements Service{
         bootstrap.childOption(ChannelOption.TCP_NODELAY, true);
         bootstrap.childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 
-        bootstrap.bind(port).sync().channel().writeAndFlush(p_common_response_pong.getDefaultInstance());
+        bootstrap.bind(port).sync().channel();
         System.out.println("正在开启端口监听，端口号 :" + port);
     }
     public void stop() {

@@ -6,7 +6,6 @@ import com.jyg.handle.initializer.SocketClientInitializer;
 import com.jyg.net.EventDispatcher;
 import com.jyg.net.ProtoProcessor;
 import com.jyg.session.Session;
-import com.jyg.timer.IdleTimer;
 import com.jyg.util.RemotingUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -15,11 +14,8 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.EpollDatagramChannel;
-import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.io.IOException;
 

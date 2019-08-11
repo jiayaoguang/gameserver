@@ -45,7 +45,7 @@ public class AuthToSMChannelMrg {
 			return channel;
 		} catch (Exception e) {
 			//e.printStackTrace();
-			System.out.println("获取 SM 连接超时");
+			System.out.println("获取 center 连接超时");
 		}
 //		try {
 //			Thread.sleep(1000);

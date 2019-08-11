@@ -1,28 +1,22 @@
 package com.jyg.net;
 
-import java.net.InetSocketAddress;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import com.google.protobuf.GeneratedMessageV3;
 import com.jyg.bean.LogicEvent;
-import com.jyg.enums.ProtoEnum;
-import com.jyg.process.PingProtoProcessor;
-import com.jyg.process.PongProtoProcessor;
-import com.jyg.proto.p_common.p_common_request_ping;
-import com.jyg.proto.p_common.p_common_response_pong;
 import com.jyg.session.Session;
 import com.jyg.timer.Timer;
 import com.jyg.timer.TimerTrigger;
 import com.jyg.util.DupilcateEventIdException;
-
 import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+
+import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * created by jiayaoguang at 2017年12月17日
@@ -52,17 +46,6 @@ public class EventDispatcher {
                 EventDispatcher.getInstance().removeOutOfTimeChannels();
             }
         });
-
-        try {
-            this.registerSendEventIdByProto(ProtoEnum.P_COMMON_REQUEST_PING.getEventId(), p_common_request_ping.class);
-            //注册pong处理器
-            this.registerSocketEvent(ProtoEnum.P_COMMON_RESPONSE_PONG.getEventId(), new PongProtoProcessor());
-
-            this.registerSendEventIdByProto(ProtoEnum.P_COMMON_RESPONSE_PONG.getEventId(), p_common_response_pong.class);
-            this.registerSocketEvent(ProtoEnum.P_COMMON_REQUEST_PING.getEventId(), new PingProtoProcessor());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
     }
 

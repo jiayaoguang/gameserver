@@ -1,8 +1,5 @@
 package com.jyg.timer;
 
-import com.jyg.proto.p_common.p_common_request_ping;
-import com.jyg.timer.Timer;
-
 import io.netty.channel.Channel;
 
 /**
@@ -17,7 +14,7 @@ public class IdleTimer extends Timer{
 	@Override
 	public void call() {
 		if(this.getChannel().isOpen()) {
-			this.getChannel().writeAndFlush(p_common_request_ping.newBuilder());
+//			this.getChannel().writeAndFlush(p_common_request_ping.newBuilder());
 		}else {
 			this.setExeNum(0);
 		}
