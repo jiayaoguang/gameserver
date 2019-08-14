@@ -8,11 +8,11 @@ import io.netty.channel.Channel;
  */
 public class FreeChannelDelayCloseTimer extends Timer {
 
-	long recentUseTime=System.currentTimeMillis();
+	private long recentUseTime=System.currentTimeMillis();
 	
 	public FreeChannelDelayCloseTimer( Channel channel) {
 		
-		super(1, 10*1000, channel);
+		super(1, 10*1000L, channel);
 		
 	}
 	

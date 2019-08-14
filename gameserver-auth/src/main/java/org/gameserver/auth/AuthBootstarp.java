@@ -1,5 +1,6 @@
 package org.gameserver.auth;
 
+import com.jyg.redis.RedisCacheClient;
 import org.gameserver.auth.module.AuthModule;
 import org.gameserver.auth.processor.LoginHttpProcessor;
 import org.gameserver.auth.processor.TokenReceiveSuccessProtoProcessor;
@@ -26,10 +27,12 @@ public class AuthBootstarp
     	
     	
     	GameServerBootstarp bootstarp = new GameServerBootstarp();
+	    RedisCacheClient redisCacheClient = injector.getInstance(RedisCacheClient.class);
+	    redisCacheClient.init();
+
+        bootstarp.registerHttpEvent("/index000", injector.getInstance(TokenSendHttpProcessor.class));
         
-        bootstarp.registerHttpEvent("/index", injector.getInstance(TokenSendHttpProcessor.class));
-        
-        bootstarp.registerHttpEvent("/login", new LoginHttpProcessor());
+        bootstarp.registerHttpEvent("/index", injector.getInstance(LoginHttpProcessor.class));
         
         bootstarp.registerSendEventIdByProto(ProtoEnum.P_AUTH_SM_REQUEST_SEND_TOKEN.getEventId(), 
         		p_auth_sm_request_send_token.class);

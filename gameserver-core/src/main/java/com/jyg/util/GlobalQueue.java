@@ -29,11 +29,11 @@ public class GlobalQueue {
 //	private static ThreadPoolExecutor executor;
 
 	public static void start() {
-		EventFactory<LogicEvent<Object>> eventFactory = () -> new LogicEvent<>();
+		EventFactory<LogicEvent<Object>> eventFactory = LogicEvent::new;
 //		BlockingQueue<Runnable> fairBlockingQueue = new ArrayBlockingQueue<>(BUFFER_SIZE, true);
 //		executor = new ThreadPoolExecutor(1, 1, 3*60*1000L, TimeUnit.MILLISECONDS, fairBlockingQueue, new AbortPolicy());
 //		executor.allowCoreThreadTimeOut(true);
-	
+
 //		disruptor = new Disruptor<>(eventFactory, BUFFER_SIZE, executor, ProducerType.MULTI,
 //				new LoopAndSleepWaitStrategy());
 
@@ -47,6 +47,20 @@ public class GlobalQueue {
 		disruptor.start();
 	}
 
+	/**
+	 *
+	 * @param groupNum 消费者组数量
+	 * @param groupNum 组里的消费者数量
+	 */
+	private void createConsumerGroups(int groupNum,int oneGroupConsumerNum) {
+		for (int i = 0; i < groupNum; i++) {
+			EventHandlerGroup<LogicEvent<Object>> handleEventsWith = disruptor.handleEventsWith(EventConsumerFactory.newEventConsumer());
+			for(int j = 0; j < oneGroupConsumerNum-1 ;j++){
+				handleEventsWith.handleEventsWith(EventConsumerFactory.newEventConsumer());
+			}
+		}
+	}
+
 	public static void shutdown() {
 
 		disruptor.shutdown();
@@ -55,7 +69,7 @@ public class GlobalQueue {
 	}
 
 	public static void publicEvent(EventType evenType, Object data, Channel channel) {
-		publicEvent( evenType,  data, channel, 0);
+		publicEvent(evenType, data, channel, 0);
 	}
 
 	public static void publicEvent(EventType evenType, Object data, Channel channel, int eventId) {
@@ -74,14 +88,14 @@ public class GlobalQueue {
 
 	static class RingBufferThreadFactory implements ThreadFactory {
 
-		AtomicInteger threadId = new AtomicInteger(0);
+		private final AtomicInteger threadId = new AtomicInteger(0);
 
 		@Override
 		public Thread newThread(Runnable r) {
 			Thread thread = new Thread(r);
 //			thread.setPriority(Thread.MAX_PRIORITY);
 			thread.setDaemon(false);
-			thread.setName("ringbuffer_consumer_thread_"+threadId.getAndIncrement());
+			thread.setName("ringbuffer_consumer_thread_" + threadId.getAndIncrement());
 			logger.info("create conusmer thread : {} ", thread.getName());
 			return thread;
 		}

@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.jyg.gameserver</groupId>
 		<artifactId>gameserver</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>${gameserver.version}</version>
 	</parent>
 	<artifactId>gameserver-auth</artifactId>
 	<name>gameserver-auth</name>
@@ -47,12 +47,12 @@
 		<dependency>
 			<groupId>com.jyg.gameserver</groupId>
 			<artifactId>gameserver-core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${gameserver.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.jyg.gameserver</groupId>
 			<artifactId>gameserver-proto</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${gameserver.version}</version>
 		</dependency>
 
 		
@@ -63,5 +63,6 @@
             <version>4.8.2</version>
             <scope>test</scope>
         </dependency>
-    </dependencies>
+
+	</dependencies>
 </project>

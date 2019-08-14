@@ -28,7 +28,7 @@ http例子代码:
         
     } );
     
-    bootstarp.addService(new HttpService(8080));
+    bootstarp.addHttpService(8080);
     bootstarp.start();
 
 更多例子请在[test](https://github.com/jiayaoguang/gameserver/tree/master/gameserver-test/src/main/java/com/jyg/test01)包查看

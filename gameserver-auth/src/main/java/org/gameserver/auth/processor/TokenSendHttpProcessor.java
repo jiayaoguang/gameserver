@@ -73,7 +73,9 @@ public class TokenSendHttpProcessor extends HttpProcessor{
 		requestidTohttpChannelMap.put(request.getRequestid(), new UserLoginInfo(  response.getChannel() ,username ) );
 		
 		Channel channel  = authToSMChannel.checkoutAndGetChannel();
-		
+		if(channel == null){
+			return;
+		}
 		channel.writeAndFlush(builder);
 		
 //		authToSMChannelPool.returnChannel(tuple);
