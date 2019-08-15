@@ -1,18 +1,18 @@
 package org.gameserver.auth;
 
-import com.jyg.redis.RedisCacheClient;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.jyg.enums.ProtoEnum;
+import com.jyg.proto.p_auth_sm.p_auth_sm_request_send_token;
+import com.jyg.startup.GameServerBootstarp;
+import com.jyg.util.redis.RedisCacheClient;
 import org.gameserver.auth.module.AuthModule;
 import org.gameserver.auth.processor.LoginHttpProcessor;
 import org.gameserver.auth.processor.TokenReceiveSuccessProtoProcessor;
 import org.gameserver.auth.processor.TokenSendHttpProcessor;
-import org.gameserver.auth.useless.LoginHtmlHttpProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.jyg.enums.ProtoEnum;
-import com.jyg.net.HttpService;
-import com.jyg.proto.p_auth_sm.p_auth_sm_request_send_token;
-import com.jyg.startup.GameServerBootstarp;
 
 /**
  * Hello world!
@@ -20,6 +20,9 @@ import com.jyg.startup.GameServerBootstarp;
  */
 public class AuthBootstarp
 {
+
+	private static final Logger logger = LoggerFactory.getLogger(AuthBootstarp.class);
+
     public static void main ( String[] args ) throws Exception 
     {
     	
@@ -43,5 +46,6 @@ public class AuthBootstarp
         		injector.getInstance(TokenReceiveSuccessProtoProcessor.class));
         
         bootstarp.start();
+        logger.error(" start success ");
     }
 }

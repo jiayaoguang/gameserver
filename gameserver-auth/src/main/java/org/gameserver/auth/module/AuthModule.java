@@ -1,8 +1,7 @@
 package org.gameserver.auth.module;
 
-import com.jyg.redis.JedisCacheClient;
-import com.jyg.redis.RedisCacheClient;
-import com.jyg.redis.RedissonCacheClient;
+import com.jyg.util.redis.JedisCacheClient;
+import com.jyg.util.redis.RedisCacheClient;
 import org.gameserver.auth.processor.LoginHttpProcessor;
 import org.gameserver.auth.processor.TokenReceiveSuccessProtoProcessor;
 import org.gameserver.auth.processor.TokenSendHttpProcessor;

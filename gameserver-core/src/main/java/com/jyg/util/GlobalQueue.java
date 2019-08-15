@@ -4,6 +4,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.jyg.bean.LogicEvent;
+import com.jyg.consumers.DefaultEventConsumerFactory;
 import com.jyg.consumers.EventConsumerFactory;
 import com.jyg.enums.EventType;
 import com.lmax.disruptor.EventFactory;
@@ -21,7 +22,7 @@ import org.slf4j.LoggerFactory;
  */
 public class GlobalQueue {
 
-	private static Logger logger = LoggerFactory.getLogger(GlobalQueue.class);
+	private static final Logger logger = LoggerFactory.getLogger(GlobalQueue.class);
 
 	private static Disruptor<LogicEvent<Object>> disruptor;
 	private static final int BUFFER_SIZE = 4096;
@@ -29,6 +30,9 @@ public class GlobalQueue {
 //	private static ThreadPoolExecutor executor;
 
 	public static void start() {
+
+		DefaultEventConsumerFactory defaultEventConsumerFactory = new DefaultEventConsumerFactory();
+
 		EventFactory<LogicEvent<Object>> eventFactory = LogicEvent::new;
 //		BlockingQueue<Runnable> fairBlockingQueue = new ArrayBlockingQueue<>(BUFFER_SIZE, true);
 //		executor = new ThreadPoolExecutor(1, 1, 3*60*1000L, TimeUnit.MILLISECONDS, fairBlockingQueue, new AbortPolicy());
@@ -41,7 +45,7 @@ public class GlobalQueue {
 				new LoopAndSleepWaitStrategy());
 
 		EventHandlerGroup<LogicEvent<Object>> handleEventsWith = disruptor
-				.handleEventsWith(EventConsumerFactory.newEventConsumer());
+				.handleEventsWith(defaultEventConsumerFactory.newEventConsumer());
 
 		ringBuffer = disruptor.getRingBuffer();
 		disruptor.start();
@@ -52,11 +56,11 @@ public class GlobalQueue {
 	 * @param groupNum 消费者组数量
 	 * @param groupNum 组里的消费者数量
 	 */
-	private void createConsumerGroups(int groupNum,int oneGroupConsumerNum) {
+	private void createConsumerGroups(int groupNum, int oneGroupConsumerNum , EventConsumerFactory eventConsumerFactory) {
 		for (int i = 0; i < groupNum; i++) {
-			EventHandlerGroup<LogicEvent<Object>> handleEventsWith = disruptor.handleEventsWith(EventConsumerFactory.newEventConsumer());
+			EventHandlerGroup<LogicEvent<Object>> handleEventsWith = disruptor.handleEventsWith(eventConsumerFactory.newEventConsumer());
 			for(int j = 0; j < oneGroupConsumerNum-1 ;j++){
-				handleEventsWith.handleEventsWith(EventConsumerFactory.newEventConsumer());
+				handleEventsWith.handleEventsWith(eventConsumerFactory.newEventConsumer());
 			}
 		}
 	}

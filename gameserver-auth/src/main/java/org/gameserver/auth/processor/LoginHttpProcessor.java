@@ -5,7 +5,7 @@ import java.util.Set;
 import com.jyg.net.HttpProcessor;
 import com.jyg.net.Request;
 import com.jyg.net.Response;
-import com.jyg.redis.RedisCacheClient;
+import com.jyg.util.redis.RedisCacheClient;
 import com.jyg.util.TokenUtil;
 
 import io.netty.handler.codec.http.cookie.Cookie;
@@ -38,14 +38,14 @@ public class LoginHttpProcessor extends HttpProcessor {
 		String token = TokenUtil.getToken();
 		String setResult = null;
 		try {
-			setResult = redisCacheClient.setValue(username, token);
+			setResult = redisCacheClient.setValueExpire(username, 60, token);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		if(setResult == null){
+		if (setResult == null) {
 			System.out.println(" set value fail ");
-		}else {
+		} else {
 			System.out.println(" set value success " + setResult);
 		}
 		request.decodeCookies();

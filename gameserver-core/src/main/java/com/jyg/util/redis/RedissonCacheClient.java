@@ -1,4 +1,4 @@
-package com.jyg.redis;
+package com.jyg.util.redis;
 
 import com.jyg.util.RemotingUtil;
 import org.redisson.Redisson;
@@ -9,8 +9,6 @@ import org.redisson.config.Config;
 import org.redisson.config.TransportMode;
 
 import javax.inject.Inject;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * create on 2019/8/13 by jiayaoguang
@@ -50,6 +48,11 @@ public class RedissonCacheClient implements RedisCacheClient {
 	@Override
 	public String setValue(String key, String value) {
 		return key;
+	}
+
+	@Override
+	public String setValueExpire(String key, int expireTimeSecond, String value) {
+		return null;
 	}
 
 	@Override

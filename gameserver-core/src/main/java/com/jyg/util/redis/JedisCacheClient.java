@@ -1,4 +1,4 @@
-package com.jyg.redis;
+package com.jyg.util.redis;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -26,6 +26,12 @@ public class JedisCacheClient implements RedisCacheClient {
 	public String setValue(String key, String value) {
 		try(Jedis jedis = pool.getResource()){
 			return jedis.set(key,value);
+		}
+	}
+
+	public String setValueExpire(String key, int expireTimeSecond, String value) {
+		try (Jedis jedis = pool.getResource()) {
+			return jedis.setex(key, expireTimeSecond, value);
 		}
 	}
 
