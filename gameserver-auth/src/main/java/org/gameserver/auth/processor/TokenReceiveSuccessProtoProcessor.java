@@ -6,11 +6,10 @@ import java.util.Map;
 import org.gameserver.auth.bean.UserLoginInfo;
 
 import com.google.inject.Inject;
-import com.jyg.net.ProtoProcessor;
-import com.jyg.net.ProtoResponse;
+import com.jyg.processor.ProtoProcessor;
+import com.jyg.processor.ProtoResponse;
 import com.jyg.net.Response;
 import com.jyg.proto.p_auth_sm.p_sm_auth_response_receive_token;
-import com.jyg.util.FTLLoader;
 
 /**
  * created by jiayaoguang at 2018年4月9日

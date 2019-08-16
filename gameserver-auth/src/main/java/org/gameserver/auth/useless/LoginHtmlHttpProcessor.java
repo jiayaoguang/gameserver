@@ -1,14 +1,10 @@
 package org.gameserver.auth.useless;
 
 import java.util.Random;
-import java.util.Set;
 
-import com.jyg.net.HttpProcessor;
+import com.jyg.processor.HttpProcessor;
 import com.jyg.net.Request;
 import com.jyg.net.Response;
-
-import io.netty.handler.codec.http.cookie.Cookie;
-import io.netty.handler.codec.http.cookie.DefaultCookie;
 
 /**
  * created by jiayaoguang at 2018年3月20日

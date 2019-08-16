@@ -1,7 +1,6 @@
 package com.jyg.tcp.http;
 
-import com.jyg.net.HttpProcessor;
-import com.jyg.net.HttpService;
+import com.jyg.processor.HttpProcessor;
 import com.jyg.net.Request;
 import com.jyg.net.Response;
 import com.jyg.startup.GameServerBootstarp;

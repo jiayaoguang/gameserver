@@ -2,8 +2,8 @@ package com.jyg.tcp.chat;
 
 import org.junit.Test;
 
-import com.jyg.net.ProtoProcessor;
-import com.jyg.net.ProtoResponse;
+import com.jyg.processor.ProtoProcessor;
+import com.jyg.processor.ProtoResponse;
 import com.jyg.proto.p_sm_scene.p_scene_sm_chat;
 import com.jyg.proto.p_sm_scene.p_sm_scene_chat;
 import com.jyg.proto.p_test.p_scene_sm_response_pong;

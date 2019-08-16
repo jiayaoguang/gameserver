@@ -2,7 +2,7 @@ package org.gameserver.auth.processor;
 
 import java.util.Set;
 
-import com.jyg.net.HttpProcessor;
+import com.jyg.processor.HttpProcessor;
 import com.jyg.net.Request;
 import com.jyg.net.Response;
 import com.jyg.util.redis.RedisCacheClient;

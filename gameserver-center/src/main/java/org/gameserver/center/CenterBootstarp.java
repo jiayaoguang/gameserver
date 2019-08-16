@@ -4,11 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.jyg.enums.ProtoEnum;
-import com.jyg.net.ProtoProcessor;
-import com.jyg.net.ProtoResponse;
-import com.jyg.net.TcpService;
-import com.jyg.net.SocketService;
-import com.jyg.net.WebSocketService;
+import com.jyg.processor.ProtoProcessor;
+import com.jyg.processor.ProtoResponse;
 import com.jyg.proto.p_auth_sm.p_auth_sm_request_send_token;
 import com.jyg.proto.p_auth_sm.p_sm_auth_response_receive_token;
 import com.jyg.startup.GameServerBootstarp;

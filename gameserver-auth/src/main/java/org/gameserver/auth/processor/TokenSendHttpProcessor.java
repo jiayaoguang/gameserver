@@ -4,7 +4,7 @@ import org.gameserver.auth.bean.UserLoginInfo;
 import org.gameserver.auth.util.AuthToSMChannelMrg;
 
 import com.google.inject.Inject;
-import com.jyg.net.HttpProcessor;
+import com.jyg.processor.HttpProcessor;
 import com.jyg.net.Request;
 import com.jyg.net.Response;
 import com.jyg.proto.p_auth_sm.p_auth_sm_request_send_token;

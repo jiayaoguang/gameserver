@@ -4,8 +4,8 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.jyg.bean.LogicEvent;
-import com.jyg.consumers.DefaultEventConsumerFactory;
-import com.jyg.consumers.EventConsumerFactory;
+import com.jyg.consumer.DefaultEventConsumerFactory;
+import com.jyg.consumer.EventConsumerFactory;
 import com.jyg.enums.EventType;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.RingBuffer;
@@ -25,13 +25,11 @@ public class GlobalQueue {
 	private static final Logger logger = LoggerFactory.getLogger(GlobalQueue.class);
 
 	private static Disruptor<LogicEvent<Object>> disruptor;
-	private static final int BUFFER_SIZE = 4096;
+	private static final int BUFFER_SIZE = 1024*64;
 	private static RingBuffer<LogicEvent<Object>> ringBuffer;
 //	private static ThreadPoolExecutor executor;
 
-	public static void start() {
-
-		DefaultEventConsumerFactory defaultEventConsumerFactory = new DefaultEventConsumerFactory();
+	public static void start(EventConsumerFactory defaultEventConsumerFactory) {
 
 		EventFactory<LogicEvent<Object>> eventFactory = LogicEvent::new;
 //		BlockingQueue<Runnable> fairBlockingQueue = new ArrayBlockingQueue<>(BUFFER_SIZE, true);
@@ -44,8 +42,7 @@ public class GlobalQueue {
 		disruptor = new Disruptor<>(eventFactory, BUFFER_SIZE, new RingBufferThreadFactory(), ProducerType.MULTI,
 				new LoopAndSleepWaitStrategy());
 
-		EventHandlerGroup<LogicEvent<Object>> handleEventsWith = disruptor
-				.handleEventsWith(defaultEventConsumerFactory.newEventConsumer());
+		disruptor.handleEventsWith(defaultEventConsumerFactory.newEventConsumer());
 
 		ringBuffer = disruptor.getRingBuffer();
 		disruptor.start();
@@ -92,11 +89,11 @@ public class GlobalQueue {
 
 	static class RingBufferThreadFactory implements ThreadFactory {
 
-		private final AtomicInteger threadId = new AtomicInteger(0);
+		private final AtomicInteger threadId = new AtomicInteger(1);
 
 		@Override
-		public Thread newThread(Runnable r) {
-			Thread thread = new Thread(r);
+		public Thread newThread(Runnable runnable) {
+			Thread thread = new Thread(runnable);
 //			thread.setPriority(Thread.MAX_PRIORITY);
 			thread.setDaemon(false);
 			thread.setName("ringbuffer_consumer_thread_" + threadId.getAndIncrement());

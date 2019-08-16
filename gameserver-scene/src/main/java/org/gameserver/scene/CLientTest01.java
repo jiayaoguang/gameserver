@@ -1,7 +1,7 @@
 package org.gameserver.scene;
 
-import com.jyg.net.ProtoProcessor;
-import com.jyg.net.ProtoResponse;
+import com.jyg.processor.ProtoProcessor;
+import com.jyg.processor.ProtoResponse;
 import com.jyg.proto.p_sm_scene.p_scene_sm_chat;
 import com.jyg.proto.p_sm_scene.p_scene_sm_response_pong;
 import com.jyg.proto.p_sm_scene.p_sm_scene_chat;

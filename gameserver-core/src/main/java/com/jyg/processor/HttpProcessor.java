@@ -1,15 +1,18 @@
-package com.jyg.net;
+package com.jyg.processor;
 
 import com.jyg.bean.LogicEvent;
+import com.jyg.net.EventDispatcher;
+import com.jyg.net.Request;
+import com.jyg.net.Response;
 import com.jyg.util.FTLLoader;
-
-import io.netty.buffer.ByteBuf;
+import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * created by jiayaoguang at 2017年12月16日 
  * http事件处理器
  */
-public abstract class HttpProcessor implements Processor<Request> {
+public abstract class HttpProcessor extends AbstractProcessor<Request> {
 
 	public final void process(LogicEvent<Request> event) {
 
@@ -19,7 +22,7 @@ public abstract class HttpProcessor implements Processor<Request> {
 			this.service(request, response);
 //			fullHttpResponse = response.createDefaultFullHttpResponse();
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(" make exception {} " , e);
 			response.write500Error();
 		}finally {
 			

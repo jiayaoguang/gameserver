@@ -2,6 +2,9 @@ package com.jyg.net;
 
 import com.google.protobuf.GeneratedMessageV3;
 import com.jyg.bean.LogicEvent;
+import com.jyg.processor.HttpProcessor;
+import com.jyg.processor.NotFoundHttpProcessor;
+import com.jyg.processor.ProtoProcessor;
 import com.jyg.session.Session;
 import com.jyg.timer.Timer;
 import com.jyg.timer.TimerTrigger;
@@ -98,7 +101,7 @@ public class EventDispatcher {
      */
     public void registerSendEventIdByProto(int eventId, Class<? extends GeneratedMessageV3> protoClazz) throws Exception {
         if (protoNameToEventidMap.containsKey(protoClazz.getName())) {
-            throw new Exception("dupilcated protoClazz:" + protoClazz.getName());
+            throw new IllegalArgumentException("dupilcated protoClazz:" + protoClazz.getName());
         }
         protoNameToEventidMap.put(protoClazz.getName(), eventId);
     }
@@ -209,7 +212,7 @@ public class EventDispatcher {
         httpPathMap.put(path, processor);
     }
 
-    HttpProcessor getHttpProcessor(String path) {
+    public HttpProcessor getHttpProcessor(String path) {
         HttpProcessor processor = httpPathMap.get(path);
         if (processor == null) {
             processor = notFOundProcessor;

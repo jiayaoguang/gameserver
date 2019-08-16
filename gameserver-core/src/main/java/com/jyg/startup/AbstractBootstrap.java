@@ -2,7 +2,7 @@ package com.jyg.startup;
 
 import com.google.protobuf.GeneratedMessageV3;
 import com.jyg.net.EventDispatcher;
-import com.jyg.net.ProtoProcessor;
+import com.jyg.processor.ProtoProcessor;
 
 /**
  * create by jiayaoguang at 2018年3月5日

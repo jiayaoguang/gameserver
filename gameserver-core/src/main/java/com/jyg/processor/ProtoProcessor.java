@@ -1,23 +1,21 @@
-package com.jyg.net;
+package com.jyg.processor;
 
 import java.lang.reflect.InvocationTargetException;
 
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.MessageLite;
-import com.google.protobuf.MessageLiteOrBuilder;
 import com.google.protobuf.Parser;
 import com.jyg.bean.LogicEvent;
 
 /**
  * created by jiayaoguang at 2017年12月16日
  */
-public abstract class ProtoProcessor<T extends GeneratedMessageV3> implements Processor<T> {
+public abstract class ProtoProcessor<T extends GeneratedMessageV3> extends AbstractProcessor<T> {
 
 	private final Parser<? extends GeneratedMessageV3> parser;
 	private final Class clazz;
 
-	@Deprecated
-	public ProtoProcessor(Class<? extends GeneratedMessageV3> protoClazz) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public ProtoProcessor(Class<? extends GeneratedMessageV3> protoClazz) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		GeneratedMessageV3 defaultInstance = (GeneratedMessageV3)protoClazz.getMethod("getDefaultInstance").invoke(null);
 		parser = defaultInstance.getParserForType();
 		clazz = protoClazz;

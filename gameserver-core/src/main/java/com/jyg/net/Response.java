@@ -143,7 +143,7 @@ public class Response {
 	}
 	
 	
-	void write500Error() {
+	public void write500Error() {
 		this.channel.writeAndFlush( create500FullHttpResponse() );
 	}
 	

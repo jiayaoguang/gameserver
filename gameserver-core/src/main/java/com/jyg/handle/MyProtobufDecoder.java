@@ -8,20 +8,15 @@ import com.google.protobuf.MessageLite;
 import com.google.protobuf.Parser;
 import com.jyg.enums.EventType;
 import com.jyg.net.EventDispatcher;
-import com.jyg.net.ProtoProcessor;
+import com.jyg.processor.ProtoProcessor;
 import com.jyg.util.GlobalQueue;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufInputStream;
-import io.netty.buffer.Unpooled;
-import io.netty.buffer.UnpooledDirectByteBuf;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import org.junit.Test;
 
 /**
  * created by jiayaoguang at 2018年3月13日 protobuf解码器

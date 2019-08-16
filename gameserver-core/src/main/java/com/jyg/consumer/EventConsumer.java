@@ -1,4 +1,4 @@
-package com.jyg.consumers;
+package com.jyg.consumer;
 
 import com.jyg.bean.LogicEvent;
 import com.jyg.net.EventDispatcher;
