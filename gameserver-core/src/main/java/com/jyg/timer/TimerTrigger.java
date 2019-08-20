@@ -7,16 +7,19 @@ import java.util.PriorityQueue;
 
 public class TimerTrigger {
 
-    private final PriorityQueue<Timer> timerQueue = new PriorityQueue<>();
+    private final PriorityQueue<Timer> timerQueue = new PriorityQueue<>(128);
 
     public void addTimer(Timer timer) {
-        timer.setStartTime(System.currentTimeMillis());
         timerQueue.add(timer);
+    }
+
+    public void cancelTimer(Timer timer){
+        timer.cancel();
     }
 
     public void tickTigger() {
 
-        for (; ; ) {
+        for ( ; ; ) {
             Timer timer = timerQueue.peek();
             if (timer == null) {
                 return;
@@ -25,17 +28,13 @@ public class TimerTrigger {
                 return;
             }
             timerQueue.poll();
-            if (timer.getExeNum() <= 0) {
-
+            if (timer.isEnd() || timer.isCancel()) {
                 continue;
             }
-            timer.setStartTime(System.currentTimeMillis());
-            timer.setExeNum(timer.getExeNum() - 1);
 
             timer.trigger();
 
             timerQueue.offer(timer);
-
         }
 
     }

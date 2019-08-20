@@ -44,9 +44,9 @@ public class EventDispatcher {
     private long nextFrameTimeStamp = System.currentTimeMillis();
 
     private EventDispatcher() {
-        this.addTimer(new Timer(Integer.MAX_VALUE, 20 * 1000L, null) {
+        this.addTimer(new Timer(Integer.MAX_VALUE, 0L , 60 * 1000L) {
             public void call() {
-                EventDispatcher.getInstance().removeOutOfTimeChannels();
+                removeOutOfTimeChannels();
             }
         });
 
@@ -153,7 +153,7 @@ public class EventDispatcher {
                 it.remove();
                 continue;
             }
-            if ((session.getLastContactMill() + 60 * 1000) < System.currentTimeMillis()) {
+            if ((session.getLastContactMill() + 60 * 1000L) < System.currentTimeMillis()) {
                 channel.close();
                 it.remove();
                 System.out.println("移除超时的channel" + channel);

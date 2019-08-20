@@ -34,13 +34,12 @@ public class PingCLient {
 		client.registerSendEventIdByProto(1, p_sm_scene_request_ping.class);
 		client.registerSocketEvent(2, pongProcessor);
 
-		Channel channel = client.connect("localhost", 8080);
+		final Channel channel = client.connect("localhost", 8080);
 
 		TimerTrigger tigger = new TimerTrigger();
-		tigger.addTimer(new Timer(10, System.currentTimeMillis(), 1000, channel) {
-
+		tigger.addTimer(new Timer(10,  1000, 1000) {
 			public void call() {
-				this.writeAndFlush(p_sm_scene_request_ping.newBuilder());
+				channel.writeAndFlush(p_sm_scene_request_ping.newBuilder());
 			}
 		});
 

@@ -15,6 +15,7 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 
 	private final EventDispatcher dispatcher = EventDispatcher.getInstance();
 
+	private int requestId = 1;
 
 	public EventConsumer() {
 
@@ -31,7 +32,6 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 
 	}
 
-	private int requestId = 1;
 
 	@Override
 	public final void onEvent(LogicEvent event) throws Exception {
@@ -66,7 +66,7 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 				((Request) event.getData()).setRequestid(getAndIncRequestId());
 				dispatcher.httpProcess(event);
 				// 5秒后关闭
-				EventDispatcher.getInstance().addTimer(new DelayCloseTimer(event.getChannel(), 5));
+				EventDispatcher.getInstance().addTimer(new DelayCloseTimer(event.getChannel(), 5 * 1000L));
 				break;
 			case ON_MESSAGE_COME:
 				dispatcher.webSocketProcess(event);
@@ -93,5 +93,5 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 	/**
 	 *
 	 */
-	protected abstract void loop() ;
+	protected abstract void loop();
 }

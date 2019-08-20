@@ -6,19 +6,24 @@ import io.netty.channel.Channel;
  * created by jiayaoguang at 2018年4月15日
  */
 public class DelayCloseTimer extends Timer{
+
+	private Channel channel;
+
 	public DelayCloseTimer(Channel channel){
-		super(1 , 5*1000L, channel);
+		super(1 , 5*1000L, 5*1000L);
+		this.channel = channel;
 	}
 	
-	public DelayCloseTimer(Channel channel,int delaySeconds){
-		super(1 , delaySeconds*1000L, channel);
+	public DelayCloseTimer(Channel channel,long delayTimeMills){
+		super(1 , delayTimeMills, delayTimeMills);
+		this.channel = channel;
 	}
 	
 	public void call() {
 		//open -> register ->active
-		if(this.getChannel().isOpen()){
+		if(channel.isOpen()){
 			System.out.println("out of time,just close it");
-			this.getChannel().close();
+			channel.close();
 		}
 	}
 	

@@ -1,23 +1,20 @@
 package org.gameserver.auth.processor;
 
-import org.gameserver.auth.bean.UserLoginInfo;
-import org.gameserver.auth.util.AuthToSMChannelMrg;
-
 import com.google.inject.Inject;
-import com.jyg.processor.HttpProcessor;
 import com.jyg.net.Request;
 import com.jyg.net.Response;
+import com.jyg.processor.HttpProcessor;
 import com.jyg.proto.p_auth_sm.p_auth_sm_request_send_token;
-
 import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import org.gameserver.auth.bean.UserLoginInfo;
 
 /**
  * created by jiayaoguang at 2018年3月20日
  */
+@Deprecated
 public class TokenSendHttpProcessor extends HttpProcessor{
-	private AuthToSMChannelMrg authToSMChannel;
 	private Long2ObjectMap<UserLoginInfo> requestidTohttpChannelMap = new Long2ObjectOpenHashMap<>();
 	
 	public UserLoginInfo getUserLoginInfo(long requestId) {
@@ -25,8 +22,8 @@ public class TokenSendHttpProcessor extends HttpProcessor{
 	}
 	
 	@Inject
-	public TokenSendHttpProcessor(AuthToSMChannelMrg authToSMChannel){
-		this.authToSMChannel = authToSMChannel;
+	public TokenSendHttpProcessor(){
+
 	}
 	
 
@@ -72,12 +69,7 @@ public class TokenSendHttpProcessor extends HttpProcessor{
 		
 		requestidTohttpChannelMap.put(request.getRequestid(), new UserLoginInfo(  response.getChannel() ,username ) );
 		
-		Channel channel  = authToSMChannel.checkoutAndGetChannel();
-		if(channel == null){
-			return;
-		}
-		channel.writeAndFlush(builder);
-		
+
 //		authToSMChannelPool.returnChannel(tuple);
 		
 	}

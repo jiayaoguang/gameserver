@@ -8,16 +8,12 @@ import io.netty.channel.Channel;
 public class IdleTimer extends Timer{
 
 	public IdleTimer( Channel channel) {
-		super(Integer.MAX_VALUE, 5*1000, channel);
+		super(Integer.MAX_VALUE, 5*1000L, 5*1000L);
 	}
 
 	@Override
 	public void call() {
-		if(this.getChannel().isOpen()) {
-//			this.getChannel().writeAndFlush(p_common_request_ping.newBuilder());
-		}else {
-			this.setExeNum(0);
-		}
+
 	}
 
 }

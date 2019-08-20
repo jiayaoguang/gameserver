@@ -3,122 +3,96 @@ package com.jyg.timer;
 import com.google.protobuf.MessageLiteOrBuilder;
 
 import io.netty.channel.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * created by jiayaoguang at 2018年3月15日 定时器
  */
-public abstract class Timer implements Comparable<Timer> {
+public abstract class Timer {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(Timer.class);
 
 	// 执行次数
-	private int exeNum = 0;
+	private int execNum = 0;
 	// 开始时间
-	private long startTime;
-	// 延迟时间
-	private final long delayTime;
-	
+	private final long startTime;
+	// 第一次执行的延迟时间
+	private final long firstExecDelayTimeMills;
+	//执行的间隔时间
+	private long execIntervalTimeMills;
+
 	private Channel channel;
-	
+
 	// 回调函数
 //	private TimerCallBack callBack;
-	
+	//执行时间戳(毫秒)
 	private long triggerTime;
-	
-	
 
-	// long triggerTime = startTime + delayTime;
+	private boolean isCancel = false;
+
+
+	public Timer(int execNum, long firstExecDelayTimeMills, long execIntervalTimeMills) {
+		super();
+		this.execNum = execNum;
+		this.execIntervalTimeMills = execIntervalTimeMills;
+		this.firstExecDelayTimeMills = firstExecDelayTimeMills;
+
+		this.startTime = System.currentTimeMillis();
+		triggerTime = startTime + firstExecDelayTimeMills;
+	}
+
 
 	public long getTriggerTime() {
 		return triggerTime;
 	}
 
-	public Timer(int exeNum, long delayTime,Channel channel ) {
-		super();
-		this.exeNum = exeNum;
-		this.startTime = System.currentTimeMillis();
-		this.delayTime = delayTime;
-		this.channel = channel;
-	}
-	
-	public Timer(int exeNum, long startTime, long delayTime,Channel channel ) {
-		super();
-		this.exeNum = exeNum;
-		this.startTime = startTime;
-		this.delayTime = delayTime;
-		this.channel = channel;
+	public int getExecNum() {
+		return execNum;
 	}
 
-	public int getExeNum() {
-		return exeNum;
+	public void setExecNum(int execNum) {
+		this.execNum = execNum;
 	}
 
-	public void setExeNum(int exeNum) {
-		this.exeNum = exeNum;
-	}
-	
-	public void incExeNum() {
-		if(exeNum==0) {
-			
-			return;
-		}
-		this.exeNum++;
+	void reduceExecNum(int reduceNum) {
+		this.execNum -= reduceNum;
 	}
 
-	public long getStartTime() {
-		return startTime;
+	private void setNextTriggerTime() {
+		this.triggerTime = System.currentTimeMillis() + this.execIntervalTimeMills;
 	}
 
-	void setStartTime(long startTime) {
-		this.startTime = startTime;
-		this.triggerTime = startTime + this.delayTime;
+	public long getFirstExecDelayTimeMills() {
+		return firstExecDelayTimeMills;
 	}
 
-	public long getDelayTime() {
-		return delayTime;
+	public void cancel() {
+		isCancel = true;
 	}
 
-//	public void setDelayTime(long delayTime) {
-//		this.delayTime = delayTime;
-//	}
+	public boolean isCancel() {
+		return isCancel;
+	}
 
-//	public TimerCallBack getTimerCallBack() {
-//		return callBack;
-//	}
-//
-//	public void setTimerCallBack(TimerCallBack callBack) {
-//		this.callBack = callBack;
-//	}
+	public boolean isEnd() {
+		return execNum <= 0;
+	}
 
-	@Override
-	public int compareTo(Timer timer2) {
-		long triggerTime1 = this.getTriggerTime();
-		long triggerTime2 = timer2.getTriggerTime();
-		if (triggerTime1 > triggerTime2) {
-			return 1;
-		} else if (triggerTime1 == triggerTime2) {
-			return 0;
-		} else {
-			return -1;
+
+	final void trigger() {
+
+		setNextTriggerTime();
+		reduceExecNum(1);
+
+		try {
+			this.call();
+		} catch (Exception e) {
+			LOGGER.error(" timer call make execption {} ", e);
 		}
 	}
 
-	public void trigger() {
-		this.call();
-	}
-	
-	public abstract void call();
-	
-	public void writeAndFlush(MessageLiteOrBuilder msg) {
-		channel.writeAndFlush(msg);
-	}
-	
-	public Channel getChannel() {
-		return channel;
-	}
 
-	public void setChannel(Channel channel) {
-		this.channel = channel;
-	}
-	
-	
+	protected abstract void call();
 
 }
