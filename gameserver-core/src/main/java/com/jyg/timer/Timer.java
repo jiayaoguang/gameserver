@@ -18,9 +18,9 @@ public abstract class Timer {
 	// 开始时间
 	private final long startTime;
 	// 第一次执行的延迟时间
-	private final long firstExecDelayTimeMills;
+//	private final long firstDelayTimeMills;
 	//执行的间隔时间
-	private long execIntervalTimeMills;
+	private long delayTimeMills;
 
 	private Channel channel;
 
@@ -32,14 +32,13 @@ public abstract class Timer {
 	private boolean isCancel = false;
 
 
-	public Timer(int execNum, long firstExecDelayTimeMills, long execIntervalTimeMills) {
-		super();
+	public Timer(int execNum, long firstDelayTimeMills, long delayTimeMills) {
 		this.execNum = execNum;
-		this.execIntervalTimeMills = execIntervalTimeMills;
-		this.firstExecDelayTimeMills = firstExecDelayTimeMills;
+		this.delayTimeMills = delayTimeMills;
+//		this.firstDelayTimeMills = firstDelayTimeMills;
 
 		this.startTime = System.currentTimeMillis();
-		triggerTime = startTime + firstExecDelayTimeMills;
+		triggerTime = startTime + firstDelayTimeMills;
 	}
 
 
@@ -59,12 +58,8 @@ public abstract class Timer {
 		this.execNum -= reduceNum;
 	}
 
-	private void setNextTriggerTime() {
-		this.triggerTime = System.currentTimeMillis() + this.execIntervalTimeMills;
-	}
-
-	public long getFirstExecDelayTimeMills() {
-		return firstExecDelayTimeMills;
+	private void updateNextTriggerTime() {
+		this.triggerTime = System.currentTimeMillis() + this.delayTimeMills;
 	}
 
 	public void cancel() {
@@ -82,7 +77,7 @@ public abstract class Timer {
 
 	final void trigger() {
 
-		setNextTriggerTime();
+		updateNextTriggerTime();
 		reduceExecNum(1);
 
 		try {

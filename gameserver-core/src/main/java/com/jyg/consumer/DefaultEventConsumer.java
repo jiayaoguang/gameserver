@@ -5,6 +5,12 @@ package com.jyg.consumer;
  */
 public class DefaultEventConsumer extends EventConsumer {
 
+
+	protected void init() {
+
+		//TODO
+	}
+
 	/**
 	 *
 	 */

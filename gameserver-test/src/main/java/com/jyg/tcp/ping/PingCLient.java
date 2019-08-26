@@ -43,7 +43,7 @@ public class PingCLient {
 			}
 		});
 
-		tigger.tickTigger();
+		tigger.updateTimer();
 
 		// client.close();
 	}

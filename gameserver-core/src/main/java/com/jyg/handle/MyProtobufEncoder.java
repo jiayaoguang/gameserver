@@ -1,19 +1,12 @@
 package com.jyg.handle;
 
-import java.util.List;
-
-import com.google.protobuf.GeneratedMessageV3;
-import com.google.protobuf.GeneratedMessageV3.Builder;
 import com.google.protobuf.MessageLite;
 import com.google.protobuf.MessageLiteOrBuilder;
 import com.jyg.net.EventDispatcher;
-import com.jyg.util.UnknowMessageTypeException;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
-import io.netty.handler.codec.MessageToMessageEncoder;
 
 /**
  * created by jiayaoguang at 2018年3月13日
@@ -25,35 +18,34 @@ public class MyProtobufEncoder extends MessageToByteEncoder<MessageLiteOrBuilder
 	EventDispatcher dis = EventDispatcher.getInstance();
 
 	@Override
-	protected void encode(ChannelHandlerContext ctx, MessageLiteOrBuilder msg, ByteBuf buf)
-			throws UnknowMessageTypeException {
-		String protoName;
+	protected void encode(ChannelHandlerContext ctx, MessageLiteOrBuilder msg, ByteBuf buf) {
+		Class<? extends MessageLite> protoClazz;
 		System.out.println("111threadName : "+Thread.currentThread().getName());
 		byte[] bytes = null;
 		if (msg instanceof MessageLite) {
 			bytes = ((MessageLite) msg).toByteArray();
-			protoName = ((MessageLite)msg).getClass().getName();
+			protoClazz = ((MessageLite)msg).getClass();
 		} else if (msg instanceof MessageLite.Builder) {
 			MessageLite messageLite = ((MessageLite.Builder) msg).build();
 			bytes = messageLite.toByteArray();
-			protoName = messageLite.getClass().getName();
+			protoClazz = messageLite.getClass();
 		}else {
-			throw new UnknowMessageTypeException("Unknow message type");
+			throw new IllegalArgumentException("Unknow message type");
 		}
 
 		if (bytes == null) {
-			throw new UnknowMessageTypeException("not MessageLiteOrBuilder");
+			throw new IllegalArgumentException("not MessageLiteOrBuilder");
 		}
-		Integer eventid = dis.getEventIdByProtoName(protoName);
-		
-		if(eventid == null) {
-			throw new UnknowMessageTypeException("unknow eventid");
+		int eventId = dis.getEventIdByProtoClazz(protoClazz);
+		if(eventId <= 0) {
+			System.out.println("unknow eventid");
+			return;
 		}
 		
 		int protoLen = 4 + bytes.length;
 //		ByteBuf buf = ctx.alloc().directBuffer(protoLen);
 		buf.writeInt(protoLen);
-		buf.writeInt(eventid.intValue());
+		buf.writeInt(eventId);
 		buf.writeBytes(bytes);
 //		out.add(buf);
 	}

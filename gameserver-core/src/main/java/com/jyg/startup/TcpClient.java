@@ -9,13 +9,11 @@ import com.jyg.session.Session;
 import com.jyg.util.RemotingUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.concurrent.Future;
 
 import java.io.IOException;
 
@@ -24,7 +22,7 @@ import java.io.IOException;
  * 远程端口连接
  */
 
-public class TcpClient {
+public class TcpClient extends AbstractBootstrap{
 
 //	public String host = "127.0.0.1"; // ip地址
 //	public int port = 6789; // 端口
@@ -66,22 +64,23 @@ public class TcpClient {
 	
 	// 连接服务端
 	public Channel connect(String host,int port) throws InterruptedException {
-		channel = bootstrap.connect(host, port).sync().channel();
+
+		ChannelFuture channelFuture = bootstrap.connect(host, port).sync();
+
+		if(!channelFuture.isSuccess()){
+			logger.error(" connect fail ");
+			return null;
+		}
+
+		isStart = true;
+
+		channel = channelFuture.channel();
 		
 //		EventDispatcher.getInstance().addTimer( new IdleTimer(channel) );
 
 		return channel;
 	}
 	
-	
-	
-	public void registerSocketEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoprocessor) throws Exception {
-		EventDispatcher.getInstance().registerSocketEvent(eventid, protoprocessor);
-	}
-
-	public void registerSendEventIdByProto(int eventId,Class<? extends GeneratedMessageV3> protoClazz) throws Exception {
-		EventDispatcher.getInstance().registerSendEventIdByProto( eventId, protoClazz);
-	}
 
 	public void write( MessageLiteOrBuilder msg) throws IOException {
 		channel.writeAndFlush( msg);

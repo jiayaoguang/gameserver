@@ -12,7 +12,7 @@ import com.lmax.disruptor.WaitStrategy;
  * created by jiayaoguang at 2018年4月9日
  */
 public final class LoopAndSleepWaitStrategy implements WaitStrategy {
-	private static final int DEFAULT_RETRIES = 200;
+	private static final int DEFAULT_RETRIES = 500;
 
 	private final int retries;
 

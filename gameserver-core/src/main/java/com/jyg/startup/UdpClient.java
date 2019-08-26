@@ -24,7 +24,7 @@ import java.io.IOException;
  * 远程端口连接
  */
 
-public class UdpClient {
+public class UdpClient extends AbstractBootstrap{
 
 //	public String host = "127.0.0.1"; // ip地址
 //	public int port = 6789; // 端口
@@ -47,12 +47,7 @@ public class UdpClient {
 		bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 	}
 	
-	// 连接服务端
-	public Channel connect(String host,int port) throws InterruptedException {
-		channel = bootstrap.connect(host, port).sync().channel();
-		
-		return channel;
-	}
+
 
 	public Channel bind(int port) throws InterruptedException {
 		channel = bootstrap.bind( port).sync().channel();
@@ -60,21 +55,7 @@ public class UdpClient {
 		return channel;
 	}
 	
-	
-	
-	public void registerSocketEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoprocessor) throws Exception {
-		EventDispatcher.getInstance().registerSocketEvent(eventid, protoprocessor);
-	}
 
-	public void registerSendEventIdByProto(int eventId,Class<? extends GeneratedMessageV3> protoClazz) throws Exception {
-		EventDispatcher.getInstance().registerSendEventIdByProto( eventId, protoClazz);
-	}
-
-	public void write( MessageLiteOrBuilder msg) throws IOException {
-		channel.writeAndFlush( msg);
-//		System.out.println("客户端发送数据>>>>");
-	}
-	
 	public Channel getChannel() {
 		return channel;
 	}

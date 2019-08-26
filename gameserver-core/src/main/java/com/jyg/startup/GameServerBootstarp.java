@@ -17,10 +17,6 @@ import org.slf4j.LoggerFactory;
  */
 public class GameServerBootstarp extends AbstractBootstrap {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-	private volatile boolean isStart = false;
-
 	private EventConsumerFactory eventConsumerFactory;
 
 	private final List<Service> services = new ArrayList<>(1);
@@ -71,22 +67,6 @@ public class GameServerBootstarp extends AbstractBootstrap {
 		services.add(new HttpService(port));
 	}
 
-
-	public void registerHttpEvent(String path, HttpProcessor processor) throws Exception {
-		if (isStart) {
-			logger.error("oprete fail,server is already start ");
-			return;
-		}
-		EventDispatcher.getInstance().registerHttpEvent(path, processor);
-	}
-
-	public void registerSendEventIdByProto(int eventId, Class<? extends GeneratedMessageV3> protoClazz) throws Exception {
-		if (isStart) {
-			logger.error("oprete fail,server is already start ");
-			return;
-		}
-		EventDispatcher.getInstance().registerSendEventIdByProto(eventId, protoClazz);
-	}
 
 	public void start() throws InterruptedException {
 

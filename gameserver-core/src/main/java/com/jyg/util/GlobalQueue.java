@@ -1,21 +1,20 @@
 package com.jyg.util;
 
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.jyg.bean.LogicEvent;
-import com.jyg.consumer.DefaultEventConsumerFactory;
 import com.jyg.consumer.EventConsumerFactory;
 import com.jyg.enums.EventType;
 import com.lmax.disruptor.EventFactory;
+import com.lmax.disruptor.ExceptionHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.EventHandlerGroup;
 import com.lmax.disruptor.dsl.ProducerType;
-
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * created by jiayaoguang at 2017年12月18日
@@ -43,9 +42,28 @@ public class GlobalQueue {
 				new LoopAndSleepWaitStrategy());
 
 		disruptor.handleEventsWith(defaultEventConsumerFactory.newEventConsumer());
-
+		disruptor.setDefaultExceptionHandler(new SysOutExceptionHandler());
 		ringBuffer = disruptor.getRingBuffer();
 		disruptor.start();
+	}
+
+
+	private static class SysOutExceptionHandler implements ExceptionHandler<LogicEvent> {
+		@Override
+		public void handleEventException(Throwable ex, long sequence, LogicEvent event) {
+			System.err.print("handleEventException seq=" + sequence + " Throwable " + ex
+					+ " , eventType " + event.getChannelEventType() + " , eventId " + event.getEventId());
+		}
+
+		@Override
+		public void handleOnStartException(Throwable ex) {
+			System.err.print("handleOnStartException  Throwable " + ex);
+		}
+
+		@Override
+		public void handleOnShutdownException(Throwable ex) {
+			System.err.print("handleOnStartException  Throwable " + ex);
+		}
 	}
 
 	/**
@@ -92,7 +110,7 @@ public class GlobalQueue {
 		private final AtomicInteger threadId = new AtomicInteger(1);
 
 		@Override
-		public Thread newThread(Runnable runnable) {
+		public Thread newThread( Runnable runnable) {
 			Thread thread = new Thread(runnable);
 //			thread.setPriority(Thread.MAX_PRIORITY);
 			thread.setDaemon(false);

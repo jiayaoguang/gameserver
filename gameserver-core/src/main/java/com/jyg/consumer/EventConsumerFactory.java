@@ -3,8 +3,9 @@ package com.jyg.consumer;
 /**
  * created by jiayaoguang at 2017年12月6日
  */
-public interface EventConsumerFactory {
+public abstract class EventConsumerFactory {
 
-	public EventConsumer newEventConsumer();
+
+	public abstract EventConsumer newEventConsumer();
 
 }

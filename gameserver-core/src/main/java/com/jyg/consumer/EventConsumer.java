@@ -90,6 +90,8 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 		return requestId++;
 	}
 
+	protected abstract void init();
+
 	/**
 	 *
 	 */

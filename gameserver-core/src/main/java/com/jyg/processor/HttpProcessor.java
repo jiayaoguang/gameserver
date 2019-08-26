@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class HttpProcessor extends AbstractProcessor<Request> {
 
+
 	public final void process(LogicEvent<Request> event) {
 
 		Request request = event.getData();
