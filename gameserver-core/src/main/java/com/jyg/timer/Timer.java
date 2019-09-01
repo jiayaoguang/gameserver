@@ -1,7 +1,5 @@
 package com.jyg.timer;
 
-import com.google.protobuf.MessageLiteOrBuilder;
-
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,13 +79,13 @@ public abstract class Timer {
 		reduceExecNum(1);
 
 		try {
-			this.call();
+			this.onTime();
 		} catch (Exception e) {
-			LOGGER.error(" timer call make execption {} ", e);
+			LOGGER.error(" timer onTime make execption {} ", e);
 		}
 	}
 
 
-	protected abstract void call();
+	protected abstract void onTime();
 
 }

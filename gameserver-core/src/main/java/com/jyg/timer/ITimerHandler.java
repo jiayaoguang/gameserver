@@ -5,6 +5,6 @@ package com.jyg.timer;
  */
 public interface ITimerHandler {
 
-	void call();
+	void onTime();
 
 }

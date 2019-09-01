@@ -15,9 +15,9 @@ public class DefaultTimer extends Timer {
 	}
 
 	@Override
-	protected void call(){
+	protected void onTime(){
 		if(timerHandler != null){
-			timerHandler.call();
+			timerHandler.onTime();
 		}
 	}
 

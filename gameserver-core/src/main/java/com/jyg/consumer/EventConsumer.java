@@ -4,6 +4,7 @@ import com.jyg.bean.LogicEvent;
 import com.jyg.net.EventDispatcher;
 import com.jyg.net.Request;
 import com.jyg.timer.DelayCloseTimer;
+import com.jyg.timer.TimerManager;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.WorkHandler;
 
@@ -13,12 +14,14 @@ import com.lmax.disruptor.WorkHandler;
 public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHandler<LogicEvent> {
 
 
+	private final TimerManager timerManager = new TimerManager();
+
 	private final EventDispatcher dispatcher = EventDispatcher.getInstance();
 
 	private int requestId = 1;
 
 	public EventConsumer() {
-
+		dispatcher.init(timerManager);
 	}
 
 	@Override
@@ -66,7 +69,7 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 				((Request) event.getData()).setRequestid(getAndIncRequestId());
 				dispatcher.httpProcess(event);
 				// 5秒后关闭
-				EventDispatcher.getInstance().addTimer(new DelayCloseTimer(event.getChannel(), 5 * 1000L));
+				timerManager.addTimer(new DelayCloseTimer(event.getChannel(), 5 * 1000L));
 				break;
 			case ON_MESSAGE_COME:
 				dispatcher.webSocketProcess(event);

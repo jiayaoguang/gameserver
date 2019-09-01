@@ -12,7 +12,7 @@ public class IdleTimer extends Timer{
 	}
 
 	@Override
-	public void call() {
+	public void onTime() {
 
 	}
 

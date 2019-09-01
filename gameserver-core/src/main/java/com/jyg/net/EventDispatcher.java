@@ -27,7 +27,7 @@ import java.util.Map;
  */
 public class EventDispatcher {
 
-	private static final EventDispatcher dispatcher = new EventDispatcher();
+	private static EventDispatcher dispatcher  = new EventDispatcher();
 
 	private final HttpProcessor notFOundProcessor = new NotFoundHttpProcessor();
 
@@ -37,19 +37,26 @@ public class EventDispatcher {
 	private final Object2IntMap<Class<? extends MessageLite>> protoClazzToEventidMap = new Object2IntOpenHashMap<>();
 	private final Map<Channel, Session> channelMap = new LinkedHashMap<>();
 
-	private final TimerManager trigger = new TimerManager();
 	//20 毫秒一帧
 	private static final long FRAME_DURATION_TIMEMILLS = 20L;
 	//上一帧时间戳
 	private long nextFrameTimeStamp = System.currentTimeMillis();
 
+	private TimerManager timerManager;
+
 	private EventDispatcher() {
-		this.addTimer(new Timer(Integer.MAX_VALUE, 0L, 60 * 1000L) {
-			public void call() {
+
+	}
+
+	public void init( TimerManager timerManager ){
+		this.timerManager = timerManager;
+		timerManager.addTimer(new Timer(Integer.MAX_VALUE, 0L, 60 * 1000L) {
+			public void onTime() {
 				removeOutOfTimeChannels();
 			}
 		});
 	}
+
 
 	public static EventDispatcher getInstance() {
 		return dispatcher;
@@ -172,12 +179,12 @@ public class EventDispatcher {
 
 
 	public void addTimer(Timer timer) {
-		trigger.addTimer(timer);
+		timerManager.addTimer(timer);
 	}
 
 	public void loop() {
 
-		trigger.updateTimer();
+		timerManager.updateTimer();
 		updateFrame();
 	}
 
