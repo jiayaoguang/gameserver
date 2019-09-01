@@ -8,8 +8,7 @@ import com.jyg.processor.NotFoundHttpProcessor;
 import com.jyg.processor.ProtoProcessor;
 import com.jyg.session.Session;
 import com.jyg.timer.Timer;
-import com.jyg.timer.TimerTrigger;
-import com.jyg.util.DupilcateEventIdException;
+import com.jyg.timer.TimerManager;
 import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -38,7 +37,7 @@ public class EventDispatcher {
 	private final Object2IntMap<Class<? extends MessageLite>> protoClazzToEventidMap = new Object2IntOpenHashMap<>();
 	private final Map<Channel, Session> channelMap = new LinkedHashMap<>();
 
-	private final TimerTrigger trigger = new TimerTrigger();
+	private final TimerManager trigger = new TimerManager();
 	//20 毫秒一帧
 	private static final long FRAME_DURATION_TIMEMILLS = 20L;
 	//上一帧时间戳

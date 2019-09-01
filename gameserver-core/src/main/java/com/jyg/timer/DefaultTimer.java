@@ -7,16 +7,18 @@ public class DefaultTimer extends Timer {
 
 
 	// 回调函数
- 	private ITimerHandler timerCallAble;
+ 	private ITimerHandler timerHandler;
 
-	public DefaultTimer(int execNum, long firstExecDelayTimeMills, long execIntervalTimeMills , ITimerHandler timerCallAble) {
+	public DefaultTimer(int execNum, long firstExecDelayTimeMills, long execIntervalTimeMills , ITimerHandler timerHandler) {
 		super(execNum, firstExecDelayTimeMills, execIntervalTimeMills);
-		this.timerCallAble = timerCallAble;
+		this.timerHandler = timerHandler;
 	}
 
 	@Override
 	protected void call(){
-		timerCallAble.call();
+		if(timerHandler != null){
+			timerHandler.call();
+		}
 	}
 
 }

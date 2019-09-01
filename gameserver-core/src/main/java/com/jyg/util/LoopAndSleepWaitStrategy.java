@@ -12,52 +12,46 @@ import com.lmax.disruptor.WaitStrategy;
  * created by jiayaoguang at 2018年4月9日
  */
 public final class LoopAndSleepWaitStrategy implements WaitStrategy {
-	private static final int DEFAULT_RETRIES = 500;
+    private static final int DEFAULT_RETRIES = 500;
 
-	private final int retries;
+    private final int retries;
 
-	public LoopAndSleepWaitStrategy() {
-		this(DEFAULT_RETRIES);
-	}
-
-	public LoopAndSleepWaitStrategy(int retries) {
-		this.retries = retries;
-	}
+    public LoopAndSleepWaitStrategy() {
+        this.retries = DEFAULT_RETRIES;
+    }
 
 
-	@Override
-	public long waitFor(
-			final long sequence, Sequence cursor, final Sequence dependentSequence, final SequenceBarrier barrier)
-			throws AlertException
-	{
-		long availableSequence;
-		int counter = retries;
+    @Override
+    public long waitFor(
+            final long sequence, Sequence cursor, final Sequence dependentSequence, final SequenceBarrier barrier)
+            throws AlertException {
+        long availableSequence;
+        int counter = retries;
 
-		while ((availableSequence = dependentSequence.get()) < sequence)
-		{
-			counter = applyWaitMethod(barrier, counter);
-		}
+        while ((availableSequence = dependentSequence.get()) < sequence) {
+            counter = applyWaitMethod(barrier, counter);
+        }
 
-		return availableSequence;
-	}
+        return availableSequence;
+    }
 
-	@Override
-	public void signalAllWhenBlocking() {
-	}
+    @Override
+    public void signalAllWhenBlocking() {
+    }
 
-	private int applyWaitMethod(final SequenceBarrier barrier, int counter) throws AlertException {
-		barrier.checkAlert();
+    private int applyWaitMethod(final SequenceBarrier barrier, int counter) throws AlertException {
+        barrier.checkAlert();
 
-		if (counter > 100) {
-			--counter;
-		} else if (counter > 0) {
-			--counter;
-			Thread.yield();
-		} else {
+        if (counter > 200) {
+            --counter;
+        } else if (counter > 0) {
+            --counter;
+            Thread.yield();
+        } else {
             EventDispatcher.getInstance().loop();
-			LockSupport.parkNanos(3*1000000L);
-		}
+            LockSupport.parkNanos(1 * 1000000L);
+        }
 
-		return counter;
-	}
+        return counter;
+    }
 }

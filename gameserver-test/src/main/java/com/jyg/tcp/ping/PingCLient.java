@@ -5,9 +5,6 @@ import com.jyg.processor.ProtoResponse;
 import com.jyg.proto.p_sm_scene.p_scene_sm_response_pong;
 import com.jyg.proto.p_sm_scene.p_sm_scene_request_ping;
 import com.jyg.startup.TcpClient;
-import com.jyg.timer.Timer;
-import com.jyg.timer.TimerTrigger;
-
 import io.netty.channel.Channel;
 
 /**
@@ -35,15 +32,8 @@ public class PingCLient {
 		client.registerSocketEvent(2, pongProcessor);
 
 		final Channel channel = client.connect("localhost", 8080);
+		channel.writeAndFlush(p_sm_scene_request_ping.newBuilder());
 
-		TimerTrigger tigger = new TimerTrigger();
-		tigger.addTimer(new Timer(10,  1000, 1000) {
-			public void call() {
-				channel.writeAndFlush(p_sm_scene_request_ping.newBuilder());
-			}
-		});
-
-		tigger.updateTimer();
 
 		// client.close();
 	}

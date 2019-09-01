@@ -32,7 +32,6 @@ public class RequestParser {
      * 解析请求参数
      * @return 包含所有请求参数的键值对, 如果没有参数, 则返回空Map
      *
-     * @throws BaseCheckedException
      * @throws IOException
      */
     public static Map<String, String> parse(HttpRequest req) throws IOException {
@@ -40,10 +39,8 @@ public class RequestParser {
         // 处理get请求  
         if (req.method() == HttpMethod.GET) {
             QueryStringDecoder decoder = new QueryStringDecoder(req.uri());  
-            Map<String, List<String>> param = decoder.parameters();  
-            Iterator<Entry<String, List<String>>> iterator = param.entrySet().iterator();
-            while(iterator.hasNext()){
-                Entry<String, List<String>> next = iterator.next();
+            Map<String, List<String>> param = decoder.parameters();
+            for (Entry<String, List<String>> next : param.entrySet()) {
                 requestParams.put(next.getKey(), next.getValue().get(0));
             }
         }
@@ -63,7 +60,7 @@ public class RequestParser {
 					}
 	        	}
         	}catch(Exception e){
-//        		e.printStackTrace();
+        		e.printStackTrace();
         	}
         	
         	decoder.destroy();
