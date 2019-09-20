@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 /**
  * created by jiayaoguang at 2018年3月15日 定时器
  */
-public abstract class Timer {
+public abstract class Timer implements Comparable<Timer>{
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Timer.class);
 
@@ -19,6 +19,7 @@ public abstract class Timer {
 //	private final long firstDelayTimeMills;
 	//执行的间隔时间
 	private long delayTimeMills;
+
 
 	private Channel channel;
 
@@ -87,5 +88,18 @@ public abstract class Timer {
 
 
 	protected abstract void onTime();
+
+	@Override
+	public int compareTo(Timer timer2) {
+		long triggerTime1 = this.getTriggerTime();
+		long triggerTime2 = timer2.getTriggerTime();
+		if (triggerTime1 > triggerTime2) {
+			return 1;
+		} else if (triggerTime1 == triggerTime2) {
+			return 0;
+		} else {
+			return -1;
+		}
+	}
 
 }
