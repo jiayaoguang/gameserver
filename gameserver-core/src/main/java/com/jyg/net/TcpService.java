@@ -43,12 +43,19 @@ public abstract class TcpService implements Service {
 
 	private final int port;
 
+	private boolean isHttp = false;
+
 	public TcpService(int port, ChannelInitializer<Channel> initializer) {
 		if (port < 0) {
 			throw new IllegalArgumentException("port number cannot be negative ");
 		}
 		this.port = port;
 		this.initializer = initializer;
+	}
+
+	public TcpService(int port, ChannelInitializer<Channel> initializer , boolean isHttp) {
+		this(port , initializer);
+		this.isHttp = isHttp;
 	}
 
 	public ChannelInitializer<Channel> getInitializer() {
@@ -84,7 +91,9 @@ public abstract class TcpService implements Service {
 
 		// 指定等待时间为0，此时调用主动关闭时不会发送FIN来结束连接，而是直接将连接设置为CLOSE状态，
 		// 清除套接字中的发送和接收缓冲区，直接对对端发送RST包。
-		bootstrap.childOption(ChannelOption.SO_LINGER, 0);
+		if(!isHttp){
+			bootstrap.childOption(ChannelOption.SO_LINGER, 0);
+		}
 		bootstrap.childOption(ChannelOption.SO_RCVBUF, 64 * 1024);
 		bootstrap.childOption(ChannelOption.SO_SNDBUF, 64 * 1024);
 		bootstrap.childOption(ChannelOption.SO_KEEPALIVE, false);// maybe useless

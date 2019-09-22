@@ -32,7 +32,7 @@ public class LoginHttpProcessor extends HttpProcessor {
 		System.out.println(username + " >> " + password);
 
 		if (!checkLogin(username, password)) {
-			getDispatcher("/404").service(request, response);
+			response.sendRedirect("/login.html");
 			return;
 		}
 		String token = TokenUtil.getToken();

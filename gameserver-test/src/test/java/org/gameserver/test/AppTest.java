@@ -32,7 +32,7 @@ public class AppTest
         assertTrue(true);
     }
 
-    public static void main(String[] args) {
+    public void testSearch() {
         int[] nums = new int[]{1, 2, 3, 4, 5, 6, 7, 9, 10, 14, 15, 16, 18, 19};
         int i = search(nums, 11);
         System.out.println("index," + i + ",num" + nums[i]);
@@ -57,4 +57,8 @@ public class AppTest
         }
         return left;
     }
+
+
+
+
 }

@@ -19,6 +19,12 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 
 		Request request = event.getData();
 		Response response = this.createResponse(event);
+
+		if(request.isMakeExecption()){
+			response.write500Error();
+			return;
+		}
+
 		try {
 			this.service(request, response);
 //			fullHttpResponse = response.createDefaultFullHttpResponse();
@@ -32,7 +38,7 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 		// .addListener(ChannelFutureListener.CLOSE);//关闭连接由客户端关闭或者timer
 	}
 
-	Response createResponse(LogicEvent<Request> event) {
+	private Response createResponse(LogicEvent<Request> event) {
 
 		Response response = new Response();
 		response.setChannel(event.getChannel());
@@ -42,7 +48,7 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 	public HttpProcessor getDispatcher(String path) {
 		return EventDispatcher.getInstance().getHttpProcessor(path);
 	}
-	
+
 	public FTLLoader getFTLLoader() {
 		return ftlLoader;
 	}

@@ -15,6 +15,7 @@ import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.cookie.Cookie;
 import io.netty.handler.codec.http.cookie.ServerCookieEncoder;
 import io.netty.util.CharsetUtil;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * created by jiayaoguang at 2018年3月20日
@@ -35,6 +36,9 @@ public class Response {
 	private static final byte[] internalServerErrorBytes = 
 			"<html><head></head><body><div align='center'><h1>500 Internal Server Error</h1></div><body></html>"
 			.getBytes();
+
+	private static final String SENDR_EDIRECT_HTML = "<html><head> <meta http-equiv=\"refresh\" content=0;URL=%s /> </head></html>";
+
 
 	private Channel channel;
 	
@@ -109,7 +113,7 @@ public class Response {
 //		//cookie.setDomain(System.getenv("USERDOMAIN"));
 //		cookie.setPath("/");
 //		cookies.add(cookie);
-		if(cookies.size()>0) {
+		if(!cookies.isEmpty()) {
 			headers.set(HttpHeaderNames.SET_COOKIE, ServerCookieEncoder.STRICT.encode(cookies) );
 		}
 		
@@ -141,7 +145,13 @@ public class Response {
 		return this.createStatuHttpResponse(HttpResponseStatus.INTERNAL_SERVER_ERROR,
 				internalServerErrorBytes);
 	}
-	
+
+	public void sendRedirect(String path){
+
+		String formatContent = String.format(SENDR_EDIRECT_HTML , path);
+
+		this.writeAndFlush(formatContent);
+	}
 	
 	public void write500Error() {
 		this.channel.writeAndFlush( create500FullHttpResponse() );

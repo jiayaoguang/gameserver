@@ -2,6 +2,7 @@ package com.jyg.net;
 
 import com.jyg.handle.initializer.InnerSocketServerInitializer;
 import com.jyg.util.GlobalQueue;
+import com.jyg.util.PrefixNameThreadFactory;
 import com.jyg.util.RemotingUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -22,36 +23,19 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class UdpService implements Service {
 
-    protected static final EventLoopGroup bossGroup;
+    protected static final EventLoopGroup bossGroup = new NioEventLoopGroup(1,
+            (Runnable r) -> new Thread(r, "ACCEPT_THREAD"));
 
     protected static final EventLoopGroup workGroup;
 
     private Channel serverChannel;
 
     static {
-        bossGroup = new NioEventLoopGroup(1,
-            (Runnable r) -> new Thread(r, "ACCEPT_THREAD"));
-
+        int defaultIOThreadNum = Runtime.getRuntime().availableProcessors() * 2;
         if (RemotingUtil.useEpoll()) {
-
-
-            workGroup = new EpollEventLoopGroup(8, new ThreadFactory() {
-                private AtomicInteger threadIndex = new AtomicInteger(0);
-
-                @Override
-                public Thread newThread(Runnable r) {
-                    return new Thread(r, "EPOLL_IO_THREAD_" + threadIndex.incrementAndGet());
-                }
-            });
+            workGroup = new EpollEventLoopGroup(defaultIOThreadNum, new PrefixNameThreadFactory("EPOLL_IO_THREAD_"));
         } else {
-            workGroup = new NioEventLoopGroup(8, new ThreadFactory() {
-                private AtomicInteger threadIndex = new AtomicInteger(0);
-
-                @Override
-                public Thread newThread(Runnable r) {
-                    return new Thread(r, "NIO_IO_THREAD_" + threadIndex.incrementAndGet());
-                }
-            });
+            workGroup = new NioEventLoopGroup(defaultIOThreadNum, new PrefixNameThreadFactory("NIO_IO_THREAD_"));
         }
     }
 

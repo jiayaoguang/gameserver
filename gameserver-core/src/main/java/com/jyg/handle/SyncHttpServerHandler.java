@@ -92,9 +92,7 @@ public class SyncHttpServerHandler extends SimpleChannelInboundHandler<HttpReque
 	// AtomicLong requestid = new AtomicLong(1);
 
 	public Request createRequest(HttpRequest httpRequest) throws IOException {
-		Map<String, String> params = RequestParser.parse(httpRequest);
 		Request request = new Request(httpRequest);
-		request.setParametersMap(params);
 		// request.setRequestid(requestid.getAndIncrement());
 		return request;
 	}

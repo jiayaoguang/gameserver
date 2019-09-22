@@ -32,23 +32,24 @@ public class RequestParser {
      * 解析请求参数
      * @return 包含所有请求参数的键值对, 如果没有参数, 则返回空Map
      *
-     * @throws IOException
      */
-    public static Map<String, String> parse(HttpRequest req) throws IOException {
-    	Map<String, String>requestParams=new HashMap<>();
-        // 处理get请求  
-        if (req.method() == HttpMethod.GET) {
-            QueryStringDecoder decoder = new QueryStringDecoder(req.uri());  
-            Map<String, List<String>> param = decoder.parameters();
-            for (Entry<String, List<String>> next : param.entrySet()) {
-                requestParams.put(next.getKey(), next.getValue().get(0));
-            }
-        }
-         // 处理POST请求  
-        else if (req.method() == HttpMethod.POST) {
-            HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(  
-                    new DefaultHttpDataFactory(false), req);
-        	try{
+    public static Map<String, String> parse(HttpRequest req) {
+		Map<String, String> requestParams = new HashMap<>();
+		// 处理get请求
+		if (req.method() == HttpMethod.GET) {
+			QueryStringDecoder decoder = new QueryStringDecoder(req.uri());
+			Map<String, List<String>> param = decoder.parameters();
+			for (Entry<String, List<String>> next : param.entrySet()) {
+				requestParams.put(next.getKey(), next.getValue().get(0));
+			}
+			return requestParams;
+		}
+
+		// 处理POST请求
+		if (req.method() == HttpMethod.POST) {
+			HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(
+					new DefaultHttpDataFactory(false), req);
+			try {
 				while (decoder.hasNext()) {
 					InterfaceHttpData httpData = decoder.next();
 					if (httpData.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute) {
@@ -58,13 +59,16 @@ public class RequestParser {
 						}
 						attribute.release();
 					}
-	        	}
-        	}catch(Exception e){
-        		e.printStackTrace();
-        	}
-        	
-        	decoder.destroy();
-        }
-        return requestParams;
-    }
+				}
+			} catch (HttpPostRequestDecoder.EndOfDataDecoderException e1) {
+				//ignore
+			} catch (IOException e) {
+				e.printStackTrace();
+			}finally {
+				decoder.destroy();
+			}
+
+		}
+		return requestParams;
+	}
 }
