@@ -123,8 +123,8 @@ public class Request {
             HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(
                     new DefaultHttpDataFactory(false), req);
             try {
+                parametersMap = new HashMap<>();
                 while (decoder.hasNext()) {
-                    parametersMap = new HashMap<>();
                     InterfaceHttpData httpData = decoder.next();
                     if (httpData.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute) {
                         Attribute attribute = (Attribute) httpData;
