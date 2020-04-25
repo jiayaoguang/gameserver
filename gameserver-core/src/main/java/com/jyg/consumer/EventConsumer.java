@@ -82,7 +82,7 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 			case ON_TEXT_MESSAGE_COME:
 				System.out.println(event.getData());
 				break;
-				
+
 			case INNER_MSG:
 				doInnerMsg(event.getData());
 				break;
@@ -97,7 +97,7 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 			return;
 		}
 		CallBackEvent callBackEvent = (CallBackEvent) msg;
-		callBackEvent.execte();
+		callBackEvent.execte(callBackEvent.getData());
 	}
 
 

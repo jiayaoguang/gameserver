@@ -29,11 +29,11 @@ public class ExecutorManager {
 //	}
 
 	/**
-	 * @param asynEventRunnable 异步Runnable 由线程池线程执行
+	 * @param asynCallEvent 异步Runnable 由线程池线程执行
 	 * @param callBackEvent 回调Runnable 由主逻辑线程执行
 	 */
-	public void execute(Runnable asynEventRunnable, CallBackEvent callBackEvent) {
-		executor.execute(new AsynEventAndCallBackEvent(asynEventRunnable , callBackEvent));
+	public void execute(AsynCallEvent asynCallEvent, CallBackEvent callBackEvent) {
+		executor.execute(new AsynEventAndCallBackRunnable(asynCallEvent , callBackEvent));
 	}
 
 
