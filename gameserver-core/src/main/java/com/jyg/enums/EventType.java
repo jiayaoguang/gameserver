@@ -24,6 +24,9 @@ public enum EventType {
 	
 	
 	ON_TEXT_MESSAGE_COME,
+
+
+	INNER_MSG,
 	
 	;
 	

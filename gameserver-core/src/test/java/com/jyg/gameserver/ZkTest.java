@@ -8,7 +8,6 @@ import org.junit.Test;
  */
 public class ZkTest {
 
-	@Test
 	public void test(){
 		ZookeeperClient zookeeperClient = new ZookeeperClient();
 		zookeeperClient.init();

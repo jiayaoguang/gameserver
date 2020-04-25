@@ -24,6 +24,20 @@ public class ExecutorManager {
 		executor.execute(runnable);
 	}
 
+//	public void execute(AsynEventAndCallBackEvent asynEventAndCallBackEvent) {
+//		executor.execute(asynEventAndCallBackEvent);
+//	}
+
+	/**
+	 * @param asynEventRunnable 异步Runnable 由线程池线程执行
+	 * @param callBackEvent 回调Runnable 由主逻辑线程执行
+	 */
+	public void execute(Runnable asynEventRunnable, CallBackEvent callBackEvent) {
+		executor.execute(new AsynEventAndCallBackEvent(asynEventRunnable , callBackEvent));
+	}
+
+
+
 	public Future submit(Runnable runnable) {
 		return executor.submit(runnable);
 	}

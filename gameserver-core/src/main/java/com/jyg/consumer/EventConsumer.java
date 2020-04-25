@@ -5,6 +5,7 @@ import com.jyg.net.EventDispatcher;
 import com.jyg.net.Request;
 import com.jyg.timer.DelayCloseTimer;
 import com.jyg.timer.TimerManager;
+import com.jyg.util.CallBackEvent;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.WorkHandler;
 
@@ -81,10 +82,24 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 			case ON_TEXT_MESSAGE_COME:
 				System.out.println(event.getData());
 				break;
+				
+			case INNER_MSG:
+				doInnerMsg(event.getData());
+				break;
+
 			default:
 				throw new IllegalArgumentException("unknown channelEventType <" + event.getChannelEventType() + ">");
 		}
 	}
+
+	private void doInnerMsg(Object msg){
+		if(!(msg instanceof CallBackEvent)){
+			return;
+		}
+		CallBackEvent callBackEvent = (CallBackEvent) msg;
+		callBackEvent.execte();
+	}
+
 
 	private int getAndIncRequestId() {
 		if (requestId == Integer.MAX_VALUE) {

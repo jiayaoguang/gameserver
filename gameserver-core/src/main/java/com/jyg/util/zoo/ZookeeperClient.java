@@ -1,11 +1,11 @@
 package com.jyg.util.zoo;
 
+import com.google.inject.Inject;
 import io.netty.util.CharsetUtil;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 
-import javax.inject.Inject;
 
 /**
  * create on 2019/8/14 by jiayaoguang
