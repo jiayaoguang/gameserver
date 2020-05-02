@@ -1,5 +1,9 @@
 package com.jyg.util;
 
+import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
+import reactor.util.annotation.NonNull;
+
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -17,7 +21,7 @@ public class PrefixNameThreadFactory implements ThreadFactory {
 	}
 
 	@Override
-	public Thread newThread(Runnable r) {
-		return new Thread(r, threadNamePrefix + threadIndex.incrementAndGet());
+	public Thread newThread(@NonNull Runnable runnable) {
+		return new Thread(runnable, threadNamePrefix + threadIndex.incrementAndGet());
 	}
 }

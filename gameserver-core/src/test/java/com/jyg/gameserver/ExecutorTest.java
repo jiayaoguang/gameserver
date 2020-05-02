@@ -1,9 +1,9 @@
 package com.jyg.gameserver;
 
 import com.jyg.util.ExecutorManager;
+import com.jyg.util.RingBufferGlobalQueue;
 import org.junit.Test;
 
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 /**
@@ -12,24 +12,24 @@ import java.util.concurrent.Future;
 public class ExecutorTest {
 
 
-	@Test
-	public void testSubmit() {
-		ExecutorManager executorManager = new ExecutorManager();
-		Future future = executorManager.submit(new Runnable() {
-			@Override
-			public void run() {
-
-				try {
-					Thread.sleep(10 * 1000L);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-
-			}
-		});
-		System.out.println(" ..... " + future.isDone());
-
-
-	}
+//	@Test
+//	public void testSubmit() {
+//		ExecutorManager executorManager = new ExecutorManager(new RingBufferGlobalQueue());
+//		Future future = executorManager.submit(new Runnable() {
+//			@Override
+//			public void run() {
+//
+//				try {
+//					Thread.sleep(10 * 1000L);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//
+//			}
+//		});
+//		System.out.println(" ..... " + future.isDone());
+//
+//
+//	}
 
 }

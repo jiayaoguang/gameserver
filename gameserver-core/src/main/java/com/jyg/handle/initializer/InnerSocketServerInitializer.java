@@ -7,13 +7,16 @@ import com.jyg.handle.MyProtobufEncoder;
 /**
  * created by jiayaoguang at 2017年12月6日
  */
+import com.jyg.util.IGlobalQueue;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
-import io.netty.channel.socket.SocketChannel;
 
 public class InnerSocketServerInitializer extends
-		ChannelInitializer<Channel> {
+		MyChannelInitializer<Channel> {
+
+	public InnerSocketServerInitializer(IGlobalQueue globalQueue) {
+		super(globalQueue);
+	}
 
 	@Override
 	public void initChannel(Channel ch) throws Exception {
@@ -21,11 +24,11 @@ public class InnerSocketServerInitializer extends
 //		pipeline.addLast(new ProtobufVarint32FrameDecoder());
 		
 		
-		pipeline.addLast(new MyProtobufDecoder());
+		pipeline.addLast(new MyProtobufDecoder(globalQueue));
 		
 		pipeline.addLast(new MyProtobufEncoder());
 		
-		pipeline.addLast(new InnerSocketHandler());
+		pipeline.addLast(new InnerSocketHandler(globalQueue));
 		
 //		pipeline.addLast(new LastHandler());
 		

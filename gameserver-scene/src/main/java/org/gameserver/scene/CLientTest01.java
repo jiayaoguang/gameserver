@@ -54,7 +54,9 @@ public class CLientTest01
         client.registerSendEventIdByProto(3, p_scene_sm_chat.class);
         
         client.registerSocketEvent(4, receiveChatProcessor);
-        
+
+		client.start();
+
         client.connect("localhost",8080);
         
 //        EventDispatcher.getInstance().registerRpcEvent(1, processor);

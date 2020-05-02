@@ -54,7 +54,9 @@ public class UDPEchoClient {
             }
         };
 
-        UdpClient client = new UdpClient(channelInitializer);
+        UdpClient client = new UdpClient();
+
+        client.start();
 
         Channel channel = client.bind(9003);
 

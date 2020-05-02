@@ -6,6 +6,8 @@ import com.jyg.net.Request;
 import com.jyg.processor.HttpProcessor;
 import com.jyg.processor.Processor;
 import com.jyg.processor.ProtoProcessor;
+import com.jyg.util.IGlobalQueue;
+import com.jyg.util.RingBufferGlobalQueue;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
@@ -28,10 +30,16 @@ public abstract class AbstractBootstrap {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	protected volatile boolean isStart = false;
+	protected final IGlobalQueue globalQueue;
+
+	protected boolean isStart = false;
 
 	public AbstractBootstrap() {
+		this.globalQueue = new RingBufferGlobalQueue();
+	}
 
+	public AbstractBootstrap(IGlobalQueue globalQueue) {
+		this.globalQueue = globalQueue;
 	}
 
 	public void registerSocketEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoProcessor){
@@ -64,4 +72,13 @@ public abstract class AbstractBootstrap {
 		EventDispatcher.getInstance().registerSendEventIdByProto(eventId, protoClazz);
 	}
 
+	public Logger getLogger() {
+		return logger;
+	}
+
+	public IGlobalQueue getGlobalQueue() {
+		return globalQueue;
+	}
+
+	public abstract void start() throws InterruptedException;
 }

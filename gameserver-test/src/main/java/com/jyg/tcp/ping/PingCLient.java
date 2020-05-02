@@ -31,6 +31,8 @@ public class PingCLient {
 		client.registerSendEventIdByProto(1, p_sm_scene_request_ping.class);
 		client.registerSocketEvent(2, pongProcessor);
 
+		client.start();
+
 		final Channel channel = client.connect("localhost", 8080);
 		channel.writeAndFlush(p_sm_scene_request_ping.newBuilder());
 

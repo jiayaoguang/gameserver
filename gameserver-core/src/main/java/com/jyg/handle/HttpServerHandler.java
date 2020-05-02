@@ -1,21 +1,22 @@
 package com.jyg.handle;
 
-import java.io.IOException;
-import java.util.Map;
-
 import com.jyg.enums.EventType;
-import com.jyg.net.EventDispatcher;
 import com.jyg.net.Request;
-import com.jyg.timer.DelayCloseTimer;
-import com.jyg.util.GlobalQueue;
-import com.jyg.util.RequestParser;
-
+import com.jyg.util.IGlobalQueue;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpRequest;
 
-public class SyncHttpServerHandler extends SimpleChannelInboundHandler<HttpRequest> {
+import java.io.IOException;
+
+public class HttpServerHandler extends SimpleChannelInboundHandler<HttpRequest> {
+
+	private final IGlobalQueue globalQueue;
+
+	public HttpServerHandler(IGlobalQueue globalQueue) {
+		this.globalQueue = globalQueue;
+	}
 
 	// 是否是线程同步的http
 	// private final boolean isSynHttp;
@@ -56,7 +57,7 @@ public class SyncHttpServerHandler extends SimpleChannelInboundHandler<HttpReque
 
 		Request request = this.createRequest((HttpRequest) msg);
 
-		GlobalQueue.publicEvent(EventType.HTTP_MSG_COME, request, ctx.channel());
+		globalQueue.publicEvent(EventType.HTTP_MSG_COME, request, ctx.channel());
 
 		// HttpRequest request = (HttpRequest) msg;
 

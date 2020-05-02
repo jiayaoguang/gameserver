@@ -35,21 +35,30 @@ public class UdpClient extends AbstractBootstrap{
 	private Channel channel;
 	private Session session;
 	public UdpClient()  {
-		this(new SocketClientInitializer());
+
 	}
 
-	public UdpClient(ChannelInitializer<Channel> channelInitializer) {
-		System.out.println("客户端成功启动...");
+//	public UdpClient(ChannelInitializer<Channel> channelInitializer) {
+//		System.out.println("客户端成功启动...");
+//		bootstrap.group(group);
+//		bootstrap.channel( RemotingUtil.useEpoll() ? EpollDatagramChannel.class : NioDatagramChannel.class);
+//		bootstrap.handler(channelInitializer);
+//        bootstrap.option(ChannelOption.SO_REUSEADDR, true);
+//		bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
+//	}
+
+
+	public void start(){
 		bootstrap.group(group);
 		bootstrap.channel( RemotingUtil.useEpoll() ? EpollDatagramChannel.class : NioDatagramChannel.class);
-		bootstrap.handler(channelInitializer);
-        bootstrap.option(ChannelOption.SO_REUSEADDR, true);
+		bootstrap.handler(new SocketClientInitializer(globalQueue));
+		bootstrap.option(ChannelOption.SO_REUSEADDR, true);
 		bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 	}
-	
 
 
 	public Channel bind(int port) throws InterruptedException {
+
 		channel = bootstrap.bind( port).sync().channel();
 
 		return channel;

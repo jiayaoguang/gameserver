@@ -2,6 +2,7 @@ package com.jyg.startup;
 
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.MessageLiteOrBuilder;
+import com.jyg.handle.initializer.MyChannelInitializer;
 import com.jyg.handle.initializer.SocketClientInitializer;
 import com.jyg.net.EventDispatcher;
 import com.jyg.processor.ProtoProcessor;
@@ -33,7 +34,7 @@ public class TcpClient extends AbstractBootstrap{
 	private Channel channel;
 	private Session session;
 	public TcpClient()  {
-		this(new SocketClientInitializer());
+		super();
 //		try {
 //			this.registerSendEventIdByProto(ProtoEnum.P_COMMON_REQUEST_PING.getEventId(), p_common.p_common_request_ping.class);
 //		} catch (Exception e) {
@@ -49,7 +50,13 @@ public class TcpClient extends AbstractBootstrap{
 		
 	}
 
-	public TcpClient(ChannelInitializer<Channel> channelInitializer) {
+	@Override
+	public void start(){
+		start(new SocketClientInitializer(globalQueue));
+	}
+
+
+	public void start(MyChannelInitializer<Channel> channelInitializer){
 		System.out.println("客户端成功启动...");
 		bootstrap.group(group);
 		bootstrap.channel( RemotingUtil.useEpoll() ? EpollSocketChannel.class : NioSocketChannel.class);
@@ -60,6 +67,10 @@ public class TcpClient extends AbstractBootstrap{
 		bootstrap.option(ChannelOption.SO_SNDBUF, 8*1024);
 		bootstrap.option(ChannelOption.SO_LINGER, 0);
 		bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
+	}
+
+	public TcpClient(MyChannelInitializer<Channel> channelInitializer) {
+
 	}
 	
 	// 连接服务端

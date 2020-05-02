@@ -1,18 +1,16 @@
 package com.jyg.handle;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.jyg.enums.EventType;
-import com.jyg.util.GlobalQueue;
-
+import com.jyg.util.IGlobalQueue;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
-import io.netty.util.ReferenceCountUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * created by jiayaoguang at 2017年12月6日
@@ -21,14 +19,18 @@ public class TextWebSocketFrameHandler extends
 		SimpleChannelInboundHandler<WebSocketFrame> {
 
 //	public static Set<Channel> channels = new HashSet<>();
+	private final IGlobalQueue globalQueue;
 
-	
+	public TextWebSocketFrameHandler(IGlobalQueue globalQueue) {
+		this.globalQueue = globalQueue;
+	}
+
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception { // (5)
 		Channel incoming = ctx.channel();
 		System.out.println("Client:" + incoming.remoteAddress() + "在线");
 		
-		GlobalQueue.publicEvent(EventType.CLIENT_SOCKET_CONNECT_ACTIVE, null, ctx.channel() );
+		globalQueue.publicEvent(EventType.CLIENT_SOCKET_CONNECT_ACTIVE, null, ctx.channel() );
 		
 		super.channelActive(ctx);
 	}
@@ -49,7 +51,7 @@ public class TextWebSocketFrameHandler extends
 			
 			Map<String,String> map = toMap(text);
 			
-			GlobalQueue.publicEvent(EventType.ON_TEXT_MESSAGE_COME, text, ctx.channel() );
+			globalQueue.publicEvent(EventType.ON_TEXT_MESSAGE_COME, text, ctx.channel() );
 			
 		}else if(frame instanceof BinaryWebSocketFrame) {
 			System.out.println("this frame is BinaryWebSocketFrame");
@@ -78,7 +80,7 @@ public class TextWebSocketFrameHandler extends
 		Channel incoming = ctx.channel();
 		System.out.println("Client:" + incoming.remoteAddress() + "掉线");
 		
-		GlobalQueue.publicEvent(EventType.CLIENT_SOCKET_CONNECT_INACTIVE, null, ctx.channel() );
+		globalQueue.publicEvent(EventType.CLIENT_SOCKET_CONNECT_INACTIVE, null, ctx.channel() );
 		
 		super.channelInactive(ctx);
 	}

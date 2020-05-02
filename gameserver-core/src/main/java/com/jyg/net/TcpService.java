@@ -1,7 +1,6 @@
 package com.jyg.net;
 
-import com.jyg.handle.initializer.WebSocketServerInitializer;
-import com.jyg.util.GlobalQueue;
+import com.jyg.handle.initializer.MyChannelInitializer;
 import com.jyg.util.PrefixNameThreadFactory;
 import com.jyg.util.RemotingUtil;
 import io.netty.bootstrap.ServerBootstrap;
@@ -14,17 +13,12 @@ import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
-
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * create by jiayaoguang at 2018年3月6日
  */
 
-public abstract class TcpService implements Service {
+public abstract class TcpService extends AbstractService {
 	protected static final EventLoopGroup bossGroup = new NioEventLoopGroup(1,
 			(Runnable r) -> new Thread(r, "ACCEPT_THREAD"));
 
@@ -43,18 +37,19 @@ public abstract class TcpService implements Service {
 
 	private final int port;
 
-	private boolean isHttp = false;
+	private final boolean isHttp;
 
-	public TcpService(int port, ChannelInitializer<Channel> initializer) {
+	public TcpService(int port, MyChannelInitializer<Channel> initializer) {
+		this(port, initializer, false);
+	}
+
+	public TcpService(int port, MyChannelInitializer<Channel> initializer , boolean isHttp) {
+		super(initializer.getGlobalQueue());
 		if (port < 0) {
 			throw new IllegalArgumentException("port number cannot be negative ");
 		}
 		this.port = port;
 		this.initializer = initializer;
-	}
-
-	public TcpService(int port, ChannelInitializer<Channel> initializer , boolean isHttp) {
-		this(port , initializer);
 		this.isHttp = isHttp;
 	}
 
@@ -68,7 +63,7 @@ public abstract class TcpService implements Service {
 	 * @return
 	 * @throws Exception
 	 */
-	public final void start() throws InterruptedException {
+	public synchronized void start() throws InterruptedException {
 
 		if (initializer == null) {
 			throw new IllegalArgumentException("initializer must not null");
@@ -111,14 +106,14 @@ public abstract class TcpService implements Service {
 	/**
 	 * 停止服务
 	 */
-	public static void shutdown() {
+	public static void shutdownThreadGrop() {
 		if (bossGroup != null && !bossGroup.isShutdown()) {
 			bossGroup.shutdownGracefully();
 		}
 		if (workGroup != null && !workGroup.isShutdown()) {
 			workGroup.shutdownGracefully();
 		}
-		GlobalQueue.shutdown();
+//		globalQueue.shutdown();
 	}
 
 }

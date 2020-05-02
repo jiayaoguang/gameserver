@@ -1,9 +1,7 @@
 package com.jyg.handle;
 
-import com.jyg.bean.LogicEvent;
 import com.jyg.enums.EventType;
-import com.jyg.util.GlobalQueue;
-
+import com.jyg.util.IGlobalQueue;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -13,13 +11,18 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
  */
 public class InnerSocketHandler extends ChannelInboundHandlerAdapter {
 
-	
+	private final IGlobalQueue globalQueue;
+
+	public InnerSocketHandler(IGlobalQueue globalQueue) {
+		this.globalQueue = globalQueue;
+	}
+
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception { // (5)
 		Channel incoming = ctx.channel();
 		System.out.println("Client:" + incoming.remoteAddress() + "在线");
 		
-		GlobalQueue.publicEvent(EventType.INNER_SOCKET_CONNECT_ACTIVE, null, ctx.channel() );
+		globalQueue.publicEvent(EventType.INNER_SOCKET_CONNECT_ACTIVE, null, ctx.channel() );
 		
 		super.channelActive(ctx);
 	}
@@ -29,7 +32,7 @@ public class InnerSocketHandler extends ChannelInboundHandlerAdapter {
 		Channel incoming = ctx.channel();
 		System.out.println("Client:" + incoming.remoteAddress() + "掉线");
 		
-		GlobalQueue.publicEvent(EventType.INNER_SOCKET_CONNECT_INACTIVE, null, ctx.channel() );
+		globalQueue.publicEvent(EventType.INNER_SOCKET_CONNECT_INACTIVE, null, ctx.channel() );
 		
 		super.channelInactive(ctx);
 	}

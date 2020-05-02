@@ -29,13 +29,13 @@ public class FTLLoader {
     	
     }
     
-    public byte[] getFtl(String ftlName , Map<String, String> dataMap  )  {
+    public byte[] getFtl(String ftlName , Map<String, String> params  )  {
     	try {
 	    	Template template = configuration.getTemplate(ftlName);
 	    	
 	    	try(ByteArrayOutputStream bos = new ByteArrayOutputStream();
 	    			Writer out = new OutputStreamWriter(bos);){
-	    		template.process(dataMap, out);
+	    		template.process(params, out);
 	    		return bos.toByteArray();
 	    	}
     	}catch(Exception e) {
@@ -48,15 +48,15 @@ public class FTLLoader {
     
     public byte[] getIndexFtl(String username) {
     	
-    	Map<String, String> dataMap = new HashMap<>();
-    	dataMap.put("username", username);
+    	Map<String, String> params = new HashMap<>();
+        params.put("username", username);
     	
-		return getFtl("index.ftl",dataMap);
+		return getFtl("index.ftl",params);
     }
     
     
     
-    public static void main(String[] args) {
+    public void test() {
         // step1 创建freeMarker配置实例
         
         Writer out = null;

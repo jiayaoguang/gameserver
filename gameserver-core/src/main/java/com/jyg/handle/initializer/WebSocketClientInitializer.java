@@ -1,21 +1,23 @@
 package com.jyg.handle.initializer;
 
-import com.jyg.handle.InnerSocketHandler;
 import com.jyg.handle.TextWebSocketFrameHandler;
 
 /**
  * created by jiayaoguang at 2017年12月6日
  */
-import io.netty.channel.ChannelInitializer;
+import com.jyg.util.IGlobalQueue;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
-import io.netty.handler.stream.ChunkedWriteHandler;
 
 public class WebSocketClientInitializer extends
-		ChannelInitializer<SocketChannel> { 
+		MyChannelInitializer<SocketChannel> {
+
+	protected WebSocketClientInitializer(IGlobalQueue globalQueue) {
+		super(globalQueue);
+	}
 
 	@Override
 	public void initChannel(SocketChannel ch) throws Exception {
@@ -28,7 +30,7 @@ public class WebSocketClientInitializer extends
 		
 		//WebSocketClientProtocolHandler TODO
 		pipeline.addLast(new WebSocketServerProtocolHandler("/"));
-		pipeline.addLast(new TextWebSocketFrameHandler());
+		pipeline.addLast(new TextWebSocketFrameHandler(globalQueue));
 		
 	}
 }
