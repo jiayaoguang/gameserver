@@ -5,7 +5,7 @@
 
 	<groupId>com.jyg.gameserver</groupId>
 	<artifactId>gameserver</artifactId>
-	<version>${gameserver.version}</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>gameserver</name>
 	<url>http://maven.apache.org</url>
