@@ -25,6 +25,8 @@ public class RingBufferGlobalQueue implements IGlobalQueue {
     private RingBuffer<LogicEvent<Object>> ringBuffer;
     private final EventConsumerFactory eventConsumerFactory;
 
+    private boolean isStart = false;
+
     public RingBufferGlobalQueue() {
         this.eventConsumerFactory = new DefaultEventConsumerFactory();
     }
@@ -34,7 +36,13 @@ public class RingBufferGlobalQueue implements IGlobalQueue {
     }
 
     @Override
-    public void start() {
+    public synchronized void start() {
+
+        if(this.isStart){
+            return;
+        }
+        this.isStart = true;
+
         EventFactory<LogicEvent<Object>> eventFactory = LogicEvent::new;
 
         ThreadFactory consumerThreadFactory = new PrefixNameThreadFactory("ringbuffer_consumer_thread_");

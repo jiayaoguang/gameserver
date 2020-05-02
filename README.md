@@ -1,4 +1,5 @@
-## 分布式游戏服务器框架 <font color=#f1986d size=3>更新中...</font>
+## 游戏服务器  <font color=#f1986d size=3>更新中...</font>
+![Java CI](https://github.com/jiayaoguang/gameserver/workflows/Java%20CI/badge.svg)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 ------
 * core模块-主要的网络库
