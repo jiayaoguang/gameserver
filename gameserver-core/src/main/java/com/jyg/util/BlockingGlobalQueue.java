@@ -1,6 +1,7 @@
 package com.jyg.util;
 
 import com.jyg.bean.LogicEvent;
+import com.jyg.consumer.EventConsumerFactory;
 import com.jyg.enums.EventType;
 import io.netty.channel.Channel;
 
@@ -54,5 +55,15 @@ public class BlockingGlobalQueue implements IGlobalQueue {
         logicEvent.setEventId(eventId);
 
         this.queue.add(logicEvent);
+    }
+
+    @Override
+    public void setEventConsumerFactory(EventConsumerFactory eventConsumerFactory) {
+        throw new UnsupportedOperationException("todo");
+    }
+
+    @Override
+    public EventConsumerFactory getEventConsumerFactory() {
+        return null;
     }
 }

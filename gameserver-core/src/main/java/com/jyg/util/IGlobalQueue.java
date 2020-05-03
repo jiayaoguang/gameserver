@@ -30,4 +30,7 @@ public interface IGlobalQueue {
 
     void publicEvent(EventType evenType, Object data, Channel channel, int eventId);
 
+    public void setEventConsumerFactory(EventConsumerFactory eventConsumerFactory);
+
+    public EventConsumerFactory getEventConsumerFactory();
 }

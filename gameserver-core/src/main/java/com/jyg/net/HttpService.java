@@ -1,6 +1,7 @@
 package com.jyg.net;
 
 import com.jyg.handle.initializer.HttpServerInitializer;
+import com.jyg.util.Context;
 import com.jyg.util.IGlobalQueue;
 
 /**
@@ -14,8 +15,8 @@ public class HttpService extends TcpService {
 	 * @throws Exception
 	 */
 	
-	public HttpService(int port , IGlobalQueue globalQueue) {
-		super(port , new HttpServerInitializer(globalQueue) , true);
+	public HttpService(int port , Context context) {
+		super(port , new HttpServerInitializer(context) , true);
 	}
 
 //	public void start(){

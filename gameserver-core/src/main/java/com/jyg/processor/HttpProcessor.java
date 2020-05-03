@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class HttpProcessor extends AbstractProcessor<Request> {
 
-
 	public final void process(LogicEvent<Request> event) {
 
 		Request request = event.getData();
@@ -45,8 +44,8 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 		return response;
 	}
 
-	public HttpProcessor getDispatcher(String path) {
-		return EventDispatcher.getInstance().getHttpProcessor(path);
+	public HttpProcessor getHttpProcessor(String path) {
+		return getEventDispatcher().getHttpProcessor(path);
 	}
 
 	public FTLLoader getFTLLoader() {

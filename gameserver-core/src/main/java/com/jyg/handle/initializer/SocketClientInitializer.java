@@ -7,7 +7,7 @@ import com.jyg.handle.MyProtobufEncoder;
 /**
  * created by jiayaoguang at 2017年12月6日
  */
-import com.jyg.util.IGlobalQueue;
+import com.jyg.util.Context;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
@@ -30,8 +30,8 @@ public class SocketClientInitializer extends
 		}
 	});
 
-	public SocketClientInitializer(IGlobalQueue globalQueue) {
-		super(globalQueue);
+	public SocketClientInitializer(Context context) {
+		super(context);
 	}
 
 	@Override
@@ -39,9 +39,9 @@ public class SocketClientInitializer extends
 		ChannelPipeline pipeline = ch.pipeline();
 //		pipeline.addLast(new ProtobufVarint32FrameDecoder());
 		
-		pipeline.addLast(new MyProtobufDecoder(globalQueue));
+		pipeline.addLast(new MyProtobufDecoder(context));
 		
-		pipeline.addLast(new MyProtobufEncoder());
+		pipeline.addLast(new MyProtobufEncoder(context.getEventDispatcher()));
 		
 		pipeline.addLast(new LastCodec());
 		

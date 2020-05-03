@@ -7,6 +7,7 @@ import com.jyg.handle.initializer.SocketClientInitializer;
 import com.jyg.net.EventDispatcher;
 import com.jyg.processor.ProtoProcessor;
 import com.jyg.session.Session;
+import com.jyg.util.Context;
 import com.jyg.util.RemotingUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -52,7 +53,7 @@ public class TcpClient extends AbstractBootstrap{
 
 	@Override
 	public void start(){
-		start(new SocketClientInitializer(globalQueue));
+		start(new SocketClientInitializer(getContext()));
 	}
 
 

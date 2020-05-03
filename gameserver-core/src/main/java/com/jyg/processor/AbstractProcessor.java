@@ -2,6 +2,7 @@ package com.jyg.processor;
 
 import com.jyg.bean.LogicEvent;
 import com.jyg.consumer.EventConsumer;
+import com.jyg.net.EventDispatcher;
 import com.jyg.util.FTLLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,16 +14,16 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	protected final FTLLoader ftlLoader = new FTLLoader();
+	protected static final FTLLoader ftlLoader = new FTLLoader();
 
-	private EventConsumer eventConsumer;
+	private EventDispatcher eventDispatcher;
 
-	public EventConsumer getEventConsumer() {
-		return eventConsumer;
+	public EventDispatcher getEventDispatcher() {
+		return eventDispatcher;
 	}
 
-	public void setEventConsumer(EventConsumer eventConsumer){
-		this.eventConsumer = eventConsumer;
+	public void setEventDispatcher(EventDispatcher eventDispatcher) {
+		this.eventDispatcher = eventDispatcher;
 	}
 
 	public abstract void process(LogicEvent<T> event);

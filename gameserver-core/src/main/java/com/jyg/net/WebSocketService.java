@@ -1,6 +1,7 @@
 package com.jyg.net;
 
 import com.jyg.handle.initializer.WebSocketServerInitializer;
+import com.jyg.util.Context;
 import com.jyg.util.IGlobalQueue;
 
 /**
@@ -9,7 +10,7 @@ import com.jyg.util.IGlobalQueue;
 
 public class WebSocketService extends TcpService {
 
-    public WebSocketService(int port, IGlobalQueue globalQueue) {
-        super(port, new WebSocketServerInitializer(globalQueue));
+    public WebSocketService(int port, Context context) {
+        super(port, new WebSocketServerInitializer(context));
     }
 }

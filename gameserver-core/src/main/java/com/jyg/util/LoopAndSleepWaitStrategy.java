@@ -1,12 +1,11 @@
 package com.jyg.util;
 
-import java.util.concurrent.locks.LockSupport;
-
-import com.jyg.net.EventDispatcher;
 import com.lmax.disruptor.AlertException;
 import com.lmax.disruptor.Sequence;
 import com.lmax.disruptor.SequenceBarrier;
 import com.lmax.disruptor.WaitStrategy;
+
+import java.util.concurrent.locks.LockSupport;
 
 /**
  * created by jiayaoguang at 2018年4月9日
@@ -48,8 +47,7 @@ public final class LoopAndSleepWaitStrategy implements WaitStrategy {
             --counter;
             Thread.yield();
         } else {
-            EventDispatcher.getInstance().loop();
-            LockSupport.parkNanos(1 * 1000000L);
+            LockSupport.parkNanos(1000L);
         }
 
         return counter;

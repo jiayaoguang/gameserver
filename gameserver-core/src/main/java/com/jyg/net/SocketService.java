@@ -1,6 +1,7 @@
 package com.jyg.net;
 
 import com.jyg.handle.initializer.InnerSocketServerInitializer;
+import com.jyg.util.Context;
 import com.jyg.util.IGlobalQueue;
 
 /**
@@ -10,8 +11,8 @@ import com.jyg.util.IGlobalQueue;
 public class SocketService extends TcpService {
 
 	
-	public SocketService(int port , IGlobalQueue globalQueue) {
-		super(port ,new InnerSocketServerInitializer(globalQueue));
+	public SocketService(int port , Context context) {
+		super(port ,new InnerSocketServerInitializer(context));
 	}
 
 	

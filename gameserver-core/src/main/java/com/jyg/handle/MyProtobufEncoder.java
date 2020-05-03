@@ -15,7 +15,12 @@ import io.netty.handler.codec.MessageToByteEncoder;
 @Sharable
 public class MyProtobufEncoder extends MessageToByteEncoder<MessageLiteOrBuilder> {
 
-	EventDispatcher dis = EventDispatcher.getInstance();
+	private final EventDispatcher eventDispatcher;
+
+	public MyProtobufEncoder(EventDispatcher eventDispatcher) {
+		this.eventDispatcher = eventDispatcher;
+	}
+
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, MessageLiteOrBuilder msg, ByteBuf buf) {
@@ -36,7 +41,7 @@ public class MyProtobufEncoder extends MessageToByteEncoder<MessageLiteOrBuilder
 		if (bytes == null) {
 			throw new IllegalArgumentException("not MessageLiteOrBuilder");
 		}
-		int eventId = dis.getEventIdByProtoClazz(protoClazz);
+		int eventId = eventDispatcher.getEventIdByProtoClazz(protoClazz);
 		if(eventId <= 0) {
 			System.out.println("unknow eventid");
 			return;

@@ -2,6 +2,7 @@ package com.jyg.net;
 
 import com.jyg.handle.initializer.InnerSocketServerInitializer;
 import com.jyg.handle.initializer.MyChannelInitializer;
+import com.jyg.util.Context;
 import com.jyg.util.IGlobalQueue;
 import com.jyg.util.PrefixNameThreadFactory;
 import com.jyg.util.RemotingUtil;
@@ -38,13 +39,15 @@ public class UdpService extends AbstractService {
 
     private final int port;
 
+    private final Context context;
 
-    public UdpService(int port, IGlobalQueue globalQueue) {
-        super(globalQueue);
+    public UdpService(int port, Context context) {
+        super(context.getGlobalQueue());
         if (port < 0) {
             throw new IllegalArgumentException("port number cannot be negative ");
         }
         this.port = port;
+        this.context = context;
     }
 
     @Override
@@ -55,7 +58,7 @@ public class UdpService extends AbstractService {
         bootstrap.group(workGroup);
 
         bootstrap.channel(RemotingUtil.useEpoll() ? EpollDatagramChannel.class : NioDatagramChannel.class);
-        bootstrap.handler(new InnerSocketServerInitializer(globalQueue));
+        bootstrap.handler(new InnerSocketServerInitializer(context));
 //        bootstrap.childHandler(initializer);
         bootstrap.option(ChannelOption.SO_BROADCAST, true);
         bootstrap.option(ChannelOption.SO_REUSEADDR, true);

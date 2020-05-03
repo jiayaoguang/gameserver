@@ -27,8 +27,6 @@ import java.util.Map;
  */
 public class EventDispatcher {
 
-	private static EventDispatcher dispatcher  = new EventDispatcher();
-
 	private final HttpProcessor notFOundProcessor = new NotFoundHttpProcessor();
 
 	private final Map<String, HttpProcessor> httpPathMap = new HashMap<>();
@@ -44,7 +42,7 @@ public class EventDispatcher {
 
 	private TimerManager timerManager;
 
-	private EventDispatcher() {
+	public EventDispatcher() {
 
 	}
 
@@ -57,10 +55,6 @@ public class EventDispatcher {
 		});
 	}
 
-
-	public static EventDispatcher getInstance() {
-		return dispatcher;
-	}
 
 	//================================ rpc start =========================================
 
@@ -178,13 +172,13 @@ public class EventDispatcher {
 	}
 
 
-	public void addTimer(Timer timer) {
-		timerManager.addTimer(timer);
-	}
+//	public void addTimer(Timer timer) {
+//		timerManager.addTimer(timer);
+//	}
 
 	public void loop() {
 
-		timerManager.updateTimer();
+//		timerManager.updateTimer();
 		updateFrame();
 	}
 
@@ -217,6 +211,7 @@ public class EventDispatcher {
 		}
 
 		httpPathMap.put(path, processor);
+		processor.setEventDispatcher(this);
 	}
 
 	public HttpProcessor getHttpProcessor(String path) {

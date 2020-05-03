@@ -16,7 +16,6 @@ import java.util.List;
  */
 public class GameServerBootstarp extends AbstractBootstrap {
 
-    private EventConsumerFactory eventConsumerFactory;
 
     private final List<Service> services = new ArrayList<>(1);
 
@@ -26,14 +25,6 @@ public class GameServerBootstarp extends AbstractBootstrap {
 
     public GameServerBootstarp(IGlobalQueue globalQueue) {
         super(globalQueue);
-    }
-
-    public void setEventConsumerFactory(EventConsumerFactory eventConsumerFactory) {
-        if (isStart) {
-            logger.error("oprete fail,server is already start ");
-            return;
-        }
-        this.eventConsumerFactory = eventConsumerFactory;
     }
 
 
@@ -50,7 +41,7 @@ public class GameServerBootstarp extends AbstractBootstrap {
             logger.error("oprete fail,server is already start ");
             return;
         }
-        services.add(new SocketService(port , globalQueue));
+        services.add(new SocketService(port , getContext()));
     }
 
     public void addWebSocketService(int port) {
@@ -58,7 +49,7 @@ public class GameServerBootstarp extends AbstractBootstrap {
             logger.error("oprete fail,server is already start ");
             return;
         }
-        services.add(new WebSocketService(port ,globalQueue ));
+        services.add(new WebSocketService(port ,getContext() ));
     }
 
     public void addHttpService(int port) {
@@ -66,7 +57,7 @@ public class GameServerBootstarp extends AbstractBootstrap {
             logger.error("oprete fail,server is already start ");
             return;
         }
-        services.add(new HttpService(port , globalQueue));
+        services.add(new HttpService(port , getContext()));
     }
 
 
@@ -77,12 +68,7 @@ public class GameServerBootstarp extends AbstractBootstrap {
             logger.error("server is already start ");
             return;
         }
-
         isStart = true;
-
-        if (eventConsumerFactory == null) {
-            eventConsumerFactory = new DefaultEventConsumerFactory();
-        }
 
         if (services.isEmpty()) {
             throw new IllegalArgumentException("services list is empty");

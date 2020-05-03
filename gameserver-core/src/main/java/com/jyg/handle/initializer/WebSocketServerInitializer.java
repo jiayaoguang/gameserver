@@ -5,6 +5,7 @@ import com.jyg.handle.TextWebSocketFrameHandler;
 /**
  * created by jiayaoguang at 2017年12月6日
  */
+import com.jyg.util.Context;
 import com.jyg.util.IGlobalQueue;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
@@ -16,8 +17,8 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 public class WebSocketServerInitializer extends
 		MyChannelInitializer<Channel> {
 
-	public WebSocketServerInitializer(IGlobalQueue globalQueue) {
-		super(globalQueue);
+	public WebSocketServerInitializer(Context context) {
+		super(context);
 	}
 
 	@Override
@@ -29,7 +30,7 @@ public class WebSocketServerInitializer extends
 //		pipeline.addLast(new HttpStaticFileServerHandler());
 		
 		pipeline.addLast(new WebSocketServerProtocolHandler("/"));
-		pipeline.addLast(new TextWebSocketFrameHandler(globalQueue));
+		pipeline.addLast(new TextWebSocketFrameHandler(context.getGlobalQueue()));
 		
 	}
 }

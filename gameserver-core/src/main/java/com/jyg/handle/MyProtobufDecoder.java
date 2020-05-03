@@ -6,6 +6,7 @@ import com.google.protobuf.Parser;
 import com.jyg.enums.EventType;
 import com.jyg.net.EventDispatcher;
 import com.jyg.processor.ProtoProcessor;
+import com.jyg.util.Context;
 import com.jyg.util.IGlobalQueue;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
@@ -13,6 +14,8 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -21,14 +24,14 @@ import java.io.IOException;
  */
 public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
 
-	private final IGlobalQueue globalQueue;
+	protected static final Logger LOGGER = LoggerFactory.getLogger(MyProtobufDecoder.class);
 
-	public MyProtobufDecoder(IGlobalQueue globalQueue) {
+	private final Context context;
+
+	public MyProtobufDecoder(Context context) {
 		super(1024 * 64, 0, 4, 0, 4);
-		this.globalQueue = globalQueue;
+		this.context = context;
 	}
-
-	private EventDispatcher dis = EventDispatcher.getInstance();
 
 	// @Override
 	// public ByteBuf extractFrame(ChannelHandlerContext ctx, ByteBuf buffer, int
@@ -64,18 +67,21 @@ public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
 		//TODO crc
 		try {
 			frame = (ByteBuf) super.decode(ctx, in);
-			
-			int eventId = frame.readInt();
-			System.out.println("cnf:"+frame.refCnt());
-			ProtoProcessor<? extends GeneratedMessageV3> protProcessor = dis.getSocketProcessor(eventId);
-			if (protProcessor == null) {
+			if(frame == null){
 				return null;
 			}
-			Parser<? extends MessageLite> parser = protProcessor.getProtoParser();
+			int eventId = frame.readInt();
+			System.out.println("cnf:"+frame.refCnt());
+			ProtoProcessor<? extends GeneratedMessageV3> protoProcessor = context.getEventDispatcher().getSocketProcessor(eventId);
+			if (protoProcessor == null) {
+				LOGGER.error(" protoProcessor not found ,id : {} ",eventId);
+				return null;
+			}
+			Parser<? extends MessageLite> parser = protoProcessor.getProtoParser();
 
 			try (ByteBufInputStream bis = new ByteBufInputStream(frame)) {
 				MessageLite messageLite = parser.parseFrom(bis);
-				globalQueue.publicEvent(EventType.RPC_MSG_COME, messageLite, ctx.channel(), eventId);
+				context.getGlobalQueue().publicEvent(EventType.RPC_MSG_COME, messageLite, ctx.channel(), eventId);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

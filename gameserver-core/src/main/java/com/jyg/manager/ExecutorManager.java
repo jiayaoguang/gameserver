@@ -1,4 +1,9 @@
-package com.jyg.util;
+package com.jyg.manager;
+
+import com.jyg.util.AsynCallEvent;
+import com.jyg.util.AsynEventAndCallBackRunnable;
+import com.jyg.util.CallBackEvent;
+import com.jyg.util.IGlobalQueue;
 
 import java.util.concurrent.*;
 
@@ -10,12 +15,16 @@ public class ExecutorManager {
 	private final ExecutorService executor;
 	private final IGlobalQueue globalQueue;
 	public ExecutorManager(IGlobalQueue globalQueue) {
-		this(10,20 , globalQueue);
+		this(10 , globalQueue);
+	}
+
+	public ExecutorManager(int poolSize,IGlobalQueue globalQueue) {
+		this(poolSize,poolSize , globalQueue);
 	}
 
 	public ExecutorManager(int corePoolSize,int maxPoolSize,IGlobalQueue globalQueue) {
-		BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(2048);
-		executor = new ThreadPoolExecutor(corePoolSize, maxPoolSize, 3 * 60 * 1000L, TimeUnit.MILLISECONDS, workQueue, new ThreadPoolExecutor.AbortPolicy());
+		BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(1024*16);
+		executor = new ThreadPoolExecutor(corePoolSize, maxPoolSize, 3 * 60 * 1000L, TimeUnit.MILLISECONDS, workQueue, new ThreadPoolExecutor.DiscardPolicy());
 		((ThreadPoolExecutor) executor).allowCoreThreadTimeOut(false);
 		this.globalQueue = globalQueue;
 	}

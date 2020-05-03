@@ -1,5 +1,6 @@
 package com.jyg.handle.initializer;
 
+import com.jyg.util.Context;
 import com.jyg.util.IGlobalQueue;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -9,14 +10,14 @@ import io.netty.channel.ChannelInitializer;
  */
 public abstract class MyChannelInitializer<C extends Channel> extends ChannelInitializer<C> {
 
-    protected final IGlobalQueue globalQueue;
+    protected final Context context;
 
-    protected MyChannelInitializer(IGlobalQueue globalQueue) {
-        this.globalQueue = globalQueue;
+    protected MyChannelInitializer(Context context) {
+        this.context = context;
     }
 
     public IGlobalQueue getGlobalQueue() {
-        return globalQueue;
+        return context.getGlobalQueue();
     }
 
 

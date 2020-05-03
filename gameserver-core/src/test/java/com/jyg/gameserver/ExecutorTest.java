@@ -1,11 +1,5 @@
 package com.jyg.gameserver;
 
-import com.jyg.util.ExecutorManager;
-import com.jyg.util.RingBufferGlobalQueue;
-import org.junit.Test;
-
-import java.util.concurrent.Future;
-
 /**
  * create on 2019/8/16 by jiayaoguang
  */

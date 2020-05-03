@@ -2,6 +2,7 @@ package com.jyg.util;
 
 import com.jyg.bean.LogicEvent;
 import com.jyg.consumer.DefaultEventConsumerFactory;
+import com.jyg.consumer.EventConsumer;
 import com.jyg.consumer.EventConsumerFactory;
 import com.jyg.enums.EventType;
 import com.lmax.disruptor.EventFactory;
@@ -23,16 +24,16 @@ public class RingBufferGlobalQueue implements IGlobalQueue {
     private static Disruptor<LogicEvent<Object>> disruptor;
     private static final int BUFFER_SIZE = 1024 * 64;
     private RingBuffer<LogicEvent<Object>> ringBuffer;
-    private final EventConsumerFactory eventConsumerFactory;
+    private EventConsumerFactory eventConsumerFactory;
 
     private boolean isStart = false;
 
     public RingBufferGlobalQueue() {
-        this.eventConsumerFactory = new DefaultEventConsumerFactory();
+        this(new DefaultEventConsumerFactory());
     }
 
-    public RingBufferGlobalQueue(EventConsumerFactory defaultEventConsumerFactory) {
-        this.eventConsumerFactory = defaultEventConsumerFactory;
+    public RingBufferGlobalQueue(EventConsumerFactory eventConsumerFactory) {
+        this.eventConsumerFactory = eventConsumerFactory;
     }
 
     @Override
@@ -50,7 +51,7 @@ public class RingBufferGlobalQueue implements IGlobalQueue {
         disruptor = new Disruptor<>(eventFactory, BUFFER_SIZE, consumerThreadFactory, ProducerType.MULTI,
                 new LoopAndSleepWaitStrategy());
 
-        disruptor.handleEventsWith(this.eventConsumerFactory.newEventConsumer());
+        disruptor.handleEventsWith(this.eventConsumerFactory.createAndInit());
         disruptor.setDefaultExceptionHandler(new LogExceptionHandler());
         ringBuffer = disruptor.getRingBuffer();
         disruptor.start();
@@ -59,6 +60,14 @@ public class RingBufferGlobalQueue implements IGlobalQueue {
     @Override
     public void shutdown() {
         disruptor.shutdown();
+    }
+
+    public EventConsumerFactory getEventConsumerFactory() {
+        return eventConsumerFactory;
+    }
+
+    public void setEventConsumerFactory(EventConsumerFactory eventConsumerFactory) {
+        this.eventConsumerFactory = eventConsumerFactory;
     }
 
     @Override

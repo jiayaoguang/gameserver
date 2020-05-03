@@ -17,13 +17,14 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 
 	private final TimerManager timerManager = new TimerManager();
 
-	private final EventDispatcher dispatcher = EventDispatcher.getInstance();
+	private EventDispatcher dispatcher;
 
 	private int requestId = 1;
 
 	public EventConsumer() {
-		dispatcher.init(timerManager);
+
 	}
+
 
 	@Override
 	public final void onEvent(LogicEvent event, long sequence, boolean endOfBatch) {
@@ -108,7 +109,18 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 		return requestId++;
 	}
 
-	protected abstract void init();
+
+	public EventDispatcher getDispatcher() {
+		return dispatcher;
+	}
+
+	public void setDispatcher(EventDispatcher dispatcher) {
+		this.dispatcher = dispatcher;
+	}
+
+	protected void init(){
+		dispatcher.init(timerManager);
+	}
 
 	/**
 	 *
