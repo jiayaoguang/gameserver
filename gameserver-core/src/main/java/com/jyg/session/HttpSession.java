@@ -7,7 +7,7 @@ import io.netty.channel.Channel;
  */
 public class HttpSession extends Session{
 
-	public HttpSession(Channel channel,long sessionId) {
+	public HttpSession(Channel channel,int sessionId) {
 		super(channel, sessionId);
 	}
 	
