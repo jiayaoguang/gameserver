@@ -22,7 +22,7 @@ public class InnerSocketHandler extends ChannelInboundHandlerAdapter {
 		Channel incoming = ctx.channel();
 		System.out.println("Client:" + incoming.remoteAddress() + "在线");
 		
-		globalQueue.publicEvent(EventType.INNER_SOCKET_CONNECT_ACTIVE, null, ctx.channel() );
+		globalQueue.publicEvent(EventType.SOCKET_CONNECT_ACTIVE, null, ctx.channel() );
 		
 		super.channelActive(ctx);
 	}
@@ -32,7 +32,7 @@ public class InnerSocketHandler extends ChannelInboundHandlerAdapter {
 		Channel incoming = ctx.channel();
 		System.out.println("Client:" + incoming.remoteAddress() + "掉线");
 		
-		globalQueue.publicEvent(EventType.INNER_SOCKET_CONNECT_INACTIVE, null, ctx.channel() );
+		globalQueue.publicEvent(EventType.SOCKET_CONNECT_INACTIVE, null, ctx.channel() );
 		
 		super.channelInactive(ctx);
 	}

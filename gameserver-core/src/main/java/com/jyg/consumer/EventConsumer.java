@@ -3,8 +3,6 @@ package com.jyg.consumer;
 import com.jyg.bean.LogicEvent;
 import com.jyg.net.EventDispatcher;
 import com.jyg.net.Request;
-import com.jyg.timer.DelayCloseTimer;
-import com.jyg.timer.TimerManager;
 import com.jyg.util.CallBackEvent;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.WorkHandler;
@@ -51,18 +49,20 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 	private void doEvent(LogicEvent event) {
 		switch (event.getChannelEventType()) {
 
-			case CLIENT_SOCKET_CONNECT_ACTIVE:
+//			case CLIENT_SOCKET_CONNECT_ACTIVE:
+//				dispatcher.as_on_client_active(event);
+//				break;
+//			case CLIENT_SOCKET_CONNECT_INACTIVE:
+//				dispatcher.as_on_client_inactive(event);
+//				break;
+
+			case SOCKET_CONNECT_ACTIVE:
+//				dispatcher.as_on_inner_server_active(event);
 				dispatcher.as_on_client_active(event);
 				break;
-			case CLIENT_SOCKET_CONNECT_INACTIVE:
+			case SOCKET_CONNECT_INACTIVE:
+//				dispatcher.as_on_inner_server_inactive(event);
 				dispatcher.as_on_client_inactive(event);
-				break;
-
-			case INNER_SOCKET_CONNECT_ACTIVE:
-				dispatcher.as_on_inner_server_active(event);
-				break;
-			case INNER_SOCKET_CONNECT_INACTIVE:
-				dispatcher.as_on_inner_server_inactive(event);
 				break;
 
 			case HTTP_MSG_COME:

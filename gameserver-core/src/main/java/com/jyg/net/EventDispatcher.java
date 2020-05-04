@@ -4,6 +4,7 @@ import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.MessageLite;
 import com.jyg.bean.LogicEvent;
 import com.jyg.manager.ChannelManager;
+import com.jyg.manager.ExecutorManager;
 import com.jyg.processor.HttpProcessor;
 import com.jyg.processor.NotFoundHttpProcessor;
 import com.jyg.processor.ProtoProcessor;
@@ -18,8 +19,6 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 
 import java.net.InetSocketAddress;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -39,13 +38,15 @@ public class EventDispatcher {
 
 	private final TimerManager timerManager = new TimerManager();
 
+	private final ExecutorManager executorManager;
+
 	//50 毫秒一帧
 	private static final long FRAME_DURATION_TIMEMILLS = 50L;
 	//上一帧时间戳
 	private long nextFrameTimeStamp = System.currentTimeMillis();
 
-	public EventDispatcher() {
-
+	public EventDispatcher(ExecutorManager executorManager) {
+		this.executorManager = executorManager;
 	}
 
 	/**
@@ -222,5 +223,9 @@ public class EventDispatcher {
 
 	public TimerManager getTimerManager() {
 		return timerManager;
+	}
+
+	public ExecutorManager getExecutorManager() {
+		return executorManager;
 	}
 }

@@ -5,9 +5,16 @@ package com.jyg.timer;
  */
 public class DefaultTimer extends Timer {
 
-
 	// 回调函数
- 	private ITimerHandler timerHandler;
+ 	private final ITimerHandler timerHandler;
+
+	public DefaultTimer(long execDelayTimeMills , ITimerHandler timerHandler) {
+		this(1, execDelayTimeMills, execDelayTimeMills,timerHandler);
+	}
+
+	public DefaultTimer(int execNum ,long execIntervalTimeMills , ITimerHandler timerHandler) {
+		this(execNum, execIntervalTimeMills, execIntervalTimeMills,timerHandler);
+	}
 
 	public DefaultTimer(int execNum, long firstExecDelayTimeMills, long execIntervalTimeMills , ITimerHandler timerHandler) {
 		super(execNum, firstExecDelayTimeMills, execIntervalTimeMills);

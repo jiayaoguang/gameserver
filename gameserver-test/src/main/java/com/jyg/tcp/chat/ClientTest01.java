@@ -13,7 +13,7 @@ import org.junit.Test;
  * Hello world!
  *
  */
-public class CLientTest01
+public class ClientTest01
 {
     public static void main( String[] args ) throws Exception
     {

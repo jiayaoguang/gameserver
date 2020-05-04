@@ -1,6 +1,7 @@
 package com.jyg.util;
 
 import com.jyg.manager.EventLoopGroupManager;
+import com.jyg.manager.ExecutorManager;
 import com.jyg.net.EventDispatcher;
 
 /**
@@ -11,13 +12,14 @@ public class Context {
     private final IGlobalQueue globalQueue;
     private final EventDispatcher eventDispatcher;
     private final EventLoopGroupManager eventLoopGroupManager;
+//    private final ExecutorManager executorManager;
 
     public Context(IGlobalQueue globalQueue) {
         this.globalQueue = globalQueue;
-        this.eventDispatcher = new EventDispatcher();
         this.eventLoopGroupManager = new EventLoopGroupManager();
+//        this.executorManager = new ExecutorManager(10, globalQueue);
+        this.eventDispatcher = new EventDispatcher( new ExecutorManager(10, globalQueue));
     }
-
 
     public IGlobalQueue getGlobalQueue() {
         return globalQueue;
@@ -30,4 +32,5 @@ public class Context {
     public EventLoopGroupManager getEventLoopGroupManager() {
         return eventLoopGroupManager;
     }
+
 }
