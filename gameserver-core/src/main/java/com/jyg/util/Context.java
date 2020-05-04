@@ -18,7 +18,7 @@ public class Context {
         this.globalQueue = globalQueue;
         this.eventLoopGroupManager = new EventLoopGroupManager();
 //        this.executorManager = new ExecutorManager(10, globalQueue);
-        this.eventDispatcher = new EventDispatcher( new ExecutorManager(10, globalQueue));
+        this.eventDispatcher = new EventDispatcher(globalQueue);
     }
 
     public IGlobalQueue getGlobalQueue() {

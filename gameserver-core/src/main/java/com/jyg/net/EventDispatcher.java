@@ -5,12 +5,14 @@ import com.google.protobuf.MessageLite;
 import com.jyg.bean.LogicEvent;
 import com.jyg.manager.ChannelManager;
 import com.jyg.manager.ExecutorManager;
+import com.jyg.manager.SingleThreadExecutorManagerPool;
 import com.jyg.processor.HttpProcessor;
 import com.jyg.processor.NotFoundHttpProcessor;
 import com.jyg.processor.ProtoProcessor;
 import com.jyg.session.Session;
 import com.jyg.timer.Timer;
 import com.jyg.timer.TimerManager;
+import com.jyg.util.IGlobalQueue;
 import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -40,13 +42,16 @@ public class EventDispatcher {
 
 	private final ExecutorManager executorManager;
 
+	private final SingleThreadExecutorManagerPool singleThreadExecutorManagerPool;
+
 	//50 毫秒一帧
 	private static final long FRAME_DURATION_TIMEMILLS = 50L;
 	//上一帧时间戳
 	private long nextFrameTimeStamp = System.currentTimeMillis();
 
-	public EventDispatcher(ExecutorManager executorManager) {
-		this.executorManager = executorManager;
+	public EventDispatcher(IGlobalQueue globalQueue) {
+		this.executorManager =  new ExecutorManager(10, globalQueue);
+		this.singleThreadExecutorManagerPool = new SingleThreadExecutorManagerPool(globalQueue);
 	}
 
 	/**

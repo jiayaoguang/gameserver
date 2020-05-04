@@ -8,7 +8,7 @@ import io.netty.channel.Channel;
  */
 public class Session {
 
-	private long sessionId;
+	private final int sessionId;
 	
 	private Channel channel;
 	
@@ -16,19 +16,19 @@ public class Session {
 	
 	private Object data;
 	
-	public Session(Channel channel,long sessionId){
+	public Session(Channel channel,int sessionId){
 		this.channel = channel;
 		this.sessionId = sessionId;
 		setLastContactMill(System.currentTimeMillis());
 	}
 
-	public long getSessionId() {
+	public int getSessionId() {
 		return sessionId;
 	}
 
-	public void setSessionId(long sessionId) {
+	/*public void setSessionId(int sessionId) {
 		this.sessionId = sessionId;
-	}
+	}*/
 
 	public Channel getChannel() {
 		return channel;
