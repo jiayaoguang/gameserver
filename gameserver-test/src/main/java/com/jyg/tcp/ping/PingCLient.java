@@ -4,6 +4,7 @@ import com.jyg.processor.ProtoProcessor;
 import com.jyg.processor.ProtoResponse;
 import com.jyg.proto.p_sm_scene.p_scene_sm_response_pong;
 import com.jyg.proto.p_sm_scene.p_sm_scene_request_ping;
+import com.jyg.session.Session;
 import com.jyg.startup.TcpClient;
 import io.netty.channel.Channel;
 
@@ -18,7 +19,7 @@ public class PingCLient {
 				p_scene_sm_response_pong.getDefaultInstance()) {
 
 			@Override
-			public void processProtoMessage(p_scene_sm_response_pong msg, ProtoResponse response) {
+			public void process(Session session, p_scene_sm_response_pong msg) {
 				System.out.println("receive pong msg");
 				// response.writeMsg(p_scene_sm_response_pong.newBuilder());
 				

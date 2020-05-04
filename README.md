@@ -33,9 +33,9 @@
              }
      
              @Override
-             public void processProtoMessage(p_sm_scene_request_ping msg, ProtoResponse response) {
+             public void process(Session session, p_sm_scene_request_ping msg) {
                  System.out.println("ok , i see ping");
-                 response.writeMsg(p_scene_sm_response_pong.newBuilder());
+                 session.writeMessage(p_scene_sm_response_pong.newBuilder());
              }
          }
      }

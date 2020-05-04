@@ -7,6 +7,7 @@ import com.google.protobuf.MessageLite;
 import com.google.protobuf.Parser;
 import com.jyg.bean.LogicEvent;
 import com.jyg.net.EventDispatcher;
+import com.jyg.session.Session;
 
 /**
  * created by jiayaoguang at 2017年12月16日
@@ -55,11 +56,15 @@ public abstract class ProtoProcessor<T extends GeneratedMessageV3> extends Abstr
 
 	public void process(LogicEvent<T> event) {
 //		System.out.println("eventid : "+event.getEventId());
-		ProtoResponse response = new ProtoResponse(event.getChannel());
-		processProtoMessage(event.getData(),response);
+
+		Session session = getEventDispatcher().getSession(event.getChannel());
+		if(session == null){
+			logger.error("session == null..................................");
+			return;
+		}
+		process(session,event.getData());
 	}
 	
-	public abstract void processProtoMessage(T msg ,ProtoResponse response);
-	
+	public abstract void process(Session session , T msg);
 
 }

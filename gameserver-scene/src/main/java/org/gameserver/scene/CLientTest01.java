@@ -6,6 +6,7 @@ import com.jyg.proto.p_sm_scene.p_scene_sm_chat;
 import com.jyg.proto.p_sm_scene.p_scene_sm_response_pong;
 import com.jyg.proto.p_sm_scene.p_sm_scene_chat;
 import com.jyg.proto.p_sm_scene.p_sm_scene_request_ping;
+import com.jyg.session.Session;
 import com.jyg.startup.TcpClient;
 
 
@@ -21,9 +22,9 @@ public class CLientTest01
     	ProtoProcessor<p_sm_scene_request_ping> pingProcessor = new ProtoProcessor<p_sm_scene_request_ping>(p_sm_scene_request_ping.getDefaultInstance()) {
 
 			@Override
-			public void processProtoMessage(p_sm_scene_request_ping msg, ProtoResponse response) {
+			public void process(Session session, p_sm_scene_request_ping msg) {
 				System.out.println("i just think so");
-				response.writeMsg(p_scene_sm_response_pong.newBuilder());
+				session.writeMessage(p_scene_sm_response_pong.newBuilder());
 				
 			}
 			
@@ -31,14 +32,14 @@ public class CLientTest01
         ProtoProcessor<p_sm_scene_chat> receiveChatProcessor = new ProtoProcessor<p_sm_scene_chat>(p_sm_scene_chat.getDefaultInstance()) {
         	int num = 0;
 			@Override
-			public void processProtoMessage(p_sm_scene_chat msg, ProtoResponse response) {
+			public void process(Session session, p_sm_scene_chat msg) {
 				System.out.println("receive msg "+num+":"+msg.getMsg());
 				num++;
 				if(num==10) {
-					response.writeMsg( p_scene_sm_chat.newBuilder().setMsg("bye"));
+					session.writeMessage( p_scene_sm_chat.newBuilder().setMsg("bye"));
 					return;
 				}
-				response.writeMsg( p_scene_sm_chat.newBuilder().setMsg("hello world!"));
+				session.writeMessage( p_scene_sm_chat.newBuilder().setMsg("hello world!"));
 			}
 			
         };

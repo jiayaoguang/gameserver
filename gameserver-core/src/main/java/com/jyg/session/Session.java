@@ -1,5 +1,6 @@
 package com.jyg.session;
 
+import com.google.protobuf.MessageLiteOrBuilder;
 import io.netty.channel.Channel;
 
 /**
@@ -44,8 +45,10 @@ public class Session {
 	public void setLastContactMill(long lastContactMill) {
 		this.lastContactMill = lastContactMill;
 	}
-	
-	
+
+	public void writeMessage( MessageLiteOrBuilder message) {
+		this.channel.writeAndFlush(message);
+	}
 	
 	
 }

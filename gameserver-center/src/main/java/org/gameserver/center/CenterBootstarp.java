@@ -8,6 +8,7 @@ import com.jyg.processor.ProtoProcessor;
 import com.jyg.processor.ProtoResponse;
 import com.jyg.proto.p_auth_sm.p_auth_sm_request_send_token;
 import com.jyg.proto.p_auth_sm.p_sm_auth_response_receive_token;
+import com.jyg.session.Session;
 import com.jyg.startup.GameServerBootstarp;
 import com.jyg.util.TokenUtil;
 
@@ -27,7 +28,7 @@ public class CenterBootstarp {
 		ProtoProcessor<p_auth_sm_request_send_token> getTokenProcessor = new ProtoProcessor<p_auth_sm_request_send_token>(
 				p_auth_sm_request_send_token.getDefaultInstance()) {
 			@Override
-			public void processProtoMessage(p_auth_sm_request_send_token msg, ProtoResponse response) {
+			public void process(Session session, p_auth_sm_request_send_token msg) {
 				System.out.println("i just get token , id" + msg.getRequestId());
 				p_sm_auth_response_receive_token.Builder builder = p_sm_auth_response_receive_token.newBuilder();
 				String token = TokenUtil.getToken();
@@ -37,7 +38,7 @@ public class CenterBootstarp {
 				builder.setIp("127.0.0.1");
 				builder.setPort(wsport);
 				builder.setRequestId(msg.getRequestId());
-				response.writeMsg(builder);
+				session.writeMessage(builder);
 			}
 
 		};

@@ -3,6 +3,7 @@ package org.gameserver.auth.processor;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.jyg.session.Session;
 import org.gameserver.auth.bean.UserLoginInfo;
 
 import com.google.inject.Inject;
@@ -27,7 +28,7 @@ public class TokenReceiveSuccessProtoProcessor extends ProtoProcessor<p_sm_auth_
 	}
 
 	@Override
-	public void processProtoMessage(p_sm_auth_response_receive_token msg, ProtoResponse response) {
+	public void process(Session session, p_sm_auth_response_receive_token msg) {
 		long requestId = msg.getRequestId();
 		String token  = msg.getToken();
 		UserLoginInfo userLoginInfo = tokenSendHttpProcessor.getUserLoginInfo(requestId);
