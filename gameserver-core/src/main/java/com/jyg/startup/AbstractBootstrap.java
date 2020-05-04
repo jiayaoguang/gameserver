@@ -23,12 +23,6 @@ import org.slf4j.LoggerFactory;
 
 public abstract class AbstractBootstrap {
 
-    protected Int2ObjectMap<ProtoProcessor<? extends GeneratedMessageV3>> protoProcessorMap = new Int2ObjectOpenHashMap<>();
-
-    protected Int2ObjectMap<Class<? extends GeneratedMessageV3>> eventId2ProtoClassMap = new Int2ObjectOpenHashMap<>();
-
-    protected Object2ObjectMap<String, Processor<Request>> httpProcessorMap = new Object2ObjectOpenHashMap<>();
-
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     protected final IGlobalQueue globalQueue;
@@ -63,8 +57,6 @@ public abstract class AbstractBootstrap {
 
     public void registerSocketEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoProcessor) {
 
-        protoProcessorMap.put(eventid, protoProcessor);
-
         this.context.getEventDispatcher().registerSocketEvent(eventid, protoProcessor);
     }
 
@@ -75,8 +67,6 @@ public abstract class AbstractBootstrap {
             return;
         }
 
-        httpProcessorMap.put(path, processor);
-
         this.context.getEventDispatcher().registerHttpEvent(path, processor);
     }
 
@@ -85,8 +75,6 @@ public abstract class AbstractBootstrap {
             logger.error("oprete fail,server is already start ");
             return;
         }
-
-        eventId2ProtoClassMap.put(eventId, protoClazz);
 
         this.context.getEventDispatcher().registerSendEventIdByProto(eventId, protoClazz);
     }
@@ -103,7 +91,16 @@ public abstract class AbstractBootstrap {
         return context;
     }
 
-    public abstract void start() throws InterruptedException;
+    public final synchronized void start() throws InterruptedException{
+        if (isStart) {
+//            throw new IllegalStateException("server is already start");
+            logger.error("server is already start ");
+            return;
+        }
+        isStart = true;
+        doStart();
+    }
 
+    public abstract void doStart() throws InterruptedException;
 
 }

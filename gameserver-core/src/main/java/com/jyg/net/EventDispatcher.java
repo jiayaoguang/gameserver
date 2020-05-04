@@ -3,6 +3,7 @@ package com.jyg.net;
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.MessageLite;
 import com.jyg.bean.LogicEvent;
+import com.jyg.manager.ChannelManager;
 import com.jyg.processor.HttpProcessor;
 import com.jyg.processor.NotFoundHttpProcessor;
 import com.jyg.processor.ProtoProcessor;
@@ -33,10 +34,11 @@ public class EventDispatcher {
 	private final Int2ObjectMap<ProtoProcessor<? extends GeneratedMessageV3>> socketEventMap = new Int2ObjectOpenHashMap<>();
 
 	private final Object2IntMap<Class<? extends MessageLite>> protoClazzToEventidMap = new Object2IntOpenHashMap<>();
-	private final Map<Channel, Session> channelMap = new LinkedHashMap<>();
 
-	//20 毫秒一帧
-	private static final long FRAME_DURATION_TIMEMILLS = 20L;
+	private final ChannelManager channelManager = new ChannelManager();
+
+	//50 毫秒一帧
+	private static final long FRAME_DURATION_TIMEMILLS = 50L;
 	//上一帧时间戳
 	private long nextFrameTimeStamp = System.currentTimeMillis();
 
@@ -48,9 +50,9 @@ public class EventDispatcher {
 
 	public void init( TimerManager timerManager ){
 		this.timerManager = timerManager;
-		timerManager.addTimer(new Timer(Integer.MAX_VALUE, 0L, 60 * 1000L) {
+		timerManager.addTimer(new Timer(Integer.MAX_VALUE, 60 * 1000L, 60 * 1000L) {
 			public void onTime() {
-				removeOutOfTimeChannels();
+				channelManager.removeOutOfTimeChannels();
 			}
 		});
 	}
@@ -69,6 +71,7 @@ public class EventDispatcher {
 			throw new IllegalArgumentException("dupilcated eventid");
 		}
 //		eventidToProtoNameMap.put(processor.getProtoClassName(), eventid);
+		processor.setEventDispatcher(this);
 		socketEventMap.put(eventid, processor);
 	}
 
@@ -108,15 +111,13 @@ public class EventDispatcher {
 
 	//================================ socket end =========================================
 
-	private long uid = 1L;
-
 	public void as_on_client_active(LogicEvent<Object> event) {
-		channelMap.put(event.getChannel(), new Session(event.getChannel(), uid++));
+		channelManager.doLink(event);
 		// event.getChannel().writeAndFlush(new TextWebSocketFrame(""));
 	}
 
 	public void as_on_client_inactive(LogicEvent<Object> event) {
-		channelMap.remove(event.getChannel());
+		channelManager.doUnlink(event);
 	}
 
 	public void as_on_inner_server_active(LogicEvent<Object> event) {
@@ -134,32 +135,10 @@ public class EventDispatcher {
 	}
 
 	public Session getSession(Channel channel) {
-		return channelMap.get(channel);
+		return channelManager.getSession(channel);
 	}
 
-	//检测并移除超时的channel
-	public void removeOutOfTimeChannels() {
-//		System.out.println("检测并移除超时的channel");
-		Iterator<Map.Entry<Channel, Session>> it = channelMap.entrySet().iterator();
-		for (; it.hasNext(); ) {
-			Map.Entry<Channel, Session> entry = it.next();
-			Channel channel = entry.getKey();
-			Session session = entry.getValue();
-			if (!channel.isOpen()) {
-				it.remove();
-				continue;
-			}
-			if (session == null) {
-				it.remove();
-				continue;
-			}
-			if ((session.getLastContactMill() + 60 * 1000L) < System.currentTimeMillis()) {
-				channel.close();
-				it.remove();
-				System.out.println("移除超时的channel" + channel);
-			}
-		}
-	}
+
 
 
 	public void webSocketProcess(LogicEvent<? extends GeneratedMessageV3> event) {
@@ -237,5 +216,6 @@ public class EventDispatcher {
 		return uri.substring(0, endIndex);
 	}
 	//============================= http end ===========================================
+
 
 }

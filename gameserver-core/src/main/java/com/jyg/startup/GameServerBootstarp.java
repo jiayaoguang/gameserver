@@ -1,7 +1,5 @@
 package com.jyg.startup;
 
-import com.jyg.consumer.DefaultEventConsumerFactory;
-import com.jyg.consumer.EventConsumerFactory;
 import com.jyg.net.HttpService;
 import com.jyg.net.Service;
 import com.jyg.net.SocketService;
@@ -62,7 +60,7 @@ public class GameServerBootstarp extends AbstractBootstrap {
 
 
     @Override
-    public synchronized void start() throws InterruptedException {
+    public void doStart() throws InterruptedException {
 
         if (isStart) {
             logger.error("server is already start ");

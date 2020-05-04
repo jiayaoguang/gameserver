@@ -17,7 +17,7 @@ public abstract class EventConsumerFactory {
 		this.eventDispatcher = eventDispatcher;
 	}
 
-	public EventConsumer createAndInit(){
+	public final EventConsumer createAndInit(){
 		EventConsumer eventConsumer = newEventConsumer();
 		eventConsumer.setDispatcher(eventDispatcher);
 		eventConsumer.init();

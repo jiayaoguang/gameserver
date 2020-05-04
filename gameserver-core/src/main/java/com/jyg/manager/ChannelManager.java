@@ -1,44 +1,88 @@
 package com.jyg.manager;
 
 import com.jyg.bean.LogicEvent;
-import com.jyg.enums.EventType;
+import com.jyg.session.Session;
 import io.netty.channel.Channel;
 
-import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * create by jiayaoguang on 2020/5/3
  */
-public class ChannelManager<T> {
+public class ChannelManager {
 
-    private Map<Channel , Object> channelObjectMap = new HashMap<>(1024);
+    private final Map<Channel , Session> channelObjectMap = new LinkedHashMap<>(1024*16);
 
-    public void process(LogicEvent<T> event) {
-        if(event.getChannelEventType() == EventType.INNER_SOCKET_CONNECT_ACTIVE){
-            doLink(event);
-        }else if(event.getChannelEventType() == EventType.INNER_SOCKET_CONNECT_INACTIVE){
-            doUnlink(event);
-        }else {
+    private int sessionIdInc = 0;
 
-        }
-    }
+//    public <T>void process(LogicEvent<T> event) {
+//        if(event.getChannelEventType() == EventType.INNER_SOCKET_CONNECT_ACTIVE){
+//            doLink(event);
+//        }else if(event.getChannelEventType() == EventType.INNER_SOCKET_CONNECT_INACTIVE){
+//            doUnlink(event);
+//        }else {
+//
+//        }
+//    }
 
-    public final void doLink(LogicEvent<T> event){
-        channelObjectMap.put(event.getChannel() , "");
+
+
+    public final <T>void doLink( LogicEvent<T> event){
+        int sessionId = incAndGetSessionId();
+        Session session = new Session(event.getChannel(),sessionId);
+        channelObjectMap.put(event.getChannel() , null);
         afterLink(event);
     }
 
-    public void afterLink(LogicEvent<T> event){
+    public <T>void afterLink(LogicEvent<T> event){
 
     }
 
-    public final void doUnlink(LogicEvent<T> event){
-        channelObjectMap.remove(event.getChannel());
-        afterUnlink(event);
+    public final <T>void doUnlink(LogicEvent<T> event){
+        Session session = channelObjectMap.remove(event.getChannel());
+        afterUnlink(session);
     }
 
-    public void afterUnlink(LogicEvent<T> event){
+    public <T>void afterUnlink(Session session){
 
     }
+
+    public Session getSession(Channel channel) {
+        return channelObjectMap.get(channel);
+    }
+
+
+    /**
+     *检测并移除超时的channel
+     */
+    public void removeOutOfTimeChannels() {
+//		System.out.println("检测并移除超时的channel");
+        Iterator<Map.Entry<Channel, Session>> it = channelObjectMap.entrySet().iterator();
+        for (; it.hasNext(); ) {
+            Map.Entry<Channel, Session> entry = it.next();
+            Channel channel = entry.getKey();
+            Session session = entry.getValue();
+            if (!channel.isOpen()) {
+                it.remove();
+                continue;
+            }
+            if (session == null) {
+                it.remove();
+                continue;
+            }
+            if ((session.getLastContactMill() + 60 * 1000L) < System.currentTimeMillis()) {
+                channel.close();
+                it.remove();
+                System.out.println("移除超时的channel" + channel);
+            }
+        }
+    }
+
+    private int incAndGetSessionId(){
+        sessionIdInc++;
+        return sessionIdInc;
+    }
+
 }

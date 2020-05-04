@@ -43,14 +43,14 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 
 		// System.out.println(event.getChannel());
 		try {
-			dealEvent(event);
+			doEvent(event);
 		} finally {
 			dispatcher.loop();
 		}
 
 	}
 
-	private void dealEvent(LogicEvent event) {
+	private void doEvent(LogicEvent event) {
 		switch (event.getChannelEventType()) {
 
 			case CLIENT_SOCKET_CONNECT_ACTIVE:

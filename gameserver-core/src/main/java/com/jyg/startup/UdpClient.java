@@ -48,7 +48,7 @@ public class UdpClient extends AbstractBootstrap{
 //	}
 
 
-	public void start(){
+	public void doStart(){
 		bootstrap.group(group);
 		bootstrap.channel( RemotingUtil.useEpoll() ? EpollDatagramChannel.class : NioDatagramChannel.class);
 		bootstrap.handler(new SocketClientInitializer(getContext()));

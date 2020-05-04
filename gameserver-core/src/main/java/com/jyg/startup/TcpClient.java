@@ -52,7 +52,7 @@ public class TcpClient extends AbstractBootstrap{
 	}
 
 	@Override
-	public void start(){
+	public void doStart(){
 		start(new SocketClientInitializer(getContext()));
 	}
 
