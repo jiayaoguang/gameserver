@@ -14,6 +14,32 @@
 
 能够处理http，protobuf类型的数据
 
+构建处理 protoBuf数据的服务器例子:
+>
+     public class PingServer {
+         public static void main(String[] args) throws Exception {
+             GameServerBootstarp bootstarp = new GameServerBootstarp();
+             bootstarp.registerSocketEvent(1, new PingProcessor());
+             bootstarp.registerSendEventIdByProto(2, p_scene_sm_response_pong.class);
+             //开端口服务
+             bootstarp.addTcpService(8080);
+             bootstarp.start();
+         }
+     
+         public static class PingProcessor extends ProtoProcessor<p_sm_scene_request_ping> {
+     
+             public PingProcessor() {
+                 super(p_sm_scene_request_ping.getDefaultInstance());
+             }
+     
+             @Override
+             public void processProtoMessage(p_sm_scene_request_ping msg, ProtoResponse response) {
+                 System.out.println("ok , i see ping");
+                 response.writeMsg(p_scene_sm_response_pong.newBuilder());
+             }
+         }
+     }
+
 http例子代码:
 >
     GameServerBootstarp bootstarp = new GameServerBootstarp();
