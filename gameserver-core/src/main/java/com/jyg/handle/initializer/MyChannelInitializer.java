@@ -20,6 +20,10 @@ public abstract class MyChannelInitializer<C extends Channel> extends ChannelIni
         return context.getGlobalQueue();
     }
 
+    public Context getContext() {
+        return context;
+    }
+
 
 //    @Override
 //    protected void initChannel(Channel channel) throws Exception {

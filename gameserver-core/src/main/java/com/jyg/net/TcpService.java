@@ -1,6 +1,7 @@
 package com.jyg.net;
 
 import com.jyg.handle.initializer.MyChannelInitializer;
+import com.jyg.manager.EventLoopGroupManager;
 import com.jyg.util.PrefixNameThreadFactory;
 import com.jyg.util.RemotingUtil;
 import io.netty.bootstrap.ServerBootstrap;
@@ -19,21 +20,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
  */
 
 public abstract class TcpService extends AbstractService {
-	protected static final EventLoopGroup bossGroup = new NioEventLoopGroup(1,
-			(Runnable r) -> new Thread(r, "ACCEPT_THREAD"));
 
-	protected static final EventLoopGroup workGroup;
-
-	static {
-		int defaultIOThreadNum = Runtime.getRuntime().availableProcessors() * 2;
-		if (RemotingUtil.useEpoll()) {
-			workGroup = new EpollEventLoopGroup(defaultIOThreadNum, new PrefixNameThreadFactory("EPOLL_IO_THREAD_"));
-		} else {
-			workGroup = new NioEventLoopGroup(defaultIOThreadNum, new PrefixNameThreadFactory("NIO_IO_THREAD_"));
-		}
-	}
-
-	private final ChannelInitializer<Channel> initializer;
+	private final MyChannelInitializer<Channel> initializer;
 
 	private final int port;
 
@@ -71,7 +59,8 @@ public abstract class TcpService extends AbstractService {
 
 		ServerBootstrap bootstrap = new ServerBootstrap();
 
-		bootstrap.group(bossGroup, workGroup);
+		EventLoopGroupManager eventLoopGroupManager = initializer.getContext().getEventLoopGroupManager();
+		bootstrap.group(eventLoopGroupManager.getBossGroup(), eventLoopGroupManager.getWorkGroup());
 
 		bootstrap.channel(RemotingUtil.useEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class);
 //		bootstrap.handler(new LoggingHandler(LogLevel.INFO));
@@ -101,19 +90,6 @@ public abstract class TcpService extends AbstractService {
 
 	public void stop() {
 
-	}
-
-	/**
-	 * 停止服务
-	 */
-	public static void shutdownThreadGrop() {
-		if (bossGroup != null && !bossGroup.isShutdown()) {
-			bossGroup.shutdownGracefully();
-		}
-		if (workGroup != null && !workGroup.isShutdown()) {
-			workGroup.shutdownGracefully();
-		}
-//		globalQueue.shutdown();
 	}
 
 }

@@ -63,7 +63,7 @@ public abstract class AbstractBootstrap {
 
     public void registerHttpEvent(String path, HttpProcessor processor) throws Exception {
         if (isStart) {
-            logger.error("oprete fail,server is already start ");
+            logger.error("opretor fail,server is already start ");
             return;
         }
 
@@ -102,5 +102,9 @@ public abstract class AbstractBootstrap {
     }
 
     public abstract void doStart() throws InterruptedException;
+
+    public void stop() throws InterruptedException{
+
+    }
 
 }

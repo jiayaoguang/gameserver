@@ -36,7 +36,7 @@ public class BlockingGlobalQueue implements IGlobalQueue {
     }
 
     @Override
-    public void shutdown() {
+    public void stop() {
         //do nothing
     }
 

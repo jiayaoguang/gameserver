@@ -35,38 +35,20 @@ public class GameServerBootstarp extends AbstractBootstrap {
     }
 
     public void addTcpService(int port) {
-        if (isStart) {
-            logger.error("oprete fail,server is already start ");
-            return;
-        }
-        services.add(new SocketService(port , getContext()));
+        addService(new SocketService(port , getContext()));
     }
 
     public void addWebSocketService(int port) {
-        if (isStart) {
-            logger.error("oprete fail,server is already start ");
-            return;
-        }
-        services.add(new WebSocketService(port ,getContext() ));
+        addService(new WebSocketService(port ,getContext() ));
     }
 
     public void addHttpService(int port) {
-        if (isStart) {
-            logger.error("oprete fail,server is already start ");
-            return;
-        }
-        services.add(new HttpService(port , getContext()));
+        addService(new HttpService(port , getContext()));
     }
 
 
     @Override
     public void doStart() throws InterruptedException {
-
-        if (isStart) {
-            logger.error("server is already start ");
-            return;
-        }
-        isStart = true;
 
         if (services.isEmpty()) {
             throw new IllegalArgumentException("services list is empty");
@@ -75,6 +57,14 @@ public class GameServerBootstarp extends AbstractBootstrap {
 
         for (Service service : services) {
             service.start();
+        }
+    }
+
+    @Override
+    public void stop(){
+        globalQueue.stop();
+        for (Service service : services) {
+            service.stop();
         }
     }
 

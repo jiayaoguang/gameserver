@@ -9,6 +9,7 @@ public abstract class AbstractService implements Service{
 
     protected final IGlobalQueue globalQueue;
 
+
     protected AbstractService(IGlobalQueue globalQueue) {
         this.globalQueue = globalQueue;
     }

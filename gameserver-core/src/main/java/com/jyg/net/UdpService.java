@@ -21,21 +21,11 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
  */
 public class UdpService extends AbstractService {
 
-    protected static final EventLoopGroup bossGroup = new NioEventLoopGroup(1,
-            (Runnable r) -> new Thread(r, "ACCEPT_THREAD"));
+    protected final EventLoopGroup bossGroup ;
 
-    protected static final EventLoopGroup workGroup;
+    protected final EventLoopGroup workGroup;
 
     private Channel serverChannel;
-
-    static {
-        int defaultIOThreadNum = Runtime.getRuntime().availableProcessors() * 2;
-        if (RemotingUtil.useEpoll()) {
-            workGroup = new EpollEventLoopGroup(defaultIOThreadNum, new PrefixNameThreadFactory("EPOLL_IO_THREAD_"));
-        } else {
-            workGroup = new NioEventLoopGroup(defaultIOThreadNum, new PrefixNameThreadFactory("NIO_IO_THREAD_"));
-        }
-    }
 
     private final int port;
 
@@ -48,6 +38,8 @@ public class UdpService extends AbstractService {
         }
         this.port = port;
         this.context = context;
+        this.workGroup = context.getEventLoopGroupManager().getWorkGroup();
+        this.bossGroup = context.getEventLoopGroupManager().getBossGroup();
     }
 
     @Override
@@ -76,19 +68,7 @@ public class UdpService extends AbstractService {
 
     @Override
     public void stop() {
-
-    }
-
-    /**
-     * 停止服务
-     */
-    public static void shutdown() {
-        if (bossGroup != null && !bossGroup.isShutdown()) {
-            bossGroup.shutdownGracefully();
-        }
-        if (workGroup != null && !workGroup.isShutdown()) {
-            workGroup.shutdownGracefully();
-        }
+        serverChannel.close();
     }
 
 }

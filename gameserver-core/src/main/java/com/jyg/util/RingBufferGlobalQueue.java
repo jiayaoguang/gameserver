@@ -58,7 +58,7 @@ public class RingBufferGlobalQueue implements IGlobalQueue {
     }
 
     @Override
-    public void shutdown() {
+    public void stop() {
         disruptor.shutdown();
     }
 

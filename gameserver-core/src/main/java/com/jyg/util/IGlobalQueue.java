@@ -24,7 +24,7 @@ public interface IGlobalQueue {
 
     void start();
 
-    void shutdown();
+    void stop();
 
     void publicEvent(EventType evenType, Object data, Channel channel);
 
