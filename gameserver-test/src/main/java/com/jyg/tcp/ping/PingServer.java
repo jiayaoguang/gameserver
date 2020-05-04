@@ -1,7 +1,6 @@
 package com.jyg.tcp.ping;
 
 import com.jyg.processor.ProtoProcessor;
-import com.jyg.processor.ProtoResponse;
 import com.jyg.proto.p_sm_scene.p_scene_sm_response_pong;
 import com.jyg.proto.p_sm_scene.p_sm_scene_request_ping;
 import com.jyg.session.Session;
