@@ -37,19 +37,21 @@ public class EventDispatcher {
 
 	private final ChannelManager channelManager = new ChannelManager();
 
+	private final TimerManager timerManager = new TimerManager();
+
 	//50 毫秒一帧
 	private static final long FRAME_DURATION_TIMEMILLS = 50L;
 	//上一帧时间戳
 	private long nextFrameTimeStamp = System.currentTimeMillis();
 
-	private TimerManager timerManager;
-
 	public EventDispatcher() {
 
 	}
 
-	public void init( TimerManager timerManager ){
-		this.timerManager = timerManager;
+	/**
+	 * 定时清理超时channel
+	 */
+	public void addRemoveOutOfTimeChannelsTimer(){
 		timerManager.addTimer(new Timer(Integer.MAX_VALUE, 60 * 1000L, 60 * 1000L) {
 			public void onTime() {
 				channelManager.removeOutOfTimeChannels();
@@ -218,4 +220,7 @@ public class EventDispatcher {
 	//============================= http end ===========================================
 
 
+	public TimerManager getTimerManager() {
+		return timerManager;
+	}
 }

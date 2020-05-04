@@ -15,8 +15,6 @@ import com.lmax.disruptor.WorkHandler;
 public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHandler<LogicEvent> {
 
 
-	private final TimerManager timerManager = new TimerManager();
-
 	private EventDispatcher dispatcher;
 
 	private int requestId = 1;
@@ -71,7 +69,7 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 				((Request) event.getData()).setRequestid(getAndIncRequestId());
 				dispatcher.httpProcess(event);
 				// 5秒后关闭
-				timerManager.addTimer(new DelayCloseTimer(event.getChannel(), 5 * 1000L));
+				dispatcher.getTimerManager().addTimer(new DelayCloseTimer(event.getChannel(), 5 * 1000L));
 				break;
 			case ON_MESSAGE_COME:
 				dispatcher.webSocketProcess(event);
@@ -119,7 +117,7 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 	}
 
 	protected void init(){
-		dispatcher.init(timerManager);
+
 	}
 
 	/**

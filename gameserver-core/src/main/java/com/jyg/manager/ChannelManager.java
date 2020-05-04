@@ -32,7 +32,7 @@ public class ChannelManager {
     public final <T>void doLink( LogicEvent<T> event){
         int sessionId = incAndGetSessionId();
         Session session = new Session(event.getChannel(),sessionId);
-        channelObjectMap.put(event.getChannel() , null);
+        channelObjectMap.put(event.getChannel() , session);
         afterLink(event);
     }
 
