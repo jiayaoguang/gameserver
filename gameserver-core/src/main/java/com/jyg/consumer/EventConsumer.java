@@ -68,8 +68,9 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 			case HTTP_MSG_COME:
 				((Request) event.getData()).setRequestid(getAndIncRequestId());
 				dispatcher.httpProcess(event);
+				event.getChannel().close();
 				// 5秒后关闭
-				dispatcher.getTimerManager().addTimer(new DelayCloseTimer(event.getChannel(), 5 * 1000L));
+//				dispatcher.getTimerManager().addTimer(new DelayCloseTimer(event.getChannel(), 5 * 1000L));
 				break;
 			case ON_MESSAGE_COME:
 				dispatcher.webSocketProcess(event);

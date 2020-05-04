@@ -62,7 +62,10 @@ public class GameServerBootstarp extends AbstractBootstrap {
 
     @Override
     public void stop(){
+        getContext().getEventLoopGroupManager().stopAllEventLoop();
+
         globalQueue.stop();
+
         for (Service service : services) {
             service.stop();
         }
