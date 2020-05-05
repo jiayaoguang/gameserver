@@ -39,7 +39,7 @@ public class AsynServerTest01
 		@Override
 		public void process(Session session, p_sm_scene.p_sm_scene_request_ping msg) {
 			System.out.println("step 1 : ok , i see ping , will exec asyn event ,current thread : "+ Thread.currentThread().getName());
-			getEventDispatcher().getExecutorManager().execute(new TestAsynCallEvent(),
+			getEventDispatcher().getSingleThreadExecutorManager(session).execute(new TestAsynCallEvent(),
 			new TestCallBackEvent());
 		}
 

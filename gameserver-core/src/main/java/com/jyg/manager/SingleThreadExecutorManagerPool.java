@@ -38,6 +38,7 @@ public class SingleThreadExecutorManagerPool {
 		return singleThreadExecutorManagerList.get(executorIndex);
 	}
 
+	@Deprecated
 	public void expandSize(int addNum) {
 		for (int i = 0; i < addNum; i++) {
 			singleThreadExecutorManagerList.add(new SingleThreadExecutorManager(this.globalQueue));

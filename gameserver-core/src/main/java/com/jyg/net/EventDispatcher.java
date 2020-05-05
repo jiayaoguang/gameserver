@@ -40,8 +40,6 @@ public class EventDispatcher {
 
 	private final TimerManager timerManager = new TimerManager();
 
-	private final ExecutorManager executorManager;
-
 	private final SingleThreadExecutorManagerPool singleThreadExecutorManagerPool;
 
 	//50 毫秒一帧
@@ -50,7 +48,7 @@ public class EventDispatcher {
 	private long nextFrameTimeStamp = System.currentTimeMillis();
 
 	public EventDispatcher(IGlobalQueue globalQueue) {
-		this.executorManager =  new ExecutorManager(10, globalQueue);
+//		this.executorManager =  new ExecutorManager(10, globalQueue);
 		this.singleThreadExecutorManagerPool = new SingleThreadExecutorManagerPool(globalQueue);
 	}
 
@@ -230,7 +228,12 @@ public class EventDispatcher {
 		return timerManager;
 	}
 
-	public ExecutorManager getExecutorManager() {
-		return executorManager;
+
+	public ExecutorManager getSingleThreadExecutorManager(int num) {
+		return singleThreadExecutorManagerPool.getSingleThreadExecutorManager(num);
+	}
+
+	public ExecutorManager getSingleThreadExecutorManager(Session session) {
+		return singleThreadExecutorManagerPool.getSingleThreadExecutorManager(session);
 	}
 }
