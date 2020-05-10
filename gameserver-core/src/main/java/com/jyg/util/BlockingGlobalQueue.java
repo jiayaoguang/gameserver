@@ -100,17 +100,16 @@ public class BlockingGlobalQueue implements IGlobalQueue {
             for (;!isStop;){
 
                 LogicEvent<Object> object = queue.poll();
-                if(object == null){
-                    pollNullNum ++;
-                    if(pollNullNum > 1000){
-                        if(pollNullNum%100 == 0){
+                if(object == null) {
+                    pollNullNum++;
+                    if (pollNullNum > 1000) {
+                        if (pollNullNum % 100 == 0) {
                             try {
-                                Thread.sleep(1000L);
+                                Thread.sleep(10L);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
                         }
-
                     }
                     continue;
                 }
