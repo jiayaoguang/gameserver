@@ -108,7 +108,7 @@ public class EventDispatcher {
 	 *
 	 * @throws Exception
 	 */
-	public void registerSendEventIdByProto(int eventId, Class<? extends MessageLite> protoClazz) throws Exception {
+	public void registerSendEventIdByProto(int eventId, Class<? extends MessageLite> protoClazz) {
 		if (protoClazzToEventidMap.containsKey(protoClazz)) {
 			throw new IllegalArgumentException("dupilcated protoClazz:" + protoClazz.getName());
 		}
@@ -186,7 +186,7 @@ public class EventDispatcher {
 	 *
 	 * @param path http url path
 	 */
-	public void registerHttpEvent(String path, HttpProcessor processor) throws Exception {
+	public void registerHttpEvent(String path, HttpProcessor processor) {
 //		path = "/" + path;
 		if (httpPathMap.containsKey(path)) {
 			throw new IllegalArgumentException("dupilcated path");

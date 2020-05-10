@@ -56,24 +56,46 @@ public abstract class AbstractBootstrap {
     }
 
     public void registerSocketEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoProcessor) {
-
-        this.context.getEventDispatcher().registerSocketEvent(eventid, protoProcessor);
+        this.registerProtoProcessor(eventid, protoProcessor);
     }
 
+    public void registerProtoProcessor(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoProcessor) {
+        this.context.getEventDispatcher().registerSendEventIdByProto( eventid , protoProcessor.getProtoClass() );
+        this.registerProtoProcessor( protoProcessor);
+    }
 
-    public void registerHttpEvent(String path, HttpProcessor processor) throws Exception {
-        if (isStart) {
-            logger.error("opretor fail,server is already start ");
-            return;
+    public void registerProtoProcessor(ProtoProcessor<? extends GeneratedMessageV3> protoProcessor) {
+        int eventId = protoProcessor.getProtoEventId();
+        if(eventId == -1){
+            throw new IllegalArgumentException(" getProtoEventId -1 ");
         }
+        this.context.getEventDispatcher().registerSocketEvent(protoProcessor.getProtoEventId(), protoProcessor);
+    }
 
+    public void registerHttpEvent(String path, HttpProcessor processor){
+        processor.setPath(path);
+        this.registerHttpProcessor( processor);
+    }
+
+    public void registerHttpProcessor( HttpProcessor processor){
+        if (isStart) {
+            throw new IllegalArgumentException(" registerHttpProcessor fail ,server is start ");
+        }
+        String path = processor.getPath();
+        if(path == null){
+            throw new IllegalArgumentException(" getProtoEventId -1 ");
+        }
         this.context.getEventDispatcher().registerHttpEvent(path, processor);
+    }
+
+    public void registerHttpProcessor(String path, HttpProcessor processor){
+        processor.setPath(path);
+        this.registerHttpProcessor(processor);
     }
 
     public void registerSendEventIdByProto(int eventId, Class<? extends GeneratedMessageV3> protoClazz) throws Exception {
         if (isStart) {
-            logger.error("oprete fail,server is already start ");
-            return;
+            throw new IllegalArgumentException(" registerHttpProcessor fail ,server is start ");
         }
 
         this.context.getEventDispatcher().registerSendEventIdByProto(eventId, protoClazz);
@@ -98,7 +120,12 @@ public abstract class AbstractBootstrap {
             return;
         }
         isStart = true;
+        beforeStart();
         doStart();
+    }
+
+    protected void beforeStart() {
+
     }
 
     public abstract void doStart() throws InterruptedException;

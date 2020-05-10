@@ -47,6 +47,12 @@ public abstract class ProtoProcessor<T extends GeneratedMessageV3> extends Abstr
 	public String getProtoClassName() {
 		return clazz.getName();
 	}
+	public Class<? extends GeneratedMessageV3> getProtoClass() {
+		return clazz;
+	}
+	public int getProtoEventId() {
+		return getEventDispatcher().getEventIdByProtoClazz(clazz);
+	}
 
 	public final Parser<? extends MessageLite> getProtoParser() {
 		return parser;

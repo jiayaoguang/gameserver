@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class HttpProcessor extends AbstractProcessor<Request> {
 
+	private String path;
+
 	public final void process(LogicEvent<Request> event) {
 
 		Request request = event.getData();
@@ -54,4 +56,11 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 	
 	public abstract void service(Request request, Response response);
 
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
 }
