@@ -7,11 +7,10 @@ import io.netty.channel.Channel;
  */
 public class DelayCloseTimer extends Timer{
 
-	private Channel channel;
+	private final Channel channel;
 
 	public DelayCloseTimer(Channel channel){
-		super(1 , 5*1000L, 5*1000L);
-		this.channel = channel;
+		this(channel , 5*1000L);
 	}
 	
 	public DelayCloseTimer(Channel channel,long delayTimeMills){
