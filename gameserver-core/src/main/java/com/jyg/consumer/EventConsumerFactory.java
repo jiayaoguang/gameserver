@@ -24,6 +24,6 @@ public abstract class EventConsumerFactory {
 		return eventConsumer;
 	}
 
-	public abstract EventConsumer newEventConsumer();
+	protected abstract EventConsumer newEventConsumer();
 
 }

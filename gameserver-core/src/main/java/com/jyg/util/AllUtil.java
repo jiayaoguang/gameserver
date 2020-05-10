@@ -108,7 +108,6 @@ public class AllUtil {
         return false;
     }
 
-    @Test
     public void test() {
         byte[] ipbytes = getIP();
 
@@ -125,7 +124,12 @@ public class AllUtil {
                 sb.append(".");
             }
         }
-        System.out.println(" ip :" + sb.toString());
+        println(" ip :" + sb.toString());
+    }
+
+
+    public static void println(Object obj){
+        System.out.println(obj);
     }
 
 }

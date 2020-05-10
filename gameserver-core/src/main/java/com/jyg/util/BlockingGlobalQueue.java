@@ -1,43 +1,59 @@
 package com.jyg.util;
 
 import com.jyg.bean.LogicEvent;
+import com.jyg.consumer.DefaultEventConsumerFactory;
+import com.jyg.consumer.EventConsumer;
 import com.jyg.consumer.EventConsumerFactory;
 import com.jyg.enums.EventType;
 import io.netty.channel.Channel;
 
-import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.*;
 
 /**
  * create by jiayaoguang on 2020/5/1
- * 暂时不支持
  */
-@Deprecated
 public class BlockingGlobalQueue implements IGlobalQueue {
 
-    private final Queue<Object> queue;
+    private final BlockingQueue<LogicEvent<Object>> queue;
+
+    private final EventConsumerFactory eventConsumerFactory;
+
+    private ConsumerThread consumerThread;
 
     public BlockingGlobalQueue() {
-        this(DEFAULT_QUEUE_SIZE);
+        this(new LinkedBlockingQueue<>());
     }
 
     public BlockingGlobalQueue(int size) {
-        this.queue = new ArrayBlockingQueue<>(size);
+        this(new LinkedBlockingQueue<>(size));
     }
 
-    public BlockingGlobalQueue(Queue<Object> queue) {
+    public BlockingGlobalQueue(BlockingQueue<LogicEvent<Object>> queue) {
         this.queue = queue;
+        this.eventConsumerFactory = new DefaultEventConsumerFactory();
     }
 
     @Override
     public void start() {
-        //do nothing
+        consumerThread = new ConsumerThread(queue , eventConsumerFactory.createAndInit());
+        consumerThread.setName("blockingQueue_consumer_thread");
+        consumerThread.setDaemon(false);
+
+        consumerThread.start();
+
     }
 
     @Override
     public void stop() {
-        //do nothing
+        consumerThread.setStop();
+        while (consumerThread.isAlive()){
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        AllUtil.println("stop success....");
     }
 
     @Override
@@ -54,7 +70,7 @@ public class BlockingGlobalQueue implements IGlobalQueue {
         logicEvent.setData(data);
         logicEvent.setEventId(eventId);
 
-        this.queue.add(logicEvent);
+        this.queue.offer(logicEvent);
     }
 
     @Override
@@ -64,6 +80,55 @@ public class BlockingGlobalQueue implements IGlobalQueue {
 
     @Override
     public EventConsumerFactory getEventConsumerFactory() {
-        return null;
+        return eventConsumerFactory;
+    }
+
+    private static class ConsumerThread extends Thread{
+        private final BlockingQueue<LogicEvent<Object>> queue;
+        private final EventConsumer eventConsumer;
+
+        private volatile boolean isStop = false;
+
+        private ConsumerThread(BlockingQueue<LogicEvent<Object>> queue, EventConsumer eventConsumer) {
+            this.queue = queue;
+            this.eventConsumer = eventConsumer;
+        }
+
+        @Override
+        public void run() {
+            int pollNullNum = 0;
+            for (;!isStop;){
+
+                LogicEvent<Object> object = queue.poll();
+                if(object == null){
+                    pollNullNum ++;
+                    if(pollNullNum > 1000){
+                        if(pollNullNum%100 == 0){
+                            try {
+                                Thread.sleep(1000L);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }
+                    continue;
+                }
+
+
+                pollNullNum = 0;
+                try {
+                    eventConsumer.onEvent(object);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+            AllUtil.println(" stop.... ");
+        }
+
+        public void setStop(){
+            isStop = true;
+        }
     }
 }
