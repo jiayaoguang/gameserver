@@ -3,6 +3,7 @@ package com.jyg.consumer;
 import com.jyg.bean.LogicEvent;
 import com.jyg.net.EventDispatcher;
 import com.jyg.net.Request;
+import com.jyg.timer.DelayCloseTimer;
 import com.jyg.util.CallBackEvent;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.WorkHandler;
@@ -68,9 +69,9 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 			case HTTP_MSG_COME:
 				((Request) event.getData()).setRequestid(getAndIncRequestId());
 				dispatcher.httpProcess(event);
-				event.getChannel().close();
+//				event.getChannel().close();
 				// 5秒后关闭
-//				dispatcher.getTimerManager().addTimer(new DelayCloseTimer(event.getChannel(), 5 * 1000L));
+				dispatcher.getTimerManager().addTimer(new DelayCloseTimer(event.getChannel(), 60 * 1000L));
 				break;
 			case ON_MESSAGE_COME:
 				dispatcher.webSocketProcess(event);
