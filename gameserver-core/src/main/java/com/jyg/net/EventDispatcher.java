@@ -163,7 +163,7 @@ public class EventDispatcher {
 
 	public void loop() {
 
-//		timerManager.updateTimer();
+		timerManager.updateTimer();
 		updateFrame();
 	}
 
