@@ -59,6 +59,11 @@ http例子代码:
     bootstarp.start();
 
 更多例子请在[test](https://github.com/jiayaoguang/gameserver/tree/master/gameserver-test/src/main/java/com/jyg/test01)包查看
+
+TODO : 自动扫描处理消息类
+支持不同服务器逻辑线程之间的通信调用
+支持发送发送bytes
+添加消息频率统计消息过滤
     
 ----------
 ## License
