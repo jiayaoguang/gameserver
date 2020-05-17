@@ -1,10 +1,10 @@
 package org.gameserver.scene;
 
 import org.jyg.gameserver.core.processor.ProtoProcessor;
-import com.jyg.proto.p_sm_scene.p_scene_sm_chat;
-import com.jyg.proto.p_sm_scene.p_scene_sm_response_pong;
-import com.jyg.proto.p_sm_scene.p_sm_scene_chat;
-import com.jyg.proto.p_sm_scene.p_sm_scene_request_ping;
+import org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat;
+import org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong;
+import org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat;
+import org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.TcpClient;
 

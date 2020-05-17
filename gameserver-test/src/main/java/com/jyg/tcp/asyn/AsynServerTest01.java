@@ -1,7 +1,7 @@
 package com.jyg.tcp.asyn;
 
 import org.jyg.gameserver.core.processor.ProtoProcessor;
-import com.jyg.proto.p_sm_scene;
+import org.jyg.gameserver.proto.p_sm_scene;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstarp;
 import org.jyg.gameserver.core.util.AsynCallEvent;

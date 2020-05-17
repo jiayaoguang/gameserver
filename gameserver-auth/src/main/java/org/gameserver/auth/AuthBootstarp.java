@@ -3,7 +3,7 @@ package org.gameserver.auth;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.jyg.gameserver.core.enums.ProtoEnum;
-import com.jyg.proto.p_auth_sm.p_auth_sm_request_send_token;
+import org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token;
 import org.jyg.gameserver.core.startup.GameServerBootstarp;
 import org.jyg.gameserver.core.util.redis.RedisCacheClient;
 import org.gameserver.auth.module.AuthModule;
