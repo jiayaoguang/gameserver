@@ -15,15 +15,15 @@ public final class p_auth_sm {
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   public interface p_auth_sm_register_roleOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:com.jyg.proto.p_auth_sm_register_role)
+      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.test.proto.p_auth_sm_register_role)
       com.google.protobuf.MessageOrBuilder {
   }
   /**
-   * Protobuf type {@code com.jyg.proto.p_auth_sm_register_role}
+   * Protobuf type {@code org.jyg.gameserver.test.proto.p_auth_sm_register_role}
    */
   public  static final class p_auth_sm_register_role extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:com.jyg.proto.p_auth_sm_register_role)
+      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.test.proto.p_auth_sm_register_role)
       p_auth_sm_register_roleOrBuilder {
   private static final long serialVersionUID = 0L;
     // Use p_auth_sm_register_role.newBuilder() to construct.
@@ -225,11 +225,11 @@ public final class p_auth_sm {
       return builder;
     }
     /**
-     * Protobuf type {@code com.jyg.proto.p_auth_sm_register_role}
+     * Protobuf type {@code org.jyg.gameserver.test.proto.p_auth_sm_register_role}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:com.jyg.proto.p_auth_sm_register_role)
+        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.test.proto.p_auth_sm_register_role)
         p_auth_sm.p_auth_sm_register_roleOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
@@ -360,10 +360,10 @@ public final class p_auth_sm {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:com.jyg.proto.p_auth_sm_register_role)
+      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.test.proto.p_auth_sm_register_role)
     }
 
-    // @@protoc_insertion_point(class_scope:com.jyg.proto.p_auth_sm_register_role)
+    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.test.proto.p_auth_sm_register_role)
     private static final p_auth_sm.p_auth_sm_register_role DEFAULT_INSTANCE;
     static {
       DEFAULT_INSTANCE = new p_auth_sm.p_auth_sm_register_role();
@@ -399,15 +399,15 @@ public final class p_auth_sm {
   }
 
   public interface p_sm_auth_register_role_successOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:com.jyg.proto.p_sm_auth_register_role_success)
+      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.test.proto.p_sm_auth_register_role_success)
       com.google.protobuf.MessageOrBuilder {
   }
   /**
-   * Protobuf type {@code com.jyg.proto.p_sm_auth_register_role_success}
+   * Protobuf type {@code org.jyg.gameserver.test.proto.p_sm_auth_register_role_success}
    */
   public  static final class p_sm_auth_register_role_success extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:com.jyg.proto.p_sm_auth_register_role_success)
+      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.test.proto.p_sm_auth_register_role_success)
       p_sm_auth_register_role_successOrBuilder {
   private static final long serialVersionUID = 0L;
     // Use p_sm_auth_register_role_success.newBuilder() to construct.
@@ -609,11 +609,11 @@ public final class p_auth_sm {
       return builder;
     }
     /**
-     * Protobuf type {@code com.jyg.proto.p_sm_auth_register_role_success}
+     * Protobuf type {@code org.jyg.gameserver.test.proto.p_sm_auth_register_role_success}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:com.jyg.proto.p_sm_auth_register_role_success)
+        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.test.proto.p_sm_auth_register_role_success)
         p_auth_sm.p_sm_auth_register_role_successOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
@@ -744,10 +744,10 @@ public final class p_auth_sm {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:com.jyg.proto.p_sm_auth_register_role_success)
+      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.test.proto.p_sm_auth_register_role_success)
     }
 
-    // @@protoc_insertion_point(class_scope:com.jyg.proto.p_sm_auth_register_role_success)
+    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.test.proto.p_sm_auth_register_role_success)
     private static final p_auth_sm.p_sm_auth_register_role_success DEFAULT_INSTANCE;
     static {
       DEFAULT_INSTANCE = new p_auth_sm.p_sm_auth_register_role_success();
@@ -783,7 +783,7 @@ public final class p_auth_sm {
   }
 
   public interface p_auth_sm_request_send_tokenOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:com.jyg.proto.p_auth_sm_request_send_token)
+      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.test.proto.p_auth_sm_request_send_token)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -796,11 +796,11 @@ public final class p_auth_sm {
    *auth 给sm服 发送token
    * </pre>
    *
-   * Protobuf type {@code com.jyg.proto.p_auth_sm_request_send_token}
+   * Protobuf type {@code org.jyg.gameserver.test.proto.p_auth_sm_request_send_token}
    */
   public  static final class p_auth_sm_request_send_token extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:com.jyg.proto.p_auth_sm_request_send_token)
+      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.test.proto.p_auth_sm_request_send_token)
       p_auth_sm_request_send_tokenOrBuilder {
   private static final long serialVersionUID = 0L;
     // Use p_auth_sm_request_send_token.newBuilder() to construct.
@@ -1034,11 +1034,11 @@ public final class p_auth_sm {
      *auth 给sm服 发送token
      * </pre>
      *
-     * Protobuf type {@code com.jyg.proto.p_auth_sm_request_send_token}
+     * Protobuf type {@code org.jyg.gameserver.test.proto.p_auth_sm_request_send_token}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:com.jyg.proto.p_auth_sm_request_send_token)
+        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.test.proto.p_auth_sm_request_send_token)
         p_auth_sm.p_auth_sm_request_send_tokenOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
@@ -1201,10 +1201,10 @@ public final class p_auth_sm {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:com.jyg.proto.p_auth_sm_request_send_token)
+      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.test.proto.p_auth_sm_request_send_token)
     }
 
-    // @@protoc_insertion_point(class_scope:com.jyg.proto.p_auth_sm_request_send_token)
+    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.test.proto.p_auth_sm_request_send_token)
     private static final p_auth_sm.p_auth_sm_request_send_token DEFAULT_INSTANCE;
     static {
       DEFAULT_INSTANCE = new p_auth_sm.p_auth_sm_request_send_token();
@@ -1240,7 +1240,7 @@ public final class p_auth_sm {
   }
 
   public interface p_sm_auth_response_receive_tokenOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:com.jyg.proto.p_sm_auth_response_receive_token)
+      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.test.proto.p_sm_auth_response_receive_token)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -1278,11 +1278,11 @@ public final class p_auth_sm {
    *场景服回复sm服
    * </pre>
    *
-   * Protobuf type {@code com.jyg.proto.p_sm_auth_response_receive_token}
+   * Protobuf type {@code org.jyg.gameserver.test.proto.p_sm_auth_response_receive_token}
    */
   public  static final class p_sm_auth_response_receive_token extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:com.jyg.proto.p_sm_auth_response_receive_token)
+      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.test.proto.p_sm_auth_response_receive_token)
       p_sm_auth_response_receive_tokenOrBuilder {
   private static final long serialVersionUID = 0L;
     // Use p_sm_auth_response_receive_token.newBuilder() to construct.
@@ -1644,11 +1644,11 @@ public final class p_auth_sm {
      *场景服回复sm服
      * </pre>
      *
-     * Protobuf type {@code com.jyg.proto.p_sm_auth_response_receive_token}
+     * Protobuf type {@code org.jyg.gameserver.test.proto.p_sm_auth_response_receive_token}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:com.jyg.proto.p_sm_auth_response_receive_token)
+        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.test.proto.p_sm_auth_response_receive_token)
         p_auth_sm.p_sm_auth_response_receive_tokenOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
@@ -1995,10 +1995,10 @@ public final class p_auth_sm {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:com.jyg.proto.p_sm_auth_response_receive_token)
+      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.test.proto.p_sm_auth_response_receive_token)
     }
 
-    // @@protoc_insertion_point(class_scope:com.jyg.proto.p_sm_auth_response_receive_token)
+    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.test.proto.p_sm_auth_response_receive_token)
     private static final p_auth_sm.p_sm_auth_response_receive_token DEFAULT_INSTANCE;
     static {
       DEFAULT_INSTANCE = new p_auth_sm.p_sm_auth_response_receive_token();
@@ -2062,7 +2062,7 @@ public final class p_auth_sm {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\017p_auth_sm.proto\022\rcom.jyg.proto\"\031\n\027p_au" +
+      "\n\017p_auth_sm.proto\022\rorg.jyg.gameserver.test.proto\"\031\n\027p_au" +
       "th_sm_register_role\"!\n\037p_sm_auth_registe" +
       "r_role_success\"1\n\034p_auth_sm_request_send" +
       "_token\022\021\n\trequestId\030\001 \001(\003\"^\n p_sm_auth_r" +

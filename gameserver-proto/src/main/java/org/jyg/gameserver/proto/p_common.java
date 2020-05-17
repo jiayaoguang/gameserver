@@ -15,7 +15,7 @@ public final class p_common {
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   public interface p_common_request_pingOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:com.jyg.proto.p_common_request_ping)
+      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.test.proto.p_common_request_ping)
       com.google.protobuf.MessageOrBuilder {
   }
   /**
@@ -23,11 +23,11 @@ public final class p_common {
    * ping
    * </pre>
    *
-   * Protobuf type {@code com.jyg.proto.p_common_request_ping}
+   * Protobuf type {@code org.jyg.gameserver.test.proto.p_common_request_ping}
    */
   public  static final class p_common_request_ping extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:com.jyg.proto.p_common_request_ping)
+      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.test.proto.p_common_request_ping)
       p_common_request_pingOrBuilder {
   private static final long serialVersionUID = 0L;
     // Use p_common_request_ping.newBuilder() to construct.
@@ -233,11 +233,11 @@ public final class p_common {
      * ping
      * </pre>
      *
-     * Protobuf type {@code com.jyg.proto.p_common_request_ping}
+     * Protobuf type {@code org.jyg.gameserver.test.proto.p_common_request_ping}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:com.jyg.proto.p_common_request_ping)
+        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.test.proto.p_common_request_ping)
         p_common.p_common_request_pingOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
@@ -368,10 +368,10 @@ public final class p_common {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:com.jyg.proto.p_common_request_ping)
+      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.test.proto.p_common_request_ping)
     }
 
-    // @@protoc_insertion_point(class_scope:com.jyg.proto.p_common_request_ping)
+    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.test.proto.p_common_request_ping)
     private static final p_common.p_common_request_ping DEFAULT_INSTANCE;
     static {
       DEFAULT_INSTANCE = new p_common.p_common_request_ping();
@@ -407,7 +407,7 @@ public final class p_common {
   }
 
   public interface p_common_response_pongOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:com.jyg.proto.p_common_response_pong)
+      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.test.proto.p_common_response_pong)
       com.google.protobuf.MessageOrBuilder {
   }
   /**
@@ -415,11 +415,11 @@ public final class p_common {
    *pong ， 回复ping消息
    * </pre>
    *
-   * Protobuf type {@code com.jyg.proto.p_common_response_pong}
+   * Protobuf type {@code org.jyg.gameserver.test.proto.p_common_response_pong}
    */
   public  static final class p_common_response_pong extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:com.jyg.proto.p_common_response_pong)
+      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.test.proto.p_common_response_pong)
       p_common_response_pongOrBuilder {
   private static final long serialVersionUID = 0L;
     // Use p_common_response_pong.newBuilder() to construct.
@@ -625,11 +625,11 @@ public final class p_common {
      *pong ， 回复ping消息
      * </pre>
      *
-     * Protobuf type {@code com.jyg.proto.p_common_response_pong}
+     * Protobuf type {@code org.jyg.gameserver.test.proto.p_common_response_pong}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:com.jyg.proto.p_common_response_pong)
+        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.test.proto.p_common_response_pong)
         p_common.p_common_response_pongOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
@@ -760,10 +760,10 @@ public final class p_common {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:com.jyg.proto.p_common_response_pong)
+      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.test.proto.p_common_response_pong)
     }
 
-    // @@protoc_insertion_point(class_scope:com.jyg.proto.p_common_response_pong)
+    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.test.proto.p_common_response_pong)
     private static final p_common.p_common_response_pong DEFAULT_INSTANCE;
     static {
       DEFAULT_INSTANCE = new p_common.p_common_response_pong();
@@ -817,7 +817,7 @@ public final class p_common {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\016p_common.proto\022\rcom.jyg.proto\"\027\n\025p_com" +
+      "\n\016p_common.proto\022\rorg.jyg.gameserver.test.proto\"\027\n\025p_com" +
       "mon_request_ping\"\030\n\026p_common_response_po" +
       "ngB\031\n\rcom.jyg.protoB\010p_commonb\006proto3"
     };
