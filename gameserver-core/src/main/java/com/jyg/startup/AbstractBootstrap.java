@@ -61,7 +61,7 @@ public abstract class AbstractBootstrap {
 
     public void registerProtoProcessor(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoProcessor) {
         this.context.getEventDispatcher().registerSendEventIdByProto( eventid , protoProcessor.getProtoClass() );
-        this.registerProtoProcessor( protoProcessor);
+//        this.registerProtoProcessor( protoProcessor);
     }
 
     public void registerProtoProcessor(ProtoProcessor<? extends GeneratedMessageV3> protoProcessor) {
