@@ -63,5 +63,13 @@
 			<artifactId>gameserver-proto</artifactId>
 			<version>${gameserver.version}</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>5.3.5</version>
+		</dependency>
+
 	</dependencies>
 </project>

@@ -1,3 +1,3 @@
-protoc --java_out=..\src\main\java\ p_test.proto
+D:\dev\protobuf3\bin\protoc --java_out=..\src\main\java\ p_test02.proto
 
 pause

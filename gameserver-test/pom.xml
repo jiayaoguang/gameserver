@@ -44,5 +44,12 @@
 			<artifactId>gameserver-proto</artifactId>
 			<version>${gameserver.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>gameserver-util</artifactId>
+			<version>${gameserver.version}</version>
+		</dependency>
+
 	</dependencies>
 </project>
