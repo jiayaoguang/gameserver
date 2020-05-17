@@ -12,18 +12,19 @@ import io.netty.channel.nio.NioEventLoopGroup;
 public class EventLoopGroupManager {
 
     private final EventLoopGroup bossGroup;
-
-    protected final EventLoopGroup workGroup;
+    private final EventLoopGroup workGroup;
 
     public EventLoopGroupManager() {
-        this.bossGroup = new NioEventLoopGroup(1,
-                (Runnable r) -> new Thread(r, "ACCEPT_THREAD"));
+        this(Runtime.getRuntime().availableProcessors() * 2);
+    }
 
-        int defaultIOThreadNum = Runtime.getRuntime().availableProcessors() * 2;
+    public EventLoopGroupManager(int selectorThreadNum) {
         if (RemotingUtil.useEpoll()) {
-            workGroup = new EpollEventLoopGroup(defaultIOThreadNum, new PrefixNameThreadFactory("EPOLL_IO_THREAD_"));
+            this.bossGroup = new EpollEventLoopGroup(1, new PrefixNameThreadFactory("NettyEpollBossThread_"));
+            this.workGroup = new EpollEventLoopGroup(selectorThreadNum, new PrefixNameThreadFactory("NettyEpollWorkThread_"));
         } else {
-            workGroup = new NioEventLoopGroup(defaultIOThreadNum, new PrefixNameThreadFactory("NIO_IO_THREAD_"));
+            this.bossGroup = new NioEventLoopGroup(1,  new PrefixNameThreadFactory("NettyNioBossThread_"));
+            this.workGroup = new NioEventLoopGroup(selectorThreadNum, new PrefixNameThreadFactory("NettyNioWorkThread_"));
         }
     }
 
@@ -35,7 +36,7 @@ public class EventLoopGroupManager {
         return workGroup;
     }
 
-    public void stopAllEventLoop(){
+    public void stopAllEventLoop() {
         this.bossGroup.shutdownGracefully();
         this.workGroup.shutdownGracefully();
     }
