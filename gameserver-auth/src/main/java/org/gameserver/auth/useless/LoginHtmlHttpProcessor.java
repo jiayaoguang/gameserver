@@ -2,9 +2,9 @@ package org.gameserver.auth.useless;
 
 import java.util.Random;
 
-import com.jyg.processor.HttpProcessor;
-import com.jyg.net.Request;
-import com.jyg.net.Response;
+import org.jyg.gameserver.core.processor.HttpProcessor;
+import org.jyg.gameserver.core.net.Request;
+import org.jyg.gameserver.core.net.Response;
 
 /**
  * created by jiayaoguang at 2018年3月20日

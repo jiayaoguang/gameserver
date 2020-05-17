@@ -1,27 +1,11 @@
 package com.jyg.udp.testEcho;
 
-import com.jyg.handle.initializer.InnerSocketServerInitializer;
-import com.jyg.net.UdpService;
-import com.jyg.startup.GameServerBootstarp;
-import com.jyg.startup.UdpClient;
-import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
+import org.jyg.gameserver.core.startup.UdpClient;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.handler.codec.MessageToMessageDecoder;
-import io.netty.handler.codec.MessageToMessageEncoder;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 import io.netty.util.CharsetUtil;
 import io.netty.util.internal.SocketUtils;
-
-import java.net.DatagramPacket;
-import java.net.InetSocketAddress;
-import java.util.List;
 
 /**
  * Created by jiayaoguang on 2019/7/13.

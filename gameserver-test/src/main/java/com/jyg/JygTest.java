@@ -1,8 +1,6 @@
 package com.jyg;
 
-import com.jyg.util.AllUtil;
-import jodd.io.FileUtil;
-import jodd.util.BinarySearch;
+import org.jyg.gameserver.core.util.AllUtil;
 import org.junit.Test;
 
 import java.util.*;

@@ -1,8 +1,7 @@
 package org.jyg.gameserver.core.util;
 
 import com.google.protobuf.MessageOrBuilder;
-import com.jyg.enums.EventType;
-import com.jyg.util.IGlobalQueue;
+import org.jyg.gameserver.core.enums.EventType;
 
 /**
  * create by jiayaoguang on 2020/5/17

@@ -8,7 +8,7 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.jyg.util.FTLLoader;
+import org.jyg.gameserver.core.util.FTLLoader;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;

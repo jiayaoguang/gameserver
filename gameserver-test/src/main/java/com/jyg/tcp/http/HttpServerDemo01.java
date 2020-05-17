@@ -1,9 +1,9 @@
 package com.jyg.tcp.http;
 
-import com.jyg.processor.HttpProcessor;
-import com.jyg.net.Request;
-import com.jyg.net.Response;
-import com.jyg.startup.GameServerBootstarp;
+import org.jyg.gameserver.core.processor.HttpProcessor;
+import org.jyg.gameserver.core.net.Request;
+import org.jyg.gameserver.core.net.Response;
+import org.jyg.gameserver.core.startup.GameServerBootstarp;
 
 /**
  * Hello world!

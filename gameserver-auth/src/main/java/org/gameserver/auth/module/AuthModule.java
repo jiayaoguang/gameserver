@@ -2,8 +2,8 @@ package org.gameserver.auth.module;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
-import com.jyg.util.redis.JedisCacheClient;
-import com.jyg.util.redis.RedisCacheClient;
+import org.jyg.gameserver.core.util.redis.JedisCacheClient;
+import org.jyg.gameserver.core.util.redis.RedisCacheClient;
 import org.gameserver.auth.processor.LoginHttpProcessor;
 import org.gameserver.auth.processor.TokenReceiveSuccessProtoProcessor;
 import org.gameserver.auth.processor.TokenSendHttpProcessor;

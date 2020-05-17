@@ -1,11 +1,10 @@
 package org.gameserver.auth.processor;
 
 import com.google.inject.Inject;
-import com.jyg.net.Request;
-import com.jyg.net.Response;
-import com.jyg.processor.HttpProcessor;
+import org.jyg.gameserver.core.net.Request;
+import org.jyg.gameserver.core.net.Response;
+import org.jyg.gameserver.core.processor.HttpProcessor;
 import com.jyg.proto.p_auth_sm.p_auth_sm_request_send_token;
-import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.gameserver.auth.bean.UserLoginInfo;

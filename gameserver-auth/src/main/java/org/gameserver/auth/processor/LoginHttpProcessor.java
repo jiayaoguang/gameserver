@@ -2,11 +2,11 @@ package org.gameserver.auth.processor;
 
 import java.util.Set;
 
-import com.jyg.processor.HttpProcessor;
-import com.jyg.net.Request;
-import com.jyg.net.Response;
-import com.jyg.util.redis.RedisCacheClient;
-import com.jyg.util.TokenUtil;
+import org.jyg.gameserver.core.processor.HttpProcessor;
+import org.jyg.gameserver.core.net.Request;
+import org.jyg.gameserver.core.net.Response;
+import org.jyg.gameserver.core.util.redis.RedisCacheClient;
+import org.jyg.gameserver.core.util.TokenUtil;
 
 import io.netty.handler.codec.http.cookie.Cookie;
 import io.netty.handler.codec.http.cookie.DefaultCookie;

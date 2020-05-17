@@ -1,12 +1,12 @@
 package org.gameserver.center;
 
-import com.jyg.enums.ProtoEnum;
-import com.jyg.processor.ProtoProcessor;
+import org.jyg.gameserver.core.enums.ProtoEnum;
+import org.jyg.gameserver.core.processor.ProtoProcessor;
 import com.jyg.proto.p_auth_sm.p_auth_sm_request_send_token;
 import com.jyg.proto.p_auth_sm.p_sm_auth_response_receive_token;
-import com.jyg.session.Session;
-import com.jyg.startup.GameServerBootstarp;
-import com.jyg.util.TokenUtil;
+import org.jyg.gameserver.core.session.Session;
+import org.jyg.gameserver.core.startup.GameServerBootstarp;
+import org.jyg.gameserver.core.util.TokenUtil;
 
 import java.util.HashMap;
 import java.util.Map;

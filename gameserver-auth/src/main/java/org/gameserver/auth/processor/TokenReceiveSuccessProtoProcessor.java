@@ -1,10 +1,10 @@
 package org.gameserver.auth.processor;
 
 import com.google.inject.Inject;
-import com.jyg.net.Response;
-import com.jyg.processor.ProtoProcessor;
+import org.jyg.gameserver.core.net.Response;
+import org.jyg.gameserver.core.processor.ProtoProcessor;
 import com.jyg.proto.p_auth_sm.p_sm_auth_response_receive_token;
-import com.jyg.session.Session;
+import org.jyg.gameserver.core.session.Session;
 import org.gameserver.auth.bean.UserLoginInfo;
 
 import java.util.HashMap;

@@ -2,7 +2,7 @@ package org.gameserver.auth;
 
 import java.io.IOException;
 
-import com.jyg.startup.HttpClient;
+import org.jyg.gameserver.core.startup.HttpClient;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
