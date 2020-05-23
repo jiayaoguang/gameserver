@@ -134,10 +134,11 @@ public class AllUtil {
     }
     public static void properties2Object(final String fileName, final Object object) {
         try {
-
 //            InputStream in = new BufferedInputStream(new FileInputStream(filePath));
             Properties properties = new Properties();
-            properties.load(AllUtil.class.getClassLoader().getResourceAsStream(fileName));
+            try (InputStream in = AllUtil.class.getClassLoader().getResourceAsStream(fileName)){
+                properties.load(in);
+            }
             properties2Object(properties, object);
         } catch (IOException e) {
             e.printStackTrace();
