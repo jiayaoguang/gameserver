@@ -1,20 +1,19 @@
 package org.jyg.gameserver.core.consumer;
 
-import org.jyg.gameserver.core.bean.LogicEvent;
-import org.jyg.gameserver.core.net.EventDispatcher;
-import org.jyg.gameserver.core.net.Request;
-import org.jyg.gameserver.core.timer.DelayCloseTimer;
-import org.jyg.gameserver.core.util.CallBackEvent;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.WorkHandler;
+import org.jyg.gameserver.core.bean.LogicEvent;
+import org.jyg.gameserver.core.net.Request;
+import org.jyg.gameserver.core.util.CallBackEvent;
+import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.IGlobalQueue;
 
 /**
  * created by jiayaoguang at 2017年12月6日
  */
 public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHandler<LogicEvent> {
 
-
-	private EventDispatcher dispatcher;
+	private Context context;
 
 	private int requestId = 1;
 
@@ -41,8 +40,10 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 		// System.out.println(event.getChannel());
 		try {
 			doEvent(event);
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
-			dispatcher.loop();
+
 		}
 
 	}
@@ -59,25 +60,25 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 
 			case SOCKET_CONNECT_ACTIVE:
 //				dispatcher.as_on_inner_server_active(event);
-				dispatcher.as_on_client_active(event);
+				context.as_on_client_active(event);
 				break;
 			case SOCKET_CONNECT_INACTIVE:
 //				dispatcher.as_on_inner_server_inactive(event);
-				dispatcher.as_on_client_inactive(event);
+				context.as_on_client_inactive(event);
 				break;
 
 			case HTTP_MSG_COME:
 				((Request) event.getData()).setRequestid(getAndIncRequestId());
-				dispatcher.httpProcess(event);
+				context.getGlobalQueue().processHttpEvent(event);
 //				event.getChannel().close();
 				// 5秒后关闭
-				dispatcher.getTimerManager().addTimer(new DelayCloseTimer(event.getChannel(), 60 * 1000L));
+//				dispatcher.getTimerManager().addTimer(new DelayCloseTimer(event.getChannel(), 60 * 1000L));
 				break;
 			case ON_MESSAGE_COME:
-				dispatcher.webSocketProcess(event);
-				break;
+//				dispatcher.webSocketProcess(event);
+//				break;
 			case RPC_MSG_COME:
-				dispatcher.socketProcess(event);
+				context.getGlobalQueue().processProtoEvent(event);
 				break;
 
 			case ON_TEXT_MESSAGE_COME:
@@ -109,15 +110,6 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 		return requestId++;
 	}
 
-
-	public EventDispatcher getDispatcher() {
-		return dispatcher;
-	}
-
-	public void setDispatcher(EventDispatcher dispatcher) {
-		this.dispatcher = dispatcher;
-	}
-
 	protected void init(){
 
 	}
@@ -126,4 +118,12 @@ public abstract class EventConsumer implements EventHandler<LogicEvent>, WorkHan
 	 *
 	 */
 	protected abstract void loop();
+
+	public Context getContext() {
+		return context;
+	}
+
+	public void setContext(Context context) {
+		this.context = context;
+	}
 }

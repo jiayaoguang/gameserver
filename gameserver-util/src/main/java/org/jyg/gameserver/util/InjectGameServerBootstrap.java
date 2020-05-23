@@ -64,18 +64,18 @@ public class InjectGameServerBootstrap extends GameServerBootstarp {
             Object obj = injector.getInstance(clazz);
             if(obj instanceof ProtoProcessor){
                 ProtoProcessor<? extends MessageLite> protoProcessor = (ProtoProcessor<? extends MessageLite>)obj;
-                int eventId = protoProcessor.getProtoEventId();
-                if(eventId == -1){
+                int msgId = protoProcessor.getProtoMsgId();
+                if(msgId == -1){
                     throw new IllegalArgumentException(" getProtoEventId -1 ");
                 }
-                registerProtoProcessor( eventId , protoProcessor);
+                addProtoProcessor( msgId , protoProcessor);
             }else if(obj instanceof HttpProcessor){
                 HttpProcessor httpProcessor = (HttpProcessor)obj;
                 String path = httpProcessor.getPath();
                 if(path == null){
                     throw new IllegalArgumentException(" getProtoEventId -1 ");
                 }
-                registerHttpProcessor( httpProcessor);
+                addHttpProcessor( httpProcessor);
             }
         }
     }

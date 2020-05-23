@@ -1,7 +1,6 @@
 package org.jyg.gameserver.core.startup;
 
 import com.google.protobuf.GeneratedMessageV3;
-import org.jyg.gameserver.core.consumer.EventConsumerFactory;
 import org.jyg.gameserver.core.processor.HttpProcessor;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.util.Context;
@@ -23,7 +22,7 @@ public abstract class AbstractBootstrap {
 
     private final Context context;
 
-    protected boolean isStart = false;
+    protected volatile boolean isStart = false;
 
     public AbstractBootstrap() {
         this(new RingBufferGlobalQueue());
@@ -36,63 +35,69 @@ public abstract class AbstractBootstrap {
     public AbstractBootstrap(Context context) {
         this.globalQueue = context.getGlobalQueue();
         this.context = context;
-        this.globalQueue.getEventConsumerFactory().setEventDispatcher(context.getEventDispatcher());
+//        this.globalQueue.getEventConsumerFactory().setContext(context);
     }
 
-    public void setEventConsumerFactory(EventConsumerFactory eventConsumerFactory) {
-        if (isStart) {
-            logger.error("oprete fail,server is already start ");
-            return;
-        }
-        eventConsumerFactory.setEventDispatcher(this.context.getEventDispatcher());
-        this.globalQueue.setEventConsumerFactory(eventConsumerFactory);
+//    public void setEventConsumerFactory(EventConsumerFactory eventConsumerFactory) {
+//        if (isStart) {
+//            logger.error("oprete fail,server is already start ");
+//            return;
+//        }
+//        eventConsumerFactory.setEventDispatcher(this.context.getEventDispatcher());
+//        this.globalQueue.setEventConsumerFactory(eventConsumerFactory);
+//
+//    }
 
+    public void registerSocketEvent(int msgId, ProtoProcessor<? extends GeneratedMessageV3> protoProcessor) {
+        this.addProtoProcessor(msgId, protoProcessor);
     }
 
-    public void registerSocketEvent(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoProcessor) {
-        this.registerProtoProcessor(eventid, protoProcessor);
+    public void addProtoProcessor(ProtoProcessor<? extends GeneratedMessageV3> protoProcessor) {
+        int msgId = protoProcessor.getProtoMsgId();
+        this.context.getGlobalQueue().addProtoProcessor(msgId, protoProcessor , context);
     }
 
-    public void registerProtoProcessor(int eventid, ProtoProcessor<? extends GeneratedMessageV3> protoProcessor) {
-        this.context.getEventDispatcher().registerSendEventIdByProto( eventid , protoProcessor.getProtoClass() );
-//        this.registerProtoProcessor( protoProcessor);
-    }
-
-    public void registerProtoProcessor(ProtoProcessor<? extends GeneratedMessageV3> protoProcessor) {
-        int eventId = protoProcessor.getProtoEventId();
-        if(eventId == -1){
-            throw new IllegalArgumentException(" getProtoEventId -1 ");
-        }
-        this.context.getEventDispatcher().registerSocketEvent(protoProcessor.getProtoEventId(), protoProcessor);
+    public void addProtoProcessor(int msgId,ProtoProcessor<? extends GeneratedMessageV3> protoProcessor) {
+        this.context.getGlobalQueue().addProtoProcessor(msgId, protoProcessor , context);
     }
 
     public void registerHttpEvent(String path, HttpProcessor processor){
-        processor.setPath(path);
-        this.registerHttpProcessor( processor);
+        this.addHttpProcessor( path, processor);
     }
 
-    public void registerHttpProcessor( HttpProcessor processor){
+    public void addHttpProcessor(HttpProcessor processor) {
         if (isStart) {
             throw new IllegalArgumentException(" registerHttpProcessor fail ,server is start ");
         }
         String path = processor.getPath();
-        if(path == null){
+        if (path == null) {
             throw new IllegalArgumentException(" getProtoEventId -1 ");
         }
-        this.context.getEventDispatcher().registerHttpEvent(path, processor);
+        this.context.getGlobalQueue().addHttpProcessor(path, processor, context);
     }
 
-    public void registerHttpProcessor(String path, HttpProcessor processor){
+
+    public void addHttpProcessor(String path, HttpProcessor processor){
         processor.setPath(path);
-        this.registerHttpProcessor(processor);
+        this.addHttpProcessor(processor);
     }
 
     public void registerSendEventIdByProto(int eventId, Class<? extends GeneratedMessageV3> protoClazz) throws Exception {
+        this.addMsgId2ProtoMapping(eventId, protoClazz);
+    }
+
+    public void addMsgId2ProtoMapping(int eventId, Class<? extends GeneratedMessageV3> protoClazz) throws Exception {
         if (isStart) {
             throw new IllegalArgumentException(" registerHttpProcessor fail ,server is start ");
         }
+        this.context.addMsgId2ProtoMapping(eventId, protoClazz);
+    }
 
-        this.context.getEventDispatcher().registerSendEventIdByProto(eventId, protoClazz);
+    public void addMsgId2ProtoMapping(int eventId, GeneratedMessageV3 defaultInstance) throws Exception {
+        if (isStart) {
+            throw new IllegalArgumentException(" registerHttpProcessor fail ,server is start ");
+        }
+        this.context.addMsgId2ProtoMapping(eventId, defaultInstance);
     }
 
     public Logger getLogger() {
@@ -114,6 +119,8 @@ public abstract class AbstractBootstrap {
             return;
         }
         isStart = true;
+        context.start();
+        this.globalQueue.setContext(context);
         beforeStart();
         doStart();
     }

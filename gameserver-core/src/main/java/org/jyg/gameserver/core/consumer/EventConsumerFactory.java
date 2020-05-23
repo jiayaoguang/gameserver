@@ -1,25 +1,16 @@
 package org.jyg.gameserver.core.consumer;
 
-import org.jyg.gameserver.core.net.EventDispatcher;
+import org.jyg.gameserver.core.util.Context;
 
 /**
  * created by jiayaoguang at 2017年12月6日
  */
 public abstract class EventConsumerFactory {
 
-	private EventDispatcher eventDispatcher;
 
-	public EventDispatcher getEventDispatcher() {
-		return eventDispatcher;
-	}
-
-	public void setEventDispatcher(EventDispatcher eventDispatcher) {
-		this.eventDispatcher = eventDispatcher;
-	}
-
-	public final EventConsumer createAndInit(){
+	public final EventConsumer createAndInit(Context context){
 		EventConsumer eventConsumer = newEventConsumer();
-		eventConsumer.setDispatcher(eventDispatcher);
+		eventConsumer.setContext(context);
 		eventConsumer.init();
 		return eventConsumer;
 	}

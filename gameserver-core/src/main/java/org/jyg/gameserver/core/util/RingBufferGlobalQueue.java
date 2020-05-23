@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.util;
 
 import org.jyg.gameserver.core.bean.LogicEvent;
 import org.jyg.gameserver.core.consumer.DefaultEventConsumerFactory;
+import org.jyg.gameserver.core.consumer.EventConsumer;
 import org.jyg.gameserver.core.consumer.EventConsumerFactory;
 import org.jyg.gameserver.core.enums.EventType;
 import com.lmax.disruptor.EventFactory;
@@ -18,7 +19,7 @@ import java.util.concurrent.ThreadFactory;
 /**
  * create by jiayaoguang on 2020/5/1
  */
-public class RingBufferGlobalQueue implements IGlobalQueue {
+public class RingBufferGlobalQueue extends IGlobalQueue {
 
     private static Disruptor<LogicEvent<Object>> disruptor;
     private static final int BUFFER_SIZE = 1024 * 64;
@@ -49,8 +50,8 @@ public class RingBufferGlobalQueue implements IGlobalQueue {
 
         disruptor = new Disruptor<>(eventFactory, BUFFER_SIZE, consumerThreadFactory, ProducerType.MULTI,
                 new LoopAndSleepWaitStrategy());
-
-        disruptor.handleEventsWith(this.eventConsumerFactory.createAndInit());
+        EventConsumer eventConsumer = this.eventConsumerFactory.createAndInit(getContext());
+        disruptor.handleEventsWith(eventConsumer);
         disruptor.setDefaultExceptionHandler(new LogExceptionHandler());
         ringBuffer = disruptor.getRingBuffer();
         disruptor.start();

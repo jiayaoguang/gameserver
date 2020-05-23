@@ -12,7 +12,8 @@ import java.util.concurrent.*;
 /**
  * create by jiayaoguang on 2020/5/1
  */
-public class BlockingGlobalQueue implements IGlobalQueue {
+@Deprecated
+public class BlockingGlobalQueue extends IGlobalQueue {
 
     private final BlockingQueue<LogicEvent<Object>> queue;
 
@@ -35,7 +36,8 @@ public class BlockingGlobalQueue implements IGlobalQueue {
 
     @Override
     public void start() {
-        consumerThread = new ConsumerThread(queue , eventConsumerFactory.createAndInit());
+        EventConsumer eventConsumer = this.eventConsumerFactory.createAndInit(getContext());
+        consumerThread = new ConsumerThread(queue , eventConsumer);
         consumerThread.setName("blockingQueue_consumer_thread");
         consumerThread.setDaemon(false);
 

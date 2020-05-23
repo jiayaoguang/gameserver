@@ -60,38 +60,39 @@ public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
 
 	
 	@Override
-	public Object decode(ChannelHandlerContext ctx, ByteBuf in) {
+	public Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
 		ByteBuf frame = null;
 		//TODO crc
-		try {
+//		try {
 			frame = (ByteBuf) super.decode(ctx, in);
 			if(frame == null){
 				return null;
 			}
-			int eventId = frame.readInt();
+			int msgId = frame.readInt();
 			System.out.println("cnf:"+frame.refCnt());
-			ProtoProcessor<? extends GeneratedMessageV3> protoProcessor = context.getEventDispatcher().getSocketProcessor(eventId);
-			if (protoProcessor == null) {
-				LOGGER.error(" protoProcessor not found ,id : {} ",eventId);
+			Parser<? extends MessageLite> protoParser = context.getProtoParserByMsgId(msgId);
+			if (protoParser == null) {
+				LOGGER.error(" protoParser not found ,id : {} ",msgId);
 				return null;
 			}
-			Parser<? extends MessageLite> parser = protoProcessor.getProtoParser();
 
 			try (ByteBufInputStream bis = new ByteBufInputStream(frame)) {
-				MessageLite messageLite = parser.parseFrom(bis);
-				context.getGlobalQueue().publicEvent(EventType.RPC_MSG_COME, messageLite, ctx.channel(), eventId);
+				MessageLite messageLite = protoParser.parseFrom(bis);
+				context.getGlobalQueue().publicEvent(EventType.RPC_MSG_COME, messageLite, ctx.channel(), msgId);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
-		} catch (Exception e) {
-			ctx.channel().close().addListener(new ChannelFutureListener() {
-				@Override
-				public void operationComplete(ChannelFuture future) throws Exception {
-					// log
-				}
-			});
-		}
+//		}
+//		catch (Exception e) {
+//			ctx.channel().close().addListener(new ChannelFutureListener() {
+//				@Override
+//				public void operationComplete(ChannelFuture future) throws Exception {
+//					// log
+//				}
+//			});
+//			e.printStackTrace();
+//		}
 		// finally {
 		// if(null!=frame)
 		// frame.release();

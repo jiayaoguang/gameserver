@@ -1,12 +1,12 @@
 package org.jyg.gameserver.core.handle;
 
-import com.google.protobuf.MessageLite;
+import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.MessageLiteOrBuilder;
-import org.jyg.gameserver.core.net.EventDispatcher;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
+import org.jyg.gameserver.core.util.Context;
 
 /**
  * created by jiayaoguang at 2018年3月13日
@@ -15,25 +15,26 @@ import io.netty.handler.codec.MessageToByteEncoder;
 @Sharable
 public class MyProtobufEncoder extends MessageToByteEncoder<MessageLiteOrBuilder> {
 
-	private final EventDispatcher eventDispatcher;
+	protected final Context context;
 
-	public MyProtobufEncoder(EventDispatcher eventDispatcher) {
-		this.eventDispatcher = eventDispatcher;
+	public MyProtobufEncoder(Context context) {
+		this.context = context;
 	}
 
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, MessageLiteOrBuilder msg, ByteBuf buf) {
-		Class<? extends MessageLite> protoClazz;
+		Class<? extends GeneratedMessageV3> protoClazz;
 		System.out.println("111threadName : "+Thread.currentThread().getName());
 		byte[] bytes = null;
-		if (msg instanceof MessageLite) {
-			bytes = ((MessageLite) msg).toByteArray();
-			protoClazz = ((MessageLite)msg).getClass();
-		} else if (msg instanceof MessageLite.Builder) {
-			MessageLite messageLite = ((MessageLite.Builder) msg).build();
-			bytes = messageLite.toByteArray();
-			protoClazz = messageLite.getClass();
+		if (msg instanceof GeneratedMessageV3) {
+			bytes = ((GeneratedMessageV3) msg).toByteArray();
+			protoClazz = ((GeneratedMessageV3)msg).getClass();
+		} else if (msg instanceof GeneratedMessageV3.Builder) {
+//			GeneratedMessageV3 messageLite =  ((GeneratedMessageV3.Builder) msg).build();
+//			bytes = messageLite.toByteArray();
+//			protoClazz = messageLite.getClass();
+			throw new IllegalArgumentException("Unknow message type");
 		}else {
 			throw new IllegalArgumentException("Unknow message type");
 		}
@@ -41,7 +42,7 @@ public class MyProtobufEncoder extends MessageToByteEncoder<MessageLiteOrBuilder
 		if (bytes == null) {
 			throw new IllegalArgumentException("not MessageLiteOrBuilder");
 		}
-		int eventId = eventDispatcher.getEventIdByProtoClazz(protoClazz);
+		int eventId = context.getMsgIdByProtoClass(protoClazz);
 		if(eventId <= 0) {
 			System.out.println("unknow eventid");
 			return;

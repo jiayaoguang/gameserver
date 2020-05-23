@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PrefixNameThreadFactory implements ThreadFactory {
 	private final AtomicInteger threadIndex = new AtomicInteger(0);
 	//线程名前缀
-	private String threadNamePrefix;
+	private final String threadNamePrefix;
 
 	public PrefixNameThreadFactory(String threadNamePrefix) {
 		this.threadNamePrefix = threadNamePrefix;

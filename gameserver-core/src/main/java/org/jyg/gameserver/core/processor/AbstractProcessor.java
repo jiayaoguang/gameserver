@@ -1,8 +1,9 @@
 package org.jyg.gameserver.core.processor;
 
 import org.jyg.gameserver.core.bean.LogicEvent;
-import org.jyg.gameserver.core.net.EventDispatcher;
+import org.jyg.gameserver.core.util.Context;
 import org.jyg.gameserver.core.util.FTLLoader;
+import org.jyg.gameserver.core.util.IGlobalQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,17 +16,24 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 
 	protected static final FTLLoader ftlLoader = new FTLLoader();
 
-	private EventDispatcher eventDispatcher;
+	private Context context;
 
-	public EventDispatcher getEventDispatcher() {
-		return eventDispatcher;
+	public IGlobalQueue getGlobalQueue() {
+		return context.getGlobalQueue();
 	}
 
-	public void setEventDispatcher(EventDispatcher eventDispatcher) {
-		this.eventDispatcher = eventDispatcher;
+
+	public Context getContext() {
+		return context;
+	}
+
+	public void setContext(Context context) {
+		this.context = context;
 	}
 
 	public abstract void process(LogicEvent<T> event);
+
+
 	
 }
 

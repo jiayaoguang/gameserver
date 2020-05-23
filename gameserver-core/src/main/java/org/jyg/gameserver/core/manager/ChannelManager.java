@@ -13,11 +13,19 @@ import java.util.Map;
  */
 public class ChannelManager {
 
-    private final Map<Channel , Session> channelObjectMap = new LinkedHashMap<>(1024*16);
+    private final Map<Channel, Session> channelObjectMap;
 
     private int sessionIdInc = 0;
 
-//    public <T>void process(LogicEvent<T> event) {
+    public ChannelManager() {
+        this(new LinkedHashMap<>(1024 * 16));
+    }
+
+    public ChannelManager(Map<Channel, Session> channelObjectMap) {
+        this.channelObjectMap = channelObjectMap;
+    }
+
+    //    public <T>void process(LogicEvent<T> event) {
 //        if(event.getChannelEventType() == EventType.INNER_SOCKET_CONNECT_ACTIVE){
 //            doLink(event);
 //        }else if(event.getChannelEventType() == EventType.INNER_SOCKET_CONNECT_INACTIVE){
@@ -28,24 +36,23 @@ public class ChannelManager {
 //    }
 
 
-
-    public final <T>void doLink( LogicEvent<T> event){
+    public final <T> void doLink(LogicEvent<T> event) {
         int sessionId = incAndGetSessionId();
-        Session session = new Session(event.getChannel(),sessionId);
-        channelObjectMap.put(event.getChannel() , session);
+        Session session = new Session(event.getChannel(), sessionId);
+        channelObjectMap.put(event.getChannel(), session);
         afterLink(event);
     }
 
-    public <T>void afterLink(LogicEvent<T> event){
+    public <T> void afterLink(LogicEvent<T> event) {
 
     }
 
-    public final <T>void doUnlink(LogicEvent<T> event){
+    public final <T> void doUnlink(LogicEvent<T> event) {
         Session session = channelObjectMap.remove(event.getChannel());
         afterUnlink(session);
     }
 
-    public <T>void afterUnlink(Session session){
+    public <T> void afterUnlink(Session session) {
 
     }
 
@@ -55,7 +62,7 @@ public class ChannelManager {
 
 
     /**
-     *检测并移除超时的channel
+     * 检测并移除超时的channel
      */
     public void removeOutOfTimeChannels() {
 //		System.out.println("检测并移除超时的channel");
@@ -80,7 +87,7 @@ public class ChannelManager {
         }
     }
 
-    private int incAndGetSessionId(){
+    private int incAndGetSessionId() {
         sessionIdInc++;
         return sessionIdInc;
     }

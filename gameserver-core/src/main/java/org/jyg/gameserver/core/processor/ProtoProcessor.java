@@ -1,13 +1,13 @@
 package org.jyg.gameserver.core.processor;
 
-import java.lang.reflect.InvocationTargetException;
-
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.MessageLite;
 import com.google.protobuf.Parser;
 import org.jyg.gameserver.core.bean.LogicEvent;
-import org.jyg.gameserver.core.net.EventDispatcher;
 import org.jyg.gameserver.core.session.Session;
+import org.jyg.gameserver.core.util.Context;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * created by jiayaoguang at 2017年12月16日
@@ -16,7 +16,8 @@ public abstract class ProtoProcessor<T extends GeneratedMessageV3> extends Abstr
 
 	private final Parser<? extends GeneratedMessageV3> parser;
 	private final Class<? extends GeneratedMessageV3> clazz;
-	private EventDispatcher eventDispatcher;
+
+	private Context context;
 
 	public ProtoProcessor(Class<? extends GeneratedMessageV3> protoClazz) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		GeneratedMessageV3 defaultInstance = (GeneratedMessageV3)protoClazz.getMethod("getDefaultInstance").invoke(null);
@@ -34,15 +35,13 @@ public abstract class ProtoProcessor<T extends GeneratedMessageV3> extends Abstr
 //	}
 
 
-	@Override
-	public EventDispatcher getEventDispatcher() {
-		return eventDispatcher;
-	}
 
-	@Override
-	public void setEventDispatcher(EventDispatcher eventDispatcher) {
-		this.eventDispatcher = eventDispatcher;
-	}
+
+
+//	@Override
+//	public void setEventDispatcher(EventDispatcher eventDispatcher) {
+//		this.eventDispatcher = eventDispatcher;
+//	}
 
 	public String getProtoClassName() {
 		return clazz.getName();
@@ -50,8 +49,8 @@ public abstract class ProtoProcessor<T extends GeneratedMessageV3> extends Abstr
 	public Class<? extends GeneratedMessageV3> getProtoClass() {
 		return clazz;
 	}
-	public int getProtoEventId() {
-		return getEventDispatcher().getEventIdByProtoClazz(clazz);
+	public int getProtoMsgId() {
+		return getContext().getMsgIdByProtoClass(clazz);
 	}
 
 	public final Parser<? extends MessageLite> getProtoParser() {
@@ -63,14 +62,22 @@ public abstract class ProtoProcessor<T extends GeneratedMessageV3> extends Abstr
 	public void process(LogicEvent<T> event) {
 //		System.out.println("eventid : "+event.getEventId());
 
-		Session session = getEventDispatcher().getSession(event.getChannel());
+		Session session = getContext().getSession(event.getChannel());
 		if(session == null){
 			logger.error("session == null..................................");
 			return;
 		}
 		process(session,event.getData());
 	}
-	
+
+	public Context getContext() {
+		return context;
+	}
+
+	public void setContext(Context context) {
+		this.context = context;
+	}
+
 	public abstract void process(Session session , T msg);
 
 }
