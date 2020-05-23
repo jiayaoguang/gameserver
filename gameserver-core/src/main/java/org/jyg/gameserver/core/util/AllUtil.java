@@ -1,9 +1,12 @@
 package org.jyg.gameserver.core.util;
 
+import java.io.*;
+import java.lang.reflect.Method;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
+import java.util.Properties;
 
 /**
  * Created by jiayaoguang on 2019/8/31.
@@ -128,6 +131,75 @@ public class AllUtil {
 
     public static void println(Object obj){
         System.out.println(obj);
+    }
+    public static void properties2Object(final String fileName, final Object object) {
+        try {
+
+//            InputStream in = new BufferedInputStream(new FileInputStream(filePath));
+            Properties properties = new Properties();
+            properties.load(AllUtil.class.getClassLoader().getResourceAsStream(fileName));
+            properties2Object(properties, object);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    public static void properties2Object(final Properties p, final Object object) {
+        Method[] methods = object.getClass().getMethods();
+        for (Method method : methods) {
+            String mn = method.getName();
+            if (!mn.startsWith("set")) {
+                continue;
+            }
+            try {
+                String tmp = mn.substring(4);
+                String first = mn.substring(3, 4);
+
+                String key = first.toLowerCase() + tmp;
+                String property = p.getProperty(key);
+                if (property == null) {
+//                    println("property == null");
+                    continue;
+                }
+                Class<?>[] pt = method.getParameterTypes();
+                if (pt == null || pt.length == 0) {
+                    continue;
+                }
+                String cn = pt[0].getSimpleName();
+                Object arg = null;
+                switch (cn) {
+                    case "int":
+                    case "Integer":
+                        arg = Integer.parseInt(property);
+                        break;
+                    case "long":
+                    case "Long":
+                        arg = Long.parseLong(property);
+                        break;
+                    case "double":
+                    case "Double":
+                        arg = Double.parseDouble(property);
+                        break;
+                    case "boolean":
+                    case "Boolean":
+                        arg = Boolean.parseBoolean(property);
+                        break;
+                    case "float":
+                    case "Float":
+                        arg = Float.parseFloat(property);
+                        break;
+                    case "String":
+                        arg = property;
+                        break;
+                    default:
+                        continue;
+                }
+                method.invoke(object, arg);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

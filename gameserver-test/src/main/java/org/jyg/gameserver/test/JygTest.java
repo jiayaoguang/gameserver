@@ -1,5 +1,9 @@
 package org.jyg.gameserver.test;
 
+import cn.hutool.core.util.ZipUtil;
+import com.google.protobuf.ByteString;
+import org.jyg.gameserver.core.bean.ServerConfig;
+import org.jyg.gameserver.core.proto.MsgBytes;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.junit.Test;
 
@@ -169,6 +173,34 @@ public class JygTest {
         }
 
         AllUtil.println(queue.size());
+    }
+
+    @Test
+    public void testBytesZip() throws Exception{
+
+        byte[] bs = new byte[10000];
+
+        MsgBytes msgBytes = MsgBytes.newBuilder().setByteDate(ByteString.copyFrom(bs)).build();
+
+        byte[] zbs = ZipUtil.gzip(bs);
+
+        byte[] zbs2 = ZipUtil.gzip(msgBytes.toByteArray());
+
+        byte[] zbs3 = ZipUtil.gzip(MsgBytes.newBuilder().setByteDate(ByteString.copyFrom(zbs2)).build().toByteArray());
+
+        AllUtil.println(zbs.length);
+        AllUtil.println(zbs2.length);
+        AllUtil.println(zbs3.length);
+    }
+
+    @Test
+    public void testConfig() throws Exception{
+
+        ServerConfig serverConfig = new ServerConfig();
+
+        AllUtil.properties2Object("jyg.properties" , serverConfig);
+
+        AllUtil.println(serverConfig.isUseGzip());
     }
 
 }
