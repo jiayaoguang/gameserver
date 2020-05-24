@@ -2,7 +2,7 @@ package org.jyg.gameserver.core.handle;
 
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.net.Request;
-import org.jyg.gameserver.core.consumer.IGlobalQueue;
+import org.jyg.gameserver.core.consumer.Consumer;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -12,9 +12,9 @@ import java.io.IOException;
 
 public class HttpServerHandler extends SimpleChannelInboundHandler<HttpRequest> {
 
-	private final IGlobalQueue globalQueue;
+	private final Consumer globalQueue;
 
-	public HttpServerHandler(IGlobalQueue globalQueue) {
+	public HttpServerHandler(Consumer globalQueue) {
 		this.globalQueue = globalQueue;
 	}
 

@@ -1,7 +1,7 @@
 package org.jyg.gameserver.core.handle;
 
 import org.jyg.gameserver.core.enums.EventType;
-import org.jyg.gameserver.core.consumer.IGlobalQueue;
+import org.jyg.gameserver.core.consumer.Consumer;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -11,9 +11,9 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
  */
 public class InnerSocketHandler extends ChannelInboundHandlerAdapter {
 
-	private final IGlobalQueue globalQueue;
+	private final Consumer globalQueue;
 
-	public InnerSocketHandler(IGlobalQueue globalQueue) {
+	public InnerSocketHandler(Consumer globalQueue) {
 		this.globalQueue = globalQueue;
 	}
 

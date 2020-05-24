@@ -4,7 +4,7 @@ import org.jyg.gameserver.core.bean.LogicEvent;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.Context;
 import org.jyg.gameserver.core.util.FTLLoader;
-import org.jyg.gameserver.core.consumer.IGlobalQueue;
+import org.jyg.gameserver.core.consumer.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +21,7 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 
 	private int consumerId = 0;
 
-	public IGlobalQueue getGlobalQueue() {
+	public Consumer getGlobalQueue() {
 		return context.getGlobalQueue();
 	}
 

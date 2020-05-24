@@ -1,20 +1,16 @@
-package org.jyg.gameserver.core.util;
+package org.jyg.gameserver.core.consumer;
 
 import org.jyg.gameserver.core.bean.LogicEvent;
-import org.jyg.gameserver.core.consumer.DefaultConsumerHandlerFactory;
-import org.jyg.gameserver.core.consumer.ConsumerHandler;
-import org.jyg.gameserver.core.consumer.ConsumerHandlerFactory;
-import org.jyg.gameserver.core.consumer.IGlobalQueue;
 import org.jyg.gameserver.core.enums.EventType;
 import io.netty.channel.Channel;
+import org.jyg.gameserver.core.util.AllUtil;
 
 import java.util.concurrent.*;
 
 /**
  * create by jiayaoguang on 2020/5/1
  */
-@Deprecated
-public class BlockingGlobalQueue extends IGlobalQueue {
+public class BlockingConsumer extends Consumer {
 
     private final BlockingQueue<LogicEvent<Object>> queue;
 
@@ -22,15 +18,15 @@ public class BlockingGlobalQueue extends IGlobalQueue {
 
     private ConsumerThread consumerThread;
 
-    public BlockingGlobalQueue() {
+    public BlockingConsumer() {
         this(new LinkedBlockingQueue<>());
     }
 
-    public BlockingGlobalQueue(int size) {
+    public BlockingConsumer(int size) {
         this(new LinkedBlockingQueue<>(size));
     }
 
-    public BlockingGlobalQueue(BlockingQueue<LogicEvent<Object>> queue) {
+    public BlockingConsumer(BlockingQueue<LogicEvent<Object>> queue) {
         this.queue = queue;
         this.eventConsumerFactory = new DefaultConsumerHandlerFactory();
     }

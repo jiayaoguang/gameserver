@@ -11,7 +11,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.jyg.gameserver.core.bean.LogicEvent;
 import org.jyg.gameserver.core.bean.ServerConfig;
-import org.jyg.gameserver.core.consumer.IGlobalQueue;
+import org.jyg.gameserver.core.consumer.Consumer;
 import org.jyg.gameserver.core.manager.*;
 import org.jyg.gameserver.core.session.Session;
 
@@ -25,7 +25,7 @@ public class Context {
     private static final String DEFAULT_CONFIG_FILE_NAME = "jyg.properties";
     private String configFileName = DEFAULT_CONFIG_FILE_NAME;
 
-    private final IGlobalQueue globalQueue;
+    private final Consumer globalQueue;
     private final EventLoopGroupManager eventLoopGroupManager;
 //    private final ExecutorManager executorManager;
 
@@ -45,14 +45,14 @@ public class Context {
     private Int2ObjectMap<Class<? extends GeneratedMessageV3>> msgId2protoClazzMap = new Int2ObjectOpenHashMap<>();
     private Int2ObjectMap<Parser<? extends GeneratedMessageV3>> msgId2protoParserMap = new Int2ObjectOpenHashMap<>();
 
-    public Context(IGlobalQueue globalQueue) {
+    public Context(Consumer globalQueue) {
         this.globalQueue = globalQueue;
         this.eventLoopGroupManager = new EventLoopGroupManager();
 //        this.executorManager = new ExecutorManager(10, globalQueue);
         this.singleThreadExecutorManagerPool = new SingleThreadExecutorManagerPool(globalQueue);
     }
 
-    public IGlobalQueue getGlobalQueue() {
+    public Consumer getGlobalQueue() {
         return globalQueue;
     }
 

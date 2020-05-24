@@ -6,7 +6,7 @@ import org.jyg.gameserver.core.enums.EventType;
 /**
  * create by jiayaoguang on 2020/5/24
  */
-public class RemoteConsumer extends Consumer {
+public class RemoteMQConsumer extends Consumer {
 
 
 

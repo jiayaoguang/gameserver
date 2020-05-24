@@ -1,7 +1,7 @@
 package org.jyg.gameserver.core.manager;
 
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.consumer.IGlobalQueue;
+import org.jyg.gameserver.core.consumer.Consumer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +15,13 @@ public class SingleThreadExecutorManagerPool {
 
 	private final List<SingleThreadExecutorManager> singleThreadExecutorManagerList;
 
-	private final IGlobalQueue globalQueue;
+	private final Consumer globalQueue;
 
-	public SingleThreadExecutorManagerPool(IGlobalQueue globalQueue ) {
+	public SingleThreadExecutorManagerPool(Consumer globalQueue ) {
 		this(globalQueue , DEFAULT_POOL_SIZE);
 	}
 
-	public SingleThreadExecutorManagerPool(IGlobalQueue globalQueue , int num) {
+	public SingleThreadExecutorManagerPool(Consumer globalQueue , int num) {
 		this.singleThreadExecutorManagerList = new ArrayList<>();
 		for(int i = 0;i < num ;i++){
 			this.singleThreadExecutorManagerList.add(new SingleThreadExecutorManager(globalQueue));

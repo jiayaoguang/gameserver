@@ -4,8 +4,8 @@ import com.google.protobuf.GeneratedMessageV3;
 import org.jyg.gameserver.core.processor.HttpProcessor;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.util.Context;
-import org.jyg.gameserver.core.consumer.IGlobalQueue;
-import org.jyg.gameserver.core.consumer.RingBufferGlobalQueue;
+import org.jyg.gameserver.core.consumer.Consumer;
+import org.jyg.gameserver.core.consumer.RingBufferConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,17 +18,17 @@ public abstract class AbstractBootstrap {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    protected final IGlobalQueue globalQueue;
+    protected final Consumer globalQueue;
 
     private final Context context;
 
     protected volatile boolean isStart = false;
 
     public AbstractBootstrap() {
-        this(new RingBufferGlobalQueue());
+        this(new RingBufferConsumer());
     }
 
-    public AbstractBootstrap(IGlobalQueue globalQueue) {
+    public AbstractBootstrap(Consumer globalQueue) {
         this(new Context(globalQueue));
     }
 
@@ -104,7 +104,7 @@ public abstract class AbstractBootstrap {
         return logger;
     }
 
-    public IGlobalQueue getGlobalQueue() {
+    public Consumer getGlobalQueue() {
         return globalQueue;
     }
 

@@ -3,7 +3,7 @@ package org.jyg.gameserver.core.net;
 import org.jyg.gameserver.core.manager.ExecutorManager;
 import org.jyg.gameserver.core.manager.SingleThreadExecutorManagerPool;
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.consumer.IGlobalQueue;
+import org.jyg.gameserver.core.consumer.Consumer;
 
 /**
  * created by jiayaoguang at 2017年12月17日
@@ -30,7 +30,7 @@ public class EventDispatcher {
 	//上一帧时间戳
 	private long nextFrameTimeStamp = System.currentTimeMillis();
 
-	public EventDispatcher(IGlobalQueue globalQueue) {
+	public EventDispatcher(Consumer globalQueue) {
 //		this.executorManager =  new ExecutorManager(10, globalQueue);
 		this.singleThreadExecutorManagerPool = new SingleThreadExecutorManagerPool(globalQueue);
 //		this.registerSocketEvent(0, new BytesProtoProcessor());

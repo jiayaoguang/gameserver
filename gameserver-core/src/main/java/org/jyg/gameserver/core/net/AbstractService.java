@@ -1,20 +1,20 @@
 package org.jyg.gameserver.core.net;
 
-import org.jyg.gameserver.core.consumer.IGlobalQueue;
+import org.jyg.gameserver.core.consumer.Consumer;
 
 /**
  * create by jiayaoguang on 2020/5/2
  */
 public abstract class AbstractService implements Service{
 
-    protected final IGlobalQueue globalQueue;
+    protected final Consumer globalQueue;
 
 
-    protected AbstractService(IGlobalQueue globalQueue) {
+    protected AbstractService(Consumer globalQueue) {
         this.globalQueue = globalQueue;
     }
 
-    public IGlobalQueue getGlobalQueue() {
+    public Consumer getGlobalQueue() {
         return globalQueue;
     }
 

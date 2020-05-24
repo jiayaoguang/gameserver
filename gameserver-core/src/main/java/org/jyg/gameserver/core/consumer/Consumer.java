@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * created by jiayaoguang at 2017年12月18日
  */
-public abstract class IGlobalQueue {
+public abstract class Consumer {
 
     public static final int DEFAULT_QUEUE_SIZE = 1024 * 64;
 

@@ -1,7 +1,7 @@
 package org.jyg.gameserver.core.handle;
 
 import org.jyg.gameserver.core.enums.EventType;
-import org.jyg.gameserver.core.consumer.IGlobalQueue;
+import org.jyg.gameserver.core.consumer.Consumer;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -19,9 +19,9 @@ public class TextWebSocketFrameHandler extends
 		SimpleChannelInboundHandler<WebSocketFrame> {
 
 //	public static Set<Channel> channels = new HashSet<>();
-	private final IGlobalQueue globalQueue;
+	private final Consumer globalQueue;
 
-	public TextWebSocketFrameHandler(IGlobalQueue globalQueue) {
+	public TextWebSocketFrameHandler(Consumer globalQueue) {
 		this.globalQueue = globalQueue;
 	}
 

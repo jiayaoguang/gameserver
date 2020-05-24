@@ -3,7 +3,7 @@ package org.jyg.gameserver.core.manager;
 import org.jyg.gameserver.core.util.AsynCallEvent;
 import org.jyg.gameserver.core.util.AsynEventAndCallBackRunnable;
 import org.jyg.gameserver.core.util.CallBackEvent;
-import org.jyg.gameserver.core.consumer.IGlobalQueue;
+import org.jyg.gameserver.core.consumer.Consumer;
 
 import java.util.concurrent.*;
 
@@ -13,16 +13,16 @@ import java.util.concurrent.*;
 public class ExecutorManager {
 
 	private final ExecutorService executor;
-	private final IGlobalQueue globalQueue;
-	public ExecutorManager(IGlobalQueue globalQueue) {
+	private final Consumer globalQueue;
+	public ExecutorManager(Consumer globalQueue) {
 		this(10 , globalQueue);
 	}
 
-	public ExecutorManager(int poolSize,IGlobalQueue globalQueue) {
+	public ExecutorManager(int poolSize, Consumer globalQueue) {
 		this(poolSize,poolSize , globalQueue);
 	}
 
-	public ExecutorManager(int corePoolSize,int maxPoolSize,IGlobalQueue globalQueue) {
+	public ExecutorManager(int corePoolSize, int maxPoolSize, Consumer globalQueue) {
 		BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(1024*16);
 		executor = new ThreadPoolExecutor(corePoolSize, maxPoolSize, 3 * 60 * 1000L, TimeUnit.MILLISECONDS, workQueue, new ThreadPoolExecutor.DiscardPolicy());
 		((ThreadPoolExecutor) executor).allowCoreThreadTimeOut(false);

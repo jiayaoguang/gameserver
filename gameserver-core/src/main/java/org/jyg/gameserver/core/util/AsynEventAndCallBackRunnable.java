@@ -1,6 +1,6 @@
 package org.jyg.gameserver.core.util;
 
-import org.jyg.gameserver.core.consumer.IGlobalQueue;
+import org.jyg.gameserver.core.consumer.Consumer;
 import org.jyg.gameserver.core.enums.EventType;
 
 /**
@@ -10,9 +10,9 @@ public class AsynEventAndCallBackRunnable implements Runnable{
 
     private final AsynCallEvent asynCallEvent;
     private final CallBackEvent callBackEvent;
-    private final IGlobalQueue globalQueue;
+    private final Consumer globalQueue;
 
-    public AsynEventAndCallBackRunnable(AsynCallEvent asynCallEvent, CallBackEvent callBackEvent, IGlobalQueue globalQueue) {
+    public AsynEventAndCallBackRunnable(AsynCallEvent asynCallEvent, CallBackEvent callBackEvent, Consumer globalQueue) {
         this.asynCallEvent = asynCallEvent;
         this.callBackEvent = callBackEvent;
         this.globalQueue = globalQueue;

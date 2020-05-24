@@ -4,7 +4,7 @@ import org.jyg.gameserver.core.net.HttpService;
 import org.jyg.gameserver.core.net.Service;
 import org.jyg.gameserver.core.net.SocketService;
 import org.jyg.gameserver.core.net.WebSocketService;
-import org.jyg.gameserver.core.consumer.IGlobalQueue;
+import org.jyg.gameserver.core.consumer.Consumer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class GameServerBootstarp extends AbstractBootstrap {
         super();
     }
 
-    public GameServerBootstarp(IGlobalQueue globalQueue) {
+    public GameServerBootstarp(Consumer globalQueue) {
         super(globalQueue);
     }
 
@@ -72,7 +72,7 @@ public class GameServerBootstarp extends AbstractBootstrap {
     }
 
 
-    public IGlobalQueue getGlobalQueue() {
+    public Consumer getGlobalQueue() {
         return globalQueue;
     }
 }
