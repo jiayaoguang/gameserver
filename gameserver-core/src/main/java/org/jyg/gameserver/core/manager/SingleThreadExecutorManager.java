@@ -1,6 +1,6 @@
 package org.jyg.gameserver.core.manager;
 
-import org.jyg.gameserver.core.util.IGlobalQueue;
+import org.jyg.gameserver.core.consumer.IGlobalQueue;
 
 /**
  * create on 2020/5/4 by jiayaoguang

@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.util;
 
+import org.jyg.gameserver.core.consumer.IGlobalQueue;
 import org.jyg.gameserver.core.enums.EventType;
 
 /**

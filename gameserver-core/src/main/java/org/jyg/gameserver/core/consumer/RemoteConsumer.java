@@ -2,7 +2,6 @@ package org.jyg.gameserver.core.consumer;
 
 import io.netty.channel.Channel;
 import org.jyg.gameserver.core.enums.EventType;
-import org.jyg.gameserver.core.util.IGlobalQueue;
 
 /**
  * create by jiayaoguang on 2020/5/24

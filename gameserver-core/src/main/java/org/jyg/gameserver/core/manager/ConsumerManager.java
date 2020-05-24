@@ -3,9 +3,7 @@ package org.jyg.gameserver.core.manager;
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
-import org.jyg.gameserver.core.util.IGlobalQueue;
+import org.jyg.gameserver.core.consumer.IGlobalQueue;
 
 /**
  * create by jiayaoguang on 2020/5/23

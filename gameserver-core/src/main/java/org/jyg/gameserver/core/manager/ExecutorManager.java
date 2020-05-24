@@ -3,7 +3,7 @@ package org.jyg.gameserver.core.manager;
 import org.jyg.gameserver.core.util.AsynCallEvent;
 import org.jyg.gameserver.core.util.AsynEventAndCallBackRunnable;
 import org.jyg.gameserver.core.util.CallBackEvent;
-import org.jyg.gameserver.core.util.IGlobalQueue;
+import org.jyg.gameserver.core.consumer.IGlobalQueue;
 
 import java.util.concurrent.*;
 

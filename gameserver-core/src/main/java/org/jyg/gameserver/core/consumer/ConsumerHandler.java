@@ -8,7 +8,6 @@ import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.CallBackEvent;
 import org.jyg.gameserver.core.util.Context;
-import org.jyg.gameserver.core.util.IGlobalQueue;
 
 /**
  * created by jiayaoguang at 2017年12月6日

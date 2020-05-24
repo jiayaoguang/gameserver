@@ -4,6 +4,7 @@ import org.jyg.gameserver.core.bean.LogicEvent;
 import org.jyg.gameserver.core.consumer.DefaultConsumerHandlerFactory;
 import org.jyg.gameserver.core.consumer.ConsumerHandler;
 import org.jyg.gameserver.core.consumer.ConsumerHandlerFactory;
+import org.jyg.gameserver.core.consumer.IGlobalQueue;
 import org.jyg.gameserver.core.enums.EventType;
 import io.netty.channel.Channel;
 

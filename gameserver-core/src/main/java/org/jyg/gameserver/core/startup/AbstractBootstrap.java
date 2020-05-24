@@ -4,8 +4,8 @@ import com.google.protobuf.GeneratedMessageV3;
 import org.jyg.gameserver.core.processor.HttpProcessor;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.util.Context;
-import org.jyg.gameserver.core.util.IGlobalQueue;
-import org.jyg.gameserver.core.util.RingBufferGlobalQueue;
+import org.jyg.gameserver.core.consumer.IGlobalQueue;
+import org.jyg.gameserver.core.consumer.RingBufferGlobalQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

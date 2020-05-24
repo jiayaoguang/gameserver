@@ -11,6 +11,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.jyg.gameserver.core.bean.LogicEvent;
 import org.jyg.gameserver.core.bean.ServerConfig;
+import org.jyg.gameserver.core.consumer.IGlobalQueue;
 import org.jyg.gameserver.core.manager.*;
 import org.jyg.gameserver.core.session.Session;
 

@@ -1,29 +1,9 @@
 package org.jyg.gameserver.core.net;
 
-import com.google.protobuf.GeneratedMessageV3;
-import com.google.protobuf.MessageLite;
-import org.jyg.gameserver.core.bean.LogicEvent;
-import org.jyg.gameserver.core.manager.ChannelManager;
 import org.jyg.gameserver.core.manager.ExecutorManager;
 import org.jyg.gameserver.core.manager.SingleThreadExecutorManagerPool;
-import org.jyg.gameserver.core.processor.BytesProtoProcessor;
-import org.jyg.gameserver.core.processor.HttpProcessor;
-import org.jyg.gameserver.core.processor.NotFoundHttpProcessor;
-import org.jyg.gameserver.core.processor.ProtoProcessor;
-import org.jyg.gameserver.core.proto.MsgBytes;
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.timer.Timer;
-import org.jyg.gameserver.core.timer.TimerManager;
-import org.jyg.gameserver.core.util.IGlobalQueue;
-import io.netty.channel.Channel;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-
-import java.net.InetSocketAddress;
-import java.util.HashMap;
-import java.util.Map;
+import org.jyg.gameserver.core.consumer.IGlobalQueue;
 
 /**
  * created by jiayaoguang at 2017年12月17日

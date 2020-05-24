@@ -1,7 +1,7 @@
 package org.jyg.gameserver.core.manager;
 
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.util.IGlobalQueue;
+import org.jyg.gameserver.core.consumer.IGlobalQueue;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -4,7 +4,7 @@ import org.jyg.gameserver.core.net.HttpService;
 import org.jyg.gameserver.core.net.Service;
 import org.jyg.gameserver.core.net.SocketService;
 import org.jyg.gameserver.core.net.WebSocketService;
-import org.jyg.gameserver.core.util.IGlobalQueue;
+import org.jyg.gameserver.core.consumer.IGlobalQueue;
 
 import java.util.ArrayList;
 import java.util.List;

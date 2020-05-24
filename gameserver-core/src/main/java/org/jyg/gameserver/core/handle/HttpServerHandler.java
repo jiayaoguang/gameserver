@@ -2,7 +2,7 @@ package org.jyg.gameserver.core.handle;
 
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.net.Request;
-import org.jyg.gameserver.core.util.IGlobalQueue;
+import org.jyg.gameserver.core.consumer.IGlobalQueue;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;

@@ -1,7 +1,7 @@
 package org.jyg.gameserver.core.handle.initializer;
 
 import org.jyg.gameserver.core.util.Context;
-import org.jyg.gameserver.core.util.IGlobalQueue;
+import org.jyg.gameserver.core.consumer.IGlobalQueue;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 
