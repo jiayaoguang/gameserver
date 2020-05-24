@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.handle;
 
+import cn.hutool.core.util.ZipUtil;
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.MessageLite;
 import com.google.protobuf.Parser;
@@ -75,13 +76,15 @@ public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
 				LOGGER.error(" protoParser not found ,id : {} ",msgId);
 				return null;
 			}
-
-			try (ByteBufInputStream bis = new ByteBufInputStream(frame)) {
-				MessageLite messageLite = protoParser.parseFrom(bis);
-				context.getGlobalQueue().publicEvent(EventType.RPC_MSG_COME, messageLite, ctx.channel(), msgId);
-			} catch (IOException e) {
-				e.printStackTrace();
+		try (ByteBufInputStream bis = new ByteBufInputStream(frame)) {
+			final MessageLite messageLite;
+			if (context.getServerConfig().isUseGzip()) {
+				messageLite = protoParser.parseFrom(ZipUtil.unGzip(bis , bis.available()));
+			}else {
+				messageLite = protoParser.parseFrom(bis);
 			}
+			context.getGlobalQueue().publicEvent(EventType.RPC_MSG_COME, messageLite, ctx.channel(), msgId);
+		}
 
 //		}
 //		catch (Exception e) {

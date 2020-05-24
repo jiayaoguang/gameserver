@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.handle;
 
+import cn.hutool.core.util.ZipUtil;
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.MessageLiteOrBuilder;
 import io.netty.buffer.ByteBuf;
@@ -46,6 +47,10 @@ public class MyProtobufEncoder extends MessageToByteEncoder<MessageLiteOrBuilder
 		if(eventId <= 0) {
 			System.out.println("unknow eventid");
 			return;
+		}
+
+		if(context.getServerConfig().isUseGzip()){
+			bytes = ZipUtil.gzip(bytes);
 		}
 		
 		int protoLen = 4 + bytes.length;

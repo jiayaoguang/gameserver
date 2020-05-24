@@ -53,7 +53,7 @@ public abstract class AbstractBootstrap {
     }
 
     public void addProtoProcessor(ProtoProcessor<? extends GeneratedMessageV3> protoProcessor) {
-        int msgId = protoProcessor.getProtoMsgId();
+        int msgId = context.getMsgIdByProtoClass(protoProcessor.getProtoClass());
         this.context.getGlobalQueue().addProtoProcessor(msgId, protoProcessor , context);
     }
 

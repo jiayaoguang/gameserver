@@ -203,4 +203,15 @@ public class JygTest {
         AllUtil.println(serverConfig.isUseGzip());
     }
 
+    @Test
+    public void gzipTest() throws Exception{
+
+        byte[] bytes = "jyg.properties".getBytes();
+
+        byte[] zipbytes = ZipUtil.gzip(bytes);
+
+        byte[] zipbytsss = ZipUtil.unGzip(zipbytes);
+        AllUtil.println(new java.lang.String(zipbytsss));
+    }
+
 }

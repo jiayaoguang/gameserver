@@ -87,6 +87,9 @@ public class Context {
     }
 
     public int getMsgIdByProtoClass( Class<? extends GeneratedMessageV3> protoClass) {
+
+        Integer num = protoClazz2MsgidMap.getInt(protoClass);
+
         return protoClazz2MsgidMap.get(protoClass);
     }
 
@@ -122,5 +125,9 @@ public class Context {
 
     public synchronized void setConfigFileName(String configFileName) {
         this.configFileName = configFileName;
+    }
+
+    public ServerConfig getServerConfig() {
+        return serverConfig;
     }
 }

@@ -27,5 +27,10 @@ public class LastCodec extends MessageToMessageCodec<Object, Object> {
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		System.out.println("inactive");
 	}
-	
+
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+		cause.printStackTrace();
+		ctx.close();
+	}
 }

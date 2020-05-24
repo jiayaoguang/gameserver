@@ -3,6 +3,8 @@ package org.jyg.gameserver.test.tcp.chat;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat;
 import org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat;
+import org.jyg.gameserver.test.proto.MsgChat;
+import org.jyg.gameserver.test.proto.p_test;
 import org.jyg.gameserver.test.proto.p_test.p_scene_sm_response_pong;
 import org.jyg.gameserver.test.proto.p_test.p_sm_scene_request_ping;
 import org.jyg.gameserver.core.session.Session;
@@ -17,51 +19,41 @@ public class ClientTest01
 {
     public static void main( String[] args ) throws Exception
     {
-    	
-    	ProtoProcessor<p_sm_scene_request_ping> pingProcessor = new ProtoProcessor<p_sm_scene_request_ping>(p_sm_scene_request_ping.getDefaultInstance()) {
 
+		ProtoProcessor<MsgChat> chatProcessor = new ProtoProcessor<MsgChat>(MsgChat.getDefaultInstance()) {
 			@Override
-			public void process(Session session , p_sm_scene_request_ping msg) {
-				System.out.println("receive ping msg");
-				session.writeMessage(p_scene_sm_response_pong.newBuilder());
-				
-			}
-			
-        };
-        ProtoProcessor<p_sm_scene_chat> receiveChatProcessor = new ProtoProcessor<p_sm_scene_chat>(p_sm_scene_chat.getDefaultInstance()) {
-        	int num = 0;
-			@Override
-			public void process(Session session, p_sm_scene_chat msg) {
-				System.out.println("receive msg "+num+":"+msg.getMsg());
-				num++;
-				if(num==10) {
-					session.writeMessage( p_scene_sm_chat.newBuilder().setMsg("bye"));
+			public void process(Session session, MsgChat msg) {
+
+				System.out.println(msg.getContent() );
+				if("bye".equals(msg.getContent() )) {
 					return;
 				}
-				session.writeMessage( p_scene_sm_chat.newBuilder().setMsg("hello world!"));
+
+				session.writeMessage(p_test.p_sm_scene_chat.newBuilder().setMsg("i just think so ,hello world too"));
 			}
-			
-        };
+
+		};
         
         
     	
         TcpClient client = new TcpClient();
-        
-        client.registerSocketEvent(1, pingProcessor);
-        
-        client.registerSendEventIdByProto(2, p_scene_sm_response_pong.class);
-        
-        client.registerSendEventIdByProto(3, p_scene_sm_chat.class);
-        
-        client.registerSocketEvent(4, receiveChatProcessor);
+//		client.addMsgId2ProtoMapping(1, p_sm_scene_request_ping.getDefaultInstance());
+//		client.addMsgId2ProtoMapping(2, p_scene_sm_response_pong.getDefaultInstance());
+//
+//		client.addMsgId2ProtoMapping(3, p_scene_sm_chat.getDefaultInstance());
+//		client.addMsgId2ProtoMapping(4, p_sm_scene_chat.getDefaultInstance());
+
+		client.addMsgId2ProtoMapping(5, MsgChat.getDefaultInstance());
+
+		client.addProtoProcessor(chatProcessor);
 
         client.start();
-
         client.connect("localhost",8080);
-        
-        
-        client.write(p_scene_sm_chat.newBuilder().setMsg("hello world!"));
-        
+
+        client.write(MsgChat.newBuilder().setContent("hello world!").build());
+
+        Thread.sleep(1000);
+
 //        client.close();
     }
     
