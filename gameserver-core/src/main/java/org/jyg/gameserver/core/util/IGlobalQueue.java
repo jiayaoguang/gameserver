@@ -4,7 +4,7 @@ import com.google.protobuf.GeneratedMessageV3;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.jyg.gameserver.core.bean.LogicEvent;
-import org.jyg.gameserver.core.consumer.EventConsumerFactory;
+import org.jyg.gameserver.core.consumer.ConsumerHandlerFactory;
 import org.jyg.gameserver.core.enums.EventType;
 import io.netty.channel.Channel;
 import org.jyg.gameserver.core.net.Request;
@@ -53,9 +53,9 @@ public abstract class IGlobalQueue {
 
     public abstract void publicEvent(EventType evenType, Object data, Channel channel, int eventId);
 
-    public abstract void setEventConsumerFactory(EventConsumerFactory eventConsumerFactory);
+    public abstract void setEventConsumerFactory(ConsumerHandlerFactory eventConsumerFactory);
 
-    public abstract EventConsumerFactory getEventConsumerFactory();
+    public abstract ConsumerHandlerFactory getEventConsumerFactory();
 
     public Context getContext() {
         return context;

@@ -1,10 +1,9 @@
 package org.jyg.gameserver.core.util;
 
-import com.lmax.disruptor.dsl.EventHandlerGroup;
 import org.jyg.gameserver.core.bean.LogicEvent;
-import org.jyg.gameserver.core.consumer.DefaultEventConsumerFactory;
-import org.jyg.gameserver.core.consumer.EventConsumer;
-import org.jyg.gameserver.core.consumer.EventConsumerFactory;
+import org.jyg.gameserver.core.consumer.DefaultConsumerHandlerFactory;
+import org.jyg.gameserver.core.consumer.ConsumerHandler;
+import org.jyg.gameserver.core.consumer.ConsumerHandlerFactory;
 import org.jyg.gameserver.core.enums.EventType;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.ExceptionHandler;
@@ -25,15 +24,15 @@ public class RingBufferGlobalQueue extends IGlobalQueue {
     private static Disruptor<LogicEvent<Object>> disruptor;
     private static final int BUFFER_SIZE = 1024 * 64;
     private RingBuffer<LogicEvent<Object>> ringBuffer;
-    private EventConsumerFactory eventConsumerFactory;
+    private ConsumerHandlerFactory eventConsumerFactory;
 
     private boolean isStart = false;
 
     public RingBufferGlobalQueue() {
-        this(new DefaultEventConsumerFactory());
+        this(new DefaultConsumerHandlerFactory());
     }
 
-    public RingBufferGlobalQueue(EventConsumerFactory eventConsumerFactory) {
+    public RingBufferGlobalQueue(ConsumerHandlerFactory eventConsumerFactory) {
         this.eventConsumerFactory = eventConsumerFactory;
     }
 
@@ -50,7 +49,7 @@ public class RingBufferGlobalQueue extends IGlobalQueue {
 
         disruptor = new Disruptor<>(eventFactory, BUFFER_SIZE, consumerThreadFactory, ProducerType.MULTI,
                 new LoopAndSleepWaitStrategy());
-        EventConsumer eventConsumer = this.eventConsumerFactory.createAndInit(getContext());
+        ConsumerHandler eventConsumer = this.eventConsumerFactory.createAndInit(getContext());
         disruptor.handleEventsWith(eventConsumer);
 
 //        disruptor.handleEventsWith(eventConsumer);
@@ -65,11 +64,11 @@ public class RingBufferGlobalQueue extends IGlobalQueue {
         disruptor.shutdown();
     }
 
-    public EventConsumerFactory getEventConsumerFactory() {
+    public ConsumerHandlerFactory getEventConsumerFactory() {
         return eventConsumerFactory;
     }
 
-    public void setEventConsumerFactory(EventConsumerFactory eventConsumerFactory) {
+    public void setEventConsumerFactory(ConsumerHandlerFactory eventConsumerFactory) {
         this.eventConsumerFactory = eventConsumerFactory;
     }
 

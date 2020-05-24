@@ -1,9 +1,9 @@
 package org.jyg.gameserver.core.util;
 
 import org.jyg.gameserver.core.bean.LogicEvent;
-import org.jyg.gameserver.core.consumer.DefaultEventConsumerFactory;
-import org.jyg.gameserver.core.consumer.EventConsumer;
-import org.jyg.gameserver.core.consumer.EventConsumerFactory;
+import org.jyg.gameserver.core.consumer.DefaultConsumerHandlerFactory;
+import org.jyg.gameserver.core.consumer.ConsumerHandler;
+import org.jyg.gameserver.core.consumer.ConsumerHandlerFactory;
 import org.jyg.gameserver.core.enums.EventType;
 import io.netty.channel.Channel;
 
@@ -17,7 +17,7 @@ public class BlockingGlobalQueue extends IGlobalQueue {
 
     private final BlockingQueue<LogicEvent<Object>> queue;
 
-    private final EventConsumerFactory eventConsumerFactory;
+    private final ConsumerHandlerFactory eventConsumerFactory;
 
     private ConsumerThread consumerThread;
 
@@ -31,12 +31,12 @@ public class BlockingGlobalQueue extends IGlobalQueue {
 
     public BlockingGlobalQueue(BlockingQueue<LogicEvent<Object>> queue) {
         this.queue = queue;
-        this.eventConsumerFactory = new DefaultEventConsumerFactory();
+        this.eventConsumerFactory = new DefaultConsumerHandlerFactory();
     }
 
     @Override
     public void start() {
-        EventConsumer eventConsumer = this.eventConsumerFactory.createAndInit(getContext());
+        ConsumerHandler eventConsumer = this.eventConsumerFactory.createAndInit(getContext());
         consumerThread = new ConsumerThread(queue , eventConsumer);
         consumerThread.setName("blockingQueue_consumer_thread");
         consumerThread.setDaemon(false);
@@ -76,22 +76,22 @@ public class BlockingGlobalQueue extends IGlobalQueue {
     }
 
     @Override
-    public void setEventConsumerFactory(EventConsumerFactory eventConsumerFactory) {
+    public void setEventConsumerFactory(ConsumerHandlerFactory eventConsumerFactory) {
         throw new UnsupportedOperationException("todo");
     }
 
     @Override
-    public EventConsumerFactory getEventConsumerFactory() {
+    public ConsumerHandlerFactory getEventConsumerFactory() {
         return eventConsumerFactory;
     }
 
     private static class ConsumerThread extends Thread{
         private final BlockingQueue<LogicEvent<Object>> queue;
-        private final EventConsumer eventConsumer;
+        private final ConsumerHandler eventConsumer;
 
         private volatile boolean isStop = false;
 
-        private ConsumerThread(BlockingQueue<LogicEvent<Object>> queue, EventConsumer eventConsumer) {
+        private ConsumerThread(BlockingQueue<LogicEvent<Object>> queue, ConsumerHandler eventConsumer) {
             this.queue = queue;
             this.eventConsumer = eventConsumer;
         }

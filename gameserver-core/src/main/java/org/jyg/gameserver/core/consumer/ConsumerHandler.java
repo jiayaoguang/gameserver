@@ -13,7 +13,7 @@ import org.jyg.gameserver.core.util.IGlobalQueue;
 /**
  * created by jiayaoguang at 2017年12月6日
  */
-public class EventConsumer implements EventHandler<LogicEvent>, WorkHandler<LogicEvent> {
+public class ConsumerHandler implements EventHandler<LogicEvent>, WorkHandler<LogicEvent> {
 
     public static final int DEFAULT_CONSUMER_ID = 0;
 
@@ -25,11 +25,11 @@ public class EventConsumer implements EventHandler<LogicEvent>, WorkHandler<Logi
 
     private final ChannelManager channelManager = new ChannelManager();
 
-    public EventConsumer() {
+    public ConsumerHandler() {
 
     }
 
-    public EventConsumer(int consumerId) {
+    public ConsumerHandler(int consumerId) {
         this.consumerId = consumerId;
     }
 
