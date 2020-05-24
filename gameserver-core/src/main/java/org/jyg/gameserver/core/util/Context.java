@@ -16,6 +16,7 @@ import org.jyg.gameserver.core.manager.*;
 import org.jyg.gameserver.core.session.Session;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.*;
 
 /**
  * create by jiayaoguang on 2020/5/3
@@ -37,6 +38,8 @@ public class Context {
     private final ConsumerManager consumerManager = new ConsumerManager();
 
     private final ChannelManager channelManager = new ChannelManager();
+
+//    private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
     //TODO I think ...
     private final SingleThreadExecutorManagerPool singleThreadExecutorManagerPool;
@@ -131,4 +134,9 @@ public class Context {
     public ServerConfig getServerConfig() {
         return serverConfig;
     }
+
+
+//    public ScheduledExecutorService getScheduledExecutorService() {
+//        return scheduledExecutorService;
+//    }
 }

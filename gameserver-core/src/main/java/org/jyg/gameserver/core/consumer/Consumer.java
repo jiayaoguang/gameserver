@@ -30,8 +30,10 @@ public abstract class Consumer {
 
     private Context context;
 
+    protected ConsumerHandlerFactory eventConsumerFactory;
 
-    private final TimerManager timerManager = new TimerManager();
+
+    protected final TimerManager timerManager = new TimerManager();
 
     private Map<String, HttpProcessor> httpProcessorMap = new HashMap<>();
     private Int2ObjectMap<ProtoProcessor<? extends GeneratedMessageV3>> protoProcessorMap = new Int2ObjectOpenHashMap<>();
@@ -54,9 +56,14 @@ public abstract class Consumer {
 
     public abstract void publicEvent(EventType evenType, Object data, Channel channel, int eventId);
 
-    public abstract void setEventConsumerFactory(ConsumerHandlerFactory eventConsumerFactory);
 
-    public abstract ConsumerHandlerFactory getEventConsumerFactory();
+    public ConsumerHandlerFactory getEventConsumerFactory() {
+        return eventConsumerFactory;
+    }
+
+    public void setEventConsumerFactory(ConsumerHandlerFactory eventConsumerFactory) {
+        this.eventConsumerFactory = eventConsumerFactory;
+    }
 
     public Context getContext() {
         return context;
@@ -120,4 +127,7 @@ public abstract class Consumer {
         //六十秒后关闭
         timerManager.addTimer(new DelayCloseTimer(event.getChannel(), 60 * 1000L));
     }
+
+
+
 }

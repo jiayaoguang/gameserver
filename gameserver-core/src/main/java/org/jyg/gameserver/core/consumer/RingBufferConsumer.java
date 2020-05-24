@@ -23,7 +23,6 @@ public class RingBufferConsumer extends Consumer {
     private static Disruptor<LogicEvent<Object>> disruptor;
     private static final int BUFFER_SIZE = 1024 * 64;
     private RingBuffer<LogicEvent<Object>> ringBuffer;
-    private ConsumerHandlerFactory eventConsumerFactory;
 
     private boolean isStart = false;
 
@@ -49,6 +48,7 @@ public class RingBufferConsumer extends Consumer {
         disruptor = new Disruptor<>(eventFactory, BUFFER_SIZE, consumerThreadFactory, ProducerType.MULTI,
                 new LoopAndSleepWaitStrategy());
         ConsumerHandler eventConsumer = this.eventConsumerFactory.createAndInit(getContext());
+        eventConsumer.setTimerManager(timerManager);
         disruptor.handleEventsWith(eventConsumer);
 
 //        disruptor.handleEventsWith(eventConsumer);

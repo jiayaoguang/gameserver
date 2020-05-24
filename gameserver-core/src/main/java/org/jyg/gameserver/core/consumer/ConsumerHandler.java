@@ -6,6 +6,8 @@ import org.jyg.gameserver.core.bean.LogicEvent;
 import org.jyg.gameserver.core.manager.ChannelManager;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.session.Session;
+import org.jyg.gameserver.core.timer.Timer;
+import org.jyg.gameserver.core.timer.TimerManager;
 import org.jyg.gameserver.core.util.CallBackEvent;
 import org.jyg.gameserver.core.util.Context;
 
@@ -23,6 +25,8 @@ public class ConsumerHandler implements EventHandler<LogicEvent>, WorkHandler<Lo
     private int consumerId = 0;
 
     private final ChannelManager channelManager = new ChannelManager();
+
+    private TimerManager timerManager;
 
     public ConsumerHandler() {
 
@@ -54,7 +58,7 @@ public class ConsumerHandler implements EventHandler<LogicEvent>, WorkHandler<Lo
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-
+            loop();
         }
 
     }
@@ -136,7 +140,15 @@ public class ConsumerHandler implements EventHandler<LogicEvent>, WorkHandler<Lo
      *
      */
     protected void loop() {
-        // do nothing
+        timerManager.updateTimer();
+    }
+
+    public TimerManager getTimerManager() {
+        return timerManager;
+    }
+
+    public void setTimerManager(TimerManager timerManager) {
+        this.timerManager = timerManager;
     }
 
     public Context getContext() {

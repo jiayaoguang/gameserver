@@ -6,10 +6,11 @@ import org.jyg.gameserver.core.enums.EventType;
 /**
  * create by jiayaoguang on 2020/5/24
  */
-public class RemoteMQConsumer extends Consumer {
+public class RabbitMQConsumer extends Consumer {
 
 
-
+    public RabbitMQConsumer() {
+    }
 
 
     @Override
@@ -32,13 +33,4 @@ public class RemoteMQConsumer extends Consumer {
 
     }
 
-    @Override
-    public void setEventConsumerFactory(ConsumerHandlerFactory eventConsumerFactory) {
-
-    }
-
-    @Override
-    public ConsumerHandlerFactory getEventConsumerFactory() {
-        return null;
-    }
 }

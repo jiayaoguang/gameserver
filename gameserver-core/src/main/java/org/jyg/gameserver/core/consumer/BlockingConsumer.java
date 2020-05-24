@@ -14,8 +14,6 @@ public class BlockingConsumer extends Consumer {
 
     private final BlockingQueue<LogicEvent<Object>> queue;
 
-    private final ConsumerHandlerFactory eventConsumerFactory;
-
     private ConsumerThread consumerThread;
 
     public BlockingConsumer() {
@@ -34,6 +32,7 @@ public class BlockingConsumer extends Consumer {
     @Override
     public void start() {
         ConsumerHandler eventConsumer = this.eventConsumerFactory.createAndInit(getContext());
+        eventConsumer.setTimerManager(timerManager);
         consumerThread = new ConsumerThread(queue , eventConsumer);
         consumerThread.setName("blockingQueue_consumer_thread");
         consumerThread.setDaemon(false);
@@ -77,10 +76,6 @@ public class BlockingConsumer extends Consumer {
         throw new UnsupportedOperationException("todo");
     }
 
-    @Override
-    public ConsumerHandlerFactory getEventConsumerFactory() {
-        return eventConsumerFactory;
-    }
 
     private static class ConsumerThread extends Thread{
         private final BlockingQueue<LogicEvent<Object>> queue;
