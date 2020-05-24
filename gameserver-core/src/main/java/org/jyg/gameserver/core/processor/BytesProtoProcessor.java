@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.processor;
 
+import org.jyg.gameserver.core.bean.LogicEvent;
 import org.jyg.gameserver.core.proto.MsgBytes;
 import org.jyg.gameserver.core.session.Session;
 
@@ -16,6 +17,7 @@ public class BytesProtoProcessor extends ProtoProcessor<MsgBytes> {
 		int id = msg.getId();
 		byte[] bytes = msg.getByteDate().toByteArray();
 	}
+
 
 //	public int getProtoEventId() {
 //		return 0;

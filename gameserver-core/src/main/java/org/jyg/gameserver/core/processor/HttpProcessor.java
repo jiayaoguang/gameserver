@@ -3,6 +3,7 @@ package org.jyg.gameserver.core.processor;
 import org.jyg.gameserver.core.bean.LogicEvent;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
+import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.FTLLoader;
 
 /**
@@ -12,6 +13,11 @@ import org.jyg.gameserver.core.util.FTLLoader;
 public abstract class HttpProcessor extends AbstractProcessor<Request> {
 
 	private String path;
+
+	@Override
+	public final void process(Session session, LogicEvent<Request> event) {
+		process(event);
+	}
 
 	public final void process(LogicEvent<Request> event) {
 

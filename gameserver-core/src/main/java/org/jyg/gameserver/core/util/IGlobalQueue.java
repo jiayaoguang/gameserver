@@ -11,6 +11,7 @@ import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.processor.HttpProcessor;
 import org.jyg.gameserver.core.processor.NotFoundHttpProcessor;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
+import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.timer.DelayCloseTimer;
 import org.jyg.gameserver.core.timer.TimerManager;
 
@@ -28,11 +29,11 @@ public abstract class IGlobalQueue {
 
     private Context context;
 
-    public final Map<String, HttpProcessor> httpProcessorMap = new HashMap<>();
 
     private final TimerManager timerManager = new TimerManager();
 
-    private final Int2ObjectMap<ProtoProcessor<? extends GeneratedMessageV3>> protoProcessorMap = new Int2ObjectOpenHashMap<>();
+    private Map<String, HttpProcessor> httpProcessorMap = new HashMap<>();
+    private Int2ObjectMap<ProtoProcessor<? extends GeneratedMessageV3>> protoProcessorMap = new Int2ObjectOpenHashMap<>();
 
     private int id;
 
@@ -104,17 +105,17 @@ public abstract class IGlobalQueue {
     /**
      * 处理普通socket事件
      */
-    public void processProtoEvent(LogicEvent<? extends GeneratedMessageV3> event) {
+    public void processProtoEvent(Session session , LogicEvent<? extends GeneratedMessageV3> event) {
 //		MessageLite msg = event.getData();
         ProtoProcessor processor = protoProcessorMap.get(event.getEventId());
         if (processor == null) {
             System.out.println("unknown socket eventid :" + event.getEventId());
             return;
         }
-        processor.process( event);
+        processor.process(session , event);
     }
     public void processHttpEvent(LogicEvent<Request> event) {
-        getHttpProcessor(event.getData().noParamUri()).process(event);
+        getHttpProcessor(event.getData().noParamUri()).process(null , event);
         //六十秒后关闭
         timerManager.addTimer(new DelayCloseTimer(event.getChannel(), 60 * 1000L));
     }

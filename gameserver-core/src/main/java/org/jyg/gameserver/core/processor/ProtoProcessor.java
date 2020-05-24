@@ -4,6 +4,7 @@ import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.MessageLite;
 import com.google.protobuf.Parser;
 import org.jyg.gameserver.core.bean.LogicEvent;
+import org.jyg.gameserver.core.proto.MsgBytes;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.Context;
 
@@ -56,19 +57,22 @@ public abstract class ProtoProcessor<T extends GeneratedMessageV3> extends Abstr
 	public final Parser<? extends MessageLite> getProtoParser() {
 		return parser;
 	}
-	
-	
 
-	public void process(LogicEvent<T> event) {
-//		System.out.println("eventid : "+event.getEventId());
 
-		Session session = getContext().getSession(event.getChannel());
-		if(session == null){
-			logger.error("session == null..................................");
-			return;
-		}
+	@Override
+	public void process(Session session, LogicEvent<T> event) {
 		process(session,event.getData());
 	}
+//	public void process(LogicEvent<T> event) {
+////		System.out.println("eventid : "+event.getEventId());
+//
+//		Session session = getContext().getSession(event.getChannel());
+//		if(session == null){
+//			logger.error("session == null..................................");
+//			return;
+//		}
+//		process(session,event.getData());
+//	}
 
 	public Context getContext() {
 		return context;

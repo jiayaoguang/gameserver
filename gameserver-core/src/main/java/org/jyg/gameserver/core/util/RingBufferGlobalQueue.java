@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.util;
 
+import com.lmax.disruptor.dsl.EventHandlerGroup;
 import org.jyg.gameserver.core.bean.LogicEvent;
 import org.jyg.gameserver.core.consumer.DefaultEventConsumerFactory;
 import org.jyg.gameserver.core.consumer.EventConsumer;
@@ -38,7 +39,6 @@ public class RingBufferGlobalQueue extends IGlobalQueue {
 
     @Override
     public synchronized void start() {
-
         if(this.isStart){
             return;
         }
@@ -52,6 +52,9 @@ public class RingBufferGlobalQueue extends IGlobalQueue {
                 new LoopAndSleepWaitStrategy());
         EventConsumer eventConsumer = this.eventConsumerFactory.createAndInit(getContext());
         disruptor.handleEventsWith(eventConsumer);
+
+//        disruptor.handleEventsWith(eventConsumer);
+
         disruptor.setDefaultExceptionHandler(new LogExceptionHandler());
         ringBuffer = disruptor.getRingBuffer();
         disruptor.start();

@@ -1,6 +1,7 @@
 package org.jyg.gameserver.core.processor;
 
 import org.jyg.gameserver.core.bean.LogicEvent;
+import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.Context;
 import org.jyg.gameserver.core.util.FTLLoader;
 import org.jyg.gameserver.core.util.IGlobalQueue;
@@ -18,6 +19,8 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 
 	private Context context;
 
+	private int consumerId = 0;
+
 	public IGlobalQueue getGlobalQueue() {
 		return context.getGlobalQueue();
 	}
@@ -31,7 +34,15 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 		this.context = context;
 	}
 
-	public abstract void process(LogicEvent<T> event);
+	public int getConsumerId() {
+		return consumerId;
+	}
+
+	public void setConsumerId(int consumerId) {
+		this.consumerId = consumerId;
+	}
+
+	public abstract void process(Session session , LogicEvent<T> event);
 
 
 	
