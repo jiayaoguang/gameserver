@@ -98,7 +98,7 @@ public class ConsumerHandler implements EventHandler<LogicEvent>, WorkHandler<Lo
             case RPC_MSG_COME:
                 Session session = null;
                 if(isDefaultConsumer()){
-                    session = getContext().getSession(event.getChannel());
+                    session = channelManager.getSession(event.getChannel());
                 }
                 context.getGlobalQueue().processProtoEvent(session , event);
                 break;

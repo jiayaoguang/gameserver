@@ -33,11 +33,9 @@ public class Context {
     private volatile boolean isStart = false;
 
 
-    private ServerConfig serverConfig = new ServerConfig();
+    private final ServerConfig serverConfig = new ServerConfig();
 
     private final ConsumerManager consumerManager = new ConsumerManager();
-
-    private final ChannelManager channelManager = new ChannelManager();
 
 //    private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
@@ -63,13 +61,6 @@ public class Context {
         return eventLoopGroupManager;
     }
 
-    public ConsumerManager getConsumerManager() {
-        return consumerManager;
-    }
-
-    public Session getSession(Channel channel) {
-        return channelManager.getSession(channel);
-    }
 
     public void addMsgId2ProtoMapping(int msgId, Class<? extends GeneratedMessageV3> protoClazz) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         GeneratedMessageV3 defaultInstance = (GeneratedMessageV3)protoClazz.getMethod("getDefaultInstance").invoke(null);
@@ -92,19 +83,9 @@ public class Context {
 
     public int getMsgIdByProtoClass( Class<? extends GeneratedMessageV3> protoClass) {
 
-        Integer num = protoClazz2MsgidMap.getInt(protoClass);
-
-        return protoClazz2MsgidMap.get(protoClass);
+        return protoClazz2MsgidMap.getInt(protoClass);
     }
 
-    public void as_on_client_active(LogicEvent<Object> event) {
-        channelManager.doLink(event);
-        // event.getChannel().writeAndFlush(new TextWebSocketFrame(""));
-    }
-
-    public void as_on_client_inactive(LogicEvent<Object> event) {
-        channelManager.doUnlink(event);
-    }
 
     public ExecutorManager getSingleThreadExecutorManager(Session session) {
         return singleThreadExecutorManagerPool.getSingleThreadExecutorManager(session);
