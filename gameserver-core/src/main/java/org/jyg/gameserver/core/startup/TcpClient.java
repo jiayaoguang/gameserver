@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.startup;
 
 import com.google.protobuf.MessageLite;
 import com.google.protobuf.MessageLiteOrBuilder;
+import org.jyg.gameserver.core.consumer.RingBufferConsumer;
 import org.jyg.gameserver.core.handle.initializer.MyChannelInitializer;
 import org.jyg.gameserver.core.handle.initializer.SocketClientInitializer;
 import org.jyg.gameserver.core.session.Session;
@@ -31,7 +32,23 @@ public class TcpClient extends AbstractBootstrap{
 	private Channel channel;
 	private Session session;
 
+	public TcpClient()  {
+		this(new Context(new RingBufferConsumer()));
 
+//		try {
+//			this.registerSendEventIdByProto(ProtoEnum.P_COMMON_REQUEST_PING.getEventId(), p_common.p_common_request_ping.class);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//
+//		//注册pong处理器
+//		try {
+//			this.registerSocketEvent(ProtoEnum.P_COMMON_RESPONSE_PONG.getEventId() , new PongProtoProcessor());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+
+	}
 	public TcpClient(Context context)  {
 		super(context);
 
