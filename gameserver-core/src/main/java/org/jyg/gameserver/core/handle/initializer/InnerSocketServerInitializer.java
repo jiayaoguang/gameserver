@@ -28,6 +28,8 @@ public class InnerSocketServerInitializer extends
 		pipeline.addLast(new MyProtobufDecoder(context));
 		
 		pipeline.addLast(new MyProtobufEncoder(context));
+
+		pipeline.addLast(new MyProtobufListEncoder(context));
 		
 		pipeline.addLast(new InnerSocketHandler(context.getGlobalQueue()));
 		

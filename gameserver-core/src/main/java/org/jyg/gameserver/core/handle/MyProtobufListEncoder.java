@@ -12,10 +12,11 @@ import java.util.List;
 
 /**
  * created by jiayaoguang at 2018年3月13日
- * protobuf编码器
+ * protobuf list 编码器
+ * 需要考虑数组产生的字节码过大的情况
  */
 @Sharable
-public class MyProtobufListEncoder extends MessageToByteEncoder<List<MessageLite>> {
+public class MyProtobufListEncoder extends MessageToByteEncoder<List<? extends MessageLite>> {
 
 	protected final Context context;
 
@@ -25,7 +26,9 @@ public class MyProtobufListEncoder extends MessageToByteEncoder<List<MessageLite
 
 
 	@Override
-	protected void encode(ChannelHandlerContext ctx, List<MessageLite> msgList, ByteBuf buf) {
+	protected void encode(ChannelHandlerContext ctx, List<? extends MessageLite> msgList, ByteBuf buf) {
+
+		
 
 		for (MessageLite msg:msgList){
 			Class<? extends MessageLite> protoClazz = msg.getClass();

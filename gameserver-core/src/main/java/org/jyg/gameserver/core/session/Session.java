@@ -3,6 +3,8 @@ package org.jyg.gameserver.core.session;
 import com.google.protobuf.MessageLite;
 import io.netty.channel.Channel;
 
+import java.util.List;
+
 /**
  * created by jiayaoguang at 2017年12月6日
  */
@@ -48,6 +50,14 @@ public class Session {
 
 	public void writeMessage( MessageLite message) {
 		this.channel.writeAndFlush(message);
+	}
+
+	public void writeMessage( MessageLite.Builder messageBuider) {
+		this.channel.writeAndFlush(messageBuider.build());
+	}
+
+	public void writeMessage( List<? extends MessageLite> messageList) {
+		this.channel.writeAndFlush(messageList);
 	}
 	
 	

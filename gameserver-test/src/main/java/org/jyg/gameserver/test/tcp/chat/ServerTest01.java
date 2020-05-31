@@ -4,7 +4,9 @@ import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstarp;
 import org.jyg.gameserver.test.proto.MsgChat;
-import org.jyg.gameserver.test.proto.p_test.p_sm_scene_chat;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -24,9 +26,14 @@ public class ServerTest01
         		if("bye".equals(msg.getContent() )) {
         			return;
         		}
-        		
-        		session.writeMessage(p_sm_scene_chat.newBuilder().setMsg("i just think so ,hello world too"));
-        	}
+
+				List<MsgChat> msgList = new ArrayList<>();
+
+        		for(int i = 0;i<10;i++){
+        			msgList.add(MsgChat.newBuilder().setContent("i just think so ,hello world too -"+i).build());
+				}
+				session.writeMessage(msgList);
+			}
 			
         };
 //		bootstarp.addMsgId2ProtoMapping(1, p_sm_scene_request_ping.getDefaultInstance());

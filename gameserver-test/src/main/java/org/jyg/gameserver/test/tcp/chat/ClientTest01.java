@@ -1,15 +1,10 @@
 package org.jyg.gameserver.test.tcp.chat;
 
+import org.junit.Test;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
-import org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat;
-import org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat;
-import org.jyg.gameserver.test.proto.MsgChat;
-import org.jyg.gameserver.test.proto.p_test;
-import org.jyg.gameserver.test.proto.p_test.p_scene_sm_response_pong;
-import org.jyg.gameserver.test.proto.p_test.p_sm_scene_request_ping;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.TcpClient;
-import org.junit.Test;
+import org.jyg.gameserver.test.proto.MsgChat;
 
 /**
  * Hello world!
@@ -29,7 +24,7 @@ public class ClientTest01
 					return;
 				}
 
-				session.writeMessage(p_test.p_sm_scene_chat.newBuilder().setMsg("i just think so ,hello world too"));
+//				session.writeMessage(p_test.p_sm_scene_chat.newBuilder().setMsg("i just think so ,hello world too").build());
 			}
 
 		};
