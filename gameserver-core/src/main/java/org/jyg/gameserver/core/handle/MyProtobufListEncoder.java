@@ -43,9 +43,9 @@ public class MyProtobufListEncoder extends MessageToByteEncoder<List<? extends M
 				continue;
 			}
 
-			if(context.getServerConfig().isUseGzip()){
-				bytes = ZipUtil.gzip(bytes);
-			}
+//			if(context.getServerConfig().isUseGzip()){
+//				bytes = ZipUtil.gzip(bytes);
+//			}
 
 			int protoLen = 4 + bytes.length;
 //		ByteBuf buf = ctx.alloc().directBuffer(protoLen);

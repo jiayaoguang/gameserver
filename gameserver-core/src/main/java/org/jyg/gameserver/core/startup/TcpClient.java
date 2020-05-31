@@ -1,9 +1,11 @@
 package org.jyg.gameserver.core.startup;
 
+import com.google.protobuf.MessageLite;
 import com.google.protobuf.MessageLiteOrBuilder;
 import org.jyg.gameserver.core.handle.initializer.MyChannelInitializer;
 import org.jyg.gameserver.core.handle.initializer.SocketClientInitializer;
 import org.jyg.gameserver.core.session.Session;
+import org.jyg.gameserver.core.util.Context;
 import org.jyg.gameserver.core.util.RemotingUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -25,12 +27,14 @@ public class TcpClient extends AbstractBootstrap{
 //	public int port = 6789; // 端口
 	
 	// 通过nio方式来接收连接和处理连接
-	private static EventLoopGroup group = new NioEventLoopGroup();
 	private final Bootstrap bootstrap = new Bootstrap();
 	private Channel channel;
 	private Session session;
-	public TcpClient()  {
-		super();
+
+
+	public TcpClient(Context context)  {
+		super(context);
+
 //		try {
 //			this.registerSendEventIdByProto(ProtoEnum.P_COMMON_REQUEST_PING.getEventId(), p_common.p_common_request_ping.class);
 //		} catch (Exception e) {
@@ -54,7 +58,7 @@ public class TcpClient extends AbstractBootstrap{
 
 	public void start(MyChannelInitializer<Channel> channelInitializer){
 		System.out.println("客户端成功启动...");
-		bootstrap.group(group);
+		bootstrap.group(getContext().getEventLoopGroupManager().getWorkGroup());
 		bootstrap.channel( RemotingUtil.useEpoll() ? EpollSocketChannel.class : NioSocketChannel.class);
 		bootstrap.handler(channelInitializer);
 		bootstrap.option(ChannelOption.SO_KEEPALIVE, false);
@@ -91,7 +95,7 @@ public class TcpClient extends AbstractBootstrap{
 	}
 	
 
-	public void write( MessageLiteOrBuilder msg) throws IOException {
+	public void write( MessageLite msg) throws IOException {
 		channel.writeAndFlush( msg);
 //		System.out.println("客户端发送数据>>>>");
 	}
@@ -104,7 +108,7 @@ public class TcpClient extends AbstractBootstrap{
 		if(channel !=null && channel.isOpen()) {
 			channel.close();
 		}
-		group.shutdownGracefully();
+		getContext().getEventLoopGroupManager().stopAllEventLoop();
 	}
 
 }

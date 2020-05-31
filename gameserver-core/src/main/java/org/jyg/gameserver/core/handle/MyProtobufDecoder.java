@@ -22,7 +22,7 @@ public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
 	private final Context context;
 
 	public MyProtobufDecoder(Context context) {
-		super(1024 * 64, 0, 4, 0, 4);
+		super(context.getServerConfig().getMaxFrameLength(), 0, 4, 0, 4);
 		this.context = context;
 	}
 
@@ -72,11 +72,11 @@ public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
 			}
 		try (ByteBufInputStream bis = new ByteBufInputStream(frame)) {
 			final MessageLite messageLite;
-			if (context.getServerConfig().isUseGzip()) {
-				messageLite = protoParser.parseFrom(ZipUtil.unGzip(bis , bis.available()));
-			}else {
+//			if (context.getServerConfig().isUseGzip()) {
+//				messageLite = protoParser.parseFrom(ZipUtil.unGzip(bis , bis.available()));
+//			}else {
 				messageLite = protoParser.parseFrom(bis);
-			}
+//			}
 			context.getGlobalQueue().publicEvent(EventType.RPC_MSG_COME, messageLite, ctx.channel(), msgId);
 		}
 

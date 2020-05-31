@@ -58,13 +58,8 @@ http例子代码:
     bootstarp.addHttpService(8080);
     bootstarp.start();
 
-更多例子请在[test](https://github.com/jiayaoguang/gameserver/tree/master/gameserver-test/src/main/java/com/jyg/test01)包查看
+更多例子请在[test](https://github.com/jiayaoguang/gameserver/tree/master/gameserver-test/src/main/java/org/jyg/gameserver/test)包查看
 
-TODO : 自动扫描处理消息类
-支持不同服务器逻辑线程之间的通信调用
-支持发送发送bytes
-添加消息频率统计消息过滤
-    
 ----------
 ## License
 [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) Copyright (C) Apache Software Foundation
