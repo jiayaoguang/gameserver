@@ -22,7 +22,7 @@ public class AsynClientTest01
 
         client.connect("localhost",8080);
 
-        client.write(p_sm_scene_request_ping.newBuilder());
+        client.write(p_sm_scene_request_ping.newBuilder().build());
         
 //        client.close();
     }

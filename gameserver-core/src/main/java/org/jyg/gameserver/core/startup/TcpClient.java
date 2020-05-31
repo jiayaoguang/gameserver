@@ -116,6 +116,11 @@ public class TcpClient extends AbstractBootstrap{
 		channel.writeAndFlush( msg);
 //		System.out.println("客户端发送数据>>>>");
 	}
+
+	public void write( MessageLite.Builder msgBuilder) throws IOException {
+		write(msgBuilder.build());
+//		System.out.println("客户端发送数据>>>>");
+	}
 	
 	public Channel getChannel() {
 		return channel;
