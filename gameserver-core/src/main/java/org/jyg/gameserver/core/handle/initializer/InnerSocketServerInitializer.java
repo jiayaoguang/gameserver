@@ -1,15 +1,16 @@
 package org.jyg.gameserver.core.handle.initializer;
 
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelPipeline;
 import org.jyg.gameserver.core.handle.InnerSocketHandler;
 import org.jyg.gameserver.core.handle.MyProtobufDecoder;
 import org.jyg.gameserver.core.handle.MyProtobufEncoder;
+import org.jyg.gameserver.core.handle.MyProtobufListEncoder;
+import org.jyg.gameserver.core.util.Context;
 
 /**
  * created by jiayaoguang at 2017年12月6日
  */
-import org.jyg.gameserver.core.util.Context;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelPipeline;
 
 public class InnerSocketServerInitializer extends
 		MyChannelInitializer<Channel> {

@@ -1,6 +1,6 @@
 package org.jyg.gameserver.core.session;
 
-import com.google.protobuf.MessageLiteOrBuilder;
+import com.google.protobuf.MessageLite;
 import io.netty.channel.Channel;
 
 /**
@@ -46,7 +46,7 @@ public class Session {
 		this.lastContactMill = lastContactMill;
 	}
 
-	public void writeMessage( MessageLiteOrBuilder message) {
+	public void writeMessage( MessageLite message) {
 		this.channel.writeAndFlush(message);
 	}
 	

@@ -2,10 +2,13 @@ package org.jyg.gameserver.test;
 
 import cn.hutool.core.util.ZipUtil;
 import com.google.protobuf.ByteString;
+import io.netty.util.internal.shaded.org.jctools.queues.MpscUnboundedArrayQueue;
+import org.junit.Test;
 import org.jyg.gameserver.core.bean.ServerConfig;
 import org.jyg.gameserver.core.proto.MsgBytes;
 import org.jyg.gameserver.core.util.AllUtil;
-import org.junit.Test;
+import org.jyg.gameserver.core.util.ExecTimeUtil;
+import org.jyg.gameserver.core.util.IdUtil;
 
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -206,12 +209,75 @@ public class JygTest {
     @Test
     public void gzipTest() throws Exception{
 
-        byte[] bytes = "jyg.properties".getBytes();
+        byte[] bytes = ("wdasdqwEDFSDGSFADASdsfsdfsdfsdfsdfhiwuefkdsnfsdsfsffsdfbxccbxxxxx" +
+                "bcvvvvv423423443535345vvvvvvvdgsdgeter43452421312312kdsncmxjhsdgfjshdbfsnbfsdfdffbvcbchfhtrer3352523423mndsvfjhgsdjcbxzbcsfu23432d234234").getBytes();
 
         byte[] zipbytes = ZipUtil.gzip(bytes);
 
         byte[] zipbytsss = ZipUtil.unGzip(zipbytes);
-        AllUtil.println(new java.lang.String(zipbytsss));
+//        AllUtil.println(new java.lang.String(zipbytsss));
+
+        AllUtil.println(" befoe "+ bytes.length + "  af "+ zipbytes.length );
+    }
+
+    @Test
+    public void testQueueCost() throws Exception{
+
+        final ArrayBlockingQueue<String> queue1 = new ArrayBlockingQueue<>(4000000);
+
+        for (int i = 0; i < 8; i++){
+            startQueueOffer("ConcurrentLinkedQueue offer" , queue1);
+        }
+
+        Thread.sleep(1000);
+
+        new Thread(()->{
+            ExecTimeUtil.exec("ConcurrentLinkedQueue poll" , ()->{
+                for (int i = 0; i < 8; i++) {
+                    queue1.poll();
+                }
+            });
+        }).start();
+
+
+        Thread.sleep(2000);
+
+        final MpscUnboundedArrayQueue<String> queue2 = new MpscUnboundedArrayQueue<>(4000000);
+        for (int i = 0; i < 8; i++){
+            startQueueOffer("MpscUnboundedArrayQueue offer",queue2);
+        }
+
+        Thread.sleep(2000);
+
+        new Thread(()->{
+            ExecTimeUtil.exec("MpscUnboundedArrayQueue poll" , ()->{
+                for (int i = 0; i < 3000000; i++) {
+                    queue2.relaxedPoll();
+                }
+            });
+        }).start();
+
+
+        Thread.sleep(3000);
+
+    }
+
+    public void startQueueOffer(String name , Queue<String> queue){
+        new Thread(() -> {
+            ExecTimeUtil.exec(name, () -> {
+                for (int i = 0; i < 1000000; i++) {
+                    queue.offer("");
+                }
+            });
+        }).start();
+    }
+
+
+    @Test
+    public void testIdUtil(){
+        for (int i = 0; i < 30; i++)
+            AllUtil.println(IdUtil.nextId());
+
     }
 
 }

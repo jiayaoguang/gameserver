@@ -12,10 +12,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * create by jiayaoguang on 2020/5/4
- */
-
-
-/**
  * 53 bits unique id:
  * <p>
  * |--------|--------|--------|--------|--------|--------|--------|--------|

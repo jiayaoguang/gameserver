@@ -1,10 +1,8 @@
 package org.jyg.gameserver.core.processor;
 
-import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.MessageLite;
 import com.google.protobuf.Parser;
 import org.jyg.gameserver.core.bean.LogicEvent;
-import org.jyg.gameserver.core.proto.MsgBytes;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.Context;
 
@@ -13,25 +11,25 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * created by jiayaoguang at 2017年12月16日
  */
-public abstract class ProtoProcessor<T extends GeneratedMessageV3> extends AbstractProcessor<T> {
+public abstract class ProtoProcessor<T extends MessageLite> extends AbstractProcessor<T> {
 
-	private final Parser<? extends GeneratedMessageV3> parser;
-	private final Class<? extends GeneratedMessageV3> clazz;
+	private final Parser<? extends MessageLite> parser;
+	private final Class<? extends MessageLite> clazz;
 
 	private Context context;
 
-	public ProtoProcessor(Class<? extends GeneratedMessageV3> protoClazz) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-		GeneratedMessageV3 defaultInstance = (GeneratedMessageV3)protoClazz.getMethod("getDefaultInstance").invoke(null);
+	public ProtoProcessor(Class<? extends MessageLite> protoClazz) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		MessageLite defaultInstance = (MessageLite)protoClazz.getMethod("getDefaultInstance").invoke(null);
 		this.parser = defaultInstance.getParserForType();
 		this.clazz = protoClazz;
 	}
 
-	public ProtoProcessor(GeneratedMessageV3 messageLite) {
+	public ProtoProcessor(MessageLite messageLite) {
 		this.parser = messageLite.getParserForType();
 		this.clazz = messageLite.getClass();
 	}
 	
-//	public ProtoProcessor(GeneratedMessageV3.Builder<T> messageLite) {
+//	public ProtoProcessor(MessageLite.Builder<T> messageLite) {
 //		this(messageLite.build());
 //	}
 
@@ -47,7 +45,7 @@ public abstract class ProtoProcessor<T extends GeneratedMessageV3> extends Abstr
 	public String getProtoClassName() {
 		return clazz.getName();
 	}
-	public Class<? extends GeneratedMessageV3> getProtoClass() {
+	public Class<? extends MessageLite> getProtoClass() {
 		return clazz;
 	}
 	public int getProtoMsgId() {

@@ -1,12 +1,11 @@
 package org.jyg.gameserver.core.consumer;
 
-import com.google.protobuf.GeneratedMessageV3;
+import com.google.protobuf.MessageLite;
+import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.jyg.gameserver.core.bean.LogicEvent;
-import org.jyg.gameserver.core.consumer.ConsumerHandlerFactory;
 import org.jyg.gameserver.core.enums.EventType;
-import io.netty.channel.Channel;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.processor.HttpProcessor;
 import org.jyg.gameserver.core.processor.NotFoundHttpProcessor;
@@ -36,7 +35,7 @@ public abstract class Consumer {
     protected final TimerManager timerManager = new TimerManager();
 
     private Map<String, HttpProcessor> httpProcessorMap = new HashMap<>();
-    private Int2ObjectMap<ProtoProcessor<? extends GeneratedMessageV3>> protoProcessorMap = new Int2ObjectOpenHashMap<>();
+    private Int2ObjectMap<ProtoProcessor<? extends MessageLite>> protoProcessorMap = new Int2ObjectOpenHashMap<>();
 
     private int id;
 
@@ -99,21 +98,21 @@ public abstract class Consumer {
      * @param msgId     消息id
      * @param processor 事件处理器
      */
-    public void addProtoProcessor(int msgId, ProtoProcessor<? extends GeneratedMessageV3> processor , Context context) {
+    public void addProtoProcessor(int msgId, ProtoProcessor<? extends MessageLite> processor , Context context) {
         if (protoProcessorMap.containsKey(msgId)) {
             throw new IllegalArgumentException("dupilcated eventid");
         }
         processor.setContext(context);
         protoProcessorMap.put(msgId, processor);
     }
-    public ProtoProcessor<? extends GeneratedMessageV3> getProtoProcessor(int msgId) {
+    public ProtoProcessor<? extends MessageLite> getProtoProcessor(int msgId) {
         return protoProcessorMap.get(msgId);
     }
 
     /**
      * 处理普通socket事件
      */
-    public void processProtoEvent(Session session , LogicEvent<? extends GeneratedMessageV3> event) {
+    public void processProtoEvent(Session session , LogicEvent<? extends MessageLite> event) {
 //		MessageLite msg = event.getData();
         ProtoProcessor processor = protoProcessorMap.get(event.getEventId());
         if (processor == null) {
