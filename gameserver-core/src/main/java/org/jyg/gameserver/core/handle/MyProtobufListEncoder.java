@@ -58,10 +58,10 @@ public class MyProtobufListEncoder extends MessageToByteEncoder<List<? extends M
 
 		//size 超了 ，队列里的数据单个处理
 		if(msgListToBufSize + 128 > context.getServerConfig().getMaxFrameLength()){
-			buf.clear();
-			for (MessageLite msg:msgList){
-				ctx.fireChannelRead(msg);
-			}
+			//buf.clear();
+			//for (MessageLite msg:msgList){
+			//	ctx.fireChannelRead(msg);
+			//}
 		}
 
 //		out.add(buf);
