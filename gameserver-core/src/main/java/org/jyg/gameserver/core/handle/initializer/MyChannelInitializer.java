@@ -16,8 +16,8 @@ public abstract class MyChannelInitializer<C extends Channel> extends ChannelIni
         this.context = context;
     }
 
-    public Consumer getGlobalQueue() {
-        return context.getGlobalQueue();
+    public Consumer getDefaultConsumer() {
+        return context.getDefaultConsumer();
     }
 
     public Context getContext() {

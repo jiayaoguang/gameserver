@@ -28,7 +28,7 @@ public abstract class TcpService extends AbstractService {
 	}
 
 	public TcpService(int port, MyChannelInitializer<Channel> initializer , boolean isHttp) {
-		super(initializer.getGlobalQueue());
+		super(initializer.getDefaultConsumer());
 		if (port < 0) {
 			throw new IllegalArgumentException("port number cannot be negative ");
 		}

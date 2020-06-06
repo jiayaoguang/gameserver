@@ -28,7 +28,6 @@ public class MyProtobufListEncoder extends MessageToByteEncoder<List<? extends M
 	@Override
 	protected void encode(ChannelHandlerContext ctx, List<? extends MessageLite> msgList, ByteBuf buf) {
 
-		int msgListToBufSize = 0;
 
 		for (MessageLite msg:msgList){
 			Class<? extends MessageLite> protoClazz = msg.getClass();
@@ -47,7 +46,6 @@ public class MyProtobufListEncoder extends MessageToByteEncoder<List<? extends M
 //				bytes = ZipUtil.gzip(bytes);
 //			}
 
-			msgListToBufSize += (bytes.length + 8);
 
 			int protoLen = 4 + bytes.length;
 //		ByteBuf buf = ctx.alloc().directBuffer(protoLen);
@@ -56,13 +54,6 @@ public class MyProtobufListEncoder extends MessageToByteEncoder<List<? extends M
 			buf.writeBytes(bytes);
 		}
 
-		//size 超了 ，队列里的数据单个处理
-		if(msgListToBufSize + 128 > context.getServerConfig().getMaxFrameLength()){
-			//buf.clear();
-			//for (MessageLite msg:msgList){
-			//	ctx.fireChannelRead(msg);
-			//}
-		}
 
 //		out.add(buf);
 	}

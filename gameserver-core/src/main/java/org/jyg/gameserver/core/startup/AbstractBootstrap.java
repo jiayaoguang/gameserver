@@ -18,7 +18,7 @@ public abstract class AbstractBootstrap {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    protected final Consumer globalQueue;
+    protected final Consumer defaultConsumer;
 
     private final Context context;
 
@@ -28,14 +28,14 @@ public abstract class AbstractBootstrap {
         this(new RingBufferConsumer());
     }
 
-    public AbstractBootstrap(Consumer globalQueue) {
-        this(new Context(globalQueue));
+    public AbstractBootstrap(Consumer defaultConsumer) {
+        this(new Context(defaultConsumer));
     }
 
     public AbstractBootstrap(Context context) {
-        this.globalQueue = context.getGlobalQueue();
+        this.defaultConsumer = context.getDefaultConsumer();
         this.context = context;
-//        this.globalQueue.getEventConsumerFactory().setContext(context);
+//        this.defaultConsumer.getEventConsumerFactory().setContext(context);
     }
 
 //    public void setEventConsumerFactory(EventConsumerFactory eventConsumerFactory) {
@@ -44,7 +44,7 @@ public abstract class AbstractBootstrap {
 //            return;
 //        }
 //        eventConsumerFactory.setEventDispatcher(this.context.getEventDispatcher());
-//        this.globalQueue.setEventConsumerFactory(eventConsumerFactory);
+//        this.defaultConsumer.setEventConsumerFactory(eventConsumerFactory);
 //
 //    }
 
@@ -54,11 +54,11 @@ public abstract class AbstractBootstrap {
 
     public void addProtoProcessor(ProtoProcessor<? extends MessageLite> protoProcessor) {
         int msgId = context.getMsgIdByProtoClass(protoProcessor.getProtoClass());
-        this.context.getGlobalQueue().addProtoProcessor(msgId, protoProcessor , context);
+        this.context.getDefaultConsumer().addProtoProcessor(msgId, protoProcessor , context);
     }
 
     public void addProtoProcessor(int msgId,ProtoProcessor<? extends MessageLite> protoProcessor) {
-        this.context.getGlobalQueue().addProtoProcessor(msgId, protoProcessor , context);
+        this.context.getDefaultConsumer().addProtoProcessor(msgId, protoProcessor , context);
     }
 
     public void registerHttpEvent(String path, HttpProcessor processor){
@@ -73,7 +73,7 @@ public abstract class AbstractBootstrap {
         if (path == null) {
             throw new IllegalArgumentException(" getProtoEventId -1 ");
         }
-        this.context.getGlobalQueue().addHttpProcessor(path, processor, context);
+        this.context.getDefaultConsumer().addHttpProcessor(path, processor, context);
     }
 
 
@@ -104,8 +104,8 @@ public abstract class AbstractBootstrap {
         return logger;
     }
 
-    public Consumer getGlobalQueue() {
-        return globalQueue;
+    public Consumer getDefaultConsumer() {
+        return defaultConsumer;
     }
 
     public Context getContext() {
@@ -120,7 +120,7 @@ public abstract class AbstractBootstrap {
         }
         isStart = true;
         context.start();
-        this.globalQueue.setContext(context);
+        this.defaultConsumer.setContext(context);
         beforeStart();
         doStart();
     }

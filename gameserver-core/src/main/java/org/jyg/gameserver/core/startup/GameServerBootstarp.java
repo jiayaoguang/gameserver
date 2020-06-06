@@ -21,8 +21,8 @@ public class GameServerBootstarp extends AbstractBootstrap {
         super();
     }
 
-    public GameServerBootstarp(Consumer globalQueue) {
-        super(globalQueue);
+    public GameServerBootstarp(Consumer defaultConsumer) {
+        super(defaultConsumer);
     }
 
 
@@ -53,7 +53,7 @@ public class GameServerBootstarp extends AbstractBootstrap {
         if (services.isEmpty()) {
             throw new IllegalArgumentException("services list is empty");
         }
-        globalQueue.start();
+        defaultConsumer.start();
 
         for (Service service : services) {
             service.start();
@@ -64,7 +64,7 @@ public class GameServerBootstarp extends AbstractBootstrap {
     public void stop(){
         getContext().getEventLoopGroupManager().stopAllEventLoop();
 
-        globalQueue.stop();
+        defaultConsumer.stop();
 
         for (Service service : services) {
             service.stop();
@@ -72,7 +72,7 @@ public class GameServerBootstarp extends AbstractBootstrap {
     }
 
 
-    public Consumer getGlobalQueue() {
-        return globalQueue;
+    public Consumer getDefaultConsumer() {
+        return defaultConsumer;
     }
 }

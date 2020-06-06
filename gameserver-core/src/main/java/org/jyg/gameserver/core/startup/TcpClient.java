@@ -1,7 +1,6 @@
 package org.jyg.gameserver.core.startup;
 
 import com.google.protobuf.MessageLite;
-import com.google.protobuf.MessageLiteOrBuilder;
 import org.jyg.gameserver.core.consumer.RingBufferConsumer;
 import org.jyg.gameserver.core.handle.initializer.MyChannelInitializer;
 import org.jyg.gameserver.core.handle.initializer.SocketClientInitializer;
@@ -12,7 +11,6 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
 import io.netty.channel.epoll.EpollSocketChannel;
-import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.io.IOException;
@@ -85,7 +83,7 @@ public class TcpClient extends AbstractBootstrap{
 		bootstrap.option(ChannelOption.SO_LINGER, 0);
 		bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 
-		globalQueue.start();
+		defaultConsumer.start();
 	}
 
 	public TcpClient(MyChannelInitializer<Channel> channelInitializer) {

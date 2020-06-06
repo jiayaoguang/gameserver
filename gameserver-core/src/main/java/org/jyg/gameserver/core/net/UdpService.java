@@ -27,7 +27,7 @@ public class UdpService extends AbstractService {
     private final Context context;
 
     public UdpService(int port, Context context) {
-        super(context.getGlobalQueue());
+        super(context.getDefaultConsumer());
         if (port < 0) {
             throw new IllegalArgumentException("port number cannot be negative ");
         }

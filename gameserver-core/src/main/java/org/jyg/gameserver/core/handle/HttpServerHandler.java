@@ -12,10 +12,10 @@ import java.io.IOException;
 
 public class HttpServerHandler extends SimpleChannelInboundHandler<HttpRequest> {
 
-	private final Consumer globalQueue;
+	private final Consumer defaultConsumer;
 
-	public HttpServerHandler(Consumer globalQueue) {
-		this.globalQueue = globalQueue;
+	public HttpServerHandler(Consumer defaultConsumer) {
+		this.defaultConsumer = defaultConsumer;
 	}
 
 	// 是否是线程同步的http
@@ -57,7 +57,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpRequest> 
 
 		Request request = this.createRequest((HttpRequest) msg);
 
-		globalQueue.publicEvent(EventType.HTTP_MSG_COME, request, ctx.channel());
+		defaultConsumer.publicEvent(EventType.HTTP_MSG_COME, request, ctx.channel());
 
 		// HttpRequest request = (HttpRequest) msg;
 

@@ -7,15 +7,15 @@ import org.jyg.gameserver.core.consumer.Consumer;
  */
 public abstract class AbstractService implements Service{
 
-    protected final Consumer globalQueue;
+    protected final Consumer defaultConsumer;
 
 
-    protected AbstractService(Consumer globalQueue) {
-        this.globalQueue = globalQueue;
+    protected AbstractService(Consumer defaultConsumer) {
+        this.defaultConsumer = defaultConsumer;
     }
 
-    public Consumer getGlobalQueue() {
-        return globalQueue;
+    public Consumer getDefaultConsumer() {
+        return defaultConsumer;
     }
 
 }

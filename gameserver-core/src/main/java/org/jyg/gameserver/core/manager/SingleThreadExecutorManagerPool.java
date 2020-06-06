@@ -15,18 +15,18 @@ public class SingleThreadExecutorManagerPool {
 
 	private final List<SingleThreadExecutorManager> singleThreadExecutorManagerList;
 
-	private final Consumer globalQueue;
+	private final Consumer defaultConsumer;
 
-	public SingleThreadExecutorManagerPool(Consumer globalQueue ) {
-		this(globalQueue , DEFAULT_POOL_SIZE);
+	public SingleThreadExecutorManagerPool(Consumer defaultConsumer) {
+		this(defaultConsumer, DEFAULT_POOL_SIZE);
 	}
 
-	public SingleThreadExecutorManagerPool(Consumer globalQueue , int num) {
+	public SingleThreadExecutorManagerPool(Consumer defaultConsumer, int num) {
 		this.singleThreadExecutorManagerList = new ArrayList<>();
 		for(int i = 0;i < num ;i++){
-			this.singleThreadExecutorManagerList.add(new SingleThreadExecutorManager(globalQueue));
+			this.singleThreadExecutorManagerList.add(new SingleThreadExecutorManager(defaultConsumer));
 		}
-		this.globalQueue = globalQueue;
+		this.defaultConsumer = defaultConsumer;
 	}
 
 	public SingleThreadExecutorManager getSingleThreadExecutorManager(Session session){
@@ -41,7 +41,7 @@ public class SingleThreadExecutorManagerPool {
 	@Deprecated
 	public void expandSize(int addNum) {
 		for (int i = 0; i < addNum; i++) {
-			singleThreadExecutorManagerList.add(new SingleThreadExecutorManager(this.globalQueue));
+			singleThreadExecutorManagerList.add(new SingleThreadExecutorManager(this.defaultConsumer));
 		}
 	}
 

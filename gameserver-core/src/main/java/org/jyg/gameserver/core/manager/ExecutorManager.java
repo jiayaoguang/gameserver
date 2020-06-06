@@ -13,20 +13,20 @@ import java.util.concurrent.*;
 public class ExecutorManager {
 
 	private final ExecutorService executor;
-	private final Consumer globalQueue;
-	public ExecutorManager(Consumer globalQueue) {
-		this(10 , globalQueue);
+	private final Consumer defaultConsumer;
+	public ExecutorManager(Consumer defaultConsumer) {
+		this(10 , defaultConsumer);
 	}
 
-	public ExecutorManager(int poolSize, Consumer globalQueue) {
-		this(poolSize,poolSize , globalQueue);
+	public ExecutorManager(int poolSize, Consumer defaultConsumer) {
+		this(poolSize,poolSize , defaultConsumer);
 	}
 
-	public ExecutorManager(int corePoolSize, int maxPoolSize, Consumer globalQueue) {
+	public ExecutorManager(int corePoolSize, int maxPoolSize, Consumer defaultConsumer) {
 		BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(1024*16);
 		executor = new ThreadPoolExecutor(corePoolSize, maxPoolSize, 3 * 60 * 1000L, TimeUnit.MILLISECONDS, workQueue, new ThreadPoolExecutor.DiscardPolicy());
 		((ThreadPoolExecutor) executor).allowCoreThreadTimeOut(false);
-		this.globalQueue = globalQueue;
+		this.defaultConsumer = defaultConsumer;
 	}
 
 
@@ -43,7 +43,7 @@ public class ExecutorManager {
 	 * @param callBackEvent 回调Runnable 由主逻辑线程执行
 	 */
 	public void execute(AsynCallEvent asynCallEvent, CallBackEvent callBackEvent) {
-		executor.execute(new AsynEventAndCallBackRunnable(asynCallEvent , callBackEvent, globalQueue));
+		executor.execute(new AsynEventAndCallBackRunnable(asynCallEvent , callBackEvent, defaultConsumer));
 	}
 
 

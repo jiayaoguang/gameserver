@@ -7,6 +7,7 @@ import org.jyg.gameserver.core.handle.MyProtobufEncoder;
 /**
  * created by jiayaoguang at 2017年12月6日
  */
+import org.jyg.gameserver.core.handle.MyProtobufListEncoder;
 import org.jyg.gameserver.core.util.Context;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
@@ -18,17 +19,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SocketClientInitializer extends
 		MyChannelInitializer<Channel> {
 
-	DefaultEventExecutorGroup defaultEventExecutorGroup = new DefaultEventExecutorGroup(
-			3,
-            new ThreadFactory() {
-
-		private AtomicInteger threadIndex = new AtomicInteger(0);
-
-		@Override
-		public Thread newThread(Runnable r) {
-			return new Thread(r, "NettyServerCodecThread_" + this.threadIndex.incrementAndGet());
-		}
-	});
 
 	public SocketClientInitializer(Context context) {
 		super(context);
@@ -42,6 +32,8 @@ public class SocketClientInitializer extends
 		pipeline.addLast(new MyProtobufDecoder(context));
 		
 		pipeline.addLast(new MyProtobufEncoder(context));
+
+		pipeline.addLast(new MyProtobufListEncoder(context));
 		
 		pipeline.addLast(new LastCodec());
 		

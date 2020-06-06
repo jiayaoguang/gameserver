@@ -30,9 +30,9 @@ public class EventDispatcher {
 	//上一帧时间戳
 	private long nextFrameTimeStamp = System.currentTimeMillis();
 
-	public EventDispatcher(Consumer globalQueue) {
-//		this.executorManager =  new ExecutorManager(10, globalQueue);
-		this.singleThreadExecutorManagerPool = new SingleThreadExecutorManagerPool(globalQueue);
+	public EventDispatcher(Consumer defaultConsumer) {
+//		this.executorManager =  new ExecutorManager(10, defaultConsumer);
+		this.singleThreadExecutorManagerPool = new SingleThreadExecutorManagerPool(defaultConsumer);
 //		this.registerSocketEvent(0, new BytesProtoProcessor());
 	}
 

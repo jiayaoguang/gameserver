@@ -50,7 +50,7 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 	}
 
 	public HttpProcessor getHttpProcessor(String path) {
-		return getGlobalQueue().getHttpProcessor(path);
+		return getDefaultConsumer().getHttpProcessor(path);
 	}
 
 	public FTLLoader getFTLLoader() {

@@ -31,7 +31,7 @@ public class InnerSocketServerInitializer extends
 
 		pipeline.addLast(new MyProtobufListEncoder(context));
 		
-		pipeline.addLast(new InnerSocketHandler(context.getGlobalQueue()));
+		pipeline.addLast(new InnerSocketHandler(context.getDefaultConsumer()));
 		
 //		pipeline.addLast(new LastHandler());
 		

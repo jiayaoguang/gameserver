@@ -10,12 +10,12 @@ public class AsynEventAndCallBackRunnable implements Runnable{
 
     private final AsynCallEvent asynCallEvent;
     private final CallBackEvent callBackEvent;
-    private final Consumer globalQueue;
+    private final Consumer consumer;
 
-    public AsynEventAndCallBackRunnable(AsynCallEvent asynCallEvent, CallBackEvent callBackEvent, Consumer globalQueue) {
+    public AsynEventAndCallBackRunnable(AsynCallEvent asynCallEvent, CallBackEvent callBackEvent, Consumer consumer) {
         this.asynCallEvent = asynCallEvent;
         this.callBackEvent = callBackEvent;
-        this.globalQueue = globalQueue;
+        this.consumer = consumer;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class AsynEventAndCallBackRunnable implements Runnable{
             Object data = asynCallEvent.execute();
             if (callBackEvent != null) {
                 callBackEvent.setData(data);
-                globalQueue.publicEvent(EventType.INNER_MSG, callBackEvent, null);
+                consumer.publicEvent(EventType.INNER_MSG, callBackEvent, null);
             }
         } catch (Exception e) {
             e.printStackTrace();

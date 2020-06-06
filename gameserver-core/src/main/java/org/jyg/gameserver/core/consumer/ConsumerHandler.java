@@ -6,7 +6,6 @@ import org.jyg.gameserver.core.bean.LogicEvent;
 import org.jyg.gameserver.core.manager.ChannelManager;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.timer.Timer;
 import org.jyg.gameserver.core.timer.TimerManager;
 import org.jyg.gameserver.core.util.CallBackEvent;
 import org.jyg.gameserver.core.util.Context;
@@ -87,7 +86,7 @@ public class ConsumerHandler implements EventHandler<LogicEvent>, WorkHandler<Lo
 
             case HTTP_MSG_COME:
                 ((Request) event.getData()).setRequestid(getAndIncRequestId());
-                context.getGlobalQueue().processHttpEvent(event);
+                context.getDefaultConsumer().processHttpEvent(event);
 //				event.getChannel().close();
                 // 5秒后关闭
 //				dispatcher.getTimerManager().addTimer(new DelayCloseTimer(event.getChannel(), 60 * 1000L));
@@ -100,7 +99,7 @@ public class ConsumerHandler implements EventHandler<LogicEvent>, WorkHandler<Lo
                 if(isDefaultConsumer()){
                     session = channelManager.getSession(event.getChannel());
                 }
-                context.getGlobalQueue().processProtoEvent(session , event);
+                context.getDefaultConsumer().processProtoEvent(session , event);
                 break;
 
             case ON_TEXT_MESSAGE_COME:

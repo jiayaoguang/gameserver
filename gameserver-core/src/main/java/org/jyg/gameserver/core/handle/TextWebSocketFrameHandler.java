@@ -19,18 +19,18 @@ public class TextWebSocketFrameHandler extends
 		SimpleChannelInboundHandler<WebSocketFrame> {
 
 //	public static Set<Channel> channels = new HashSet<>();
-	private final Consumer globalQueue;
+	private final Consumer defaultConsumer;
 
-	public TextWebSocketFrameHandler(Consumer globalQueue) {
-		this.globalQueue = globalQueue;
+	public TextWebSocketFrameHandler(Consumer defaultConsumer) {
+		this.defaultConsumer = defaultConsumer;
 	}
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception { // (5)
 		Channel incoming = ctx.channel();
 		System.out.println("Client:" + incoming.remoteAddress() + "在线");
-		
-		globalQueue.publicEvent(EventType.SOCKET_CONNECT_ACTIVE, null, ctx.channel() );
+
+		defaultConsumer.publicEvent(EventType.SOCKET_CONNECT_ACTIVE, null, ctx.channel() );
 		
 		super.channelActive(ctx);
 	}
@@ -51,7 +51,7 @@ public class TextWebSocketFrameHandler extends
 			
 			Map<String,String> map = toMap(text);
 			
-			globalQueue.publicEvent(EventType.ON_TEXT_MESSAGE_COME, text, ctx.channel() );
+			defaultConsumer.publicEvent(EventType.ON_TEXT_MESSAGE_COME, text, ctx.channel() );
 			
 		}else if(frame instanceof BinaryWebSocketFrame) {
 			System.out.println("this frame is BinaryWebSocketFrame");
@@ -80,7 +80,7 @@ public class TextWebSocketFrameHandler extends
 		Channel incoming = ctx.channel();
 		System.out.println("Client:" + incoming.remoteAddress() + "掉线");
 		
-		globalQueue.publicEvent(EventType.SOCKET_CONNECT_INACTIVE, null, ctx.channel() );
+		defaultConsumer.publicEvent(EventType.SOCKET_CONNECT_INACTIVE, null, ctx.channel() );
 		
 		super.channelInactive(ctx);
 	}

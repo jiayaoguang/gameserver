@@ -7,7 +7,7 @@ import org.jyg.gameserver.core.consumer.Consumer;
  */
 public class SingleThreadExecutorManager extends ExecutorManager {
 
-	public SingleThreadExecutorManager(Consumer globalQueue) {
-		super(1, globalQueue);
+	public SingleThreadExecutorManager(Consumer consumer) {
+		super(1, consumer);
 	}
 }

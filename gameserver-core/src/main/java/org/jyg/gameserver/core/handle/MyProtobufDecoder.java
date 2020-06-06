@@ -1,6 +1,5 @@
 package org.jyg.gameserver.core.handle;
 
-import cn.hutool.core.util.ZipUtil;
 import com.google.protobuf.MessageLite;
 import com.google.protobuf.Parser;
 import io.netty.buffer.ByteBuf;
@@ -43,7 +42,7 @@ public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
 	// try (ByteBufInputStream bis = new ByteBufInputStream(buf)) {
 	// MessageLite messageLite = parser.parseFrom(bis);
 	//
-	// GlobalQueue.publicEvent(EventType.RPC_MSG_COME, messageLite, ctx.channel() ,
+	// .publicEvent(EventType.RPC_MSG_COME, messageLite, ctx.channel() ,
 	// eventId );
 	//
 	// } catch (IOException e) {
@@ -77,7 +76,7 @@ public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
 //			}else {
 				messageLite = protoParser.parseFrom(bis);
 //			}
-			context.getGlobalQueue().publicEvent(EventType.RPC_MSG_COME, messageLite, ctx.channel(), msgId);
+			context.getDefaultConsumer().publicEvent(EventType.RPC_MSG_COME, messageLite, ctx.channel(), msgId);
 		}
 
 //		}

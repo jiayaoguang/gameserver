@@ -11,10 +11,10 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
  */
 public class InnerSocketHandler extends ChannelInboundHandlerAdapter {
 
-	private final Consumer globalQueue;
+	private final Consumer defaultConsumer;
 
-	public InnerSocketHandler(Consumer globalQueue) {
-		this.globalQueue = globalQueue;
+	public InnerSocketHandler(Consumer defaultConsumer) {
+		this.defaultConsumer = defaultConsumer;
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class InnerSocketHandler extends ChannelInboundHandlerAdapter {
 		Channel incoming = ctx.channel();
 		System.out.println("Client:" + incoming.remoteAddress() + "在线");
 		
-		globalQueue.publicEvent(EventType.SOCKET_CONNECT_ACTIVE, null, ctx.channel() );
+		defaultConsumer.publicEvent(EventType.SOCKET_CONNECT_ACTIVE, null, ctx.channel() );
 		
 		super.channelActive(ctx);
 	}
@@ -32,7 +32,7 @@ public class InnerSocketHandler extends ChannelInboundHandlerAdapter {
 		Channel incoming = ctx.channel();
 		System.out.println("Client:" + incoming.remoteAddress() + "掉线");
 		
-		globalQueue.publicEvent(EventType.SOCKET_CONNECT_INACTIVE, null, ctx.channel() );
+		defaultConsumer.publicEvent(EventType.SOCKET_CONNECT_INACTIVE, null, ctx.channel() );
 		
 		super.channelInactive(ctx);
 	}

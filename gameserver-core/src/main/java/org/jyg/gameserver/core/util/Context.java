@@ -26,7 +26,7 @@ public class Context {
     private static final String DEFAULT_CONFIG_FILE_NAME = "jyg.properties";
     private String configFileName = DEFAULT_CONFIG_FILE_NAME;
 
-    private final Consumer globalQueue;
+    private final Consumer defaultConsumer;
     private final EventLoopGroupManager eventLoopGroupManager;
 //    private final ExecutorManager executorManager;
 
@@ -46,15 +46,15 @@ public class Context {
     private Int2ObjectMap<Class<? extends MessageLite>> msgId2protoClazzMap = new Int2ObjectOpenHashMap<>();
     private Int2ObjectMap<Parser<? extends MessageLite>> msgId2protoParserMap = new Int2ObjectOpenHashMap<>();
 
-    public Context(Consumer globalQueue) {
-        this.globalQueue = globalQueue;
+    public Context(Consumer defaultConsumer) {
+        this.defaultConsumer = defaultConsumer;
         this.eventLoopGroupManager = new EventLoopGroupManager();
-//        this.executorManager = new ExecutorManager(10, globalQueue);
-        this.singleThreadExecutorManagerPool = new SingleThreadExecutorManagerPool(globalQueue);
+//        this.executorManager = new ExecutorManager(10, defaultConsumer);
+        this.singleThreadExecutorManagerPool = new SingleThreadExecutorManagerPool(defaultConsumer);
     }
 
-    public Consumer getGlobalQueue() {
-        return globalQueue;
+    public Consumer getDefaultConsumer() {
+        return defaultConsumer;
     }
 
     public EventLoopGroupManager getEventLoopGroupManager() {

@@ -10,20 +10,20 @@ import org.jyg.gameserver.core.consumer.Consumer;
  */
 public class ConsumerManager {
     private static final int DEFAULT_CONSUMER_ID = 0;
-    private Int2ObjectMap<Consumer> globalQueueMap = Int2ObjectMaps.EMPTY_MAP;
+    private Int2ObjectMap<Consumer> consumerMap = Int2ObjectMaps.EMPTY_MAP;
 
-    public synchronized void addConsumer(Consumer globalQueue) {
-        Int2ObjectMap<Consumer> tmpGlobalQueueMap = new Int2ObjectLinkedOpenHashMap<>(this.globalQueueMap);
-        tmpGlobalQueueMap.put(globalQueue.getId(), globalQueue);
-        setConsumers(tmpGlobalQueueMap);
+    public synchronized void addConsumer(Consumer consumer) {
+        Int2ObjectMap<Consumer> tmpConsumerMap = new Int2ObjectLinkedOpenHashMap<>(this.consumerMap);
+        tmpConsumerMap.put(consumer.getId(), consumer);
+        setConsumers(tmpConsumerMap);
     }
 
-    public synchronized void setConsumers(Int2ObjectMap<Consumer> globalQueueMap){
-        this.globalQueueMap = Int2ObjectMaps.unmodifiable(globalQueueMap);
+    public synchronized void setConsumers(Int2ObjectMap<Consumer> consumerMap){
+        this.consumerMap = Int2ObjectMaps.unmodifiable(consumerMap);
     }
 
     public void getConsumer(int id){
-        this.globalQueueMap.get(id);
+        this.consumerMap.get(id);
     }
 
 

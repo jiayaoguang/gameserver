@@ -21,8 +21,8 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 
 	private int consumerId = 0;
 
-	public Consumer getGlobalQueue() {
-		return context.getGlobalQueue();
+	public Consumer getDefaultConsumer() {
+		return context.getDefaultConsumer();
 	}
 
 
