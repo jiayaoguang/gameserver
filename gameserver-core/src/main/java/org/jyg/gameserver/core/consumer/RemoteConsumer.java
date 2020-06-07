@@ -1,11 +1,14 @@
 package org.jyg.gameserver.core.consumer;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.proto.MsgBytes;
 import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.timer.ITimerHandler;
 import org.jyg.gameserver.core.timer.Timer;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * create by jiayaoguang on 2020/5/24
@@ -28,6 +31,13 @@ public class RemoteConsumer extends Consumer {
     @Override
     public void start() {
         connect();
+        //定时检测重连
+        getContext().getDefaultConsumer().timerManager.addTimer(Integer.MAX_VALUE , TimeUnit.SECONDS.toMillis(5) , ()->{
+            if(!isConnectAvailable()){
+                logger.error("connect lose, try reconnect");
+                connect();
+            }
+        });
     }
 
     private void connect() {
@@ -40,17 +50,27 @@ public class RemoteConsumer extends Consumer {
 
     @Override
     public void stop() {
-
+        ChannelFuture closeFuture = channel.close();
+        closeFuture.isSuccess();
     }
 
-    @Override
-    public void publicEvent(EventType evenType, Object data, Channel channel) {
-        channel.write(MsgBytes.newBuilder().build());
-    }
+//    @Override
+//    public void publicEvent(EventType evenType, Object data, Channel channel) {
+//
+//    }
 
     @Override
     public void publicEvent(EventType evenType, Object data, Channel channel, int eventId) {
-        channel.write(MsgBytes.newBuilder().build());
+        if(!isConnectAvailable()){
+            logger.error("  isConnectAvailable false , reconnect ");
+            connect();
+        }
+
+        if(isConnectAvailable()){
+            channel.write(MsgBytes.newBuilder().build());
+        }else {
+            logger.error(" publicEvent fail , isConnectAvailable false ");
+        }
     }
 
     private boolean isConnectAvailable(){

@@ -53,7 +53,6 @@ public class GameServerBootstarp extends AbstractBootstrap {
         if (services.isEmpty()) {
             throw new IllegalArgumentException("services list is empty");
         }
-        defaultConsumer.start();
 
         for (Service service : services) {
             service.start();
@@ -64,7 +63,6 @@ public class GameServerBootstarp extends AbstractBootstrap {
     public void stop(){
         getContext().getEventLoopGroupManager().stopAllEventLoop();
 
-        defaultConsumer.stop();
 
         for (Service service : services) {
             service.stop();
@@ -72,7 +70,4 @@ public class GameServerBootstarp extends AbstractBootstrap {
     }
 
 
-    public Consumer getDefaultConsumer() {
-        return defaultConsumer;
-    }
 }

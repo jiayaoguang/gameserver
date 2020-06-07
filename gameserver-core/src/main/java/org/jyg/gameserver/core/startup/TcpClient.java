@@ -83,7 +83,6 @@ public class TcpClient extends AbstractBootstrap{
 		bootstrap.option(ChannelOption.SO_LINGER, 0);
 		bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 
-		defaultConsumer.start();
 	}
 
 	public TcpClient(MyChannelInitializer<Channel> channelInitializer) {

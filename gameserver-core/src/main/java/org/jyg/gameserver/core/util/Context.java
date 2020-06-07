@@ -24,7 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 public class Context {
 
     private static final String DEFAULT_CONFIG_FILE_NAME = "jyg.properties";
-    private String configFileName = DEFAULT_CONFIG_FILE_NAME;
+//    private String configFileName = DEFAULT_CONFIG_FILE_NAME;
 
     private final Consumer defaultConsumer;
     private final EventLoopGroupManager eventLoopGroupManager;
@@ -35,7 +35,7 @@ public class Context {
 
     private final ServerConfig serverConfig = new ServerConfig();
 
-    private final ConsumerManager consumerManager = new ConsumerManager();
+    private final ConsumerManager consumerManager;
 
 //    private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
@@ -51,6 +51,13 @@ public class Context {
         this.eventLoopGroupManager = new EventLoopGroupManager();
 //        this.executorManager = new ExecutorManager(10, defaultConsumer);
         this.singleThreadExecutorManagerPool = new SingleThreadExecutorManagerPool(defaultConsumer);
+
+        defaultConsumer.setId(ConsumerManager.DEFAULT_CONSUMER_ID);
+        defaultConsumer.setContext(this);
+        this.consumerManager = new ConsumerManager(this);
+        this.consumerManager.addConsumer(defaultConsumer);
+
+        loadServerConfig(DEFAULT_CONFIG_FILE_NAME);
     }
 
     public Consumer getDefaultConsumer() {
@@ -101,23 +108,32 @@ public class Context {
         this.msgId2protoClazzMap = Int2ObjectMaps.unmodifiable(this.msgId2protoClazzMap);
         this.msgId2protoParserMap = Int2ObjectMaps.unmodifiable(this.msgId2protoParserMap);
 
-        loadServerConfig(configFileName);
+//        loadServerConfig(configFileName);
     }
 
     public synchronized void loadServerConfig(String configFileName){
+        if(isStart){
+            AllUtil.println(" already start .... ");
+            return;
+        }
         AllUtil.properties2Object(configFileName, serverConfig);
     }
 
-    public synchronized void setConfigFileName(String configFileName) {
-        this.configFileName = configFileName;
-    }
 
     public ServerConfig getServerConfig() {
         return serverConfig;
     }
 
+    public boolean isStart() {
+        return isStart;
+    }
 
-//    public ScheduledExecutorService getScheduledExecutorService() {
+    public ConsumerManager getConsumerManager() {
+        return consumerManager;
+    }
+
+
+    //    public ScheduledExecutorService getScheduledExecutorService() {
 //        return scheduledExecutorService;
 //    }
 }

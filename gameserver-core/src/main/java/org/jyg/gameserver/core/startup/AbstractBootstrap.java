@@ -18,8 +18,6 @@ public abstract class AbstractBootstrap {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    protected final Consumer defaultConsumer;
-
     private final Context context;
 
     protected volatile boolean isStart = false;
@@ -33,7 +31,6 @@ public abstract class AbstractBootstrap {
     }
 
     public AbstractBootstrap(Context context) {
-        this.defaultConsumer = context.getDefaultConsumer();
         this.context = context;
 //        this.defaultConsumer.getEventConsumerFactory().setContext(context);
     }
@@ -105,7 +102,7 @@ public abstract class AbstractBootstrap {
     }
 
     public Consumer getDefaultConsumer() {
-        return defaultConsumer;
+        return context.getDefaultConsumer();
     }
 
     public Context getContext() {
@@ -120,9 +117,12 @@ public abstract class AbstractBootstrap {
         }
         isStart = true;
         context.start();
-        this.defaultConsumer.setContext(context);
         beforeStart();
         doStart();
+
+        for(Consumer consumer : context.getConsumerManager().getConsumers()){
+            consumer.start();
+        }
     }
 
     protected void beforeStart() {
@@ -132,7 +132,9 @@ public abstract class AbstractBootstrap {
     public abstract void doStart() throws InterruptedException;
 
     public void stop() throws InterruptedException{
-
+        for(Consumer consumer : context.getConsumerManager().getConsumers()){
+            consumer.stop();
+        }
     }
 
 }
