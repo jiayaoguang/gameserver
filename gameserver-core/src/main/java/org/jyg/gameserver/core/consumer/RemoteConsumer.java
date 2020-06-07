@@ -31,7 +31,7 @@ public class RemoteConsumer extends Consumer {
     @Override
     public void start() {
         connect();
-        //定时检测重连
+        //定时检测重连 TODO think do it in other thread ?
         getContext().getDefaultConsumer().timerManager.addTimer(Integer.MAX_VALUE , TimeUnit.SECONDS.toMillis(5) , ()->{
             if(!isConnectAvailable()){
                 logger.error("connect lose, try reconnect");
@@ -40,7 +40,10 @@ public class RemoteConsumer extends Consumer {
         });
     }
 
-    private void connect() {
+    private synchronized void connect() {
+        if(channel != null){
+            channel.close();
+        }
         try {
             channel = tcpClient.connect(remoteAddress , port);
         } catch (InterruptedException e) {
@@ -50,8 +53,10 @@ public class RemoteConsumer extends Consumer {
 
     @Override
     public void stop() {
-        ChannelFuture closeFuture = channel.close();
-        closeFuture.isSuccess();
+        if(channel != null){
+            ChannelFuture closeFuture = channel.close();
+            closeFuture.isSuccess();
+        }
     }
 
 //    @Override
