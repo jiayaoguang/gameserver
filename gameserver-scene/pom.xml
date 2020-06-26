@@ -41,7 +41,7 @@
 			<version>${gameserver.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.jyg.gameserver</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>gameserver-proto</artifactId>
 			<version>${gameserver.version}</version>
 		</dependency>

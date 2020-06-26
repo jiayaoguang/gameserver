@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.jyg.gameserver</groupId>
 		<artifactId>gameserver</artifactId>
-		<version>${gameserver.version}</version>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>gameserver-test</artifactId>
 	<name>gameserver-test</name>
@@ -30,7 +30,7 @@
 	
 	<dependencies>
 		<dependency>
-			<groupId>com.jyg.gameserver</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>gameserver-core</artifactId>
 			<version>${gameserver.version}</version>
 		</dependency>
@@ -44,5 +44,12 @@
 			<artifactId>gameserver-proto</artifactId>
 			<version>${gameserver.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>gameserver-util</artifactId>
+			<version>${gameserver.version}</version>
+		</dependency>
+
 	</dependencies>
 </project>

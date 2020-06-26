@@ -45,23 +45,15 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.jyg.gameserver</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>gameserver-core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${gameserver.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.jyg.gameserver</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>gameserver-proto</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${gameserver.version}</version>
 		</dependency>
 
-		
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.2</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+	</dependencies>
 </project>

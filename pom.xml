@@ -5,15 +5,16 @@
 
 	<groupId>com.jyg.gameserver</groupId>
 	<artifactId>gameserver</artifactId>
-	<version>${gameserver.version}</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-
 	<name>gameserver</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<gameserver.version>0.0.1-SNAPSHOT</gameserver.version>
+		<netty.version>4.1.42.Final</netty.version>
+		<maven.test.skip>true</maven.test.skip>
 	</properties>
 
 	<build>
@@ -21,7 +22,9 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
 				<configuration>
+					<skip>true</skip>
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
@@ -32,9 +35,10 @@
 	<modules>
 		<module>gameserver-core</module>
 		<module>gameserver-auth</module>
-		<module>gameserver-sm</module>
+		<module>gameserver-center</module>
 		<module>gameserver-scene</module>
 		<module>gameserver-proto</module>
+		<module>gameserver-util</module>
 		<module>gameserver-test</module>
 	</modules>
 
@@ -42,8 +46,7 @@
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-all</artifactId>
-			<version>4.1.19.Final</version>
-			<scope>compile</scope>
+			<version>${netty.version}</version>
 		</dependency>
 
 		<!-- <dependency> <groupId>com.google.inject</groupId> <artifactId>guice</artifactId> 
@@ -53,16 +56,41 @@
 			<groupId>com.lmax</groupId>
 			<artifactId>disruptor</artifactId>
 			<version>3.4.2</version>
-			<scope>compile</scope>
 		</dependency>
 		<!-- <dependency> <groupId>org.mongodb</groupId> <artifactId>mongo-java-driver</artifactId> 
 			<version>3.4.1</version> </dependency> -->
-		<dependency>
+		<!--<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.7.2</version>
-			<scope>compile</scope>
+		</dependency>-->
+
+		<!-- =====================logger start =============================  -->
+		<!--log4j2核心包-->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.12.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.12.1</version>
+		</dependency>
+		<!--用于与slf4j保持桥接-->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>2.12.1</version>
+		</dependency>
+		<!-- slf4j核心包-->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+		<!-- =====================logger end =============================  -->
+
 		<dependency>
 			<groupId>fastutil</groupId>
 			<artifactId>fastutil</artifactId>
@@ -100,5 +128,13 @@
 			<artifactId>junit</artifactId>
 			<version>4.8.2</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>5.3.5</version>
+		</dependency>
+
 	</dependencies>
 </project>
