@@ -47,6 +47,10 @@ public class Context {
     private Int2ObjectMap<Parser<? extends MessageLite>> msgId2protoParserMap = new Int2ObjectOpenHashMap<>();
 
     public Context(Consumer defaultConsumer) {
+        this(defaultConsumer ,DEFAULT_CONFIG_FILE_NAME );
+    }
+
+    public Context(Consumer defaultConsumer , String configFileName) {
         this.defaultConsumer = defaultConsumer;
         this.eventLoopGroupManager = new EventLoopGroupManager();
 //        this.executorManager = new ExecutorManager(10, defaultConsumer);
@@ -57,7 +61,7 @@ public class Context {
         this.consumerManager = new ConsumerManager(this);
         this.consumerManager.addConsumer(defaultConsumer);
 
-        loadServerConfig(DEFAULT_CONFIG_FILE_NAME);
+        loadServerConfig(configFileName);
     }
 
     public Consumer getDefaultConsumer() {
