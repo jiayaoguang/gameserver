@@ -13,7 +13,7 @@ import org.jyg.gameserver.core.util.Context;
 /**
  * created by jiayaoguang at 2017年12月6日
  */
-public class ConsumerHandler implements EventHandler<LogicEvent>, WorkHandler<LogicEvent> {
+public class ConsumerHandler{
 
     public static final int DEFAULT_CONSUMER_ID = 0;
 
@@ -36,20 +36,7 @@ public class ConsumerHandler implements EventHandler<LogicEvent>, WorkHandler<Lo
     }
 
 
-    @Override
-    public final void onEvent(LogicEvent event, long sequence, boolean endOfBatch) {
-
-        try {
-            this.onEvent(event);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
-    @Override
-    public final void onEvent(LogicEvent event) throws Exception {
+    public final void onReciveEvent(LogicEvent<?> event) {
 
         // System.out.println(event.getChannel());
         try {

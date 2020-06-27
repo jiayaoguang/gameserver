@@ -111,7 +111,7 @@ public class BlockingConsumer extends Consumer {
 
                 pollNullNum = 0;
                 try {
-                    eventConsumer.onEvent(object);
+                    eventConsumer.onReciveEvent(object);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

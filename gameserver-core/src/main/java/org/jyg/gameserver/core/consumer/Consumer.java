@@ -49,6 +49,14 @@ public abstract class Consumer {
 
     private final List<Consumer> childConsumerList = new ArrayList<>() ;
 
+    public Consumer() {
+
+    }
+
+    public Consumer(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

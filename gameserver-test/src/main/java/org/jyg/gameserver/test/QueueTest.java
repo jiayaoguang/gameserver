@@ -1,9 +1,12 @@
 package org.jyg.gameserver.test;
 
+import io.netty.util.internal.shaded.org.jctools.queues.MpscChunkedArrayQueue;
 import io.netty.util.internal.shaded.org.jctools.queues.MpscUnboundedArrayQueue;
+import io.netty.util.internal.shaded.org.jctools.queues.atomic.MpscGrowableAtomicArrayQueue;
 
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * create by jiayaoguang on 2020/5/31
@@ -12,31 +15,42 @@ public class QueueTest {
 
     public static void main(String[] args) throws Exception {
 
-        int threadNum = 2;
+        int threadNum = 1;
 
-        final ArrayBlockingQueue<String> blockingQueue = new ArrayBlockingQueue<>(4000000);
+
+        final ConcurrentLinkedQueue<String> concurrentLinkedQueue = new ConcurrentLinkedQueue<>();
 
         for (int i = 0; i < threadNum; i++){
-            startQueueOffer("ConcurrentLinkedQueue offer" , blockingQueue);
+            startQueueOffer("concurrentLinkedQueue offer" , concurrentLinkedQueue);
         }
 
-        Thread.sleep(2000);
+        Thread.sleep(500);
 
-        startQueuePoll("ConcurrentLinkedQueue poll" , blockingQueue);
+        startQueuePoll("ConcurrentLinkedQueue poll" , concurrentLinkedQueue);
+
+        Thread.sleep(500);
+
+        final ArrayBlockingQueue<String> blockingQueue = new ArrayBlockingQueue<>(8000000);
+
+        for (int i = 0; i < threadNum; i++){
+            startQueueOffer("ArrayBlockingQueue offer" , blockingQueue);
+        }
+
+        Thread.sleep(500);
+        startQueuePoll("ArrayBlockingQueue poll" , blockingQueue);
+        Thread.sleep(500);
 
 
-        Thread.sleep(2000);
-
-        final MpscUnboundedArrayQueue<String> mpscUnboundedArrayQueue = new MpscUnboundedArrayQueue<>(4000000);
+        final MpscUnboundedArrayQueue<String> mpscUnboundedArrayQueue = new MpscUnboundedArrayQueue<>(8000000);
         for (int i = 0; i < threadNum; i++){
             startQueueOffer("MpscUnboundedArrayQueue offer",mpscUnboundedArrayQueue);
         }
 
-        Thread.sleep(2000);
+        Thread.sleep(500);
 
         startQueuePoll("MpscUnboundedArrayQueue poll" , mpscUnboundedArrayQueue);
 
-        Thread.sleep(3000);
+        Thread.sleep(500);
 
     }
 

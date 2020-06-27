@@ -26,12 +26,14 @@ public class RingBufferConsumer extends Consumer {
 
     private boolean isStart = false;
 
+    private final RingBuffConsumerHandler ringBuffConsumerHandler;
+
     public RingBufferConsumer() {
-        this(new DefaultConsumerHandlerFactory());
+        this(new RingBuffConsumerHandler());
     }
 
-    public RingBufferConsumer(ConsumerHandlerFactory eventConsumerFactory) {
-        this.eventConsumerFactory = eventConsumerFactory;
+    public RingBufferConsumer(RingBuffConsumerHandler ringBuffConsumerHandler) {
+        this.ringBuffConsumerHandler = ringBuffConsumerHandler;
     }
 
     @Override
@@ -47,9 +49,11 @@ public class RingBufferConsumer extends Consumer {
 
         disruptor = new Disruptor<>(eventFactory, BUFFER_SIZE, consumerThreadFactory, ProducerType.MULTI,
                 new LoopAndSleepWaitStrategy());
-        ConsumerHandler eventConsumer = this.eventConsumerFactory.createAndInit(getContext());
-        eventConsumer.setTimerManager(timerManager);
-        disruptor.handleEventsWith(eventConsumer);
+
+        this.ringBuffConsumerHandler.setContext(getContext());
+        this.ringBuffConsumerHandler.setTimerManager(timerManager);
+
+        disruptor.handleEventsWith(ringBuffConsumerHandler);
 
 //        disruptor.handleEventsWith(eventConsumer);
 
