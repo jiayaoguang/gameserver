@@ -10,6 +10,8 @@ public class ServerConfig {
 
     private int maxFrameLength = 1024*1024*8;
 
+    private String ip = "127.0.0.1";
+
     public boolean isUseGzip() {
         return useGzip;
     }
@@ -24,5 +26,13 @@ public class ServerConfig {
 
     public void setMaxFrameLength(int maxFrameLength) {
         this.maxFrameLength = maxFrameLength;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 }

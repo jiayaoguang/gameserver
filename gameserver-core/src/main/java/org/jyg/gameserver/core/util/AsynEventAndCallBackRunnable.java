@@ -22,13 +22,13 @@ public class AsynEventAndCallBackRunnable implements Runnable{
     public void run() {
         try {
             Object data = asynCallEvent.execute();
-            if (callBackEvent != null) {
-                callBackEvent.setData(data);
-                consumer.publicEvent(EventType.INNER_MSG, callBackEvent, null);
-            }
+            callBackEvent.setData(data);
+            callBackEvent.setSuccess(true);
         } catch (Exception e) {
             e.printStackTrace();
+            callBackEvent.setSuccess(false);
         }
+        consumer.publicEvent(EventType.INNER_MSG, callBackEvent, null);
 
     }
 

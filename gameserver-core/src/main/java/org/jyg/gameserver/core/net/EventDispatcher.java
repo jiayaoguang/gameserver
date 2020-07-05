@@ -213,11 +213,11 @@ public class EventDispatcher {
 //	}
 
 
-	public ExecutorManager getSingleThreadExecutorManager(int num) {
-		return singleThreadExecutorManagerPool.getSingleThreadExecutorManager(num);
-	}
-
-	public ExecutorManager getSingleThreadExecutorManager(Session session) {
-		return singleThreadExecutorManagerPool.getSingleThreadExecutorManager(session);
-	}
+//	public ExecutorManager getSingleThreadExecutorManager(int num) {
+//		return singleThreadExecutorManagerPool.getSingleThreadExecutorManager(num);
+//	}
+//
+//	public ExecutorManager getSingleThreadExecutorManager(Session session) {
+//		return singleThreadExecutorManagerPool.getSingleThreadExecutorManager(session);
+//	}
 }

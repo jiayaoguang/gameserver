@@ -2,6 +2,7 @@ package org.jyg.gameserver.auth.module;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
+import org.jyg.gameserver.auth.processor.LoginProtoProcessor;
 import org.jyg.gameserver.core.util.redis.JedisCacheClient;
 import org.jyg.gameserver.core.util.redis.RedisCacheClient;
 import org.jyg.gameserver.auth.processor.LoginHttpProcessor;
@@ -23,6 +24,7 @@ public class AuthModule extends AbstractModule{
 
 		this.bind(RedisCacheClient.class).to(JedisCacheClient.class).in(Scopes.SINGLETON);
 		this.bind(LoginHttpProcessor.class).in(Scopes.SINGLETON);
+		this.bind(LoginProtoProcessor.class).in(Scopes.SINGLETON);
 
 		
 	}

@@ -33,8 +33,8 @@ public class SingleThreadExecutorManagerPool {
 		return getSingleThreadExecutorManager(session.getSessionId());
 	}
 
-	public SingleThreadExecutorManager getSingleThreadExecutorManager(int num){
-		int executorIndex = num % singleThreadExecutorManagerList.size();
+	public SingleThreadExecutorManager getSingleThreadExecutorManager(long playerUid){
+		int executorIndex = (int)(playerUid % singleThreadExecutorManagerList.size());
 		return singleThreadExecutorManagerList.get(executorIndex);
 	}
 

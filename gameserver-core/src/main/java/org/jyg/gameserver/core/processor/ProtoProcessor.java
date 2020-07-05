@@ -16,17 +16,18 @@ public abstract class ProtoProcessor<T extends MessageLite> extends AbstractProc
 	private final Parser<? extends MessageLite> parser;
 	private final Class<? extends MessageLite> clazz;
 
+	private final MessageLite defaultInstance;
+
 	private Context context;
 
 	public ProtoProcessor(Class<? extends MessageLite> protoClazz) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-		MessageLite defaultInstance = (MessageLite)protoClazz.getMethod("getDefaultInstance").invoke(null);
-		this.parser = defaultInstance.getParserForType();
-		this.clazz = protoClazz;
+		this((MessageLite)protoClazz.getMethod("getDefaultInstance").invoke(null));
 	}
 
 	public ProtoProcessor(MessageLite messageLite) {
 		this.parser = messageLite.getParserForType();
 		this.clazz = messageLite.getClass();
+		this.defaultInstance = messageLite;
 	}
 	
 //	public ProtoProcessor(MessageLite.Builder<T> messageLite) {
@@ -82,4 +83,7 @@ public abstract class ProtoProcessor<T extends MessageLite> extends AbstractProc
 
 	public abstract void process(Session session , T msg);
 
+	public MessageLite getProtoDefaultInstance() {
+		return defaultInstance;
+	}
 }

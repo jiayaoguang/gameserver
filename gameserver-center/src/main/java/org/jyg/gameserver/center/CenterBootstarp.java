@@ -2,8 +2,6 @@ package org.jyg.gameserver.center;
 
 import org.jyg.gameserver.core.enums.ProtoEnum;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
-import org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token;
-import org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstarp;
 import org.jyg.gameserver.core.util.TokenUtil;

@@ -124,6 +124,8 @@ public abstract class Consumer {
         if (protoProcessorMap.containsKey(msgId)) {
             throw new IllegalArgumentException("dupilcated eventid");
         }
+        getContext().addMsgId2ProtoMapping(msgId , processor.getProtoDefaultInstance());
+
         processor.setContext(context);
         protoProcessorMap.put(msgId, processor);
     }

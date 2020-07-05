@@ -14,7 +14,6 @@ import org.jyg.gameserver.core.manager.ConsumerManager;
 import org.jyg.gameserver.core.manager.EventLoopGroupManager;
 import org.jyg.gameserver.core.manager.ExecutorManager;
 import org.jyg.gameserver.core.manager.SingleThreadExecutorManagerPool;
-import org.jyg.gameserver.core.session.Session;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -43,8 +42,7 @@ public class Context {
     private final SingleThreadExecutorManagerPool singleThreadExecutorManagerPool;
 
     private Object2IntMap<Class<? extends MessageLite>> protoClazz2MsgidMap = new Object2IntOpenHashMap<>();
-    private Int2ObjectMap<Class<? extends MessageLite>> msgId2protoClazzMap = new Int2ObjectOpenHashMap<>();
-    private Int2ObjectMap<Parser<? extends MessageLite>> msgId2protoParserMap = new Int2ObjectOpenHashMap<>();
+    private Int2ObjectMap<MessageLite> msgId2ProtoMap = new Int2ObjectOpenHashMap<>();
 
     public Context(Consumer defaultConsumer) {
         this(defaultConsumer ,DEFAULT_CONFIG_FILE_NAME );
@@ -80,17 +78,19 @@ public class Context {
 
     public void addMsgId2ProtoMapping(int msgId,  MessageLite defaultInstance) {
         this.protoClazz2MsgidMap.put(defaultInstance.getClass(), msgId);
-        this.msgId2protoClazzMap.put(msgId, defaultInstance.getClass());
-        this.msgId2protoParserMap.put(msgId , defaultInstance.getParserForType());
+        this.msgId2ProtoMap.put(msgId , defaultInstance);
     }
 
     public Parser<? extends MessageLite> getProtoParserByMsgId (int msgId){
-        return this.msgId2protoParserMap.get(msgId);
+
+        MessageLite messageLite = msgId2ProtoMap.get(msgId);
+        if(messageLite == null){
+            return null;
+        }
+
+        return messageLite.getParserForType();
     }
 
-    public Class<? extends MessageLite> getProtoClassByMsgId(int msgId) {
-        return msgId2protoClazzMap.get(msgId);
-    }
 
     public int getMsgIdByProtoClass( Class<? extends MessageLite> protoClass) {
 
@@ -98,8 +98,8 @@ public class Context {
     }
 
 
-    public ExecutorManager getSingleThreadExecutorManager(Session session) {
-        return singleThreadExecutorManagerPool.getSingleThreadExecutorManager(session);
+    public ExecutorManager getSingleThreadExecutorManager(long playerUid) {
+        return singleThreadExecutorManagerPool.getSingleThreadExecutorManager(playerUid);
     }
 
     public synchronized void start() {
@@ -109,8 +109,7 @@ public class Context {
         }
         this.isStart = true;
         this.protoClazz2MsgidMap = Object2IntMaps.unmodifiable(this.protoClazz2MsgidMap);
-        this.msgId2protoClazzMap = Int2ObjectMaps.unmodifiable(this.msgId2protoClazzMap);
-        this.msgId2protoParserMap = Int2ObjectMaps.unmodifiable(this.msgId2protoParserMap);
+        this.msgId2ProtoMap = Int2ObjectMaps.unmodifiable(this.msgId2ProtoMap);
 
 //        loadServerConfig(configFileName);
     }

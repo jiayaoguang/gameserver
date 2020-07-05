@@ -4,10 +4,10 @@ import com.google.inject.Inject;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
 import org.jyg.gameserver.core.processor.HttpProcessor;
-import org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.jyg.gameserver.auth.bean.UserLoginInfo;
+import org.jyg.gameserver.proto.p_auth_sm;
 
 /**
  * created by jiayaoguang at 2018年3月20日
@@ -57,7 +57,7 @@ public class TokenSendHttpProcessor extends HttpProcessor{
 	
 	@Override
 	public void service(Request request, Response response) {
-		p_auth_sm_request_send_token.Builder builder = p_auth_sm_request_send_token.newBuilder();
+		p_auth_sm.p_auth_sm_request_send_token.Builder builder = p_auth_sm.p_auth_sm_request_send_token.newBuilder();
 //		long id = requestId.getAndIncrement();
 		builder.setRequestId(request.getRequestid());
 		String username = request.getParameter("username");

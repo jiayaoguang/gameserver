@@ -1,28 +1,27 @@
-package org.jyg.gameserver.test.tcp.chat;
+package org.jyg.gameserver.auth;
 
 import org.junit.Test;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.TcpClient;
-import org.jyg.gameserver.test.proto.MsgChat;
+import org.jyg.gameserver.proto.MsgLogin;
+import org.jyg.gameserver.proto.MsgLoginReply;
+import org.jyg.gameserver.proto.MsgLoginRequest;
 
 /**
  * Hello world!
  *
  */
-public class ClientTest01
+public class ClientLoginTest01
 {
     public static void main( String[] args ) throws Exception
     {
 
-		ProtoProcessor<MsgChat> chatProcessor = new ProtoProcessor<MsgChat>(MsgChat.getDefaultInstance()) {
+		ProtoProcessor<MsgLoginReply> chatProcessor = new ProtoProcessor<MsgLoginReply>(MsgLoginReply.getDefaultInstance()) {
 			@Override
-			public void process(Session session, MsgChat msg) {
+			public void process(Session session, MsgLoginReply msg) {
 
-				System.out.println(msg.getContent() );
-				if("bye".equals(msg.getContent() )) {
-					return;
-				}
+				System.out.println(msg.getToken() );
 
 //				session.writeMessage(p_test.p_sm_scene_chat.newBuilder().setMsg("i just think so ,hello world too").build());
 			}
@@ -38,23 +37,19 @@ public class ClientTest01
 //		client.addMsgId2ProtoMapping(3, p_scene_sm_chat.getDefaultInstance());
 //		client.addMsgId2ProtoMapping(4, p_sm_scene_chat.getDefaultInstance());
 
-		client.addMsgId2ProtoMapping(5, MsgChat.getDefaultInstance());
+		client.addMsgId2ProtoMapping(1000 , MsgLoginRequest.class);
+        client.addMsgId2ProtoMapping(1001 , MsgLoginReply.class);
 
-		client.addProtoProcessor(chatProcessor);
+		client.addProtoProcessor(1001 , chatProcessor);
 
         client.start();
-        client.connect("localhost",8088);
+        client.connect("localhost",8081);
 
-        client.write(MsgChat.newBuilder().setContent("hello world!").build());
+        client.write(MsgLoginRequest.newBuilder().setPlayerUid(2333).build());
 
         Thread.sleep(1000);
 
 //        client.close();
     }
     
-    @Test
-    public void test01() {
-    	char u = '　';
-    	System.out.println((int)(char)(u*100));
-    }
 }

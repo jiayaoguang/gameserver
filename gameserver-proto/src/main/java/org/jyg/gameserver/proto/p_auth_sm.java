@@ -14,776 +14,8 @@ public final class p_auth_sm {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-  public interface p_auth_sm_register_roleOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.test.proto.p_auth_sm_register_role)
-      com.google.protobuf.MessageOrBuilder {
-  }
-  /**
-   * Protobuf type {@code org.jyg.gameserver.test.proto.p_auth_sm_register_role}
-   */
-  public  static final class p_auth_sm_register_role extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.test.proto.p_auth_sm_register_role)
-      p_auth_sm_register_roleOrBuilder {
-  private static final long serialVersionUID = 0L;
-    // Use p_auth_sm_register_role.newBuilder() to construct.
-    private p_auth_sm_register_role(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private p_auth_sm_register_role() {
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private p_auth_sm_register_role(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return p_auth_sm.internal_static_com_jyg_proto_p_auth_sm_register_role_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return p_auth_sm.internal_static_com_jyg_proto_p_auth_sm_register_role_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              p_auth_sm.p_auth_sm_register_role.class, p_auth_sm.p_auth_sm_register_role.Builder.class);
-    }
-
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      unknownFields.writeTo(output);
-    }
-
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      size += unknownFields.getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof p_auth_sm.p_auth_sm_register_role)) {
-        return super.equals(obj);
-      }
-      p_auth_sm.p_auth_sm_register_role other = (p_auth_sm.p_auth_sm_register_role) obj;
-
-      boolean result = true;
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static p_auth_sm.p_auth_sm_register_role parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static p_auth_sm.p_auth_sm_register_role parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static p_auth_sm.p_auth_sm_register_role parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static p_auth_sm.p_auth_sm_register_role parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static p_auth_sm.p_auth_sm_register_role parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static p_auth_sm.p_auth_sm_register_role parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static p_auth_sm.p_auth_sm_register_role parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static p_auth_sm.p_auth_sm_register_role parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static p_auth_sm.p_auth_sm_register_role parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static p_auth_sm.p_auth_sm_register_role parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static p_auth_sm.p_auth_sm_register_role parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static p_auth_sm.p_auth_sm_register_role parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(p_auth_sm.p_auth_sm_register_role prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code org.jyg.gameserver.test.proto.p_auth_sm_register_role}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.test.proto.p_auth_sm_register_role)
-        p_auth_sm.p_auth_sm_register_roleOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return p_auth_sm.internal_static_com_jyg_proto_p_auth_sm_register_role_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return p_auth_sm.internal_static_com_jyg_proto_p_auth_sm_register_role_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                p_auth_sm.p_auth_sm_register_role.class, p_auth_sm.p_auth_sm_register_role.Builder.class);
-      }
-
-      // Construct using org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_register_role.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
-      }
-      public Builder clear() {
-        super.clear();
-        return this;
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return p_auth_sm.internal_static_com_jyg_proto_p_auth_sm_register_role_descriptor;
-      }
-
-      public p_auth_sm.p_auth_sm_register_role getDefaultInstanceForType() {
-        return p_auth_sm.p_auth_sm_register_role.getDefaultInstance();
-      }
-
-      public p_auth_sm.p_auth_sm_register_role build() {
-        p_auth_sm.p_auth_sm_register_role result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public p_auth_sm.p_auth_sm_register_role buildPartial() {
-        p_auth_sm.p_auth_sm_register_role result = new p_auth_sm.p_auth_sm_register_role(this);
-        onBuilt();
-        return result;
-      }
-
-      public Builder clone() {
-        return (Builder) super.clone();
-      }
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.setField(field, value);
-      }
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
-      }
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
-      }
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
-      }
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
-      }
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof p_auth_sm.p_auth_sm_register_role) {
-          return mergeFrom((p_auth_sm.p_auth_sm_register_role)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(p_auth_sm.p_auth_sm_register_role other) {
-        if (other == p_auth_sm.p_auth_sm_register_role.getDefaultInstance()) return this;
-        this.mergeUnknownFields(other.unknownFields);
-        onChanged();
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        p_auth_sm.p_auth_sm_register_role parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (p_auth_sm.p_auth_sm_register_role) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFieldsProto3(unknownFields);
-      }
-
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.test.proto.p_auth_sm_register_role)
-    }
-
-    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.test.proto.p_auth_sm_register_role)
-    private static final p_auth_sm.p_auth_sm_register_role DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new p_auth_sm.p_auth_sm_register_role();
-    }
-
-    public static p_auth_sm.p_auth_sm_register_role getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<p_auth_sm_register_role>
-        PARSER = new com.google.protobuf.AbstractParser<p_auth_sm_register_role>() {
-      public p_auth_sm_register_role parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-          return new p_auth_sm_register_role(input, extensionRegistry);
-      }
-    };
-
-    public static com.google.protobuf.Parser<p_auth_sm_register_role> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<p_auth_sm_register_role> getParserForType() {
-      return PARSER;
-    }
-
-    public p_auth_sm.p_auth_sm_register_role getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
-  public interface p_sm_auth_register_role_successOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.test.proto.p_sm_auth_register_role_success)
-      com.google.protobuf.MessageOrBuilder {
-  }
-  /**
-   * Protobuf type {@code org.jyg.gameserver.test.proto.p_sm_auth_register_role_success}
-   */
-  public  static final class p_sm_auth_register_role_success extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.test.proto.p_sm_auth_register_role_success)
-      p_sm_auth_register_role_successOrBuilder {
-  private static final long serialVersionUID = 0L;
-    // Use p_sm_auth_register_role_success.newBuilder() to construct.
-    private p_sm_auth_register_role_success(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private p_sm_auth_register_role_success() {
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private p_sm_auth_register_role_success(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return p_auth_sm.internal_static_com_jyg_proto_p_sm_auth_register_role_success_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return p_auth_sm.internal_static_com_jyg_proto_p_sm_auth_register_role_success_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              p_auth_sm.p_sm_auth_register_role_success.class, p_auth_sm.p_sm_auth_register_role_success.Builder.class);
-    }
-
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      unknownFields.writeTo(output);
-    }
-
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      size += unknownFields.getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof p_auth_sm.p_sm_auth_register_role_success)) {
-        return super.equals(obj);
-      }
-      p_auth_sm.p_sm_auth_register_role_success other = (p_auth_sm.p_sm_auth_register_role_success) obj;
-
-      boolean result = true;
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static p_auth_sm.p_sm_auth_register_role_success parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static p_auth_sm.p_sm_auth_register_role_success parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static p_auth_sm.p_sm_auth_register_role_success parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static p_auth_sm.p_sm_auth_register_role_success parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static p_auth_sm.p_sm_auth_register_role_success parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static p_auth_sm.p_sm_auth_register_role_success parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static p_auth_sm.p_sm_auth_register_role_success parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static p_auth_sm.p_sm_auth_register_role_success parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static p_auth_sm.p_sm_auth_register_role_success parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static p_auth_sm.p_sm_auth_register_role_success parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static p_auth_sm.p_sm_auth_register_role_success parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static p_auth_sm.p_sm_auth_register_role_success parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(p_auth_sm.p_sm_auth_register_role_success prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code org.jyg.gameserver.test.proto.p_sm_auth_register_role_success}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.test.proto.p_sm_auth_register_role_success)
-        p_auth_sm.p_sm_auth_register_role_successOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return p_auth_sm.internal_static_com_jyg_proto_p_sm_auth_register_role_success_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return p_auth_sm.internal_static_com_jyg_proto_p_sm_auth_register_role_success_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                p_auth_sm.p_sm_auth_register_role_success.class, p_auth_sm.p_sm_auth_register_role_success.Builder.class);
-      }
-
-      // Construct using org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_register_role_success.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
-      }
-      public Builder clear() {
-        super.clear();
-        return this;
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return p_auth_sm.internal_static_com_jyg_proto_p_sm_auth_register_role_success_descriptor;
-      }
-
-      public p_auth_sm.p_sm_auth_register_role_success getDefaultInstanceForType() {
-        return p_auth_sm.p_sm_auth_register_role_success.getDefaultInstance();
-      }
-
-      public p_auth_sm.p_sm_auth_register_role_success build() {
-        p_auth_sm.p_sm_auth_register_role_success result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public p_auth_sm.p_sm_auth_register_role_success buildPartial() {
-        p_auth_sm.p_sm_auth_register_role_success result = new p_auth_sm.p_sm_auth_register_role_success(this);
-        onBuilt();
-        return result;
-      }
-
-      public Builder clone() {
-        return (Builder) super.clone();
-      }
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.setField(field, value);
-      }
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
-      }
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
-      }
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
-      }
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
-      }
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof p_auth_sm.p_sm_auth_register_role_success) {
-          return mergeFrom((p_auth_sm.p_sm_auth_register_role_success)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(p_auth_sm.p_sm_auth_register_role_success other) {
-        if (other == p_auth_sm.p_sm_auth_register_role_success.getDefaultInstance()) return this;
-        this.mergeUnknownFields(other.unknownFields);
-        onChanged();
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        p_auth_sm.p_sm_auth_register_role_success parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (p_auth_sm.p_sm_auth_register_role_success) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFieldsProto3(unknownFields);
-      }
-
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.test.proto.p_sm_auth_register_role_success)
-    }
-
-    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.test.proto.p_sm_auth_register_role_success)
-    private static final p_auth_sm.p_sm_auth_register_role_success DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new p_auth_sm.p_sm_auth_register_role_success();
-    }
-
-    public static p_auth_sm.p_sm_auth_register_role_success getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<p_sm_auth_register_role_success>
-        PARSER = new com.google.protobuf.AbstractParser<p_sm_auth_register_role_success>() {
-      public p_sm_auth_register_role_success parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-          return new p_sm_auth_register_role_success(input, extensionRegistry);
-      }
-    };
-
-    public static com.google.protobuf.Parser<p_sm_auth_register_role_success> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<p_sm_auth_register_role_success> getParserForType() {
-      return PARSER;
-    }
-
-    public p_auth_sm.p_sm_auth_register_role_success getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
   public interface p_auth_sm_request_send_tokenOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.test.proto.p_auth_sm_request_send_token)
+      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.proto.p_auth_sm_request_send_token)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -796,11 +28,11 @@ public final class p_auth_sm {
    *auth 给sm服 发送token
    * </pre>
    *
-   * Protobuf type {@code org.jyg.gameserver.test.proto.p_auth_sm_request_send_token}
+   * Protobuf type {@code org.jyg.gameserver.proto.p_auth_sm_request_send_token}
    */
   public  static final class p_auth_sm_request_send_token extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.test.proto.p_auth_sm_request_send_token)
+      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.proto.p_auth_sm_request_send_token)
       p_auth_sm_request_send_tokenOrBuilder {
   private static final long serialVersionUID = 0L;
     // Use p_auth_sm_request_send_token.newBuilder() to construct.
@@ -858,14 +90,14 @@ public final class p_auth_sm {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return p_auth_sm.internal_static_com_jyg_proto_p_auth_sm_request_send_token_descriptor;
+      return org.jyg.gameserver.proto.p_auth_sm.internal_static_org_jyg_gameserver_proto_p_auth_sm_request_send_token_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return p_auth_sm.internal_static_com_jyg_proto_p_auth_sm_request_send_token_fieldAccessorTable
+      return org.jyg.gameserver.proto.p_auth_sm.internal_static_org_jyg_gameserver_proto_p_auth_sm_request_send_token_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              p_auth_sm.p_auth_sm_request_send_token.class, p_auth_sm.p_auth_sm_request_send_token.Builder.class);
+              org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token.class, org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token.Builder.class);
     }
 
     public static final int REQUESTID_FIELD_NUMBER = 1;
@@ -914,10 +146,10 @@ public final class p_auth_sm {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof p_auth_sm.p_auth_sm_request_send_token)) {
+      if (!(obj instanceof org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token)) {
         return super.equals(obj);
       }
-      p_auth_sm.p_auth_sm_request_send_token other = (p_auth_sm.p_auth_sm_request_send_token) obj;
+      org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token other = (org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token) obj;
 
       boolean result = true;
       result = result && (getRequestId()
@@ -941,69 +173,69 @@ public final class p_auth_sm {
       return hash;
     }
 
-    public static p_auth_sm.p_auth_sm_request_send_token parseFrom(
+    public static org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static p_auth_sm.p_auth_sm_request_send_token parseFrom(
+    public static org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static p_auth_sm.p_auth_sm_request_send_token parseFrom(
+    public static org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static p_auth_sm.p_auth_sm_request_send_token parseFrom(
+    public static org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static p_auth_sm.p_auth_sm_request_send_token parseFrom(byte[] data)
+    public static org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static p_auth_sm.p_auth_sm_request_send_token parseFrom(
+    public static org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static p_auth_sm.p_auth_sm_request_send_token parseFrom(java.io.InputStream input)
+    public static org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static p_auth_sm.p_auth_sm_request_send_token parseFrom(
+    public static org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static p_auth_sm.p_auth_sm_request_send_token parseDelimitedFrom(java.io.InputStream input)
+    public static org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static p_auth_sm.p_auth_sm_request_send_token parseDelimitedFrom(
+    public static org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static p_auth_sm.p_auth_sm_request_send_token parseFrom(
+    public static org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static p_auth_sm.p_auth_sm_request_send_token parseFrom(
+    public static org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1015,7 +247,7 @@ public final class p_auth_sm {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(p_auth_sm.p_auth_sm_request_send_token prototype) {
+    public static Builder newBuilder(org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -1034,22 +266,22 @@ public final class p_auth_sm {
      *auth 给sm服 发送token
      * </pre>
      *
-     * Protobuf type {@code org.jyg.gameserver.test.proto.p_auth_sm_request_send_token}
+     * Protobuf type {@code org.jyg.gameserver.proto.p_auth_sm_request_send_token}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.test.proto.p_auth_sm_request_send_token)
-        p_auth_sm.p_auth_sm_request_send_tokenOrBuilder {
+        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.proto.p_auth_sm_request_send_token)
+        org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_tokenOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return p_auth_sm.internal_static_com_jyg_proto_p_auth_sm_request_send_token_descriptor;
+        return org.jyg.gameserver.proto.p_auth_sm.internal_static_org_jyg_gameserver_proto_p_auth_sm_request_send_token_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return p_auth_sm.internal_static_com_jyg_proto_p_auth_sm_request_send_token_fieldAccessorTable
+        return org.jyg.gameserver.proto.p_auth_sm.internal_static_org_jyg_gameserver_proto_p_auth_sm_request_send_token_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                p_auth_sm.p_auth_sm_request_send_token.class, p_auth_sm.p_auth_sm_request_send_token.Builder.class);
+                org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token.class, org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token.Builder.class);
       }
 
       // Construct using org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token.newBuilder()
@@ -1076,23 +308,23 @@ public final class p_auth_sm {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return p_auth_sm.internal_static_com_jyg_proto_p_auth_sm_request_send_token_descriptor;
+        return org.jyg.gameserver.proto.p_auth_sm.internal_static_org_jyg_gameserver_proto_p_auth_sm_request_send_token_descriptor;
       }
 
-      public p_auth_sm.p_auth_sm_request_send_token getDefaultInstanceForType() {
-        return p_auth_sm.p_auth_sm_request_send_token.getDefaultInstance();
+      public org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token getDefaultInstanceForType() {
+        return org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token.getDefaultInstance();
       }
 
-      public p_auth_sm.p_auth_sm_request_send_token build() {
-        p_auth_sm.p_auth_sm_request_send_token result = buildPartial();
+      public org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token build() {
+        org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public p_auth_sm.p_auth_sm_request_send_token buildPartial() {
-        p_auth_sm.p_auth_sm_request_send_token result = new p_auth_sm.p_auth_sm_request_send_token(this);
+      public org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token buildPartial() {
+        org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token result = new org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token(this);
         result.requestId_ = requestId_;
         onBuilt();
         return result;
@@ -1125,16 +357,16 @@ public final class p_auth_sm {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof p_auth_sm.p_auth_sm_request_send_token) {
-          return mergeFrom((p_auth_sm.p_auth_sm_request_send_token)other);
+        if (other instanceof org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token) {
+          return mergeFrom((org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(p_auth_sm.p_auth_sm_request_send_token other) {
-        if (other == p_auth_sm.p_auth_sm_request_send_token.getDefaultInstance()) return this;
+      public Builder mergeFrom(org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token other) {
+        if (other == org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token.getDefaultInstance()) return this;
         if (other.getRequestId() != 0L) {
           setRequestId(other.getRequestId());
         }
@@ -1151,11 +383,11 @@ public final class p_auth_sm {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        p_auth_sm.p_auth_sm_request_send_token parsedMessage = null;
+        org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (p_auth_sm.p_auth_sm_request_send_token) e.getUnfinishedMessage();
+          parsedMessage = (org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1201,16 +433,16 @@ public final class p_auth_sm {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.test.proto.p_auth_sm_request_send_token)
+      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.proto.p_auth_sm_request_send_token)
     }
 
-    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.test.proto.p_auth_sm_request_send_token)
-    private static final p_auth_sm.p_auth_sm_request_send_token DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.proto.p_auth_sm_request_send_token)
+    private static final org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new p_auth_sm.p_auth_sm_request_send_token();
+      DEFAULT_INSTANCE = new org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token();
     }
 
-    public static p_auth_sm.p_auth_sm_request_send_token getDefaultInstance() {
+    public static org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1233,14 +465,14 @@ public final class p_auth_sm {
       return PARSER;
     }
 
-    public p_auth_sm.p_auth_sm_request_send_token getDefaultInstanceForType() {
+    public org.jyg.gameserver.proto.p_auth_sm.p_auth_sm_request_send_token getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
   public interface p_sm_auth_response_receive_tokenOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.test.proto.p_sm_auth_response_receive_token)
+      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.proto.p_sm_auth_response_receive_token)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -1278,11 +510,11 @@ public final class p_auth_sm {
    *场景服回复sm服
    * </pre>
    *
-   * Protobuf type {@code org.jyg.gameserver.test.proto.p_sm_auth_response_receive_token}
+   * Protobuf type {@code org.jyg.gameserver.proto.p_sm_auth_response_receive_token}
    */
   public  static final class p_sm_auth_response_receive_token extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.test.proto.p_sm_auth_response_receive_token)
+      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.proto.p_sm_auth_response_receive_token)
       p_sm_auth_response_receive_tokenOrBuilder {
   private static final long serialVersionUID = 0L;
     // Use p_sm_auth_response_receive_token.newBuilder() to construct.
@@ -1360,14 +592,14 @@ public final class p_auth_sm {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return p_auth_sm.internal_static_com_jyg_proto_p_sm_auth_response_receive_token_descriptor;
+      return org.jyg.gameserver.proto.p_auth_sm.internal_static_org_jyg_gameserver_proto_p_sm_auth_response_receive_token_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return p_auth_sm.internal_static_com_jyg_proto_p_sm_auth_response_receive_token_fieldAccessorTable
+      return org.jyg.gameserver.proto.p_auth_sm.internal_static_org_jyg_gameserver_proto_p_sm_auth_response_receive_token_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              p_auth_sm.p_sm_auth_response_receive_token.class, p_auth_sm.p_sm_auth_response_receive_token.Builder.class);
+              org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token.class, org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token.Builder.class);
     }
 
     public static final int REQUESTID_FIELD_NUMBER = 1;
@@ -1512,10 +744,10 @@ public final class p_auth_sm {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof p_auth_sm.p_sm_auth_response_receive_token)) {
+      if (!(obj instanceof org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token)) {
         return super.equals(obj);
       }
-      p_auth_sm.p_sm_auth_response_receive_token other = (p_auth_sm.p_sm_auth_response_receive_token) obj;
+      org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token other = (org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token) obj;
 
       boolean result = true;
       result = result && (getRequestId()
@@ -1551,69 +783,69 @@ public final class p_auth_sm {
       return hash;
     }
 
-    public static p_auth_sm.p_sm_auth_response_receive_token parseFrom(
+    public static org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static p_auth_sm.p_sm_auth_response_receive_token parseFrom(
+    public static org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static p_auth_sm.p_sm_auth_response_receive_token parseFrom(
+    public static org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static p_auth_sm.p_sm_auth_response_receive_token parseFrom(
+    public static org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static p_auth_sm.p_sm_auth_response_receive_token parseFrom(byte[] data)
+    public static org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static p_auth_sm.p_sm_auth_response_receive_token parseFrom(
+    public static org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static p_auth_sm.p_sm_auth_response_receive_token parseFrom(java.io.InputStream input)
+    public static org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static p_auth_sm.p_sm_auth_response_receive_token parseFrom(
+    public static org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static p_auth_sm.p_sm_auth_response_receive_token parseDelimitedFrom(java.io.InputStream input)
+    public static org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static p_auth_sm.p_sm_auth_response_receive_token parseDelimitedFrom(
+    public static org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static p_auth_sm.p_sm_auth_response_receive_token parseFrom(
+    public static org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static p_auth_sm.p_sm_auth_response_receive_token parseFrom(
+    public static org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1625,7 +857,7 @@ public final class p_auth_sm {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(p_auth_sm.p_sm_auth_response_receive_token prototype) {
+    public static Builder newBuilder(org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -1644,22 +876,22 @@ public final class p_auth_sm {
      *场景服回复sm服
      * </pre>
      *
-     * Protobuf type {@code org.jyg.gameserver.test.proto.p_sm_auth_response_receive_token}
+     * Protobuf type {@code org.jyg.gameserver.proto.p_sm_auth_response_receive_token}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.test.proto.p_sm_auth_response_receive_token)
-        p_auth_sm.p_sm_auth_response_receive_tokenOrBuilder {
+        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.proto.p_sm_auth_response_receive_token)
+        org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_tokenOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return p_auth_sm.internal_static_com_jyg_proto_p_sm_auth_response_receive_token_descriptor;
+        return org.jyg.gameserver.proto.p_auth_sm.internal_static_org_jyg_gameserver_proto_p_sm_auth_response_receive_token_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return p_auth_sm.internal_static_com_jyg_proto_p_sm_auth_response_receive_token_fieldAccessorTable
+        return org.jyg.gameserver.proto.p_auth_sm.internal_static_org_jyg_gameserver_proto_p_sm_auth_response_receive_token_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                p_auth_sm.p_sm_auth_response_receive_token.class, p_auth_sm.p_sm_auth_response_receive_token.Builder.class);
+                org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token.class, org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token.Builder.class);
       }
 
       // Construct using org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token.newBuilder()
@@ -1692,23 +924,23 @@ public final class p_auth_sm {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return p_auth_sm.internal_static_com_jyg_proto_p_sm_auth_response_receive_token_descriptor;
+        return org.jyg.gameserver.proto.p_auth_sm.internal_static_org_jyg_gameserver_proto_p_sm_auth_response_receive_token_descriptor;
       }
 
-      public p_auth_sm.p_sm_auth_response_receive_token getDefaultInstanceForType() {
-        return p_auth_sm.p_sm_auth_response_receive_token.getDefaultInstance();
+      public org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token getDefaultInstanceForType() {
+        return org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token.getDefaultInstance();
       }
 
-      public p_auth_sm.p_sm_auth_response_receive_token build() {
-        p_auth_sm.p_sm_auth_response_receive_token result = buildPartial();
+      public org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token build() {
+        org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public p_auth_sm.p_sm_auth_response_receive_token buildPartial() {
-        p_auth_sm.p_sm_auth_response_receive_token result = new p_auth_sm.p_sm_auth_response_receive_token(this);
+      public org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token buildPartial() {
+        org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token result = new org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token(this);
         result.requestId_ = requestId_;
         result.token_ = token_;
         result.ip_ = ip_;
@@ -1744,16 +976,16 @@ public final class p_auth_sm {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof p_auth_sm.p_sm_auth_response_receive_token) {
-          return mergeFrom((p_auth_sm.p_sm_auth_response_receive_token)other);
+        if (other instanceof org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token) {
+          return mergeFrom((org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(p_auth_sm.p_sm_auth_response_receive_token other) {
-        if (other == p_auth_sm.p_sm_auth_response_receive_token.getDefaultInstance()) return this;
+      public Builder mergeFrom(org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token other) {
+        if (other == org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token.getDefaultInstance()) return this;
         if (other.getRequestId() != 0L) {
           setRequestId(other.getRequestId());
         }
@@ -1781,11 +1013,11 @@ public final class p_auth_sm {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        p_auth_sm.p_sm_auth_response_receive_token parsedMessage = null;
+        org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (p_auth_sm.p_sm_auth_response_receive_token) e.getUnfinishedMessage();
+          parsedMessage = (org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1995,16 +1227,16 @@ public final class p_auth_sm {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.test.proto.p_sm_auth_response_receive_token)
+      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.proto.p_sm_auth_response_receive_token)
     }
 
-    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.test.proto.p_sm_auth_response_receive_token)
-    private static final p_auth_sm.p_sm_auth_response_receive_token DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.proto.p_sm_auth_response_receive_token)
+    private static final org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new p_auth_sm.p_sm_auth_response_receive_token();
+      DEFAULT_INSTANCE = new org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token();
     }
 
-    public static p_auth_sm.p_sm_auth_response_receive_token getDefaultInstance() {
+    public static org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -2027,32 +1259,22 @@ public final class p_auth_sm {
       return PARSER;
     }
 
-    public p_auth_sm.p_sm_auth_response_receive_token getDefaultInstanceForType() {
+    public org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_jyg_proto_p_auth_sm_register_role_descriptor;
+    internal_static_org_jyg_gameserver_proto_p_auth_sm_request_send_token_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_jyg_proto_p_auth_sm_register_role_fieldAccessorTable;
+      internal_static_org_jyg_gameserver_proto_p_auth_sm_request_send_token_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_jyg_proto_p_sm_auth_register_role_success_descriptor;
+    internal_static_org_jyg_gameserver_proto_p_sm_auth_response_receive_token_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_jyg_proto_p_sm_auth_register_role_success_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_jyg_proto_p_auth_sm_request_send_token_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_jyg_proto_p_auth_sm_request_send_token_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_jyg_proto_p_sm_auth_response_receive_token_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_jyg_proto_p_sm_auth_response_receive_token_fieldAccessorTable;
+      internal_static_org_jyg_gameserver_proto_p_sm_auth_response_receive_token_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -2062,13 +1284,12 @@ public final class p_auth_sm {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\017p_auth_sm.proto\022\rorg.jyg.gameserver.test.proto\"\031\n\027p_au" +
-      "th_sm_register_role\"!\n\037p_sm_auth_registe" +
-      "r_role_success\"1\n\034p_auth_sm_request_send" +
-      "_token\022\021\n\trequestId\030\001 \001(\003\"^\n p_sm_auth_r" +
-      "esponse_receive_token\022\021\n\trequestId\030\001 \001(\003" +
-      "\022\r\n\005token\030\002 \001(\t\022\n\n\002ip\030\003 \001(\t\022\014\n\004port\030\004 \001(" +
-      "\005B\032\n\rcom.jyg.protoB\tp_auth_smb\006proto3"
+      "\n\017p_auth_sm.proto\022\030org.jyg.gameserver.pr" +
+      "oto\"1\n\034p_auth_sm_request_send_token\022\021\n\tr" +
+      "equestId\030\001 \001(\003\"^\n p_sm_auth_response_rec" +
+      "eive_token\022\021\n\trequestId\030\001 \001(\003\022\r\n\005token\030\002" +
+      " \001(\t\022\n\n\002ip\030\003 \001(\t\022\014\n\004port\030\004 \001(\005B%\n\030org.jy" +
+      "g.gameserver.protoB\tp_auth_smb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2082,29 +1303,17 @@ public final class p_auth_sm {
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
-    internal_static_com_jyg_proto_p_auth_sm_register_role_descriptor =
+    internal_static_org_jyg_gameserver_proto_p_auth_sm_request_send_token_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_com_jyg_proto_p_auth_sm_register_role_fieldAccessorTable = new
+    internal_static_org_jyg_gameserver_proto_p_auth_sm_request_send_token_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_jyg_proto_p_auth_sm_register_role_descriptor,
-        new java.lang.String[] { });
-    internal_static_com_jyg_proto_p_sm_auth_register_role_success_descriptor =
-      getDescriptor().getMessageTypes().get(1);
-    internal_static_com_jyg_proto_p_sm_auth_register_role_success_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_jyg_proto_p_sm_auth_register_role_success_descriptor,
-        new java.lang.String[] { });
-    internal_static_com_jyg_proto_p_auth_sm_request_send_token_descriptor =
-      getDescriptor().getMessageTypes().get(2);
-    internal_static_com_jyg_proto_p_auth_sm_request_send_token_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_jyg_proto_p_auth_sm_request_send_token_descriptor,
+        internal_static_org_jyg_gameserver_proto_p_auth_sm_request_send_token_descriptor,
         new java.lang.String[] { "RequestId", });
-    internal_static_com_jyg_proto_p_sm_auth_response_receive_token_descriptor =
-      getDescriptor().getMessageTypes().get(3);
-    internal_static_com_jyg_proto_p_sm_auth_response_receive_token_fieldAccessorTable = new
+    internal_static_org_jyg_gameserver_proto_p_sm_auth_response_receive_token_descriptor =
+      getDescriptor().getMessageTypes().get(1);
+    internal_static_org_jyg_gameserver_proto_p_sm_auth_response_receive_token_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_jyg_proto_p_sm_auth_response_receive_token_descriptor,
+        internal_static_org_jyg_gameserver_proto_p_sm_auth_response_receive_token_descriptor,
         new java.lang.String[] { "RequestId", "Token", "Ip", "Port", });
   }
 

@@ -15,7 +15,7 @@ public final class p_sm_scene {
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   public interface p_sm_scene_request_pingOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.test.proto.p_sm_scene_request_ping)
+      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.proto.p_sm_scene_request_ping)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -44,27 +44,27 @@ public final class p_sm_scene {
         getEmailBytes();
 
     /**
-     * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+     * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
      */
-    java.util.List<p_sm_scene.p_sm_scene_request_ping.Car>
+    java.util.List<org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car> 
         getCarsList();
     /**
-     * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+     * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
      */
-    p_sm_scene.p_sm_scene_request_ping.Car getCars(int index);
+    org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car getCars(int index);
     /**
-     * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+     * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
      */
     int getCarsCount();
     /**
-     * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+     * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
      */
-    java.util.List<? extends p_sm_scene.p_sm_scene_request_ping.CarOrBuilder>
+    java.util.List<? extends org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarOrBuilder> 
         getCarsOrBuilderList();
     /**
-     * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+     * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
      */
-    p_sm_scene.p_sm_scene_request_ping.CarOrBuilder getCarsOrBuilder(
+    org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarOrBuilder getCarsOrBuilder(
         int index);
   }
   /**
@@ -72,11 +72,11 @@ public final class p_sm_scene {
    *sm服 ping场景服
    * </pre>
    *
-   * Protobuf type {@code org.jyg.gameserver.test.proto.p_sm_scene_request_ping}
+   * Protobuf type {@code org.jyg.gameserver.proto.p_sm_scene_request_ping}
    */
   public  static final class p_sm_scene_request_ping extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.test.proto.p_sm_scene_request_ping)
+      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.proto.p_sm_scene_request_ping)
       p_sm_scene_request_pingOrBuilder {
   private static final long serialVersionUID = 0L;
     // Use p_sm_scene_request_ping.newBuilder() to construct.
@@ -137,11 +137,11 @@ public final class p_sm_scene {
             }
             case 34: {
               if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-                cars_ = new java.util.ArrayList<p_sm_scene.p_sm_scene_request_ping.Car>();
+                cars_ = new java.util.ArrayList<org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car>();
                 mutable_bitField0_ |= 0x00000008;
               }
               cars_.add(
-                  input.readMessage(p_sm_scene.p_sm_scene_request_ping.Car.parser(), extensionRegistry));
+                  input.readMessage(org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.parser(), extensionRegistry));
               break;
             }
           }
@@ -161,18 +161,18 @@ public final class p_sm_scene {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return p_sm_scene.internal_static_com_jyg_proto_p_sm_scene_request_ping_descriptor;
+      return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return p_sm_scene.internal_static_com_jyg_proto_p_sm_scene_request_ping_fieldAccessorTable
+      return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              p_sm_scene.p_sm_scene_request_ping.class, p_sm_scene.p_sm_scene_request_ping.Builder.class);
+              org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.class, org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Builder.class);
     }
 
     /**
-     * Protobuf enum {@code org.jyg.gameserver.test.proto.p_sm_scene_request_ping.CarType}
+     * Protobuf enum {@code org.jyg.gameserver.proto.p_sm_scene_request_ping.CarType}
      */
     public enum CarType
         implements com.google.protobuf.ProtocolMessageEnum {
@@ -261,7 +261,7 @@ public final class p_sm_scene {
       }
       public static final com.google.protobuf.Descriptors.EnumDescriptor
           getDescriptor() {
-        return p_sm_scene.p_sm_scene_request_ping.getDescriptor().getEnumTypes().get(0);
+        return org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.getDescriptor().getEnumTypes().get(0);
       }
 
       private static final CarType[] VALUES = values();
@@ -284,11 +284,11 @@ public final class p_sm_scene {
         this.value = value;
       }
 
-      // @@protoc_insertion_point(enum_scope:org.jyg.gameserver.test.proto.p_sm_scene_request_ping.CarType)
+      // @@protoc_insertion_point(enum_scope:org.jyg.gameserver.proto.p_sm_scene_request_ping.CarType)
     }
 
     public interface CarOrBuilder extends
-        // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car)
+        // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.proto.p_sm_scene_request_ping.Car)
         com.google.protobuf.MessageOrBuilder {
 
       /**
@@ -302,20 +302,20 @@ public final class p_sm_scene {
           getNameBytes();
 
       /**
-       * <code>.org.jyg.gameserver.test.proto.p_sm_scene_request_ping.CarType type = 2;</code>
+       * <code>.org.jyg.gameserver.proto.p_sm_scene_request_ping.CarType type = 2;</code>
        */
       int getTypeValue();
       /**
-       * <code>.org.jyg.gameserver.test.proto.p_sm_scene_request_ping.CarType type = 2;</code>
+       * <code>.org.jyg.gameserver.proto.p_sm_scene_request_ping.CarType type = 2;</code>
        */
-      p_sm_scene.p_sm_scene_request_ping.CarType getType();
+      org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarType getType();
     }
     /**
-     * Protobuf type {@code org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car}
+     * Protobuf type {@code org.jyg.gameserver.proto.p_sm_scene_request_ping.Car}
      */
     public  static final class Car extends
         com.google.protobuf.GeneratedMessageV3 implements
-        // @@protoc_insertion_point(message_implements:org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car)
+        // @@protoc_insertion_point(message_implements:org.jyg.gameserver.proto.p_sm_scene_request_ping.Car)
         CarOrBuilder {
     private static final long serialVersionUID = 0L;
       // Use Car.newBuilder() to construct.
@@ -381,14 +381,14 @@ public final class p_sm_scene {
       }
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return p_sm_scene.internal_static_com_jyg_proto_p_sm_scene_request_ping_Car_descriptor;
+        return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_Car_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return p_sm_scene.internal_static_com_jyg_proto_p_sm_scene_request_ping_Car_fieldAccessorTable
+        return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_Car_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                p_sm_scene.p_sm_scene_request_ping.Car.class, p_sm_scene.p_sm_scene_request_ping.Car.Builder.class);
+                org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.class, org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.Builder.class);
       }
 
       public static final int NAME_FIELD_NUMBER = 1;
@@ -428,17 +428,17 @@ public final class p_sm_scene {
       public static final int TYPE_FIELD_NUMBER = 2;
       private int type_;
       /**
-       * <code>.org.jyg.gameserver.test.proto.p_sm_scene_request_ping.CarType type = 2;</code>
+       * <code>.org.jyg.gameserver.proto.p_sm_scene_request_ping.CarType type = 2;</code>
        */
       public int getTypeValue() {
         return type_;
       }
       /**
-       * <code>.org.jyg.gameserver.test.proto.p_sm_scene_request_ping.CarType type = 2;</code>
+       * <code>.org.jyg.gameserver.proto.p_sm_scene_request_ping.CarType type = 2;</code>
        */
-      public p_sm_scene.p_sm_scene_request_ping.CarType getType() {
-        p_sm_scene.p_sm_scene_request_ping.CarType result = p_sm_scene.p_sm_scene_request_ping.CarType.valueOf(type_);
-        return result == null ? p_sm_scene.p_sm_scene_request_ping.CarType.UNRECOGNIZED : result;
+      public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarType getType() {
+        org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarType result = org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarType.valueOf(type_);
+        return result == null ? org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarType.UNRECOGNIZED : result;
       }
 
       private byte memoizedIsInitialized = -1;
@@ -456,7 +456,7 @@ public final class p_sm_scene {
         if (!getNameBytes().isEmpty()) {
           com.google.protobuf.GeneratedMessageV3.writeString(output, 1, name_);
         }
-        if (type_ != p_sm_scene.p_sm_scene_request_ping.CarType.AUDI.getNumber()) {
+        if (type_ != org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarType.AUDI.getNumber()) {
           output.writeEnum(2, type_);
         }
         unknownFields.writeTo(output);
@@ -470,7 +470,7 @@ public final class p_sm_scene {
         if (!getNameBytes().isEmpty()) {
           size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, name_);
         }
-        if (type_ != p_sm_scene.p_sm_scene_request_ping.CarType.AUDI.getNumber()) {
+        if (type_ != org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarType.AUDI.getNumber()) {
           size += com.google.protobuf.CodedOutputStream
             .computeEnumSize(2, type_);
         }
@@ -484,10 +484,10 @@ public final class p_sm_scene {
         if (obj == this) {
          return true;
         }
-        if (!(obj instanceof p_sm_scene.p_sm_scene_request_ping.Car)) {
+        if (!(obj instanceof org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car)) {
           return super.equals(obj);
         }
-        p_sm_scene.p_sm_scene_request_ping.Car other = (p_sm_scene.p_sm_scene_request_ping.Car) obj;
+        org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car other = (org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car) obj;
 
         boolean result = true;
         result = result && getName()
@@ -513,69 +513,69 @@ public final class p_sm_scene {
         return hash;
       }
 
-      public static p_sm_scene.p_sm_scene_request_ping.Car parseFrom(
+      public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car parseFrom(
           java.nio.ByteBuffer data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-      public static p_sm_scene.p_sm_scene_request_ping.Car parseFrom(
+      public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car parseFrom(
           java.nio.ByteBuffer data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-      public static p_sm_scene.p_sm_scene_request_ping.Car parseFrom(
+      public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car parseFrom(
           com.google.protobuf.ByteString data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-      public static p_sm_scene.p_sm_scene_request_ping.Car parseFrom(
+      public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car parseFrom(
           com.google.protobuf.ByteString data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-      public static p_sm_scene.p_sm_scene_request_ping.Car parseFrom(byte[] data)
+      public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car parseFrom(byte[] data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-      public static p_sm_scene.p_sm_scene_request_ping.Car parseFrom(
+      public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car parseFrom(
           byte[] data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-      public static p_sm_scene.p_sm_scene_request_ping.Car parseFrom(java.io.InputStream input)
+      public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car parseFrom(java.io.InputStream input)
           throws java.io.IOException {
         return com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input);
       }
-      public static p_sm_scene.p_sm_scene_request_ping.Car parseFrom(
+      public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car parseFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         return com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input, extensionRegistry);
       }
-      public static p_sm_scene.p_sm_scene_request_ping.Car parseDelimitedFrom(java.io.InputStream input)
+      public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
         return com.google.protobuf.GeneratedMessageV3
             .parseDelimitedWithIOException(PARSER, input);
       }
-      public static p_sm_scene.p_sm_scene_request_ping.Car parseDelimitedFrom(
+      public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car parseDelimitedFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         return com.google.protobuf.GeneratedMessageV3
             .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
       }
-      public static p_sm_scene.p_sm_scene_request_ping.Car parseFrom(
+      public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car parseFrom(
           com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
         return com.google.protobuf.GeneratedMessageV3
             .parseWithIOException(PARSER, input);
       }
-      public static p_sm_scene.p_sm_scene_request_ping.Car parseFrom(
+      public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car parseFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
@@ -587,7 +587,7 @@ public final class p_sm_scene {
       public static Builder newBuilder() {
         return DEFAULT_INSTANCE.toBuilder();
       }
-      public static Builder newBuilder(p_sm_scene.p_sm_scene_request_ping.Car prototype) {
+      public static Builder newBuilder(org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car prototype) {
         return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
       }
       public Builder toBuilder() {
@@ -602,22 +602,22 @@ public final class p_sm_scene {
         return builder;
       }
       /**
-       * Protobuf type {@code org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car}
+       * Protobuf type {@code org.jyg.gameserver.proto.p_sm_scene_request_ping.Car}
        */
       public static final class Builder extends
           com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-          // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car)
-          p_sm_scene.p_sm_scene_request_ping.CarOrBuilder {
+          // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.proto.p_sm_scene_request_ping.Car)
+          org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
-          return p_sm_scene.internal_static_com_jyg_proto_p_sm_scene_request_ping_Car_descriptor;
+          return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_Car_descriptor;
         }
 
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
             internalGetFieldAccessorTable() {
-          return p_sm_scene.internal_static_com_jyg_proto_p_sm_scene_request_ping_Car_fieldAccessorTable
+          return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_Car_fieldAccessorTable
               .ensureFieldAccessorsInitialized(
-                  p_sm_scene.p_sm_scene_request_ping.Car.class, p_sm_scene.p_sm_scene_request_ping.Car.Builder.class);
+                  org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.class, org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.Builder.class);
         }
 
         // Construct using org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.newBuilder()
@@ -646,23 +646,23 @@ public final class p_sm_scene {
 
         public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
-          return p_sm_scene.internal_static_com_jyg_proto_p_sm_scene_request_ping_Car_descriptor;
+          return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_Car_descriptor;
         }
 
-        public p_sm_scene.p_sm_scene_request_ping.Car getDefaultInstanceForType() {
-          return p_sm_scene.p_sm_scene_request_ping.Car.getDefaultInstance();
+        public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car getDefaultInstanceForType() {
+          return org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.getDefaultInstance();
         }
 
-        public p_sm_scene.p_sm_scene_request_ping.Car build() {
-          p_sm_scene.p_sm_scene_request_ping.Car result = buildPartial();
+        public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car build() {
+          org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car result = buildPartial();
           if (!result.isInitialized()) {
             throw newUninitializedMessageException(result);
           }
           return result;
         }
 
-        public p_sm_scene.p_sm_scene_request_ping.Car buildPartial() {
-          p_sm_scene.p_sm_scene_request_ping.Car result = new p_sm_scene.p_sm_scene_request_ping.Car(this);
+        public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car buildPartial() {
+          org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car result = new org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car(this);
           result.name_ = name_;
           result.type_ = type_;
           onBuilt();
@@ -696,16 +696,16 @@ public final class p_sm_scene {
           return (Builder) super.addRepeatedField(field, value);
         }
         public Builder mergeFrom(com.google.protobuf.Message other) {
-          if (other instanceof p_sm_scene.p_sm_scene_request_ping.Car) {
-            return mergeFrom((p_sm_scene.p_sm_scene_request_ping.Car)other);
+          if (other instanceof org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car) {
+            return mergeFrom((org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car)other);
           } else {
             super.mergeFrom(other);
             return this;
           }
         }
 
-        public Builder mergeFrom(p_sm_scene.p_sm_scene_request_ping.Car other) {
-          if (other == p_sm_scene.p_sm_scene_request_ping.Car.getDefaultInstance()) return this;
+        public Builder mergeFrom(org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car other) {
+          if (other == org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.getDefaultInstance()) return this;
           if (!other.getName().isEmpty()) {
             name_ = other.name_;
             onChanged();
@@ -726,11 +726,11 @@ public final class p_sm_scene {
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          p_sm_scene.p_sm_scene_request_ping.Car parsedMessage = null;
+          org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car parsedMessage = null;
           try {
             parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
           } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (p_sm_scene.p_sm_scene_request_ping.Car) e.getUnfinishedMessage();
+            parsedMessage = (org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car) e.getUnfinishedMessage();
             throw e.unwrapIOException();
           } finally {
             if (parsedMessage != null) {
@@ -811,13 +811,13 @@ public final class p_sm_scene {
 
         private int type_ = 0;
         /**
-         * <code>.org.jyg.gameserver.test.proto.p_sm_scene_request_ping.CarType type = 2;</code>
+         * <code>.org.jyg.gameserver.proto.p_sm_scene_request_ping.CarType type = 2;</code>
          */
         public int getTypeValue() {
           return type_;
         }
         /**
-         * <code>.org.jyg.gameserver.test.proto.p_sm_scene_request_ping.CarType type = 2;</code>
+         * <code>.org.jyg.gameserver.proto.p_sm_scene_request_ping.CarType type = 2;</code>
          */
         public Builder setTypeValue(int value) {
           type_ = value;
@@ -825,16 +825,16 @@ public final class p_sm_scene {
           return this;
         }
         /**
-         * <code>.org.jyg.gameserver.test.proto.p_sm_scene_request_ping.CarType type = 2;</code>
+         * <code>.org.jyg.gameserver.proto.p_sm_scene_request_ping.CarType type = 2;</code>
          */
-        public p_sm_scene.p_sm_scene_request_ping.CarType getType() {
-          p_sm_scene.p_sm_scene_request_ping.CarType result = p_sm_scene.p_sm_scene_request_ping.CarType.valueOf(type_);
-          return result == null ? p_sm_scene.p_sm_scene_request_ping.CarType.UNRECOGNIZED : result;
+        public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarType getType() {
+          org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarType result = org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarType.valueOf(type_);
+          return result == null ? org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarType.UNRECOGNIZED : result;
         }
         /**
-         * <code>.org.jyg.gameserver.test.proto.p_sm_scene_request_ping.CarType type = 2;</code>
+         * <code>.org.jyg.gameserver.proto.p_sm_scene_request_ping.CarType type = 2;</code>
          */
-        public Builder setType(p_sm_scene.p_sm_scene_request_ping.CarType value) {
+        public Builder setType(org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarType value) {
           if (value == null) {
             throw new NullPointerException();
           }
@@ -844,7 +844,7 @@ public final class p_sm_scene {
           return this;
         }
         /**
-         * <code>.org.jyg.gameserver.test.proto.p_sm_scene_request_ping.CarType type = 2;</code>
+         * <code>.org.jyg.gameserver.proto.p_sm_scene_request_ping.CarType type = 2;</code>
          */
         public Builder clearType() {
           
@@ -863,16 +863,16 @@ public final class p_sm_scene {
         }
 
 
-        // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car)
+        // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.proto.p_sm_scene_request_ping.Car)
       }
 
-      // @@protoc_insertion_point(class_scope:org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car)
-      private static final p_sm_scene.p_sm_scene_request_ping.Car DEFAULT_INSTANCE;
+      // @@protoc_insertion_point(class_scope:org.jyg.gameserver.proto.p_sm_scene_request_ping.Car)
+      private static final org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car DEFAULT_INSTANCE;
       static {
-        DEFAULT_INSTANCE = new p_sm_scene.p_sm_scene_request_ping.Car();
+        DEFAULT_INSTANCE = new org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car();
       }
 
-      public static p_sm_scene.p_sm_scene_request_ping.Car getDefaultInstance() {
+      public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car getDefaultInstance() {
         return DEFAULT_INSTANCE;
       }
 
@@ -895,7 +895,7 @@ public final class p_sm_scene {
         return PARSER;
       }
 
-      public p_sm_scene.p_sm_scene_request_ping.Car getDefaultInstanceForType() {
+      public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car getDefaultInstanceForType() {
         return DEFAULT_INSTANCE;
       }
 
@@ -980,36 +980,36 @@ public final class p_sm_scene {
     }
 
     public static final int CARS_FIELD_NUMBER = 4;
-    private java.util.List<p_sm_scene.p_sm_scene_request_ping.Car> cars_;
+    private java.util.List<org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car> cars_;
     /**
-     * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+     * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
      */
-    public java.util.List<p_sm_scene.p_sm_scene_request_ping.Car> getCarsList() {
+    public java.util.List<org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car> getCarsList() {
       return cars_;
     }
     /**
-     * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+     * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
      */
-    public java.util.List<? extends p_sm_scene.p_sm_scene_request_ping.CarOrBuilder>
+    public java.util.List<? extends org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarOrBuilder> 
         getCarsOrBuilderList() {
       return cars_;
     }
     /**
-     * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+     * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
      */
     public int getCarsCount() {
       return cars_.size();
     }
     /**
-     * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+     * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
      */
-    public p_sm_scene.p_sm_scene_request_ping.Car getCars(int index) {
+    public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car getCars(int index) {
       return cars_.get(index);
     }
     /**
-     * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+     * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
      */
-    public p_sm_scene.p_sm_scene_request_ping.CarOrBuilder getCarsOrBuilder(
+    public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarOrBuilder getCarsOrBuilder(
         int index) {
       return cars_.get(index);
     }
@@ -1070,10 +1070,10 @@ public final class p_sm_scene {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof p_sm_scene.p_sm_scene_request_ping)) {
+      if (!(obj instanceof org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping)) {
         return super.equals(obj);
       }
-      p_sm_scene.p_sm_scene_request_ping other = (p_sm_scene.p_sm_scene_request_ping) obj;
+      org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping other = (org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping) obj;
 
       boolean result = true;
       result = result && (getId()
@@ -1110,69 +1110,69 @@ public final class p_sm_scene {
       return hash;
     }
 
-    public static p_sm_scene.p_sm_scene_request_ping parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static p_sm_scene.p_sm_scene_request_ping parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static p_sm_scene.p_sm_scene_request_ping parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static p_sm_scene.p_sm_scene_request_ping parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static p_sm_scene.p_sm_scene_request_ping parseFrom(byte[] data)
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static p_sm_scene.p_sm_scene_request_ping parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static p_sm_scene.p_sm_scene_request_ping parseFrom(java.io.InputStream input)
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static p_sm_scene.p_sm_scene_request_ping parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static p_sm_scene.p_sm_scene_request_ping parseDelimitedFrom(java.io.InputStream input)
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static p_sm_scene.p_sm_scene_request_ping parseDelimitedFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static p_sm_scene.p_sm_scene_request_ping parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static p_sm_scene.p_sm_scene_request_ping parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1184,7 +1184,7 @@ public final class p_sm_scene {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(p_sm_scene.p_sm_scene_request_ping prototype) {
+    public static Builder newBuilder(org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -1203,22 +1203,22 @@ public final class p_sm_scene {
      *sm服 ping场景服
      * </pre>
      *
-     * Protobuf type {@code org.jyg.gameserver.test.proto.p_sm_scene_request_ping}
+     * Protobuf type {@code org.jyg.gameserver.proto.p_sm_scene_request_ping}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.test.proto.p_sm_scene_request_ping)
-        p_sm_scene.p_sm_scene_request_pingOrBuilder {
+        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.proto.p_sm_scene_request_ping)
+        org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_pingOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return p_sm_scene.internal_static_com_jyg_proto_p_sm_scene_request_ping_descriptor;
+        return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return p_sm_scene.internal_static_com_jyg_proto_p_sm_scene_request_ping_fieldAccessorTable
+        return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                p_sm_scene.p_sm_scene_request_ping.class, p_sm_scene.p_sm_scene_request_ping.Builder.class);
+                org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.class, org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Builder.class);
       }
 
       // Construct using org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.newBuilder()
@@ -1256,23 +1256,23 @@ public final class p_sm_scene {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return p_sm_scene.internal_static_com_jyg_proto_p_sm_scene_request_ping_descriptor;
+        return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_descriptor;
       }
 
-      public p_sm_scene.p_sm_scene_request_ping getDefaultInstanceForType() {
-        return p_sm_scene.p_sm_scene_request_ping.getDefaultInstance();
+      public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping getDefaultInstanceForType() {
+        return org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.getDefaultInstance();
       }
 
-      public p_sm_scene.p_sm_scene_request_ping build() {
-        p_sm_scene.p_sm_scene_request_ping result = buildPartial();
+      public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping build() {
+        org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public p_sm_scene.p_sm_scene_request_ping buildPartial() {
-        p_sm_scene.p_sm_scene_request_ping result = new p_sm_scene.p_sm_scene_request_ping(this);
+      public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping buildPartial() {
+        org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping result = new org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         result.id_ = id_;
@@ -1319,16 +1319,16 @@ public final class p_sm_scene {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof p_sm_scene.p_sm_scene_request_ping) {
-          return mergeFrom((p_sm_scene.p_sm_scene_request_ping)other);
+        if (other instanceof org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping) {
+          return mergeFrom((org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(p_sm_scene.p_sm_scene_request_ping other) {
-        if (other == p_sm_scene.p_sm_scene_request_ping.getDefaultInstance()) return this;
+      public Builder mergeFrom(org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping other) {
+        if (other == org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.getDefaultInstance()) return this;
         if (other.getId() != 0) {
           setId(other.getId());
         }
@@ -1379,11 +1379,11 @@ public final class p_sm_scene {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        p_sm_scene.p_sm_scene_request_ping parsedMessage = null;
+        org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (p_sm_scene.p_sm_scene_request_ping) e.getUnfinishedMessage();
+          parsedMessage = (org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1558,22 +1558,22 @@ public final class p_sm_scene {
         return this;
       }
 
-      private java.util.List<p_sm_scene.p_sm_scene_request_ping.Car> cars_ =
+      private java.util.List<org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car> cars_ =
         java.util.Collections.emptyList();
       private void ensureCarsIsMutable() {
         if (!((bitField0_ & 0x00000008) == 0x00000008)) {
-          cars_ = new java.util.ArrayList<p_sm_scene.p_sm_scene_request_ping.Car>(cars_);
+          cars_ = new java.util.ArrayList<org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car>(cars_);
           bitField0_ |= 0x00000008;
          }
       }
 
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          p_sm_scene.p_sm_scene_request_ping.Car, p_sm_scene.p_sm_scene_request_ping.Car.Builder, p_sm_scene.p_sm_scene_request_ping.CarOrBuilder> carsBuilder_;
+          org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car, org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.Builder, org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarOrBuilder> carsBuilder_;
 
       /**
-       * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+       * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
        */
-      public java.util.List<p_sm_scene.p_sm_scene_request_ping.Car> getCarsList() {
+      public java.util.List<org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car> getCarsList() {
         if (carsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(cars_);
         } else {
@@ -1581,7 +1581,7 @@ public final class p_sm_scene {
         }
       }
       /**
-       * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+       * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
        */
       public int getCarsCount() {
         if (carsBuilder_ == null) {
@@ -1591,9 +1591,9 @@ public final class p_sm_scene {
         }
       }
       /**
-       * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+       * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
        */
-      public p_sm_scene.p_sm_scene_request_ping.Car getCars(int index) {
+      public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car getCars(int index) {
         if (carsBuilder_ == null) {
           return cars_.get(index);
         } else {
@@ -1601,10 +1601,10 @@ public final class p_sm_scene {
         }
       }
       /**
-       * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+       * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
        */
       public Builder setCars(
-          int index, p_sm_scene.p_sm_scene_request_ping.Car value) {
+          int index, org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car value) {
         if (carsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1618,10 +1618,10 @@ public final class p_sm_scene {
         return this;
       }
       /**
-       * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+       * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
        */
       public Builder setCars(
-          int index, p_sm_scene.p_sm_scene_request_ping.Car.Builder builderForValue) {
+          int index, org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.Builder builderForValue) {
         if (carsBuilder_ == null) {
           ensureCarsIsMutable();
           cars_.set(index, builderForValue.build());
@@ -1632,9 +1632,9 @@ public final class p_sm_scene {
         return this;
       }
       /**
-       * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+       * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
        */
-      public Builder addCars(p_sm_scene.p_sm_scene_request_ping.Car value) {
+      public Builder addCars(org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car value) {
         if (carsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1648,10 +1648,10 @@ public final class p_sm_scene {
         return this;
       }
       /**
-       * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+       * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
        */
       public Builder addCars(
-          int index, p_sm_scene.p_sm_scene_request_ping.Car value) {
+          int index, org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car value) {
         if (carsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1665,10 +1665,10 @@ public final class p_sm_scene {
         return this;
       }
       /**
-       * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+       * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
        */
       public Builder addCars(
-          p_sm_scene.p_sm_scene_request_ping.Car.Builder builderForValue) {
+          org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.Builder builderForValue) {
         if (carsBuilder_ == null) {
           ensureCarsIsMutable();
           cars_.add(builderForValue.build());
@@ -1679,10 +1679,10 @@ public final class p_sm_scene {
         return this;
       }
       /**
-       * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+       * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
        */
       public Builder addCars(
-          int index, p_sm_scene.p_sm_scene_request_ping.Car.Builder builderForValue) {
+          int index, org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.Builder builderForValue) {
         if (carsBuilder_ == null) {
           ensureCarsIsMutable();
           cars_.add(index, builderForValue.build());
@@ -1693,10 +1693,10 @@ public final class p_sm_scene {
         return this;
       }
       /**
-       * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+       * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
        */
       public Builder addAllCars(
-          java.lang.Iterable<? extends p_sm_scene.p_sm_scene_request_ping.Car> values) {
+          java.lang.Iterable<? extends org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car> values) {
         if (carsBuilder_ == null) {
           ensureCarsIsMutable();
           com.google.protobuf.AbstractMessageLite.Builder.addAll(
@@ -1708,7 +1708,7 @@ public final class p_sm_scene {
         return this;
       }
       /**
-       * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+       * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
        */
       public Builder clearCars() {
         if (carsBuilder_ == null) {
@@ -1721,7 +1721,7 @@ public final class p_sm_scene {
         return this;
       }
       /**
-       * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+       * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
        */
       public Builder removeCars(int index) {
         if (carsBuilder_ == null) {
@@ -1734,16 +1734,16 @@ public final class p_sm_scene {
         return this;
       }
       /**
-       * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+       * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
        */
-      public p_sm_scene.p_sm_scene_request_ping.Car.Builder getCarsBuilder(
+      public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.Builder getCarsBuilder(
           int index) {
         return getCarsFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+       * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
        */
-      public p_sm_scene.p_sm_scene_request_ping.CarOrBuilder getCarsOrBuilder(
+      public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarOrBuilder getCarsOrBuilder(
           int index) {
         if (carsBuilder_ == null) {
           return cars_.get(index);  } else {
@@ -1751,9 +1751,9 @@ public final class p_sm_scene {
         }
       }
       /**
-       * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+       * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
        */
-      public java.util.List<? extends p_sm_scene.p_sm_scene_request_ping.CarOrBuilder>
+      public java.util.List<? extends org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarOrBuilder> 
            getCarsOrBuilderList() {
         if (carsBuilder_ != null) {
           return carsBuilder_.getMessageOrBuilderList();
@@ -1762,33 +1762,33 @@ public final class p_sm_scene {
         }
       }
       /**
-       * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+       * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
        */
-      public p_sm_scene.p_sm_scene_request_ping.Car.Builder addCarsBuilder() {
+      public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.Builder addCarsBuilder() {
         return getCarsFieldBuilder().addBuilder(
-            p_sm_scene.p_sm_scene_request_ping.Car.getDefaultInstance());
+            org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.getDefaultInstance());
       }
       /**
-       * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+       * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
        */
-      public p_sm_scene.p_sm_scene_request_ping.Car.Builder addCarsBuilder(
+      public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.Builder addCarsBuilder(
           int index) {
         return getCarsFieldBuilder().addBuilder(
-            index, p_sm_scene.p_sm_scene_request_ping.Car.getDefaultInstance());
+            index, org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.getDefaultInstance());
       }
       /**
-       * <code>repeated .org.jyg.gameserver.test.proto.p_sm_scene_request_ping.Car cars = 4;</code>
+       * <code>repeated .org.jyg.gameserver.proto.p_sm_scene_request_ping.Car cars = 4;</code>
        */
-      public java.util.List<p_sm_scene.p_sm_scene_request_ping.Car.Builder>
+      public java.util.List<org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.Builder> 
            getCarsBuilderList() {
         return getCarsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          p_sm_scene.p_sm_scene_request_ping.Car, p_sm_scene.p_sm_scene_request_ping.Car.Builder, p_sm_scene.p_sm_scene_request_ping.CarOrBuilder>
+          org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car, org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.Builder, org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarOrBuilder> 
           getCarsFieldBuilder() {
         if (carsBuilder_ == null) {
           carsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-              p_sm_scene.p_sm_scene_request_ping.Car, p_sm_scene.p_sm_scene_request_ping.Car.Builder, p_sm_scene.p_sm_scene_request_ping.CarOrBuilder>(
+              org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car, org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.Car.Builder, org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping.CarOrBuilder>(
                   cars_,
                   ((bitField0_ & 0x00000008) == 0x00000008),
                   getParentForChildren(),
@@ -1808,16 +1808,16 @@ public final class p_sm_scene {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.test.proto.p_sm_scene_request_ping)
+      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.proto.p_sm_scene_request_ping)
     }
 
-    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.test.proto.p_sm_scene_request_ping)
-    private static final p_sm_scene.p_sm_scene_request_ping DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.proto.p_sm_scene_request_ping)
+    private static final org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new p_sm_scene.p_sm_scene_request_ping();
+      DEFAULT_INSTANCE = new org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping();
     }
 
-    public static p_sm_scene.p_sm_scene_request_ping getDefaultInstance() {
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1840,14 +1840,14 @@ public final class p_sm_scene {
       return PARSER;
     }
 
-    public p_sm_scene.p_sm_scene_request_ping getDefaultInstanceForType() {
+    public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_request_ping getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
   public interface p_scene_sm_response_pongOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.test.proto.p_scene_sm_response_pong)
+      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.proto.p_scene_sm_response_pong)
       com.google.protobuf.MessageOrBuilder {
   }
   /**
@@ -1855,11 +1855,11 @@ public final class p_sm_scene {
    *场景服回复sm服
    * </pre>
    *
-   * Protobuf type {@code org.jyg.gameserver.test.proto.p_scene_sm_response_pong}
+   * Protobuf type {@code org.jyg.gameserver.proto.p_scene_sm_response_pong}
    */
   public  static final class p_scene_sm_response_pong extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.test.proto.p_scene_sm_response_pong)
+      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.proto.p_scene_sm_response_pong)
       p_scene_sm_response_pongOrBuilder {
   private static final long serialVersionUID = 0L;
     // Use p_scene_sm_response_pong.newBuilder() to construct.
@@ -1910,14 +1910,14 @@ public final class p_sm_scene {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return p_sm_scene.internal_static_com_jyg_proto_p_scene_sm_response_pong_descriptor;
+      return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_scene_sm_response_pong_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return p_sm_scene.internal_static_com_jyg_proto_p_scene_sm_response_pong_fieldAccessorTable
+      return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_scene_sm_response_pong_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              p_sm_scene.p_scene_sm_response_pong.class, p_sm_scene.p_scene_sm_response_pong.Builder.class);
+              org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong.class, org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong.Builder.class);
     }
 
     private byte memoizedIsInitialized = -1;
@@ -1950,10 +1950,10 @@ public final class p_sm_scene {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof p_sm_scene.p_scene_sm_response_pong)) {
+      if (!(obj instanceof org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong)) {
         return super.equals(obj);
       }
-      p_sm_scene.p_scene_sm_response_pong other = (p_sm_scene.p_scene_sm_response_pong) obj;
+      org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong other = (org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong) obj;
 
       boolean result = true;
       result = result && unknownFields.equals(other.unknownFields);
@@ -1972,69 +1972,69 @@ public final class p_sm_scene {
       return hash;
     }
 
-    public static p_sm_scene.p_scene_sm_response_pong parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static p_sm_scene.p_scene_sm_response_pong parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static p_sm_scene.p_scene_sm_response_pong parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static p_sm_scene.p_scene_sm_response_pong parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static p_sm_scene.p_scene_sm_response_pong parseFrom(byte[] data)
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static p_sm_scene.p_scene_sm_response_pong parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static p_sm_scene.p_scene_sm_response_pong parseFrom(java.io.InputStream input)
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static p_sm_scene.p_scene_sm_response_pong parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static p_sm_scene.p_scene_sm_response_pong parseDelimitedFrom(java.io.InputStream input)
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static p_sm_scene.p_scene_sm_response_pong parseDelimitedFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static p_sm_scene.p_scene_sm_response_pong parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static p_sm_scene.p_scene_sm_response_pong parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -2046,7 +2046,7 @@ public final class p_sm_scene {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(p_sm_scene.p_scene_sm_response_pong prototype) {
+    public static Builder newBuilder(org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -2065,22 +2065,22 @@ public final class p_sm_scene {
      *场景服回复sm服
      * </pre>
      *
-     * Protobuf type {@code org.jyg.gameserver.test.proto.p_scene_sm_response_pong}
+     * Protobuf type {@code org.jyg.gameserver.proto.p_scene_sm_response_pong}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.test.proto.p_scene_sm_response_pong)
-        p_sm_scene.p_scene_sm_response_pongOrBuilder {
+        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.proto.p_scene_sm_response_pong)
+        org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pongOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return p_sm_scene.internal_static_com_jyg_proto_p_scene_sm_response_pong_descriptor;
+        return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_scene_sm_response_pong_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return p_sm_scene.internal_static_com_jyg_proto_p_scene_sm_response_pong_fieldAccessorTable
+        return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_scene_sm_response_pong_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                p_sm_scene.p_scene_sm_response_pong.class, p_sm_scene.p_scene_sm_response_pong.Builder.class);
+                org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong.class, org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong.Builder.class);
       }
 
       // Construct using org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong.newBuilder()
@@ -2105,23 +2105,23 @@ public final class p_sm_scene {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return p_sm_scene.internal_static_com_jyg_proto_p_scene_sm_response_pong_descriptor;
+        return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_scene_sm_response_pong_descriptor;
       }
 
-      public p_sm_scene.p_scene_sm_response_pong getDefaultInstanceForType() {
-        return p_sm_scene.p_scene_sm_response_pong.getDefaultInstance();
+      public org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong getDefaultInstanceForType() {
+        return org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong.getDefaultInstance();
       }
 
-      public p_sm_scene.p_scene_sm_response_pong build() {
-        p_sm_scene.p_scene_sm_response_pong result = buildPartial();
+      public org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong build() {
+        org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public p_sm_scene.p_scene_sm_response_pong buildPartial() {
-        p_sm_scene.p_scene_sm_response_pong result = new p_sm_scene.p_scene_sm_response_pong(this);
+      public org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong buildPartial() {
+        org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong result = new org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong(this);
         onBuilt();
         return result;
       }
@@ -2153,16 +2153,16 @@ public final class p_sm_scene {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof p_sm_scene.p_scene_sm_response_pong) {
-          return mergeFrom((p_sm_scene.p_scene_sm_response_pong)other);
+        if (other instanceof org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong) {
+          return mergeFrom((org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(p_sm_scene.p_scene_sm_response_pong other) {
-        if (other == p_sm_scene.p_scene_sm_response_pong.getDefaultInstance()) return this;
+      public Builder mergeFrom(org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong other) {
+        if (other == org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong.getDefaultInstance()) return this;
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -2176,11 +2176,11 @@ public final class p_sm_scene {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        p_sm_scene.p_scene_sm_response_pong parsedMessage = null;
+        org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (p_sm_scene.p_scene_sm_response_pong) e.getUnfinishedMessage();
+          parsedMessage = (org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -2200,16 +2200,16 @@ public final class p_sm_scene {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.test.proto.p_scene_sm_response_pong)
+      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.proto.p_scene_sm_response_pong)
     }
 
-    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.test.proto.p_scene_sm_response_pong)
-    private static final p_sm_scene.p_scene_sm_response_pong DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.proto.p_scene_sm_response_pong)
+    private static final org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new p_sm_scene.p_scene_sm_response_pong();
+      DEFAULT_INSTANCE = new org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong();
     }
 
-    public static p_sm_scene.p_scene_sm_response_pong getDefaultInstance() {
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -2232,14 +2232,14 @@ public final class p_sm_scene {
       return PARSER;
     }
 
-    public p_sm_scene.p_scene_sm_response_pong getDefaultInstanceForType() {
+    public org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_response_pong getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
   public interface p_sm_scene_chatOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.test.proto.p_sm_scene_chat)
+      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.proto.p_sm_scene_chat)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -2257,11 +2257,11 @@ public final class p_sm_scene {
    *聊天信息
    * </pre>
    *
-   * Protobuf type {@code org.jyg.gameserver.test.proto.p_sm_scene_chat}
+   * Protobuf type {@code org.jyg.gameserver.proto.p_sm_scene_chat}
    */
   public  static final class p_sm_scene_chat extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.test.proto.p_sm_scene_chat)
+      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.proto.p_sm_scene_chat)
       p_sm_scene_chatOrBuilder {
   private static final long serialVersionUID = 0L;
     // Use p_sm_scene_chat.newBuilder() to construct.
@@ -2320,14 +2320,14 @@ public final class p_sm_scene {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return p_sm_scene.internal_static_com_jyg_proto_p_sm_scene_chat_descriptor;
+      return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_sm_scene_chat_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return p_sm_scene.internal_static_com_jyg_proto_p_sm_scene_chat_fieldAccessorTable
+      return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_sm_scene_chat_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              p_sm_scene.p_sm_scene_chat.class, p_sm_scene.p_sm_scene_chat.Builder.class);
+              org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat.class, org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat.Builder.class);
     }
 
     public static final int MSG_FIELD_NUMBER = 1;
@@ -2400,10 +2400,10 @@ public final class p_sm_scene {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof p_sm_scene.p_sm_scene_chat)) {
+      if (!(obj instanceof org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat)) {
         return super.equals(obj);
       }
-      p_sm_scene.p_sm_scene_chat other = (p_sm_scene.p_sm_scene_chat) obj;
+      org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat other = (org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat) obj;
 
       boolean result = true;
       result = result && getMsg()
@@ -2426,69 +2426,69 @@ public final class p_sm_scene {
       return hash;
     }
 
-    public static p_sm_scene.p_sm_scene_chat parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static p_sm_scene.p_sm_scene_chat parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static p_sm_scene.p_sm_scene_chat parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static p_sm_scene.p_sm_scene_chat parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static p_sm_scene.p_sm_scene_chat parseFrom(byte[] data)
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static p_sm_scene.p_sm_scene_chat parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static p_sm_scene.p_sm_scene_chat parseFrom(java.io.InputStream input)
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static p_sm_scene.p_sm_scene_chat parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static p_sm_scene.p_sm_scene_chat parseDelimitedFrom(java.io.InputStream input)
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static p_sm_scene.p_sm_scene_chat parseDelimitedFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static p_sm_scene.p_sm_scene_chat parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static p_sm_scene.p_sm_scene_chat parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -2500,7 +2500,7 @@ public final class p_sm_scene {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(p_sm_scene.p_sm_scene_chat prototype) {
+    public static Builder newBuilder(org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -2519,22 +2519,22 @@ public final class p_sm_scene {
      *聊天信息
      * </pre>
      *
-     * Protobuf type {@code org.jyg.gameserver.test.proto.p_sm_scene_chat}
+     * Protobuf type {@code org.jyg.gameserver.proto.p_sm_scene_chat}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.test.proto.p_sm_scene_chat)
-        p_sm_scene.p_sm_scene_chatOrBuilder {
+        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.proto.p_sm_scene_chat)
+        org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chatOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return p_sm_scene.internal_static_com_jyg_proto_p_sm_scene_chat_descriptor;
+        return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_sm_scene_chat_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return p_sm_scene.internal_static_com_jyg_proto_p_sm_scene_chat_fieldAccessorTable
+        return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_sm_scene_chat_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                p_sm_scene.p_sm_scene_chat.class, p_sm_scene.p_sm_scene_chat.Builder.class);
+                org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat.class, org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat.Builder.class);
       }
 
       // Construct using org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat.newBuilder()
@@ -2561,23 +2561,23 @@ public final class p_sm_scene {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return p_sm_scene.internal_static_com_jyg_proto_p_sm_scene_chat_descriptor;
+        return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_sm_scene_chat_descriptor;
       }
 
-      public p_sm_scene.p_sm_scene_chat getDefaultInstanceForType() {
-        return p_sm_scene.p_sm_scene_chat.getDefaultInstance();
+      public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat getDefaultInstanceForType() {
+        return org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat.getDefaultInstance();
       }
 
-      public p_sm_scene.p_sm_scene_chat build() {
-        p_sm_scene.p_sm_scene_chat result = buildPartial();
+      public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat build() {
+        org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public p_sm_scene.p_sm_scene_chat buildPartial() {
-        p_sm_scene.p_sm_scene_chat result = new p_sm_scene.p_sm_scene_chat(this);
+      public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat buildPartial() {
+        org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat result = new org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat(this);
         result.msg_ = msg_;
         onBuilt();
         return result;
@@ -2610,16 +2610,16 @@ public final class p_sm_scene {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof p_sm_scene.p_sm_scene_chat) {
-          return mergeFrom((p_sm_scene.p_sm_scene_chat)other);
+        if (other instanceof org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat) {
+          return mergeFrom((org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(p_sm_scene.p_sm_scene_chat other) {
-        if (other == p_sm_scene.p_sm_scene_chat.getDefaultInstance()) return this;
+      public Builder mergeFrom(org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat other) {
+        if (other == org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat.getDefaultInstance()) return this;
         if (!other.getMsg().isEmpty()) {
           msg_ = other.msg_;
           onChanged();
@@ -2637,11 +2637,11 @@ public final class p_sm_scene {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        p_sm_scene.p_sm_scene_chat parsedMessage = null;
+        org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (p_sm_scene.p_sm_scene_chat) e.getUnfinishedMessage();
+          parsedMessage = (org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -2730,16 +2730,16 @@ public final class p_sm_scene {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.test.proto.p_sm_scene_chat)
+      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.proto.p_sm_scene_chat)
     }
 
-    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.test.proto.p_sm_scene_chat)
-    private static final p_sm_scene.p_sm_scene_chat DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.proto.p_sm_scene_chat)
+    private static final org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new p_sm_scene.p_sm_scene_chat();
+      DEFAULT_INSTANCE = new org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat();
     }
 
-    public static p_sm_scene.p_sm_scene_chat getDefaultInstance() {
+    public static org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -2762,14 +2762,14 @@ public final class p_sm_scene {
       return PARSER;
     }
 
-    public p_sm_scene.p_sm_scene_chat getDefaultInstanceForType() {
+    public org.jyg.gameserver.proto.p_sm_scene.p_sm_scene_chat getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
   public interface p_scene_sm_chatOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.test.proto.p_scene_sm_chat)
+      // @@protoc_insertion_point(interface_extends:org.jyg.gameserver.proto.p_scene_sm_chat)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -2783,11 +2783,11 @@ public final class p_sm_scene {
         getMsgBytes();
   }
   /**
-   * Protobuf type {@code org.jyg.gameserver.test.proto.p_scene_sm_chat}
+   * Protobuf type {@code org.jyg.gameserver.proto.p_scene_sm_chat}
    */
   public  static final class p_scene_sm_chat extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.test.proto.p_scene_sm_chat)
+      // @@protoc_insertion_point(message_implements:org.jyg.gameserver.proto.p_scene_sm_chat)
       p_scene_sm_chatOrBuilder {
   private static final long serialVersionUID = 0L;
     // Use p_scene_sm_chat.newBuilder() to construct.
@@ -2846,14 +2846,14 @@ public final class p_sm_scene {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return p_sm_scene.internal_static_com_jyg_proto_p_scene_sm_chat_descriptor;
+      return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_scene_sm_chat_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return p_sm_scene.internal_static_com_jyg_proto_p_scene_sm_chat_fieldAccessorTable
+      return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_scene_sm_chat_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              p_sm_scene.p_scene_sm_chat.class, p_sm_scene.p_scene_sm_chat.Builder.class);
+              org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat.class, org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat.Builder.class);
     }
 
     public static final int MSG_FIELD_NUMBER = 1;
@@ -2926,10 +2926,10 @@ public final class p_sm_scene {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof p_sm_scene.p_scene_sm_chat)) {
+      if (!(obj instanceof org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat)) {
         return super.equals(obj);
       }
-      p_sm_scene.p_scene_sm_chat other = (p_sm_scene.p_scene_sm_chat) obj;
+      org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat other = (org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat) obj;
 
       boolean result = true;
       result = result && getMsg()
@@ -2952,69 +2952,69 @@ public final class p_sm_scene {
       return hash;
     }
 
-    public static p_sm_scene.p_scene_sm_chat parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static p_sm_scene.p_scene_sm_chat parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static p_sm_scene.p_scene_sm_chat parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static p_sm_scene.p_scene_sm_chat parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static p_sm_scene.p_scene_sm_chat parseFrom(byte[] data)
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static p_sm_scene.p_scene_sm_chat parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static p_sm_scene.p_scene_sm_chat parseFrom(java.io.InputStream input)
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static p_sm_scene.p_scene_sm_chat parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static p_sm_scene.p_scene_sm_chat parseDelimitedFrom(java.io.InputStream input)
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static p_sm_scene.p_scene_sm_chat parseDelimitedFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static p_sm_scene.p_scene_sm_chat parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static p_sm_scene.p_scene_sm_chat parseFrom(
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -3026,7 +3026,7 @@ public final class p_sm_scene {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(p_sm_scene.p_scene_sm_chat prototype) {
+    public static Builder newBuilder(org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -3041,22 +3041,22 @@ public final class p_sm_scene {
       return builder;
     }
     /**
-     * Protobuf type {@code org.jyg.gameserver.test.proto.p_scene_sm_chat}
+     * Protobuf type {@code org.jyg.gameserver.proto.p_scene_sm_chat}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.test.proto.p_scene_sm_chat)
-        p_sm_scene.p_scene_sm_chatOrBuilder {
+        // @@protoc_insertion_point(builder_implements:org.jyg.gameserver.proto.p_scene_sm_chat)
+        org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chatOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return p_sm_scene.internal_static_com_jyg_proto_p_scene_sm_chat_descriptor;
+        return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_scene_sm_chat_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return p_sm_scene.internal_static_com_jyg_proto_p_scene_sm_chat_fieldAccessorTable
+        return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_scene_sm_chat_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                p_sm_scene.p_scene_sm_chat.class, p_sm_scene.p_scene_sm_chat.Builder.class);
+                org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat.class, org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat.Builder.class);
       }
 
       // Construct using org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat.newBuilder()
@@ -3083,23 +3083,23 @@ public final class p_sm_scene {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return p_sm_scene.internal_static_com_jyg_proto_p_scene_sm_chat_descriptor;
+        return org.jyg.gameserver.proto.p_sm_scene.internal_static_org_jyg_gameserver_proto_p_scene_sm_chat_descriptor;
       }
 
-      public p_sm_scene.p_scene_sm_chat getDefaultInstanceForType() {
-        return p_sm_scene.p_scene_sm_chat.getDefaultInstance();
+      public org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat getDefaultInstanceForType() {
+        return org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat.getDefaultInstance();
       }
 
-      public p_sm_scene.p_scene_sm_chat build() {
-        p_sm_scene.p_scene_sm_chat result = buildPartial();
+      public org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat build() {
+        org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public p_sm_scene.p_scene_sm_chat buildPartial() {
-        p_sm_scene.p_scene_sm_chat result = new p_sm_scene.p_scene_sm_chat(this);
+      public org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat buildPartial() {
+        org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat result = new org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat(this);
         result.msg_ = msg_;
         onBuilt();
         return result;
@@ -3132,16 +3132,16 @@ public final class p_sm_scene {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof p_sm_scene.p_scene_sm_chat) {
-          return mergeFrom((p_sm_scene.p_scene_sm_chat)other);
+        if (other instanceof org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat) {
+          return mergeFrom((org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(p_sm_scene.p_scene_sm_chat other) {
-        if (other == p_sm_scene.p_scene_sm_chat.getDefaultInstance()) return this;
+      public Builder mergeFrom(org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat other) {
+        if (other == org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat.getDefaultInstance()) return this;
         if (!other.getMsg().isEmpty()) {
           msg_ = other.msg_;
           onChanged();
@@ -3159,11 +3159,11 @@ public final class p_sm_scene {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        p_sm_scene.p_scene_sm_chat parsedMessage = null;
+        org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (p_sm_scene.p_scene_sm_chat) e.getUnfinishedMessage();
+          parsedMessage = (org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -3252,16 +3252,16 @@ public final class p_sm_scene {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.test.proto.p_scene_sm_chat)
+      // @@protoc_insertion_point(builder_scope:org.jyg.gameserver.proto.p_scene_sm_chat)
     }
 
-    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.test.proto.p_scene_sm_chat)
-    private static final p_sm_scene.p_scene_sm_chat DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:org.jyg.gameserver.proto.p_scene_sm_chat)
+    private static final org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new p_sm_scene.p_scene_sm_chat();
+      DEFAULT_INSTANCE = new org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat();
     }
 
-    public static p_sm_scene.p_scene_sm_chat getDefaultInstance() {
+    public static org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -3284,37 +3284,37 @@ public final class p_sm_scene {
       return PARSER;
     }
 
-    public p_sm_scene.p_scene_sm_chat getDefaultInstanceForType() {
+    public org.jyg.gameserver.proto.p_sm_scene.p_scene_sm_chat getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_jyg_proto_p_sm_scene_request_ping_descriptor;
+    internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_jyg_proto_p_sm_scene_request_ping_fieldAccessorTable;
+      internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_jyg_proto_p_sm_scene_request_ping_Car_descriptor;
+    internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_Car_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_jyg_proto_p_sm_scene_request_ping_Car_fieldAccessorTable;
+      internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_Car_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_jyg_proto_p_scene_sm_response_pong_descriptor;
+    internal_static_org_jyg_gameserver_proto_p_scene_sm_response_pong_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_jyg_proto_p_scene_sm_response_pong_fieldAccessorTable;
+      internal_static_org_jyg_gameserver_proto_p_scene_sm_response_pong_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_jyg_proto_p_sm_scene_chat_descriptor;
+    internal_static_org_jyg_gameserver_proto_p_sm_scene_chat_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_jyg_proto_p_sm_scene_chat_fieldAccessorTable;
+      internal_static_org_jyg_gameserver_proto_p_sm_scene_chat_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_jyg_proto_p_scene_sm_chat_descriptor;
+    internal_static_org_jyg_gameserver_proto_p_scene_sm_chat_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_com_jyg_proto_p_scene_sm_chat_fieldAccessorTable;
+      internal_static_org_jyg_gameserver_proto_p_scene_sm_chat_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -3324,17 +3324,18 @@ public final class p_sm_scene {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\020p_sm_scene.proto\022\rorg.jyg.gameserver.test.proto\"\214\002\n\027p_" +
-      "sm_scene_request_ping\022\n\n\002id\030\001 \001(\005\022\014\n\004nam" +
-      "e\030\002 \001(\t\022\r\n\005email\030\003 \001(\t\0228\n\004cars\030\004 \003(\0132*.c" +
-      "om.jyg.proto.p_sm_scene_request_ping.Car" +
-      "\032Q\n\003Car\022\014\n\004name\030\001 \001(\t\022<\n\004type\030\002 \001(\0162..co" +
-      "m.jyg.proto.p_sm_scene_request_ping.CarT" +
-      "ype\";\n\007CarType\022\010\n\004AUDI\020\000\022\010\n\004BENZ\020\001\022\017\n\013LA" +
-      "MBORGHINI\020\002\022\013\n\007DASAUTO\020\003\"\032\n\030p_scene_sm_r" +
-      "esponse_pong\"\036\n\017p_sm_scene_chat\022\013\n\003msg\030\001" +
-      " \001(\t\"\036\n\017p_scene_sm_chat\022\013\n\003msg\030\001 \001(\tB\033\n\r",
-      "com.jyg.protoB\np_sm_sceneb\006proto3"
+      "\n\020p_sm_scene.proto\022\030org.jyg.gameserver.p" +
+      "roto\"\242\002\n\027p_sm_scene_request_ping\022\n\n\002id\030\001" +
+      " \001(\005\022\014\n\004name\030\002 \001(\t\022\r\n\005email\030\003 \001(\t\022C\n\004car" +
+      "s\030\004 \003(\01325.org.jyg.gameserver.proto.p_sm_" +
+      "scene_request_ping.Car\032\\\n\003Car\022\014\n\004name\030\001 " +
+      "\001(\t\022G\n\004type\030\002 \001(\01629.org.jyg.gameserver.p" +
+      "roto.p_sm_scene_request_ping.CarType\";\n\007" +
+      "CarType\022\010\n\004AUDI\020\000\022\010\n\004BENZ\020\001\022\017\n\013LAMBORGHI" +
+      "NI\020\002\022\013\n\007DASAUTO\020\003\"\032\n\030p_scene_sm_response" +
+      "_pong\"\036\n\017p_sm_scene_chat\022\013\n\003msg\030\001 \001(\t\"\036\n",
+      "\017p_scene_sm_chat\022\013\n\003msg\030\001 \001(\tB&\n\030org.jyg" +
+      ".gameserver.protoB\np_sm_sceneb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -3348,35 +3349,35 @@ public final class p_sm_scene {
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
-    internal_static_com_jyg_proto_p_sm_scene_request_ping_descriptor =
+    internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_com_jyg_proto_p_sm_scene_request_ping_fieldAccessorTable = new
+    internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_jyg_proto_p_sm_scene_request_ping_descriptor,
+        internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_descriptor,
         new java.lang.String[] { "Id", "Name", "Email", "Cars", });
-    internal_static_com_jyg_proto_p_sm_scene_request_ping_Car_descriptor =
-      internal_static_com_jyg_proto_p_sm_scene_request_ping_descriptor.getNestedTypes().get(0);
-    internal_static_com_jyg_proto_p_sm_scene_request_ping_Car_fieldAccessorTable = new
+    internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_Car_descriptor =
+      internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_descriptor.getNestedTypes().get(0);
+    internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_Car_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_jyg_proto_p_sm_scene_request_ping_Car_descriptor,
+        internal_static_org_jyg_gameserver_proto_p_sm_scene_request_ping_Car_descriptor,
         new java.lang.String[] { "Name", "Type", });
-    internal_static_com_jyg_proto_p_scene_sm_response_pong_descriptor =
+    internal_static_org_jyg_gameserver_proto_p_scene_sm_response_pong_descriptor =
       getDescriptor().getMessageTypes().get(1);
-    internal_static_com_jyg_proto_p_scene_sm_response_pong_fieldAccessorTable = new
+    internal_static_org_jyg_gameserver_proto_p_scene_sm_response_pong_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_jyg_proto_p_scene_sm_response_pong_descriptor,
+        internal_static_org_jyg_gameserver_proto_p_scene_sm_response_pong_descriptor,
         new java.lang.String[] { });
-    internal_static_com_jyg_proto_p_sm_scene_chat_descriptor =
+    internal_static_org_jyg_gameserver_proto_p_sm_scene_chat_descriptor =
       getDescriptor().getMessageTypes().get(2);
-    internal_static_com_jyg_proto_p_sm_scene_chat_fieldAccessorTable = new
+    internal_static_org_jyg_gameserver_proto_p_sm_scene_chat_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_jyg_proto_p_sm_scene_chat_descriptor,
+        internal_static_org_jyg_gameserver_proto_p_sm_scene_chat_descriptor,
         new java.lang.String[] { "Msg", });
-    internal_static_com_jyg_proto_p_scene_sm_chat_descriptor =
+    internal_static_org_jyg_gameserver_proto_p_scene_sm_chat_descriptor =
       getDescriptor().getMessageTypes().get(3);
-    internal_static_com_jyg_proto_p_scene_sm_chat_fieldAccessorTable = new
+    internal_static_org_jyg_gameserver_proto_p_scene_sm_chat_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_com_jyg_proto_p_scene_sm_chat_descriptor,
+        internal_static_org_jyg_gameserver_proto_p_scene_sm_chat_descriptor,
         new java.lang.String[] { "Msg", });
   }
 
