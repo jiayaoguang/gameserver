@@ -50,7 +50,8 @@ public class AsynServerTest01
 		class TestCallBackEvent extends CallBackEvent {
 
 			@Override
-			public void execte(Object data) {
+			public void execte() {
+				Object data = getData();
 				System.out.println("step 3 :receive data : "+ data + " ,event call back exec ,current thread : "+ Thread.currentThread().getName());
 			}
 		}

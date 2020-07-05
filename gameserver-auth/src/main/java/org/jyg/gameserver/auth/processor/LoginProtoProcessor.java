@@ -49,7 +49,13 @@ public class LoginProtoProcessor  extends ProtoProcessor<MsgLoginRequest> {
             return token;
         }, new CallBackEvent() {
             @Override
-            public void execte(Object data) {
+            public void execte() {
+
+                Object data = getData();
+                if(data == null){
+                    return;
+                }
+
                 session.writeMessage(MsgLoginReply.newBuilder().setPlayerUid(playerUid).setToken((String) data).build());
             }
         });

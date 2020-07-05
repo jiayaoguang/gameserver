@@ -107,7 +107,7 @@ public class ConsumerHandler{
             return;
         }
         CallBackEvent callBackEvent = (CallBackEvent) msg;
-        callBackEvent.execte(callBackEvent.getData());
+        callBackEvent.execte();
     }
 
 

@@ -8,7 +8,7 @@ public abstract class CallBackEvent {
     private boolean isSuccess;
     private Object data;
 
-    public abstract void execte(Object data);
+    public abstract void execte();
 
     public boolean isSuccess() {
         return isSuccess;
