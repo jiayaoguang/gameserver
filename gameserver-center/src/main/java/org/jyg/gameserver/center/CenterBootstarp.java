@@ -5,6 +5,7 @@ import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstarp;
 import org.jyg.gameserver.core.util.TokenUtil;
+import org.jyg.gameserver.proto.p_auth_sm;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,12 +23,12 @@ public class CenterBootstarp {
 
 		Map<String, Object> tokenMap = new HashMap<>();
 
-		ProtoProcessor<p_auth_sm_request_send_token> getTokenProcessor = new ProtoProcessor<p_auth_sm_request_send_token>(
-				p_auth_sm_request_send_token.getDefaultInstance()) {
+		ProtoProcessor<p_auth_sm.p_auth_sm_request_send_token> getTokenProcessor = new ProtoProcessor<p_auth_sm.p_auth_sm_request_send_token>(
+				p_auth_sm.p_auth_sm_request_send_token.getDefaultInstance()) {
 			@Override
-			public void process(Session session, p_auth_sm_request_send_token msg) {
+			public void process(Session session, p_auth_sm.p_auth_sm_request_send_token msg) {
 				System.out.println("i just get token , id" + msg.getRequestId());
-				p_sm_auth_response_receive_token.Builder builder = p_sm_auth_response_receive_token.newBuilder();
+				p_auth_sm.p_sm_auth_response_receive_token.Builder builder = p_auth_sm.p_sm_auth_response_receive_token.newBuilder();
 				String token = TokenUtil.getToken();
 
 				tokenMap.put(token, 1);
@@ -45,7 +46,7 @@ public class CenterBootstarp {
 		bootstarp.registerSocketEvent(ProtoEnum.P_AUTH_SM_REQUEST_SEND_TOKEN.getEventId(), getTokenProcessor);
 
 		bootstarp.registerSendEventIdByProto(ProtoEnum.P_SM_AUTH_RESPONSE_RECEIVE_TOKEN.getEventId(),
-				p_sm_auth_response_receive_token.class);
+				p_auth_sm.p_sm_auth_response_receive_token.class);
 
 		//
 
