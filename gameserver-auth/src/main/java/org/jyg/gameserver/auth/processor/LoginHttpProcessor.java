@@ -27,39 +27,47 @@ public class LoginHttpProcessor extends HttpProcessor {
 
 	@Override
 	public void service(Request request, Response response) {
-		String username = request.getParameter("username");
+		String account = request.getParameter("account");
 		String password = request.getParameter("password");
-		System.out.println(username + " >> " + password);
+		System.out.println(account + " >> " + password);
 
-		if (!checkLogin(username, password)) {
+		if (!checkLogin(account, password)) {
 			response.sendRedirect("/login.html");
 			return;
 		}
+
+
 		String token = TokenUtil.getToken();
-		String setResult = null;
-		try {
-			setResult = redisCacheClient.setValueExpire(username, 60, token);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
-		if (setResult == null) {
-			System.out.println(" set value fail ");
-		} else {
-			System.out.println(" set value success " + setResult);
-		}
-		request.decodeCookies();
+		getContext().getSingleThreadExecutorManager(request.getRequestid()).execute(()->{
 
-		Set<Cookie> cookies = request.decodeCookies();
-		for (Cookie c : cookies) {
-			System.out.println(c.name() + " : " + c.value());
-		}
-		Cookie cookie = new DefaultCookie("jyg", "jia");
-		cookie.setMaxAge(60 * 60L);
+			String setResult = null;
+			try {
+				setResult = redisCacheClient.setValueExpire(account, 60, token);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			if (setResult == null) {
+				System.out.println(" set value fail ");
+			} else {
+				System.out.println(" set value success " + setResult);
+			}
+			request.decodeCookies();
+
+			Set<Cookie> cookies = request.decodeCookies();
+			for (Cookie c : cookies) {
+				System.out.println(c.name() + " : " + c.value());
+			}
+			Cookie cookie = new DefaultCookie("jyg", "jia");
+			cookie.setMaxAge(60 * 60L);
 //		cookie.setDomain("127.0.0.1");
-		cookie.setPath("/");
-		response.addCookie(cookie);
-		response.writeAndFlush("<html><head></head><body>welcome user " + request.getParameter("username") + " to index," + " token :" + token + "<body></html>");
+			cookie.setPath("/");
+			response.addCookie(cookie);
+			response.writeAndFlush("<html><head></head><body>welcome user " + request.getParameter("username") + " to index," + " token :" + token + "<body></html>");
+
+		});
+
 
 	}
 
