@@ -9,6 +9,7 @@ import org.jyg.gameserver.core.util.AllUtil;
 /**
  * create by jiayaoguang on 2020/7/12
  * websocket 画图
+ * 127.0.0.1:8080/ws.html
  */
 public class DrawWsServer {
 
@@ -26,6 +27,7 @@ public class DrawWsServer {
             }
         });
 
+        gameServerBootstrap.addHttpService(8080);
         gameServerBootstrap.addWebSocketService(9998);
 
 
