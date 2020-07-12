@@ -13,6 +13,7 @@ import org.jyg.gameserver.proto.MsgLoginRequest;
 /**
  * create by jiayaoguang on 2020/7/5
  */
+@Deprecated
 public class LoginProtoProcessor  extends ProtoProcessor<MsgLoginRequest> {
 
     private final RedisCacheClient redisCacheClient;
@@ -26,7 +27,7 @@ public class LoginProtoProcessor  extends ProtoProcessor<MsgLoginRequest> {
     @Override
     public void process(Session session, MsgLoginRequest msg) {
 
-        long playerUid = msg.getPlayerUid();
+        long playerUid = 0;
 
         String key = "token_"+playerUid;
 
@@ -56,7 +57,7 @@ public class LoginProtoProcessor  extends ProtoProcessor<MsgLoginRequest> {
                     return;
                 }
 
-                session.writeMessage(MsgLoginReply.newBuilder().setPlayerUid(playerUid).setToken((String) data).build());
+                session.writeMessage(MsgLoginReply.newBuilder().setToken((String) data).build());
             }
         });
 
