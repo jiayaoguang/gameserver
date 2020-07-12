@@ -16,13 +16,12 @@ public class DrawWsServer {
 
         GameServerBootstrap gameServerBootstrap = new GameServerBootstrap();
 
-        gameServerBootstrap.getContext().getDefaultConsumer().setTextProcessor( new TextProcessor() {
+        gameServerBootstrap.getContext().getDefaultConsumer().setTextProcessor(new TextProcessor() {
             public void process(Session session, LogicEvent<String> event) {
 
-                getDefaultConsumer();
-
-
-                session.writeWsMessage(event.getData());
+                for (Session otherSession : getDefaultConsumer().getChannelManager().getSessions()) {
+                    otherSession.writeWsMessage(event.getData());
+                }
 
             }
         });

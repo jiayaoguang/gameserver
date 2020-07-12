@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.consumer;
 
+import com.lmax.disruptor.EventHandler;
 import org.jyg.gameserver.core.bean.LogicEvent;
 import org.jyg.gameserver.core.enums.EventType;
 import com.lmax.disruptor.EventFactory;
@@ -26,14 +27,13 @@ public class RingBufferConsumer extends Consumer {
 
     private boolean isStart = false;
 
-    private final RingBuffConsumerHandler ringBuffConsumerHandler;
 
     public RingBufferConsumer() {
-        this(new RingBuffConsumerHandler());
+        this(new ConsumerHandler());
     }
 
-    public RingBufferConsumer(RingBuffConsumerHandler ringBuffConsumerHandler) {
-        this.ringBuffConsumerHandler = ringBuffConsumerHandler;
+    public RingBufferConsumer(ConsumerHandler ringBuffConsumerHandler) {
+        super(ringBuffConsumerHandler);
     }
 
     @Override
@@ -50,10 +50,10 @@ public class RingBufferConsumer extends Consumer {
         disruptor = new Disruptor<>(eventFactory, BUFFER_SIZE, consumerThreadFactory, ProducerType.MULTI,
                 new LoopAndSleepWaitStrategy());
 
-        this.ringBuffConsumerHandler.setContext(getContext());
-        this.ringBuffConsumerHandler.setTimerManager(timerManager);
+        this.consumerHandler.setContext(getContext());
+        this.consumerHandler.setTimerManager(timerManager);
 
-        disruptor.handleEventsWith(ringBuffConsumerHandler);
+        disruptor.handleEventsWith((objectLogicEvent, l, b) -> consumerHandler.onReciveEvent(objectLogicEvent));
 
 //        disruptor.handleEventsWith(eventConsumer);
 

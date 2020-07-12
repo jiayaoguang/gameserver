@@ -45,12 +45,18 @@ public abstract class Consumer {
 
     private TextProcessor textProcessor;
 
+    protected ConsumerHandler consumerHandler;
+
     private int id;
 
     private final List<Consumer> childConsumerList = new ArrayList<>() ;
 
     public Consumer() {
 
+    }
+
+    public Consumer(ConsumerHandler consumerHandler) {
+        this.consumerHandler = consumerHandler;
     }
 
     public Consumer(int id) {
@@ -134,11 +140,9 @@ public abstract class Consumer {
 
     /**
      * 注册普通socket事件
-     *  @param msgId     消息id
-     * @param processor 事件处理器
      */
     public void setTextProcessor(TextProcessor textProcessor) {
-
+        textProcessor.setContext(context);
         this.textProcessor = textProcessor;
 
     }
@@ -228,5 +232,13 @@ public abstract class Consumer {
         logger.error(" unknown processor type  : {} " , processor.getClass());
     }
 
+
+    public ConsumerHandler getConsumerHandler() {
+        return consumerHandler;
+    }
+
+    public ChannelManager getChannelManager() {
+        return consumerHandler.getChannelManager();
+    }
 
 }
