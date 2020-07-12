@@ -57,7 +57,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpRequest> 
 
 		Request request = this.createRequest((HttpRequest) msg);
 
-		defaultConsumer.publicEvent(EventType.HTTP_MSG_COME, request, ctx.channel());
+		defaultConsumer.publicEvent(EventType.HTTP_MESSAGE_COME, request, ctx.channel());
 
 		// HttpRequest request = (HttpRequest) msg;
 

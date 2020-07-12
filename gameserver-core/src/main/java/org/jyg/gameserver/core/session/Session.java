@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.session;
 
 import com.google.protobuf.MessageLite;
 import io.netty.channel.Channel;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 import java.util.List;
 
@@ -50,6 +51,10 @@ public class Session {
 
 	public void writeMessage( MessageLite message) {
 		this.channel.writeAndFlush(message);
+	}
+
+	public void writeWsMessage(String message) {
+		this.channel.writeAndFlush(new TextWebSocketFrame(message));
 	}
 
 	public void writeMessage( MessageLite.Builder messageBuider) {

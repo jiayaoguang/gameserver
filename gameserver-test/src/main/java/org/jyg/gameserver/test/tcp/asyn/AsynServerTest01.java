@@ -2,7 +2,7 @@ package org.jyg.gameserver.test.tcp.asyn;
 
 import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.startup.GameServerBootstarp;
+import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.AsynCallEvent;
 import org.jyg.gameserver.core.util.CallBackEvent;
 import org.jyg.gameserver.proto.p_sm_scene;
@@ -15,7 +15,7 @@ import org.jyg.gameserver.proto.p_sm_scene;
 public class AsynServerTest01
 {
     public static void main( String[] args ) throws Exception{
-        GameServerBootstarp bootstarp = new GameServerBootstarp();
+        GameServerBootstrap bootstarp = new GameServerBootstrap();
 
 		PingProcessor pingProcessor = new PingProcessor();
 		System.out.println(pingProcessor.getProtoClassName());

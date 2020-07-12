@@ -3,7 +3,7 @@ package org.jyg.gameserver.test.tcp.http;
 import org.jyg.gameserver.core.processor.HttpProcessor;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
-import org.jyg.gameserver.core.startup.GameServerBootstarp;
+import org.jyg.gameserver.core.startup.GameServerBootstrap;
 
 /**
  * Hello world!
@@ -15,7 +15,7 @@ public class HttpServerDemo01
     {
     	
     	
-    	GameServerBootstarp bootstarp = new GameServerBootstarp();
+    	GameServerBootstrap bootstarp = new GameServerBootstrap();
         
         bootstarp.registerHttpEvent("/index", new HttpProcessor() {
 			

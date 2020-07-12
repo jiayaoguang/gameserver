@@ -2,7 +2,7 @@ package org.jyg.gameserver.test.tcp.chat;
 
 import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.startup.GameServerBootstarp;
+import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.test.proto.MsgChat;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.List;
 public class ServerTest01 
 {
     public static void main( String[] args ) throws Exception{
-        GameServerBootstarp bootstarp = new GameServerBootstarp();
+        GameServerBootstrap bootstarp = new GameServerBootstrap();
         
         ProtoProcessor<MsgChat> chatProcessor = new ProtoProcessor<MsgChat>(MsgChat.getDefaultInstance()) {
         	@Override

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>WebSocket Chat</title>
+<style>
+	#canvas {
+		border: 2px solid;
+		border-radius: 25px;
+		-moz-border-radius: 25px; /* Old Firefox */
+	}
+</style>
+</head>
+<body>
+	<script type="text/javascript">
+		//按下标记
+		var onoff = false;
+		
+		var canvas ;
+		var ctx 
+		
+		window.onload = function() {
+			canvas = document.getElementById("canvas");
+			canvas.addEventListener("mousedown", doMouseDown, false);
+			canvas.addEventListener("mousemove", doMousemove, false);
+			canvas.addEventListener("mouseup", doMouseUp, false);
+			
+			cw = window.innerWidth;
+			ch = window.innerHeight;
+			canvas.width = cw - 100;
+			canvas.height = ch - 100;
+			ctx = canvas.getContext("2d"); //准备画布
+			ctx.lineWidth = 0.5; //选择画笔
+			ctx.strokeStyle = "#ee6699"; //选择颜料
+			//ctx.lineCap="round";								//三种：butt,round,qruare
+			//ctx.beginPath();
+		}
+		
+		
+
+		
+		
+		
+		var socket;
+		if (!window.WebSocket) {
+			window.WebSocket = window.MozWebSocket;
+		}
+		if (window.WebSocket) {
+			socket = new WebSocket("ws://localhost:9998/ws");
+			socket.onmessage = function(event) {
+				console.log("recive msg:"+event.data);
+				//var ta = document.getElementById('responseText');
+				//ta.value = ta.value + '\n' + event.data;
+				var strs;//= new Array(); //定义一数组 
+				strs = event.data.split(","); //字符分割 
+				x1 = parseInt(strs[0]);
+				y1 = parseInt(strs[1]);
+				
+				x2 = parseInt(strs[2]);
+				y2 = parseInt(strs[3]);
+				
+				drawLine(x1, y1,x2, y2);
+			};
+			socket.onopen = function(event) {
+				//var ta = document.getElementById('responseText');
+				//ta.value = "连接开启!";
+				console.log("连接开启......");
+			};
+			socket.onclose = function(event) {
+				//var ta = document.getElementById('responseText');
+				//ta.value = ta.value + "连接被关闭";
+				console.log("连接关闭......");
+			};
+		} else {
+			alert("你的浏览器不支持 WebSocket！");
+		}
+		
+
+		function send(message) {
+			if (!window.WebSocket) {
+				return;
+			}
+			if (socket.readyState == WebSocket.OPEN) {
+				socket.send(message);
+			} else {
+				console.log("连接没有开启.");
+			}
+		}
+		
+		function drawLine(x1,y1,x2,y2){
+			ctx.beginPath();
+			ctx.moveTo(x1,y1);
+			ctx.lineTo(x2,y2);
+			ctx.lineWidth=5;
+			ctx.stroke();
+		}
+		
+
+		function doMousemove(event) {
+			
+			if(onoff == true){
+				var newX = event.pageX-10;
+				var newY = event.pageY-10;
+//				ctx.beginPath();
+//				ctx.moveTo(oldX,oldY);
+//				ctx.lineTo(newX,newY);
+//				ctx.lineWidth=5;
+//				ctx.stroke();
+
+				send(oldX + "," + oldY+","+newX+","+newY);
+				
+				oldX = newX;
+				oldY = newY;
+				
+			}
+
+		}
+		
+		function doMouseUp(event) {
+			onoff = false;
+			var btnNum = event.button;
+			var x = event.clientX;
+			var y = event.clientY;
+			//alert(111);
+			
+		}
+		
+		var oldX = 0;
+		var oldY = 0;
+		
+		function doMouseDown(event) {
+			onoff = true;
+			oldX = event.pageX-10;
+			oldY = event.pageY-10;
+			//send(x + "," + y);
+		}
+		
+		
+		
+	</script>
+
+	<canvas id="canvas">Canvas is not supported in your browser.</canvas>
+
+	<h1 id="responseText"></h1>
+
+	<br>
+	<br>
+</body>
+</html>

@@ -8,7 +8,12 @@ public interface MsgLoginRequestOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>int64 playerUid = 1;</code>
+   * <code>string account = 1;</code>
    */
-  long getPlayerUid();
+  java.lang.String getAccount();
+  /**
+   * <code>string account = 1;</code>
+   */
+  com.google.protobuf.ByteString
+      getAccountBytes();
 }

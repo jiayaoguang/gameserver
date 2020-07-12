@@ -279,5 +279,18 @@ public class JygTest {
             AllUtil.println(IdUtil.nextId());
 
     }
+    @Test
+    public void testInvoke(){
+        Object o = "";
+        p(o);
+    }
+
+    public void p(Object o){
+        AllUtil.println("Object");
+    }
+
+    public void p(String o){
+        AllUtil.println("Object");
+    }
 
 }

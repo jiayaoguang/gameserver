@@ -3,7 +3,7 @@ package org.jyg.gameserver.center;
 import org.jyg.gameserver.core.enums.ProtoEnum;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.startup.GameServerBootstarp;
+import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.TokenUtil;
 import org.jyg.gameserver.proto.p_auth_sm;
 
@@ -19,7 +19,7 @@ public class CenterBootstarp {
 
 		final int wsport = 8088;
 
-		GameServerBootstarp bootstarp = new GameServerBootstarp();
+		GameServerBootstrap bootstarp = new GameServerBootstrap();
 
 		Map<String, Object> tokenMap = new HashMap<>();
 

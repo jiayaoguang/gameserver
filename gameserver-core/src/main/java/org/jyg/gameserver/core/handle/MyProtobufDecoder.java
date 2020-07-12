@@ -76,7 +76,7 @@ public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
 //			}else {
 				messageLite = protoParser.parseFrom(bis);
 //			}
-			context.getDefaultConsumer().publicEvent(EventType.RPC_MSG_COME, messageLite, ctx.channel(), msgId);
+			context.getDefaultConsumer().publicEvent(EventType.RROTO_MSG_COME, messageLite, ctx.channel(), msgId);
 		}
 
 //		}

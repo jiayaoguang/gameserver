@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.handle;
 
+import org.jyg.gameserver.core.bean.LogicEvent;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.consumer.Consumer;
 import io.netty.channel.Channel;
@@ -49,9 +50,8 @@ public class TextWebSocketFrameHandler extends
 			
 			String text = ((TextWebSocketFrame) frame).text();
 			
-			Map<String,String> map = toMap(text);
-			
-			defaultConsumer.publicEvent(EventType.ON_TEXT_MESSAGE_COME, text, ctx.channel() );
+
+			defaultConsumer.publicEvent(EventType.TEXT_MESSAGE_COME, text, ctx.channel() );
 			
 		}else if(frame instanceof BinaryWebSocketFrame) {
 			System.out.println("this frame is BinaryWebSocketFrame");

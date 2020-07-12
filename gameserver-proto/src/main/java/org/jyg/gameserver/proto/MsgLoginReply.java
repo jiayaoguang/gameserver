@@ -16,7 +16,7 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private MsgLoginReply() {
-    playerUid_ = 0L;
+    account_ = "";
     token_ = "";
   }
 
@@ -48,9 +48,10 @@ private static final long serialVersionUID = 0L;
             }
             break;
           }
-          case 8: {
+          case 10: {
+            java.lang.String s = input.readStringRequireUtf8();
 
-            playerUid_ = input.readInt64();
+            account_ = s;
             break;
           }
           case 18: {
@@ -83,13 +84,38 @@ private static final long serialVersionUID = 0L;
             org.jyg.gameserver.proto.MsgLoginReply.class, org.jyg.gameserver.proto.MsgLoginReply.Builder.class);
   }
 
-  public static final int PLAYERUID_FIELD_NUMBER = 1;
-  private long playerUid_;
+  public static final int ACCOUNT_FIELD_NUMBER = 1;
+  private volatile java.lang.Object account_;
   /**
-   * <code>int64 playerUid = 1;</code>
+   * <code>string account = 1;</code>
    */
-  public long getPlayerUid() {
-    return playerUid_;
+  public java.lang.String getAccount() {
+    java.lang.Object ref = account_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      account_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string account = 1;</code>
+   */
+  public com.google.protobuf.ByteString
+      getAccountBytes() {
+    java.lang.Object ref = account_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      account_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
   }
 
   public static final int TOKEN_FIELD_NUMBER = 2;
@@ -138,8 +164,8 @@ private static final long serialVersionUID = 0L;
 
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (playerUid_ != 0L) {
-      output.writeInt64(1, playerUid_);
+    if (!getAccountBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, account_);
     }
     if (!getTokenBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, token_);
@@ -152,9 +178,8 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (playerUid_ != 0L) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(1, playerUid_);
+    if (!getAccountBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, account_);
     }
     if (!getTokenBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, token_);
@@ -175,8 +200,8 @@ private static final long serialVersionUID = 0L;
     org.jyg.gameserver.proto.MsgLoginReply other = (org.jyg.gameserver.proto.MsgLoginReply) obj;
 
     boolean result = true;
-    result = result && (getPlayerUid()
-        == other.getPlayerUid());
+    result = result && getAccount()
+        .equals(other.getAccount());
     result = result && getToken()
         .equals(other.getToken());
     result = result && unknownFields.equals(other.unknownFields);
@@ -190,9 +215,8 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + PLAYERUID_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getPlayerUid());
+    hash = (37 * hash) + ACCOUNT_FIELD_NUMBER;
+    hash = (53 * hash) + getAccount().hashCode();
     hash = (37 * hash) + TOKEN_FIELD_NUMBER;
     hash = (53 * hash) + getToken().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
@@ -324,7 +348,7 @@ private static final long serialVersionUID = 0L;
     }
     public Builder clear() {
       super.clear();
-      playerUid_ = 0L;
+      account_ = "";
 
       token_ = "";
 
@@ -350,7 +374,7 @@ private static final long serialVersionUID = 0L;
 
     public org.jyg.gameserver.proto.MsgLoginReply buildPartial() {
       org.jyg.gameserver.proto.MsgLoginReply result = new org.jyg.gameserver.proto.MsgLoginReply(this);
-      result.playerUid_ = playerUid_;
+      result.account_ = account_;
       result.token_ = token_;
       onBuilt();
       return result;
@@ -393,8 +417,9 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(org.jyg.gameserver.proto.MsgLoginReply other) {
       if (other == org.jyg.gameserver.proto.MsgLoginReply.getDefaultInstance()) return this;
-      if (other.getPlayerUid() != 0L) {
-        setPlayerUid(other.getPlayerUid());
+      if (!other.getAccount().isEmpty()) {
+        account_ = other.account_;
+        onChanged();
       }
       if (!other.getToken().isEmpty()) {
         token_ = other.token_;
@@ -427,28 +452,71 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private long playerUid_ ;
+    private java.lang.Object account_ = "";
     /**
-     * <code>int64 playerUid = 1;</code>
+     * <code>string account = 1;</code>
      */
-    public long getPlayerUid() {
-      return playerUid_;
+    public java.lang.String getAccount() {
+      java.lang.Object ref = account_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        account_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
     }
     /**
-     * <code>int64 playerUid = 1;</code>
+     * <code>string account = 1;</code>
      */
-    public Builder setPlayerUid(long value) {
-      
-      playerUid_ = value;
+    public com.google.protobuf.ByteString
+        getAccountBytes() {
+      java.lang.Object ref = account_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        account_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string account = 1;</code>
+     */
+    public Builder setAccount(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      account_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>int64 playerUid = 1;</code>
+     * <code>string account = 1;</code>
      */
-    public Builder clearPlayerUid() {
+    public Builder clearAccount() {
       
-      playerUid_ = 0L;
+      account_ = getDefaultInstance().getAccount();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string account = 1;</code>
+     */
+    public Builder setAccountBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      account_ = value;
       onChanged();
       return this;
     }

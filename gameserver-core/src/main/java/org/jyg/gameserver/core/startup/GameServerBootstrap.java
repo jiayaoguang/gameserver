@@ -12,16 +12,16 @@ import java.util.List;
 /**
  * Created by jiayaoguang on 2017/3/30
  */
-public class GameServerBootstarp extends AbstractBootstrap {
+public class GameServerBootstrap extends AbstractBootstrap {
 
 
     private final List<Service> services = new ArrayList<>(1);
 
-    public GameServerBootstarp() {
+    public GameServerBootstrap() {
         super();
     }
 
-    public GameServerBootstarp(Consumer defaultConsumer) {
+    public GameServerBootstrap(Consumer defaultConsumer) {
         super(defaultConsumer);
     }
 

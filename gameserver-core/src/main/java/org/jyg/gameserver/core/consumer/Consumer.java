@@ -7,11 +7,9 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.bean.LogicEvent;
 import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.manager.ChannelManager;
 import org.jyg.gameserver.core.net.Request;
-import org.jyg.gameserver.core.processor.HttpProcessor;
-import org.jyg.gameserver.core.processor.NotFoundHttpProcessor;
-import org.jyg.gameserver.core.processor.Processor;
-import org.jyg.gameserver.core.processor.ProtoProcessor;
+import org.jyg.gameserver.core.processor.*;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.timer.DelayCloseTimer;
 import org.jyg.gameserver.core.timer.TimerManager;
@@ -44,6 +42,8 @@ public abstract class Consumer {
 
     private Map<String, HttpProcessor> httpProcessorMap = new HashMap<>();
     private Int2ObjectMap<ProtoProcessor<? extends MessageLite>> protoProcessorMap = new Int2ObjectOpenHashMap<>();
+
+    private TextProcessor textProcessor;
 
     private int id;
 
@@ -124,27 +124,55 @@ public abstract class Consumer {
         if (protoProcessorMap.containsKey(msgId)) {
             throw new IllegalArgumentException("dupilcated eventid");
         }
-        getContext().addMsgId2ProtoMapping(msgId , processor.getProtoDefaultInstance());
+        if(processor instanceof ProtoProcessor){
+            getContext().addMsgId2ProtoMapping(msgId , ((ProtoProcessor)processor).getProtoDefaultInstance());
+        }
 
         processor.setContext(context);
         protoProcessorMap.put(msgId, processor);
     }
-    public ProtoProcessor<? extends MessageLite> getProtoProcessor(int msgId) {
-        return protoProcessorMap.get(msgId);
+
+    /**
+     * 注册普通socket事件
+     *  @param msgId     消息id
+     * @param processor 事件处理器
+     */
+    public void setTextProcessor(TextProcessor textProcessor) {
+
+        this.textProcessor = textProcessor;
+
     }
+
 
     /**
      * 处理普通socket事件
      */
     public void processProtoEvent(Session session , LogicEvent<? extends MessageLite> event) {
 //		MessageLite msg = event.getData();
-        ProtoProcessor processor = protoProcessorMap.get(event.getEventId());
+        Processor processor = protoProcessorMap.get(event.getEventId());
         if (processor == null) {
             System.out.println("unknown socket eventid :" + event.getEventId());
             return;
         }
+
         processor.process(session , event);
     }
+
+
+    /**
+     * 处理普通socket事件
+     */
+    public void processTextEvent(Session session , LogicEvent<String> event) {
+//		MessageLite msg = event.getData();
+
+        if (textProcessor == null) {
+            System.out.println("textProcessor == null :" + event.getEventId());
+            return;
+        }
+
+        textProcessor.process(session , event);
+    }
+
     public void processHttpEvent(LogicEvent<Request> event) {
         getHttpProcessor(event.getData().noParamUri()).process(null , event);
         //六十秒后关闭

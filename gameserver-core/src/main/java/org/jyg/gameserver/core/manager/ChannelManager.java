@@ -4,9 +4,7 @@ import org.jyg.gameserver.core.bean.LogicEvent;
 import org.jyg.gameserver.core.session.Session;
 import io.netty.channel.Channel;
 
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * create by jiayaoguang on 2020/5/3
@@ -90,6 +88,15 @@ public class ChannelManager {
     private int incAndGetSessionId() {
         sessionIdInc++;
         return sessionIdInc;
+    }
+
+
+    public void broadcast(Object data){
+        throw new UnsupportedOperationException();
+    }
+
+    public List<Session> getSessions(){
+        return new ArrayList<>(channelObjectMap.values());
     }
 
 }
