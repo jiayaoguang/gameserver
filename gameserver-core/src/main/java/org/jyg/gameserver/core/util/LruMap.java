@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * created by jiayaoguang at 2018年5月17日
  */
-public class LruMap extends LinkedHashMap {
+public class LruMap<K,V> extends LinkedHashMap<K,V> {
     private final int maxElementNum;
 
     public LruMap(int maxSize) {
@@ -15,7 +15,7 @@ public class LruMap extends LinkedHashMap {
     }
 
     @Override
-    protected boolean removeEldestEntry(Map.Entry eldest) {
+    protected boolean removeEldestEntry(Map.Entry<K,V> eldest) {
         return this.size() > this.maxElementNum;
     }
 
