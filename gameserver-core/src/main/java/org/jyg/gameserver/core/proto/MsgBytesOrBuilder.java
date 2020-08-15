@@ -13,7 +13,7 @@ public interface MsgBytesOrBuilder extends
   int getId();
 
   /**
-   * <code>bytes byteDate = 2;</code>
+   * <code>bytes byteData = 2;</code>
    */
-  com.google.protobuf.ByteString getByteDate();
+  com.google.protobuf.ByteString getByteData();
 }

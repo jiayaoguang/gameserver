@@ -6,5 +6,5 @@ option java_package = "org.jyg.gameserver.core.proto";
 //sm服 ping场景服
 message MsgBytes {
 	int32 id = 1;
-    bytes byteDate = 2;
+    bytes byteData = 2;
 }  

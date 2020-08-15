@@ -15,7 +15,7 @@ public class BytesProtoProcessor extends ProtoProcessor<MsgBytes> {
 
 	public  void process(Session session , MsgBytes msg){
 		int id = msg.getId();
-		byte[] bytes = msg.getByteDate().toByteArray();
+		byte[] bytes = msg.getByteData().toByteArray();
 	}
 
 

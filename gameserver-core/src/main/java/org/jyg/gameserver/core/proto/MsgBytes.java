@@ -22,7 +22,7 @@ private static final long serialVersionUID = 0L;
   }
   private MsgBytes() {
     id_ = 0;
-    byteDate_ = com.google.protobuf.ByteString.EMPTY;
+    byteData_ = com.google.protobuf.ByteString.EMPTY;
   }
 
   @java.lang.Override
@@ -60,7 +60,7 @@ private static final long serialVersionUID = 0L;
           }
           case 18: {
 
-            byteDate_ = input.readBytes();
+            byteData_ = input.readBytes();
             break;
           }
         }
@@ -96,13 +96,13 @@ private static final long serialVersionUID = 0L;
     return id_;
   }
 
-  public static final int BYTEDATE_FIELD_NUMBER = 2;
-  private com.google.protobuf.ByteString byteDate_;
+  public static final int BYTEDATA_FIELD_NUMBER = 2;
+  private com.google.protobuf.ByteString byteData_;
   /**
-   * <code>bytes byteDate = 2;</code>
+   * <code>bytes byteData = 2;</code>
    */
-  public com.google.protobuf.ByteString getByteDate() {
-    return byteDate_;
+  public com.google.protobuf.ByteString getByteData() {
+    return byteData_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -120,8 +120,8 @@ private static final long serialVersionUID = 0L;
     if (id_ != 0) {
       output.writeInt32(1, id_);
     }
-    if (!byteDate_.isEmpty()) {
-      output.writeBytes(2, byteDate_);
+    if (!byteData_.isEmpty()) {
+      output.writeBytes(2, byteData_);
     }
     unknownFields.writeTo(output);
   }
@@ -135,9 +135,9 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(1, id_);
     }
-    if (!byteDate_.isEmpty()) {
+    if (!byteData_.isEmpty()) {
       size += com.google.protobuf.CodedOutputStream
-        .computeBytesSize(2, byteDate_);
+        .computeBytesSize(2, byteData_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -157,8 +157,8 @@ private static final long serialVersionUID = 0L;
     boolean result = true;
     result = result && (getId()
         == other.getId());
-    result = result && getByteDate()
-        .equals(other.getByteDate());
+    result = result && getByteData()
+        .equals(other.getByteData());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -172,8 +172,8 @@ private static final long serialVersionUID = 0L;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + ID_FIELD_NUMBER;
     hash = (53 * hash) + getId();
-    hash = (37 * hash) + BYTEDATE_FIELD_NUMBER;
-    hash = (53 * hash) + getByteDate().hashCode();
+    hash = (37 * hash) + BYTEDATA_FIELD_NUMBER;
+    hash = (53 * hash) + getByteData().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -310,7 +310,7 @@ private static final long serialVersionUID = 0L;
       super.clear();
       id_ = 0;
 
-      byteDate_ = com.google.protobuf.ByteString.EMPTY;
+      byteData_ = com.google.protobuf.ByteString.EMPTY;
 
       return this;
     }
@@ -335,7 +335,7 @@ private static final long serialVersionUID = 0L;
     public org.jyg.gameserver.core.proto.MsgBytes buildPartial() {
       org.jyg.gameserver.core.proto.MsgBytes result = new org.jyg.gameserver.core.proto.MsgBytes(this);
       result.id_ = id_;
-      result.byteDate_ = byteDate_;
+      result.byteData_ = byteData_;
       onBuilt();
       return result;
     }
@@ -380,8 +380,8 @@ private static final long serialVersionUID = 0L;
       if (other.getId() != 0) {
         setId(other.getId());
       }
-      if (other.getByteDate() != com.google.protobuf.ByteString.EMPTY) {
-        setByteDate(other.getByteDate());
+      if (other.getByteData() != com.google.protobuf.ByteString.EMPTY) {
+        setByteData(other.getByteData());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -436,31 +436,31 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private com.google.protobuf.ByteString byteDate_ = com.google.protobuf.ByteString.EMPTY;
+    private com.google.protobuf.ByteString byteData_ = com.google.protobuf.ByteString.EMPTY;
     /**
-     * <code>bytes byteDate = 2;</code>
+     * <code>bytes byteData = 2;</code>
      */
-    public com.google.protobuf.ByteString getByteDate() {
-      return byteDate_;
+    public com.google.protobuf.ByteString getByteData() {
+      return byteData_;
     }
     /**
-     * <code>bytes byteDate = 2;</code>
+     * <code>bytes byteData = 2;</code>
      */
-    public Builder setByteDate(com.google.protobuf.ByteString value) {
+    public Builder setByteData(com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      byteDate_ = value;
+      byteData_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>bytes byteDate = 2;</code>
+     * <code>bytes byteData = 2;</code>
      */
-    public Builder clearByteDate() {
+    public Builder clearByteData() {
       
-      byteDate_ = getDefaultInstance().getByteDate();
+      byteData_ = getDefaultInstance().getByteData();
       onChanged();
       return this;
     }

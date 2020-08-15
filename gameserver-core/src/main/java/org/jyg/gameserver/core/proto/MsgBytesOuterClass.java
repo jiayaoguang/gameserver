@@ -30,7 +30,7 @@ public final class MsgBytesOuterClass {
     java.lang.String[] descriptorData = {
       "\n\016MsgBytes.proto\022\035org.jyg.gameserver.cor" +
       "e.proto\"(\n\010MsgBytes\022\n\n\002id\030\001 \001(\005\022\020\n\010byteD" +
-      "ate\030\002 \001(\014B!\n\035org.jyg.gameserver.core.pro" +
+      "ata\030\002 \001(\014B!\n\035org.jyg.gameserver.core.pro" +
       "toP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
@@ -50,7 +50,7 @@ public final class MsgBytesOuterClass {
     internal_static_org_jyg_gameserver_core_proto_MsgBytes_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_jyg_gameserver_core_proto_MsgBytes_descriptor,
-        new java.lang.String[] { "Id", "ByteDate", });
+        new java.lang.String[] { "Id", "ByteData", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

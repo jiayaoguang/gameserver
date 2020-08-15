@@ -183,13 +183,13 @@ public class JygTest {
 
         byte[] bs = new byte[10000];
 
-        MsgBytes msgBytes = MsgBytes.newBuilder().setByteDate(ByteString.copyFrom(bs)).build();
+        MsgBytes msgBytes = MsgBytes.newBuilder().setByteData(ByteString.copyFrom(bs)).build();
 
         byte[] zbs = ZipUtil.gzip(bs);
 
         byte[] zbs2 = ZipUtil.gzip(msgBytes.toByteArray());
 
-        byte[] zbs3 = ZipUtil.gzip(MsgBytes.newBuilder().setByteDate(ByteString.copyFrom(zbs2)).build().toByteArray());
+        byte[] zbs3 = ZipUtil.gzip(MsgBytes.newBuilder().setByteData(ByteString.copyFrom(zbs2)).build().toByteArray());
 
         AllUtil.println(zbs.length);
         AllUtil.println(zbs2.length);
