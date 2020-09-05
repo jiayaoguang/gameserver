@@ -27,7 +27,7 @@ public class InnerSocketServerInitializer extends
 		pipeline.addLast(new MyProtobufDecoder(context));
 
 		if(context.getServerConfig().isNeedMergeProto()){
-			pipeline.addLast(context.getNettyHandlerFactory().createProtoMergeHandler());
+			pipeline.addLast(context.getNettyHandlerFactory().createProtoMergeHandler(context));
 		}else {
 			pipeline.addLast(context.getNettyHandlerFactory().getMyProtobufEncoder());
 		}
