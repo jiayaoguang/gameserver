@@ -27,12 +27,14 @@ public class ServerTest01
         			return;
         		}
 
-				List<MsgChat> msgList = new ArrayList<>();
+//				List<MsgChat> msgList = new ArrayList<>();
+//
+//        		for(int i = 0;i<2;i++){
+//        			msgList.add(MsgChat.newBuilder().setContent("i just think so ,hello world too -"+i).build());
+//				}
+//				session.writeMessage(msgList);
 
-        		for(int i = 0;i<2;i++){
-        			msgList.add(MsgChat.newBuilder().setContent("i just think so ,hello world too -"+i).build());
-				}
-				session.writeMessage(msgList);
+				session.writeMessage(MsgChat.newBuilder().setContent("i just think so ,hello world too").build());
 			}
 			
         };
