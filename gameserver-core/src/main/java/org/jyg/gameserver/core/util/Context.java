@@ -10,6 +10,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.jyg.gameserver.core.bean.ServerConfig;
 import org.jyg.gameserver.core.consumer.Consumer;
+import org.jyg.gameserver.core.handle.NettyHandlerFactory;
 import org.jyg.gameserver.core.manager.ConsumerManager;
 import org.jyg.gameserver.core.manager.EventLoopGroupManager;
 import org.jyg.gameserver.core.manager.ExecutorManager;
@@ -31,7 +32,6 @@ public class Context {
 
     private volatile boolean isStart = false;
 
-
     private final ServerConfig serverConfig = new ServerConfig();
 
     private final ConsumerManager consumerManager;
@@ -43,6 +43,9 @@ public class Context {
 
     private Object2IntMap<Class<? extends MessageLite>> protoClazz2MsgidMap = new Object2IntOpenHashMap<>();
     private Int2ObjectMap<MessageLite> msgId2ProtoMap = new Int2ObjectOpenHashMap<>();
+
+
+    private final NettyHandlerFactory nettyHandlerFactory;
 
     public Context(Consumer defaultConsumer) {
         this(defaultConsumer ,DEFAULT_CONFIG_FILE_NAME );
@@ -58,6 +61,8 @@ public class Context {
         defaultConsumer.setContext(this);
         this.consumerManager = new ConsumerManager(this);
         this.consumerManager.addConsumer(defaultConsumer);
+
+        this.nettyHandlerFactory = new NettyHandlerFactory(this);
 
         loadServerConfig(configFileName);
     }
@@ -133,6 +138,10 @@ public class Context {
 
     public ConsumerManager getConsumerManager() {
         return consumerManager;
+    }
+
+    public NettyHandlerFactory getNettyHandlerFactory() {
+        return nettyHandlerFactory;
     }
 
 

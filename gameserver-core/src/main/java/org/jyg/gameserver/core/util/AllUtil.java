@@ -1,5 +1,8 @@
 package org.jyg.gameserver.core.util;
 
+import com.google.protobuf.MessageLite;
+import io.netty.buffer.ByteBuf;
+
 import java.io.*;
 import java.lang.reflect.Method;
 import java.net.Inet4Address;
@@ -196,11 +199,54 @@ public class AllUtil {
                     default:
                         continue;
                 }
+                MyLoggerFactory.DEFAULT_LOGGER.info("set field : {} value : {} " , key , arg);
                 method.invoke(object, arg);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     *
+     * @param context
+     * @param msg
+     * @param buf
+     */
+    public static void writeToBuf(Context context, MessageLite msg, ByteBuf buf) {
+        Class<? extends MessageLite> protoClazz = msg.getClass();
+        MyLoggerFactory.DEFAULT_LOGGER.info("deal threadName : " + Thread.currentThread().getName());
+        byte[] bytes = msg.toByteArray();
+//    if (msg instanceof GeneratedMessageV3) {
+//       bytes = msg.toByteArray();
+//       protoClazz = ((GeneratedMessageV3)msg).getClass();
+//    } else if (msg instanceof GeneratedMessageV3.Builder) {
+////         GeneratedMessageV3 messageLite =  ((GeneratedMessageV3.Builder) msg).build();
+////         bytes = messageLite.toByteArray();
+////         protoClazz = messageLite.getClass();
+//       throw new IllegalArgumentException("Unknow message type");
+//    }else {
+//       throw new IllegalArgumentException("Unknow message type");
+//    }
+
+        if (bytes == null) {
+            throw new IllegalArgumentException("not MessageLiteOrBuilder");
+        }
+        int eventId = context.getMsgIdByProtoClass(protoClazz);
+        if (eventId <= 0) {
+            System.out.println("unknow eventid");
+            return;
+        }
+
+//    if(context.getServerConfig().isUseGzip()){
+//       bytes = ZipUtil.gzip(bytes);
+//    }
+
+        int protoLen = 4 + bytes.length;
+//    ByteBuf buf = ctx.alloc().directBuffer(protoLen);
+        buf.writeInt(protoLen);
+        buf.writeInt(eventId);
+        buf.writeBytes(bytes);
     }
 
 }

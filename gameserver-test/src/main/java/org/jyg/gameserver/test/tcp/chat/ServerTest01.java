@@ -29,7 +29,7 @@ public class ServerTest01
 
 				List<MsgChat> msgList = new ArrayList<>();
 
-        		for(int i = 0;i<10;i++){
+        		for(int i = 0;i<2;i++){
         			msgList.add(MsgChat.newBuilder().setContent("i just think so ,hello world too -"+i).build());
 				}
 				session.writeMessage(msgList);
@@ -48,7 +48,7 @@ public class ServerTest01
 		bootstarp.addProtoProcessor(chatProcessor);
         
 
-		bootstarp.addTcpService(8080);
+		bootstarp.addTcpService(8088);
         
         bootstarp.start();
     }

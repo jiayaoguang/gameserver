@@ -10,7 +10,9 @@ public class ServerConfig {
 
     private int maxFrameLength = 1024*1024*8;
 
-    private String ip = "127.0.0.1";
+    private String host = "127.0.0.1";
+
+    private boolean needMergeProto = true;
 
     public boolean isUseGzip() {
         return useGzip;
@@ -28,11 +30,20 @@ public class ServerConfig {
         this.maxFrameLength = maxFrameLength;
     }
 
-    public String getIp() {
-        return ip;
+    public String getHost() {
+        return host;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+
+    public boolean isNeedMergeProto() {
+        return needMergeProto;
+    }
+
+    public void setNeedMergeProto(boolean needMergeProto) {
+        this.needMergeProto = needMergeProto;
     }
 }

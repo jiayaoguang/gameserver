@@ -44,8 +44,9 @@ public class ClientTest01
 
         client.start();
         client.connect("localhost",8088);
-
-        client.write(MsgChat.newBuilder().setContent("hello world!").build());
+		for(int i=0;i<50;i++){
+			client.write(MsgChat.newBuilder().setContent("hello world!").build());
+		}
 
         Thread.sleep(1000);
 
