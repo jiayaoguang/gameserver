@@ -4,7 +4,6 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import org.jyg.gameserver.core.handle.InnerSocketHandler;
 import org.jyg.gameserver.core.handle.MyProtobufDecoder;
-import org.jyg.gameserver.core.handle.MyProtobufEncoder;
 import org.jyg.gameserver.core.handle.MyProtobufListEncoder;
 import org.jyg.gameserver.core.util.Context;
 
@@ -28,7 +27,7 @@ public class InnerSocketServerInitializer extends
 		pipeline.addLast(new MyProtobufDecoder(context));
 
 		if(context.getServerConfig().isNeedMergeProto()){
-			pipeline.addLast(context.getNettyHandlerFactory().getProtoMergeHandler());
+			pipeline.addLast(context.getNettyHandlerFactory().createProtoMergeHandler());
 		}else {
 			pipeline.addLast(context.getNettyHandlerFactory().getMyProtobufEncoder());
 		}

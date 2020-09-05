@@ -18,7 +18,6 @@ import java.util.concurrent.TimeUnit;
  * create by jiayaoguang on 2020/9/5
  * proto 消息合并
  */
-@Sharable
 public class ProtoMergeHandler  extends MessageToByteEncoder<MessageLite> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("ProtoMergeHandler");

@@ -7,19 +7,16 @@ import org.jyg.gameserver.core.util.Context;
  */
 public class NettyHandlerFactory {
 
-    private  final ProtoMergeHandler protoMergeHandler;
-
     private final MyProtobufEncoder myProtobufEncoder;
 
 
     public NettyHandlerFactory(Context context) {
-        this.protoMergeHandler = new ProtoMergeHandler(context);
         this.myProtobufEncoder = new MyProtobufEncoder(context);
     }
 
 
-    public ProtoMergeHandler getProtoMergeHandler() {
-        return protoMergeHandler;
+    public ProtoMergeHandler createProtoMergeHandler(Context context) {
+        return new ProtoMergeHandler(context);
     }
 
     public MyProtobufEncoder getMyProtobufEncoder() {
