@@ -13,7 +13,7 @@ import java.security.ProtectionDomain;
  * create by jiayaoguang on 2020/9/7
  * 热更新class工具
  */
-public class CLassRedefineUtil {
+public class ClassRedefineUtil {
 
     private CLassRedefineUtil() {
     }
