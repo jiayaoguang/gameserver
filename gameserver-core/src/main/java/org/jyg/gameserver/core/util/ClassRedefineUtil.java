@@ -15,7 +15,7 @@ import java.security.ProtectionDomain;
  */
 public class ClassRedefineUtil {
 
-    private CLassRedefineUtil() {
+    private ClassRedefineUtil() {
     }
 
     private static class InstrumentationHolder {
