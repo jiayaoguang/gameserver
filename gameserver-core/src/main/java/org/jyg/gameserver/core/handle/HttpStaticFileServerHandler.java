@@ -55,6 +55,7 @@ import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.stream.ChunkedFile;
 import io.netty.util.CharsetUtil;
 import io.netty.util.internal.SystemPropertyUtil;
+import org.jyg.gameserver.core.util.MyLoggerFactory;
 
 /**
  * A simple handler that serves incoming HTTP requests to send their respective
@@ -119,10 +120,10 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 //
 //		System.out.println("CONTENT_TYPE: " + s + "," + request.headers());
 		//包含点字符的当做静态文件请求处理
-		if (request.uri().indexOf('.')==-1) {
+		if (request.uri().indexOf('.')==-1 && !request.uri().endsWith("/")) {
 			request.retain();
 			ctx.fireChannelRead(request);
-			System.out.println("static :" + request.refCnt());
+			MyLoggerFactory.DEFAULT_LOGGER.info("static :" + request.refCnt());
 			return;
 		}
 
@@ -139,7 +140,7 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 			return;
 		}
 
-		System.out.println(uri);
+		MyLoggerFactory.DEFAULT_LOGGER.info(uri);
 		
 		File file = new File( path);
 		if (file.isHidden() || !file.exists()) {
