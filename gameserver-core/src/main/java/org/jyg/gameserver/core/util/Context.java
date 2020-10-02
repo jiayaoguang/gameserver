@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.util;
 
 import com.google.protobuf.MessageLite;
 import com.google.protobuf.Parser;
+import io.netty.channel.epoll.Epoll;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -45,6 +46,8 @@ public class Context {
     private Int2ObjectMap<MessageLite> msgId2ProtoMap = new Int2ObjectOpenHashMap<>();
 
 
+    private final boolean useEpoll;
+
     private final NettyHandlerFactory nettyHandlerFactory;
 
     public Context(Consumer defaultConsumer) {
@@ -53,7 +56,13 @@ public class Context {
 
     public Context(Consumer defaultConsumer , String configFileName) {
         this.defaultConsumer = defaultConsumer;
-        this.eventLoopGroupManager = new EventLoopGroupManager();
+
+        loadServerConfig(configFileName);
+
+        this.useEpoll = (RemotingUtil.isLinuxPlatform() && Epoll.isAvailable() && serverConfig.isPreferEpoll());
+
+
+        this.eventLoopGroupManager = new EventLoopGroupManager(useEpoll);
 //        this.executorManager = new ExecutorManager(10, defaultConsumer);
         this.singleThreadExecutorManagerPool = new SingleThreadExecutorManagerPool(defaultConsumer);
 
@@ -64,7 +73,6 @@ public class Context {
 
         this.nettyHandlerFactory = new NettyHandlerFactory(this);
 
-        loadServerConfig(configFileName);
     }
 
     public Consumer getDefaultConsumer() {
@@ -148,4 +156,9 @@ public class Context {
     //    public ScheduledExecutorService getScheduledExecutorService() {
 //        return scheduledExecutorService;
 //    }
+
+
+    public boolean isUseEpoll() {
+        return useEpoll;
+    }
 }

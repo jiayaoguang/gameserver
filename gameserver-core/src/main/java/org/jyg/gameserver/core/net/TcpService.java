@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.net;
 
+import io.netty.channel.epoll.Epoll;
 import org.jyg.gameserver.core.handle.initializer.MyChannelInitializer;
 import org.jyg.gameserver.core.manager.EventLoopGroupManager;
 import org.jyg.gameserver.core.util.RemotingUtil;
@@ -58,15 +59,20 @@ public abstract class TcpService extends AbstractService {
 		EventLoopGroupManager eventLoopGroupManager = initializer.getContext().getEventLoopGroupManager();
 		bootstrap.group(eventLoopGroupManager.getBossGroup(), eventLoopGroupManager.getWorkGroup());
 
-		bootstrap.channel(RemotingUtil.useEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class);
+
+		bootstrap.channel(getDefaultConsumer().getContext().isUseEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class);
 //		bootstrap.handler(new LoggingHandler(LogLevel.INFO));
 		bootstrap.childHandler(initializer);
 
 		bootstrap.option(ChannelOption.SO_REUSEADDR, true);
 		// tcp等待三次握手队列的长度
 		bootstrap.option(ChannelOption.SO_BACKLOG, 1024);
-		bootstrap.option(ChannelOption.SO_KEEPALIVE, false);
-		bootstrap.option(ChannelOption.TCP_NODELAY, true);// maybe useless
+
+		if(getDefaultConsumer().getContext().isUseEpoll()){
+			bootstrap.option(ChannelOption.SO_KEEPALIVE, false);
+			bootstrap.option(ChannelOption.TCP_NODELAY, true);// maybe useless
+		}
+
 		bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 
 		// 指定等待时间为0，此时调用主动关闭时不会发送FIN来结束连接，而是直接将连接设置为CLOSE状态，
@@ -87,5 +93,6 @@ public abstract class TcpService extends AbstractService {
 	public void stop() {
 
 	}
+
 
 }

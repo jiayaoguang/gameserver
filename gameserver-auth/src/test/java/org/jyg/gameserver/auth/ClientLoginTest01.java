@@ -45,7 +45,7 @@ public class ClientLoginTest01
         client.start();
         client.connect("localhost",8081);
 
-        client.write(MsgLoginRequest.newBuilder().setPlayerUid(2333).build());
+        client.write(MsgLoginRequest.newBuilder().setAccount("jyg").build());
 
         Thread.sleep(1000);
 

@@ -26,7 +26,7 @@ public class RedissonCacheClient implements RedisCacheClient {
 		config.useClusterServers()
 				// use "rediss://" for SSL connection
 				.addNodeAddress("redis://127.0.0.1:7181");
-		if(RemotingUtil.useEpoll()){
+		if(RemotingUtil.isLinuxPlatform()){
 			config.setTransportMode(TransportMode.EPOLL);
 		}else {
 			config.setTransportMode(TransportMode.NIO);

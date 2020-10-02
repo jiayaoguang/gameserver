@@ -136,10 +136,24 @@ public class AllUtil {
         System.out.println(obj);
     }
     public static void properties2Object(final String fileName, final Object object) {
+
+        File file = new File(fileName);
+
+        if(!file.exists()){
+            MyLoggerFactory.DEFAULT_LOGGER.error(" config {} file not exist " , fileName);
+            return;
+        }
+
+        if(file.isDirectory()){
+            MyLoggerFactory.DEFAULT_LOGGER.error(" config {} file isDirectory " , fileName);
+            return;
+        }
+
+
         try {
 //            InputStream in = new BufferedInputStream(new FileInputStream(filePath));
             Properties properties = new Properties();
-            try (InputStream in = AllUtil.class.getClassLoader().getResourceAsStream(fileName)){
+            try (InputStream in = new BufferedInputStream(new FileInputStream(file));){
                 properties.load(in);
             }
             properties2Object(properties, object);

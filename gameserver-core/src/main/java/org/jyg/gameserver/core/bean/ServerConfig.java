@@ -14,6 +14,8 @@ public class ServerConfig {
 
     private boolean needMergeProto = true;
 
+    private boolean preferEpoll = false;
+
     public boolean isUseGzip() {
         return useGzip;
     }
@@ -45,5 +47,13 @@ public class ServerConfig {
 
     public void setNeedMergeProto(boolean needMergeProto) {
         this.needMergeProto = needMergeProto;
+    }
+
+    public boolean isPreferEpoll() {
+        return preferEpoll;
+    }
+
+    public void setPreferEpoll(boolean preferEpoll) {
+        this.preferEpoll = preferEpoll;
     }
 }

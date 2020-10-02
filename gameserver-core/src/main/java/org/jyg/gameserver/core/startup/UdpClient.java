@@ -43,7 +43,7 @@ public class UdpClient extends AbstractBootstrap{
 
 	public void doStart(){
 		bootstrap.group(group);
-		bootstrap.channel( RemotingUtil.useEpoll() ? EpollDatagramChannel.class : NioDatagramChannel.class);
+		bootstrap.channel( getDefaultConsumer().getContext().isUseEpoll() ? EpollDatagramChannel.class : NioDatagramChannel.class);
 		bootstrap.handler(new SocketClientInitializer(getContext()));
 		bootstrap.option(ChannelOption.SO_REUSEADDR, true);
 		bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);

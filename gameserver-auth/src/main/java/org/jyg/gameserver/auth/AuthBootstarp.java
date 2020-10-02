@@ -54,6 +54,6 @@ public class AuthBootstarp
         		injector.getInstance(TokenReceiveSuccessProtoProcessor.class));
         
         bootstarp.start();
-        logger.error(" start success ");
+        logger.info(" start success ");
     }
 }

@@ -27,7 +27,7 @@ public class LoginHttpProcessor extends HttpProcessor {
 
 	@Override
 	public void service(Request request, Response response) {
-		String account = request.getParameter("account");
+		String account = request.getParameter("username");
 		String password = request.getParameter("password");
 		System.out.println(account + " >> " + password);
 

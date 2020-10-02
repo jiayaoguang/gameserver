@@ -14,16 +14,16 @@ public class EventLoopGroupManager {
     private final EventLoopGroup bossGroup;
     private final EventLoopGroup workGroup;
 
-    public EventLoopGroupManager() {
-        this(Runtime.getRuntime().availableProcessors() * 2);
+    public EventLoopGroupManager(boolean useEpoll) {
+        this(useEpoll,Runtime.getRuntime().availableProcessors() * 2);
     }
 
-    public EventLoopGroupManager(int selectorThreadNum) {
-        if (RemotingUtil.useEpoll()) {
+    public EventLoopGroupManager(boolean useEpoll, int selectorThreadNum) {
+        if (useEpoll) {
             this.bossGroup = new EpollEventLoopGroup(1, new PrefixNameThreadFactory("NettyEpollBossThread_"));
             this.workGroup = new EpollEventLoopGroup(selectorThreadNum, new PrefixNameThreadFactory("NettyEpollWorkThread_"));
         } else {
-            this.bossGroup = new NioEventLoopGroup(1,  new PrefixNameThreadFactory("NettyNioBossThread_"));
+            this.bossGroup = new NioEventLoopGroup(1, new PrefixNameThreadFactory("NettyNioBossThread_"));
             this.workGroup = new NioEventLoopGroup(selectorThreadNum, new PrefixNameThreadFactory("NettyNioWorkThread_"));
         }
     }

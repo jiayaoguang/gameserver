@@ -74,7 +74,7 @@ public class TcpClient extends AbstractBootstrap{
 	public void start(MyChannelInitializer<Channel> channelInitializer){
 		System.out.println("客户端成功启动...");
 		bootstrap.group(getContext().getEventLoopGroupManager().getWorkGroup());
-		bootstrap.channel( RemotingUtil.useEpoll() ? EpollSocketChannel.class : NioSocketChannel.class);
+		bootstrap.channel( getDefaultConsumer().getContext().isUseEpoll() ? EpollSocketChannel.class : NioSocketChannel.class);
 		bootstrap.handler(channelInitializer);
 		bootstrap.option(ChannelOption.SO_KEEPALIVE, false);
 		bootstrap.option(ChannelOption.TCP_NODELAY, true);

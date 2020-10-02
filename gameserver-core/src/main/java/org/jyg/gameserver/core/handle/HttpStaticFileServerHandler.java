@@ -129,12 +129,12 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 		String noParamUri = getNoParamUri(request.uri());
 
 		if( noParamUri.indexOf('.')==-1){
-//			if (!request.uri().endsWith("/")) {
+			if (!request.uri().endsWith("/")) {
 				request.retain();
 				ctx.fireChannelRead(request);
 				MyLoggerFactory.DEFAULT_LOGGER.info("static :" + request.refCnt());
 				return;
-//			}
+			}
 		}
 
 		if (request.method() != GET) {

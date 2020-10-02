@@ -23,8 +23,8 @@ public class RemotingUtil {
 	}
 
 	// TODO
-	public static boolean useEpoll() {
-		return RemotingUtil.IS_LINUX_PLATFORM && Epoll.isAvailable();
+	public static boolean isLinuxPlatform() {
+		return RemotingUtil.IS_LINUX_PLATFORM;
 	}
 
 }

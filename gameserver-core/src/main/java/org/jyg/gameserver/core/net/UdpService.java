@@ -44,7 +44,7 @@ public class UdpService extends AbstractService {
 
         bootstrap.group(workGroup);
 
-        bootstrap.channel(RemotingUtil.useEpoll() ? EpollDatagramChannel.class : NioDatagramChannel.class);
+        bootstrap.channel(defaultConsumer.getContext().isUseEpoll() ? EpollDatagramChannel.class : NioDatagramChannel.class);
         bootstrap.handler(new InnerSocketServerInitializer(context));
 //        bootstrap.childHandler(initializer);
         bootstrap.option(ChannelOption.SO_BROADCAST, true);
