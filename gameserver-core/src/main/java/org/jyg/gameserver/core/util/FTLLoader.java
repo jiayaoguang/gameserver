@@ -29,7 +29,7 @@ public class FTLLoader {
     	
     }
     
-    public byte[] getFtl(String ftlName , Map<String, String> params  )  {
+    public byte[] getFtl(String ftlName , Map<String, Object> params  )  {
     	try {
 	    	Template template = configuration.getTemplate(ftlName);
 	    	
@@ -48,7 +48,7 @@ public class FTLLoader {
     
     public byte[] getIndexFtl(String username) {
     	
-    	Map<String, String> params = new HashMap<>();
+    	Map<String, Object> params = new HashMap<>();
         params.put("username", username);
     	
 		return getFtl("index.ftl",params);
