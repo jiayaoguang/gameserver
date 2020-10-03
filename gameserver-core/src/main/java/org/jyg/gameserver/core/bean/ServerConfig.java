@@ -10,7 +10,7 @@ public class ServerConfig {
 
     private int maxFrameLength = 1024*1024*8;
 
-    private String host = "127.0.0.1";
+    private String host = null;
 
     private boolean needMergeProto = true;
 
