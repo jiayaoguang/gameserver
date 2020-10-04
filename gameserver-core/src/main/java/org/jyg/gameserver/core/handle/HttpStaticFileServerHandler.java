@@ -143,7 +143,9 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 			return;
 		}
 
-		final String uri = Constants.HTTP_ROOT_DIR+ request.uri();
+		String httpRootDir = System.getProperty("http.root.dir","/html");
+
+		final String uri = httpRootDir + request.uri();
 		
 		final String path = sanitizeUri(uri);
 		if (path == null) {
