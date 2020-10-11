@@ -37,7 +37,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpRequest> 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		// TODO Auto-generated method stub
-		// super.channelActive(ctx);
+		 super.channelActive(ctx);
 		// httpChannels.put(id.getAndIncrement(), ctx.channel());
 	}
 
