@@ -1,6 +1,7 @@
 package org.jyg.gameserver.core.net;
 
 import io.netty.channel.epoll.Epoll;
+import io.netty.channel.epoll.EpollChannelOption;
 import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.handle.initializer.MyChannelInitializer;
 import org.jyg.gameserver.core.manager.EventLoopGroupManager;
@@ -70,8 +71,7 @@ public abstract class TcpService extends AbstractService {
 		bootstrap.option(ChannelOption.SO_BACKLOG, 1024);
 
 		if(getDefaultConsumer().getContext().isUseEpoll()){
-			bootstrap.option(ChannelOption.SO_KEEPALIVE, false);
-			bootstrap.option(ChannelOption.TCP_NODELAY, true);// maybe useless
+			bootstrap.option(EpollChannelOption.TCP_CORK, false);
 		}
 
 		bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
