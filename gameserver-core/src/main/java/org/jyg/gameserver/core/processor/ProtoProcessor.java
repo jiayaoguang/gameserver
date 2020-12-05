@@ -18,7 +18,6 @@ public abstract class ProtoProcessor<T extends MessageLite> extends AbstractProc
 
 	private final MessageLite defaultInstance;
 
-	private Context context;
 
 	public ProtoProcessor(Class<? extends MessageLite> protoClazz) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		this((MessageLite)protoClazz.getMethod("getDefaultInstance").invoke(null));
@@ -73,13 +72,6 @@ public abstract class ProtoProcessor<T extends MessageLite> extends AbstractProc
 //		process(session,event.getData());
 //	}
 
-	public Context getContext() {
-		return context;
-	}
-
-	public void setContext(Context context) {
-		this.context = context;
-	}
 
 	public abstract void process(Session session , T msg);
 
