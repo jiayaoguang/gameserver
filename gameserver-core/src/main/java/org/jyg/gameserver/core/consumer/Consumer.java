@@ -221,10 +221,15 @@ public abstract class Consumer {
         return childConsumerList.get( num % childConsumerList.size());
     }
 
-    public void addProcessor(Processor<?> processor , Context context) {
+    public void addProcessor(Processor<?> processor) {
         if(processor instanceof ProtoProcessor){
             ProtoProcessor protoProcessor = (ProtoProcessor)processor;
             addProcessor(protoProcessor.getProtoMsgId() , protoProcessor );
+            return;
+        }
+        if(processor instanceof ByteMsgObjProcessor){
+            ByteMsgObjProcessor byteMsgObjProcessor = (ByteMsgObjProcessor)processor;
+            addProcessor(byteMsgObjProcessor.getMsgId() , byteMsgObjProcessor );
             return;
         }
         if(processor instanceof HttpProcessor){

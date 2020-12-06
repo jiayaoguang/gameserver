@@ -1,6 +1,8 @@
 package org.jyg.gameserver.core.startup;
 
 import com.google.protobuf.MessageLite;
+import org.jyg.gameserver.core.msg.ByteMsgObj;
+import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.processor.HttpProcessor;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.util.Context;
@@ -52,6 +54,11 @@ public abstract class AbstractBootstrap {
     public void addProtoProcessor(ProtoProcessor<? extends MessageLite> protoProcessor) {
         int msgId = context.getMsgIdByProtoClass(protoProcessor.getProtoClass());
         this.context.getDefaultConsumer().addProcessor(msgId, protoProcessor);
+    }
+
+    public void addByteMsgObjProcessor(ByteMsgObjProcessor<? extends ByteMsgObj> byteMsgObjProcessor) {
+//        int msgId = byteMsgObjProcessor.getMsgId();
+        this.context.getDefaultConsumer().addProcessor(byteMsgObjProcessor);
     }
 
     public void addProtoProcessor(int msgId,ProtoProcessor<? extends MessageLite> protoProcessor) {

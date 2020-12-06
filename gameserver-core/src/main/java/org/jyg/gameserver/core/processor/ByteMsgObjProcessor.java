@@ -21,4 +21,8 @@ public abstract class ByteMsgObjProcessor<T extends ByteMsgObj> extends Abstract
     public Class<? extends ByteMsgObj> getByteMsgObjClazz() {
         return byteMsgObjClazz;
     }
+
+    public int getMsgId() {
+        return getContext().getMsgIdByByteMsgObj(byteMsgObjClazz);
+    }
 }
