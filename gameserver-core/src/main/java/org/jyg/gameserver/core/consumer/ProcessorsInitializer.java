@@ -16,7 +16,7 @@ public abstract class ProcessorsInitializer {
         List<Processor<?>> processList = new ArrayList<>();
         initProcessors(processList);
         for (Processor<?> processor : processList) {
-            consumer.addProcessor(processor, consumer.getContext());
+            consumer.addProcessor(processor);
         }
     }
 
