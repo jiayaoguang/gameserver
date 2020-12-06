@@ -98,7 +98,7 @@ public abstract class Consumer {
         this.context = context;
     }
 
-    public void addHttpProcessor(String path, HttpProcessor processor , Context context) {
+    public void addHttpProcessor(String path, HttpProcessor processor) {
 
         if (StringUtils.isEmpty(path) || path.charAt(0) != '/' || path.contains(".")) {
             throw new IllegalArgumentException("path cannot contain char:'.' and must start with char:'/' ");
@@ -109,7 +109,7 @@ public abstract class Consumer {
         }
 
         httpProcessorMap.put(path, processor);
-        processor.setContext(context);
+        processor.setConsumer(this);
     }
 
     public HttpProcessor getHttpProcessor(String path) {
@@ -126,7 +126,7 @@ public abstract class Consumer {
      * @param msgId     消息id
      * @param processor 事件处理器
      */
-    public void addProtoProcessor(int msgId, ProtoProcessor<? extends MessageLite> processor , Context context) {
+    public void addProtoProcessor(int msgId, ProtoProcessor<? extends MessageLite> processor ) {
         if (protoProcessorMap.containsKey(msgId)) {
             throw new IllegalArgumentException("dupilcated eventid");
         }
@@ -134,7 +134,7 @@ public abstract class Consumer {
             getContext().addMsgId2ProtoMapping(msgId , ((ProtoProcessor)processor).getProtoDefaultInstance());
         }
 
-        processor.setContext(context);
+        processor.setConsumer(this);
         protoProcessorMap.put(msgId, processor);
     }
 
@@ -142,7 +142,7 @@ public abstract class Consumer {
      * 注册普通socket事件
      */
     public void setTextProcessor(TextProcessor textProcessor) {
-        textProcessor.setContext(context);
+        textProcessor.setConsumer(this);
         this.textProcessor = textProcessor;
 
     }
@@ -221,12 +221,12 @@ public abstract class Consumer {
     public void addProcessor(Processor<?> processor , Context context) {
         if(processor instanceof ProtoProcessor){
             ProtoProcessor protoProcessor = (ProtoProcessor)processor;
-            addProtoProcessor(protoProcessor.getProtoMsgId() , protoProcessor , context);
+            addProtoProcessor(protoProcessor.getProtoMsgId() , protoProcessor );
             return;
         }
         if(processor instanceof HttpProcessor){
             HttpProcessor httpProcessor = (HttpProcessor)processor;
-            addHttpProcessor(httpProcessor.getPath() , httpProcessor , context);
+            addHttpProcessor(httpProcessor.getPath() , httpProcessor );
             return;
         }
         logger.error(" unknown processor type  : {} " , processor.getClass());

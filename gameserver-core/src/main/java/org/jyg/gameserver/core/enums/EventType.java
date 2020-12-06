@@ -26,6 +26,8 @@ public enum EventType {
 	TEXT_MESSAGE_COME,
 
 
+	BYTE_OBJ_MSG_COME,
+
 	INNER_MSG,
 	
 	;

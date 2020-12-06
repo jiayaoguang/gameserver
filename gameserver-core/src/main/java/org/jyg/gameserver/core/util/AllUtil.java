@@ -2,6 +2,8 @@ package org.jyg.gameserver.core.util;
 
 import com.google.protobuf.MessageLite;
 import io.netty.buffer.ByteBuf;
+import org.jyg.gameserver.core.msg.AbstractMsgCodec;
+import org.jyg.gameserver.core.msg.ByteMsgObj;
 
 import java.io.*;
 import java.lang.reflect.Method;
@@ -135,6 +137,15 @@ public class AllUtil {
     public static void println(Object obj){
         System.out.println(obj);
     }
+
+    public static void println(byte[] bytes){
+        StringBuilder sb = new StringBuilder();
+        for(byte b:bytes){
+            sb.append(b).append(',');
+        }
+        System.out.println(sb.toString());
+    }
+
     public static void properties2Object(final String fileName, final Object object) {
 
         File file = new File(fileName);
@@ -230,7 +241,7 @@ public class AllUtil {
     public static void writeToBuf(Context context, MessageLite msg, ByteBuf buf) {
         Class<? extends MessageLite> protoClazz = msg.getClass();
         MyLoggerFactory.DEFAULT_LOGGER.info("deal threadName : " + Thread.currentThread().getName());
-        byte[] bytes = msg.toByteArray();
+        byte[] msgBytes = msg.toByteArray();
 //    if (msg instanceof GeneratedMessageV3) {
 //       bytes = msg.toByteArray();
 //       protoClazz = ((GeneratedMessageV3)msg).getClass();
@@ -243,12 +254,12 @@ public class AllUtil {
 //       throw new IllegalArgumentException("Unknow message type");
 //    }
 
-        if (bytes == null) {
+        if (msgBytes == null) {
             throw new IllegalArgumentException("not MessageLiteOrBuilder");
         }
         int eventId = context.getMsgIdByProtoClass(protoClazz);
         if (eventId <= 0) {
-            System.out.println("unknow eventid");
+            MyLoggerFactory.DEFAULT_LOGGER.error("unknow eventid");
             return;
         }
 
@@ -256,11 +267,43 @@ public class AllUtil {
 //       bytes = ZipUtil.gzip(bytes);
 //    }
 
-        int protoLen = 4 + bytes.length;
+        writeToBuf(eventId , buf , msgBytes);
+    }
+
+
+    /**
+     *
+     * @param context
+     * @param byteMsgObj
+     * @param buf
+     */
+    public static void writeToBuf(Context context, ByteMsgObj byteMsgObj, ByteBuf buf) {
+        Class<? extends ByteMsgObj> byteMsgObjClazz = byteMsgObj.getClass();
+        MyLoggerFactory.DEFAULT_LOGGER.info("deal threadName : " + Thread.currentThread().getName());
+
+
+        int eventId = context.getMsgIdByByteMsgObj(byteMsgObjClazz);
+        if (eventId <= 0) {
+            MyLoggerFactory.DEFAULT_LOGGER.error("unknow eventid");
+            return;
+        }
+
+
+        AbstractMsgCodec msgCodec = context.getMsgCodec(eventId);
+
+        byte[] msgBytes = msgCodec.encode(byteMsgObj);
+
+        writeToBuf(eventId , buf , msgBytes);
+
+    }
+
+    private static void writeToBuf(int msgId ,ByteBuf buf, byte[] msgBytes){
+        int protoLen = 4 + msgBytes.length;
 //    ByteBuf buf = ctx.alloc().directBuffer(protoLen);
         buf.writeInt(protoLen);
-        buf.writeInt(eventId);
-        buf.writeBytes(bytes);
+        buf.writeInt(msgId);
+        buf.writeBytes(msgBytes);
     }
+
 
 }

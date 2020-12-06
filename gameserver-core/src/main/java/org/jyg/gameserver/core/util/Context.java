@@ -16,6 +16,10 @@ import org.jyg.gameserver.core.manager.ConsumerManager;
 import org.jyg.gameserver.core.manager.EventLoopGroupManager;
 import org.jyg.gameserver.core.manager.ExecutorManager;
 import org.jyg.gameserver.core.manager.SingleThreadExecutorManagerPool;
+import org.jyg.gameserver.core.msg.AbstractByteMsgCodec;
+import org.jyg.gameserver.core.msg.AbstractMsgCodec;
+import org.jyg.gameserver.core.msg.ByteMsgObj;
+import org.jyg.gameserver.core.msg.JsonMsgCodec;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -42,9 +46,10 @@ public class Context {
     //TODO I think ...
     private final SingleThreadExecutorManagerPool singleThreadExecutorManagerPool;
 
-    private Object2IntMap<Class<? extends MessageLite>> protoClazz2MsgidMap = new Object2IntOpenHashMap<>();
-    private Int2ObjectMap<MessageLite> msgId2ProtoMap = new Int2ObjectOpenHashMap<>();
+    private Object2IntMap<Class<? extends MessageLite>> protoClazz2MsgIdMap = new Object2IntOpenHashMap<>();
+    private Int2ObjectMap<AbstractMsgCodec<?>> msgId2MsgCodecMap = new Int2ObjectOpenHashMap<>();
 
+    private Object2IntMap<Class<? extends ByteMsgObj>> msgObjClazz2MsgIdMap = new Object2IntOpenHashMap<>();
 
     private final boolean useEpoll;
 
@@ -90,24 +95,37 @@ public class Context {
     }
 
     public void addMsgId2ProtoMapping(int msgId,  MessageLite defaultInstance) {
-        this.protoClazz2MsgidMap.put(defaultInstance.getClass(), msgId);
-        this.msgId2ProtoMap.put(msgId , defaultInstance);
+        ProtoMsgCodec protoMsgCodec = new ProtoMsgCodec( msgId,defaultInstance);
+        this.protoClazz2MsgIdMap.put(defaultInstance.getClass(), msgId);
+        this.msgId2MsgCodecMap.put(msgId ,protoMsgCodec );
     }
 
-    public Parser<? extends MessageLite> getProtoParserByMsgId (int msgId){
+    public void addMsgId2JsonMsgCLassMapping(int msgId,  Class<? extends ByteMsgObj> byteMsgObjClazz) {
+        JsonMsgCodec jsonMsgCodec = new JsonMsgCodec( msgId,byteMsgObjClazz);
+        this.msgObjClazz2MsgIdMap.put(byteMsgObjClazz ,msgId );
+        this.msgId2MsgCodecMap.put(msgId ,jsonMsgCodec );
+    }
 
-        MessageLite messageLite = msgId2ProtoMap.get(msgId);
-        if(messageLite == null){
+
+    public<T> AbstractMsgCodec<?> getMsgCodec (int msgId){
+
+        AbstractMsgCodec<?> msgCodec = msgId2MsgCodecMap.get(msgId);
+        if(msgCodec == null){
             return null;
         }
 
-        return messageLite.getParserForType();
+        return msgCodec;
     }
 
 
     public int getMsgIdByProtoClass( Class<? extends MessageLite> protoClass) {
 
-        return protoClazz2MsgidMap.getInt(protoClass);
+        return protoClazz2MsgIdMap.getInt(protoClass);
+    }
+
+    public int getMsgIdByByteMsgObj( Class<? extends ByteMsgObj> protoClass) {
+
+        return msgObjClazz2MsgIdMap.getInt(protoClass);
     }
 
 
@@ -121,8 +139,8 @@ public class Context {
             return;
         }
         this.isStart = true;
-        this.protoClazz2MsgidMap = Object2IntMaps.unmodifiable(this.protoClazz2MsgidMap);
-        this.msgId2ProtoMap = Int2ObjectMaps.unmodifiable(this.msgId2ProtoMap);
+        this.protoClazz2MsgIdMap = Object2IntMaps.unmodifiable(this.protoClazz2MsgIdMap);
+        this.msgId2MsgCodecMap = Int2ObjectMaps.unmodifiable(this.msgId2MsgCodecMap);
 
 //        loadServerConfig(configFileName);
     }

@@ -17,34 +17,30 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 
 	protected static final FTLLoader ftlLoader = new FTLLoader();
 
-	private Context context;
+//	private Context context;
 
-	private int consumerId = 0;
+	private Consumer consumer;
+
 
 	public Consumer getDefaultConsumer() {
-		return context.getDefaultConsumer();
+		return consumer.getContext().getDefaultConsumer();
 	}
 
 
 	public Context getContext() {
-		return context;
+		return consumer.getContext();
 	}
 
-	public void setContext(Context context) {
-		this.context = context;
-	}
-
-	public int getConsumerId() {
-		return consumerId;
-	}
-
-	public void setConsumerId(int consumerId) {
-		this.consumerId = consumerId;
-	}
 
 	public abstract void process(Session session , LogicEvent<T> event);
 
 
-	
+	public Consumer getConsumer() {
+		return consumer;
+	}
+
+	public void setConsumer(Consumer consumer) {
+		this.consumer = consumer;
+	}
 }
 
