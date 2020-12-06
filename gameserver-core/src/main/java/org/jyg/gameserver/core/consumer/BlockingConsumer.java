@@ -98,6 +98,7 @@ public class BlockingConsumer extends Consumer {
                     pollNullNum++;
                     if (pollNullNum > 1000) {
                         if (pollNullNum % 100 == 0) {
+                            eventConsumer.update();
                             try {
                                 Thread.sleep(10L);
                             } catch (InterruptedException e) {

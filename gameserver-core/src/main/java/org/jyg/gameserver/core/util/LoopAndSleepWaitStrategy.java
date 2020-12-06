@@ -4,6 +4,7 @@ import com.lmax.disruptor.AlertException;
 import com.lmax.disruptor.Sequence;
 import com.lmax.disruptor.SequenceBarrier;
 import com.lmax.disruptor.WaitStrategy;
+import org.jyg.gameserver.core.consumer.ConsumerHandler;
 
 import java.util.concurrent.locks.LockSupport;
 
@@ -15,8 +16,11 @@ public final class LoopAndSleepWaitStrategy implements WaitStrategy {
 
     private final int retries;
 
-    public LoopAndSleepWaitStrategy() {
+    private final ConsumerHandler consumerHandler;
+
+    public LoopAndSleepWaitStrategy(ConsumerHandler consumerHandler) {
         this.retries = DEFAULT_RETRIES;
+        this.consumerHandler = consumerHandler;
     }
 
 
@@ -47,6 +51,7 @@ public final class LoopAndSleepWaitStrategy implements WaitStrategy {
             --counter;
             Thread.yield();
         } else {
+            consumerHandler.update();
             LockSupport.parkNanos(1000L);
         }
 

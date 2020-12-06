@@ -42,7 +42,7 @@ public class ConsumerHandler {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            loop();
+            update();
         }
 
     }
@@ -129,7 +129,7 @@ public class ConsumerHandler {
     /**
      *
      */
-    protected void loop() {
+    public void update() {
         timerManager.updateTimer();
     }
 

@@ -48,7 +48,7 @@ public class RingBufferConsumer extends Consumer {
         ThreadFactory consumerThreadFactory = new PrefixNameThreadFactory("ringbuffer_consumer_thread_");
 
         disruptor = new Disruptor<>(eventFactory, BUFFER_SIZE, consumerThreadFactory, ProducerType.MULTI,
-                new LoopAndSleepWaitStrategy());
+                new LoopAndSleepWaitStrategy( consumerHandler));
 
         this.consumerHandler.setContext(getContext());
         this.consumerHandler.setTimerManager(timerManager);
