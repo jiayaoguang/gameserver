@@ -249,4 +249,7 @@ public abstract class Consumer {
         return consumerHandler.getChannelManager();
     }
 
+    public TimerManager getTimerManager() {
+        return timerManager;
+    }
 }
