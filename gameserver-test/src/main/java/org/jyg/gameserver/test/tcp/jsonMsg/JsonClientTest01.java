@@ -8,29 +8,10 @@ import org.jyg.gameserver.test.proto.MsgChat;
 
 /**
  * Hello world!
- *
  */
-public class JsonClientTest01
-{
-    public static void main( String[] args ) throws Exception
-    {
+public class JsonClientTest01 {
+    public static void main(String[] args) throws Exception {
 
-		ProtoProcessor<MsgChat> chatProcessor = new ProtoProcessor<MsgChat>(MsgChat.getDefaultInstance()) {
-			@Override
-			public void process(Session session, MsgChat msg) {
-
-				System.out.println(msg.getContent() );
-				if("bye".equals(msg.getContent() )) {
-					return;
-				}
-
-//				session.writeMessage(p_test.p_sm_scene_chat.newBuilder().setMsg("i just think so ,hello world too").build());
-			}
-
-		};
-        
-        
-    	
         TcpClient client = new TcpClient();
 //		client.addMsgId2ProtoMapping(1, p_sm_scene_request_ping.getDefaultInstance());
 //		client.addMsgId2ProtoMapping(2, p_scene_sm_response_pong.getDefaultInstance());
@@ -38,28 +19,23 @@ public class JsonClientTest01
 //		client.addMsgId2ProtoMapping(3, p_scene_sm_chat.getDefaultInstance());
 //		client.addMsgId2ProtoMapping(4, p_sm_scene_chat.getDefaultInstance());
 
-		client.getContext().addMsgId2JsonMsgCLassMapping(8, JsonServerTest01.ChatMsgObj.class);
+        client.getContext().addMsgId2JsonMsgCLassMapping(8, JsonServerTest01.ChatMsgObj.class);
 //		client.getDefaultConsumer().addProcessor(8, chatProcessor);
 
 //		client.addProtoProcessor(chatProcessor);
 
         client.start();
-        client.connect("localhost",8088);
-		for(int i=0;i<50;i++){
-			JsonServerTest01.ChatMsgObj chatMsgObj = new JsonServerTest01.ChatMsgObj();
-			chatMsgObj.setConetnt(i+"---");
-			client.write(chatMsgObj);
-		}
+        client.connect("localhost", 8088);
+        for (int i = 0; i < 50; i++) {
+            JsonServerTest01.ChatMsgObj chatMsgObj = new JsonServerTest01.ChatMsgObj();
+            chatMsgObj.setConetnt(i + "---");
+            client.write(chatMsgObj);
+        }
 
-		Thread.sleep(10000);
+        Thread.sleep(10000);
 
         client.close();
-		client.stop();
+        client.stop();
     }
-    
-    @Test
-    public void test01() {
-    	char u = '　';
-    	System.out.println((int)(char)(u*100));
-    }
+
 }

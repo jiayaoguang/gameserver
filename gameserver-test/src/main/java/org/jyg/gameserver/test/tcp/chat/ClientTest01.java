@@ -55,9 +55,4 @@ public class ClientTest01
 		client.stop();
     }
     
-    @Test
-    public void test01() {
-    	char u = '　';
-    	System.out.println((int)(char)(u*100));
-    }
 }

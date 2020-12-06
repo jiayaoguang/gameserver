@@ -12,7 +12,7 @@
 使用protobuf3.5.1作为发送消息序列化格式,
 使用disruptor3.3.2框架去做端口消息的多线程同步
 
-能够处理http，protobuf类型的数据
+能够处理http，protobuf , json/自定义字节数组 类型的数据
 
 构建处理 protoBuf数据的服务器例子:
 >
