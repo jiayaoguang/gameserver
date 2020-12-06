@@ -24,16 +24,18 @@ public class InnerSocketServerInitializer extends
 //		pipeline.addLast(new ProtobufVarint32FrameDecoder());
 		
 		
-		pipeline.addLast(new MyProtobufDecoder(context));
+		pipeline.addLast("msgDecoder" , new MyProtobufDecoder(context));
 
 		if(context.getServerConfig().isNeedMergeProto()){
-			pipeline.addLast(context.getNettyHandlerFactory().createProtoMergeHandler(context));
+			pipeline.addLast("protoMsgMergeEncoder" , context.getNettyHandlerFactory().createProtoMergeHandler(context));
 		}else {
-			pipeline.addLast(context.getNettyHandlerFactory().getMyProtobufEncoder());
+			pipeline.addLast("protoMsgEncoder" , context.getNettyHandlerFactory().getMyProtobufEncoder());
 		}
 
+		pipeline.addLast("byteMsgEncoder" , context.getNettyHandlerFactory().getMyByteMsgObjEncoder());
 
-		pipeline.addLast(new MyProtobufListEncoder(context));
+
+//		pipeline.addLast(new MyProtobufListEncoder(context));
 		
 		pipeline.addLast(new InnerSocketHandler(context.getDefaultConsumer()));
 		

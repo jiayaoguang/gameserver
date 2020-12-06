@@ -51,11 +51,11 @@ public abstract class AbstractBootstrap {
 
     public void addProtoProcessor(ProtoProcessor<? extends MessageLite> protoProcessor) {
         int msgId = context.getMsgIdByProtoClass(protoProcessor.getProtoClass());
-        this.context.getDefaultConsumer().addProtoProcessor(msgId, protoProcessor);
+        this.context.getDefaultConsumer().addProcessor(msgId, protoProcessor);
     }
 
     public void addProtoProcessor(int msgId,ProtoProcessor<? extends MessageLite> protoProcessor) {
-        this.context.getDefaultConsumer().addProtoProcessor(msgId, protoProcessor);
+        this.context.getDefaultConsumer().addProcessor(msgId, protoProcessor);
     }
 
     public void registerHttpEvent(String path, HttpProcessor processor){

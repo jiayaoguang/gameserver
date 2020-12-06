@@ -9,9 +9,12 @@ public class NettyHandlerFactory {
 
     private final MyProtobufEncoder myProtobufEncoder;
 
+    private final MyByteMsgObjEncoder myByteMsgObjEncoder;
+
 
     public NettyHandlerFactory(Context context) {
         this.myProtobufEncoder = new MyProtobufEncoder(context);
+        this.myByteMsgObjEncoder = new MyByteMsgObjEncoder(context);
     }
 
 
@@ -21,5 +24,9 @@ public class NettyHandlerFactory {
 
     public MyProtobufEncoder getMyProtobufEncoder() {
         return myProtobufEncoder;
+    }
+
+    public MyByteMsgObjEncoder getMyByteMsgObjEncoder() {
+        return myByteMsgObjEncoder;
     }
 }

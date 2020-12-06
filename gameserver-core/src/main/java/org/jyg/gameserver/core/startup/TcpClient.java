@@ -4,6 +4,7 @@ import com.google.protobuf.MessageLite;
 import org.jyg.gameserver.core.consumer.RingBufferConsumer;
 import org.jyg.gameserver.core.handle.initializer.MyChannelInitializer;
 import org.jyg.gameserver.core.handle.initializer.SocketClientInitializer;
+import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.Context;
 import org.jyg.gameserver.core.util.RemotingUtil;
@@ -111,6 +112,11 @@ public class TcpClient extends AbstractBootstrap{
 
 	public void write( MessageLite msg) throws IOException {
 		channel.writeAndFlush( msg);
+//		System.out.println("客户端发送数据>>>>");
+	}
+
+	public void write( ByteMsgObj byteMsgObj) throws IOException {
+		channel.writeAndFlush( byteMsgObj);
 //		System.out.println("客户端发送数据>>>>");
 	}
 

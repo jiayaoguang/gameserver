@@ -41,7 +41,7 @@ public abstract class Consumer {
     protected final TimerManager timerManager = new TimerManager();
 
     private Map<String, HttpProcessor> httpProcessorMap = new HashMap<>();
-    private Int2ObjectMap<ProtoProcessor<? extends MessageLite>> protoProcessorMap = new Int2ObjectOpenHashMap<>();
+    private Int2ObjectMap<Processor> protoProcessorMap = new Int2ObjectOpenHashMap<>();
 
     private TextProcessor textProcessor;
 
@@ -126,12 +126,15 @@ public abstract class Consumer {
      * @param msgId     消息id
      * @param processor 事件处理器
      */
-    public void addProtoProcessor(int msgId, ProtoProcessor<? extends MessageLite> processor ) {
+    public void addProcessor(int msgId, AbstractProcessor processor ) {
         if (protoProcessorMap.containsKey(msgId)) {
             throw new IllegalArgumentException("dupilcated eventid");
         }
         if(processor instanceof ProtoProcessor){
             getContext().addMsgId2ProtoMapping(msgId , ((ProtoProcessor)processor).getProtoDefaultInstance());
+        }
+        if(processor instanceof ByteMsgObjProcessor){
+            getContext().addMsgId2JsonMsgCLassMapping(msgId , ((ByteMsgObjProcessor)processor).getByteMsgObjClazz());
         }
 
         processor.setConsumer(this);
@@ -151,7 +154,7 @@ public abstract class Consumer {
     /**
      * 处理普通socket事件
      */
-    public void processProtoEvent(Session session , LogicEvent<? extends MessageLite> event) {
+    public void processEventMsg(Session session , LogicEvent<? extends MessageLite> event) {
 //		MessageLite msg = event.getData();
         Processor processor = protoProcessorMap.get(event.getEventId());
         if (processor == null) {
@@ -221,7 +224,7 @@ public abstract class Consumer {
     public void addProcessor(Processor<?> processor , Context context) {
         if(processor instanceof ProtoProcessor){
             ProtoProcessor protoProcessor = (ProtoProcessor)processor;
-            addProtoProcessor(protoProcessor.getProtoMsgId() , protoProcessor );
+            addProcessor(protoProcessor.getProtoMsgId() , protoProcessor );
             return;
         }
         if(processor instanceof HttpProcessor){

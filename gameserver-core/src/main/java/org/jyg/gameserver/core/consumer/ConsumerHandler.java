@@ -84,7 +84,15 @@ public class ConsumerHandler {
                 if (isDefaultConsumer()) {
                     session = channelManager.getSession(event.getChannel());
                 }
-                context.getDefaultConsumer().processProtoEvent(session, event);
+                context.getDefaultConsumer().processEventMsg(session, event);
+                break;
+            }
+            case BYTE_OBJ_MSG_COME:{
+                Session session = null;
+                if (isDefaultConsumer()) {
+                    session = channelManager.getSession(event.getChannel());
+                }
+                context.getDefaultConsumer().processEventMsg(session, event);
                 break;
             }
 

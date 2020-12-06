@@ -259,7 +259,7 @@ public class AllUtil {
         }
         int eventId = context.getMsgIdByProtoClass(protoClazz);
         if (eventId <= 0) {
-            MyLoggerFactory.DEFAULT_LOGGER.error("unknow eventid");
+            MyLoggerFactory.DEFAULT_LOGGER.error("unknow eventid  protoClazz : {}" , protoClazz);
             return;
         }
 
