@@ -52,7 +52,8 @@ public final class LoopAndSleepWaitStrategy implements WaitStrategy {
             Thread.yield();
         } else {
             consumerHandler.update();
-            LockSupport.parkNanos(1000L);
+            //停1毫秒
+            LockSupport.parkNanos(1000 * 1000L);
         }
 
         return counter;

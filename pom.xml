@@ -112,9 +112,9 @@
 								</goals>
 							</execution>
 						</executions>
-						<configuration>
+						<!--<configuration>
 							<skip>true</skip>
-						</configuration>
+						</configuration>-->
 						<!--<configuration>
 							<tagNameFormat>v@{project.version}</tagNameFormat>
 							<autoVersionSubmodules>true</autoVersionSubmodules>
