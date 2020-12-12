@@ -8,7 +8,7 @@ import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
 import org.jyg.gameserver.core.processor.HttpProcessor;
 import org.jyg.gameserver.core.util.TokenUtil;
-import org.jyg.gameserver.core.util.redis.RedisCacheClient;
+//import org.jyg.gameserver.core.util.redis.RedisCacheClient;
 
 import javax.inject.Inject;
 import java.util.Set;
@@ -18,11 +18,11 @@ import java.util.Set;
  */
 public class CheckLoginHttpProcessor extends HttpProcessor {
 
-	private final RedisCacheClient redisCacheClient;
+//	private final RedisCacheClient redisCacheClient;
 
 	@Inject
-	public CheckLoginHttpProcessor(RedisCacheClient redisCacheClient) {
-		this.redisCacheClient = redisCacheClient;
+	public CheckLoginHttpProcessor() {
+//		this.redisCacheClient = redisCacheClient;
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class CheckLoginHttpProcessor extends HttpProcessor {
 
 			String token = null;
 			try {
-				token = redisCacheClient.getValue(account);
+//				token = redisCacheClient.getValue(account);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
