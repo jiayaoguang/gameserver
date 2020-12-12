@@ -9,6 +9,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>gameserver-proto</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 	<name>gameserver-proto</name>
 	<url>http://maven.apache.org</url>
 	<properties>

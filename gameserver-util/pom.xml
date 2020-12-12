@@ -9,6 +9,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>gameserver-util</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 	<name>gameserver-util</name>
 	<url>http://maven.apache.org</url>
 	<properties>
@@ -56,12 +57,12 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>gameserver-core</artifactId>
-			<version>${gameserver.version}</version>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>gameserver-proto</artifactId>
-			<version>${gameserver.version}</version>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
 	</dependencies>
