@@ -6,7 +6,7 @@ import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.AsynCallEvent;
 import org.jyg.gameserver.core.util.CallBackEvent;
 import org.jyg.gameserver.core.util.TokenUtil;
-import org.jyg.gameserver.core.util.redis.RedisCacheClient;
+//import org.jyg.gameserver.core.util.redis.RedisCacheClient;
 import org.jyg.gameserver.proto.MsgLoginReply;
 import org.jyg.gameserver.proto.MsgLoginRequest;
 
@@ -16,12 +16,12 @@ import org.jyg.gameserver.proto.MsgLoginRequest;
 @Deprecated
 public class LoginProtoProcessor  extends ProtoProcessor<MsgLoginRequest> {
 
-    private final RedisCacheClient redisCacheClient;
+//    private final RedisCacheClient redisCacheClient;
 
     @Inject
-    public LoginProtoProcessor(RedisCacheClient redisCacheClient) {
+    public LoginProtoProcessor() {
         super(MsgLoginRequest.getDefaultInstance());
-        this.redisCacheClient = redisCacheClient;
+//        this.redisCacheClient = redisCacheClient;
     }
 
     @Override
