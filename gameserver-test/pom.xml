@@ -4,7 +4,7 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.jyg.gameserver</groupId>
+		<groupId>com.github.jiayaoguang</groupId>
 		<artifactId>gameserver</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
@@ -40,7 +40,7 @@
 			<version>3.5.1</version>
 		</dependency>
 		<dependency>
-			<groupId>com.jyg.gameserver</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>gameserver-proto</artifactId>
 			<version>${gameserver.version}</version>
 		</dependency>
