@@ -18,9 +18,9 @@
 	</properties>
 
 	<scm>
-		<url>git@github.com:jiayaoguang/gameserver.git</url>
-		<connection>scm:git:git@github.com:jiayaoguang/gameserver.git</connection>
-		<developerConnection>scm:git:git@github.com:jiayaoguang/gameserver.git</developerConnection>
+		<url>https://github.com/:jiayaoguang/gameserver.git</url>
+		<connection>scm:git:https://github.com/:jiayaoguang/gameserver.git</connection>
+		<developerConnection>scm:git:https://github.com/:jiayaoguang/gameserver.git</developerConnection>
 		<tag>gameserver-0.0.1-SNAPSHOT</tag>
 	</scm>
 
@@ -84,10 +84,10 @@
 								</goals>
 							</execution>
 						</executions>
-						<configuration>
+						<!--<configuration>
 							<tagNameFormat>v@{project.version}</tagNameFormat>
 							<autoVersionSubmodules>true</autoVersionSubmodules>
-						</configuration>
+						</configuration>-->
 					</plugin>
 					<plugin>
 						<groupId>org.sonatype.plugins</groupId>
