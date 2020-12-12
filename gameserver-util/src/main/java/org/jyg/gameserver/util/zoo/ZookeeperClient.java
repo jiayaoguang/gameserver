@@ -1,4 +1,4 @@
-package org.jyg.gameserver.core.util.zoo;
+package org.jyg.gameserver.util.zoo;
 
 import com.google.inject.Inject;
 import io.netty.util.CharsetUtil;

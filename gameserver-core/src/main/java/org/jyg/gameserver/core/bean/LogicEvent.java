@@ -6,7 +6,6 @@ import io.netty.channel.Channel;
 
 /**
  * created by jiayaoguang at 2017年12月6日
- * @param <T>
  */
 public class LogicEvent<T>{
 

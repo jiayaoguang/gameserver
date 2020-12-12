@@ -196,15 +196,6 @@ public class EventDispatcher {
 //	}
 
 
-	@Deprecated
-	public String getNoParamPath(String uri) {
-		int endIndex = uri.indexOf('?');
-		if (endIndex == -1) {
-			return uri;
-		}
-
-		return uri.substring(0, endIndex);
-	}
 	//============================= http end ===========================================
 
 

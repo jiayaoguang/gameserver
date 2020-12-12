@@ -10,10 +10,9 @@ import org.jyg.gameserver.core.util.Context;
 public class HttpService extends TcpService {
 
 	/**
-	 * @param port
-	 * @throws Exception
+	 * @param port 端口
+	 * @param context context
 	 */
-	
 	public HttpService(int port , Context context) {
 		super(port , new HttpServerInitializer(context) , true);
 	}

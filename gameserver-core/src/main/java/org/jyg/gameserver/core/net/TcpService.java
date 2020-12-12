@@ -46,9 +46,7 @@ public abstract class TcpService extends AbstractService {
 
 	/**
 	 * 启动端口监听方法
-	 *
-	 * @return
-	 * @throws Exception
+	 * @throws InterruptedException InterruptedException
 	 */
 	public synchronized void start() throws InterruptedException {
 

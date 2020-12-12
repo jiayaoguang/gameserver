@@ -1,6 +1,5 @@
 package org.jyg.gameserver.core.util;
 
-import reactor.util.annotation.NonNull;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -19,7 +18,7 @@ public class PrefixNameThreadFactory implements ThreadFactory {
 	}
 
 	@Override
-	public Thread newThread(@NonNull Runnable runnable) {
+	public Thread newThread( Runnable runnable) {
 		return new Thread(runnable, threadNamePrefix + threadIndex.incrementAndGet());
 	}
 }

@@ -5,7 +5,7 @@ import java.util.Set;
 import org.jyg.gameserver.core.processor.HttpProcessor;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
-import org.jyg.gameserver.core.util.redis.RedisCacheClient;
+//import org.jyg.gameserver.core.util.redis.RedisCacheClient;
 import org.jyg.gameserver.core.util.TokenUtil;
 
 import io.netty.handler.codec.http.cookie.Cookie;
@@ -18,11 +18,11 @@ import javax.inject.Inject;
  */
 public class LoginHttpProcessor extends HttpProcessor {
 
-	private final RedisCacheClient redisCacheClient;
+//	private final RedisCacheClient redisCacheClient;
 
 	@Inject
-	public LoginHttpProcessor(RedisCacheClient redisCacheClient) {
-		this.redisCacheClient = redisCacheClient;
+	public LoginHttpProcessor() {
+//		this.redisCacheClient = redisCacheClient;
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class LoginHttpProcessor extends HttpProcessor {
 
 			String setResult = null;
 			try {
-				setResult = redisCacheClient.setValueExpire(account, 60, token);
+//				setResult = redisCacheClient.setValueExpire(account, 60, token);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

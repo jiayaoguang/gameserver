@@ -3,7 +3,6 @@ package org.jyg.gameserver.core.consumer;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import org.jyg.gameserver.core.enums.EventType;
-import org.jyg.gameserver.core.proto.MsgBytes;
 import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.timer.ITimerHandler;
 import org.jyg.gameserver.core.timer.Timer;
@@ -72,7 +71,7 @@ public class RemoteConsumer extends Consumer {
         }
 
         if(isConnectAvailable()){
-            channel.write(MsgBytes.newBuilder().build());
+//            channel.write(MsgBytes.newBuilder().build());
         }else {
             logger.error(" publicEvent fail , isConnectAvailable false ");
         }

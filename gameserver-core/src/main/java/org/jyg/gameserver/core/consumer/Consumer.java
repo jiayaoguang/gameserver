@@ -143,6 +143,7 @@ public abstract class Consumer {
 
     /**
      * 注册普通socket事件
+     * @param textProcessor textProcessor
      */
     public void setTextProcessor(TextProcessor textProcessor) {
         textProcessor.setConsumer(this);
@@ -153,6 +154,8 @@ public abstract class Consumer {
 
     /**
      * 处理普通socket事件
+     * @param session session
+     * @param event event
      */
     public void processEventMsg(Session session , LogicEvent<? extends MessageLite> event) {
 //		MessageLite msg = event.getData();
@@ -168,6 +171,8 @@ public abstract class Consumer {
 
     /**
      * 处理普通socket事件
+     * @param session session
+     * @param event event
      */
     public void processTextEvent(Session session , LogicEvent<String> event) {
 //		MessageLite msg = event.getData();

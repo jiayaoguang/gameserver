@@ -25,8 +25,8 @@ public class RequestParser {
 
     /**
      * 解析请求参数
+	 * @param req req
      * @return 包含所有请求参数的键值对, 如果没有参数, 则返回空Map
-     *
      */
     public static Map<String, String> parse(HttpRequest req) {
 		Map<String, String> requestParams = new HashMap<>();

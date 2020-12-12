@@ -234,9 +234,9 @@ public class AllUtil {
 
     /**
      *
-     * @param context
-     * @param msg
-     * @param buf
+     * @param context context
+     * @param msg msg
+     * @param buf buf
      */
     public static void writeToBuf(Context context, MessageLite msg, ByteBuf buf) {
         Class<? extends MessageLite> protoClazz = msg.getClass();
@@ -273,9 +273,9 @@ public class AllUtil {
 
     /**
      *
-     * @param context
-     * @param byteMsgObj
-     * @param buf
+     * @param context context
+     * @param byteMsgObj byteMsgObj
+     * @param buf buf
      */
     public static void writeToBuf(Context context, ByteMsgObj byteMsgObj, ByteBuf buf) {
         Class<? extends ByteMsgObj> byteMsgObjClazz = byteMsgObj.getClass();

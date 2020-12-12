@@ -1,4 +1,4 @@
-package org.jyg.gameserver.core.util.redis;
+package org.jyg.gameserver.util.redis;
 
 /**
  * create on 2019/8/13 by jiayaoguang

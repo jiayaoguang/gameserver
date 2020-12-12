@@ -1,6 +1,7 @@
-package com.jyg.gameserver;
+package org.jyg.gameserver.util;
 
-import org.jyg.gameserver.core.util.zoo.ZookeeperClient;
+
+import org.jyg.gameserver.util.zoo.ZookeeperClient;
 
 /**
  * create on 2019/8/14 by jiayaoguang

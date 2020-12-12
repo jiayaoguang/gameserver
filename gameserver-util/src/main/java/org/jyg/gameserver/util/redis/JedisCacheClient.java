@@ -1,4 +1,4 @@
-package org.jyg.gameserver.core.util.redis;
+package org.jyg.gameserver.util.redis;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;

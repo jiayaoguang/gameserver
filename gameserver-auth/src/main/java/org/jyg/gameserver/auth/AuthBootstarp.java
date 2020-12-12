@@ -5,7 +5,7 @@ import com.google.inject.Injector;
 import org.jyg.gameserver.auth.processor.*;
 import org.jyg.gameserver.core.enums.ProtoEnum;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
-import org.jyg.gameserver.core.util.redis.RedisCacheClient;
+//import org.jyg.gameserver.core.util.redis.RedisCacheClient;
 import org.jyg.gameserver.auth.module.AuthModule;
 import org.jyg.gameserver.proto.p_auth_sm;
 import org.slf4j.Logger;
@@ -28,8 +28,8 @@ public class AuthBootstarp
     	
     	
     	GameServerBootstrap bootstarp = new GameServerBootstrap();
-	    RedisCacheClient redisCacheClient = injector.getInstance(RedisCacheClient.class);
-	    redisCacheClient.init();
+//	    RedisCacheClient redisCacheClient = injector.getInstance(RedisCacheClient.class);
+//	    redisCacheClient.init();
 
 //        bootstarp.registerHttpEvent("/index000", injector.getInstance(TokenSendHttpProcessor.class));
         

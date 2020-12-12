@@ -1,4 +1,4 @@
-package org.jyg.gameserver.core.util.redis;
+package org.jyg.gameserver.util.redis;
 
 import org.jyg.gameserver.core.util.RemotingUtil;
 import org.redisson.Redisson;

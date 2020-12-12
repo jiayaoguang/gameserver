@@ -42,8 +42,8 @@ public class RSACoder {
 
     /**
      * 初始化密钥对
-     *
      * @return Map 甲方密钥的Map
+     * @throws Exception Exception
      */
     public static Map<String, Object> initKey() throws Exception {
         //实例化密钥生成器
@@ -71,6 +71,7 @@ public class RSACoder {
      * @param data 待加密数据
      * @param key       密钥
      * @return byte[] 加密数据
+     * @throws Exception Exception
      */
     public static byte[] encryptByPrivateKey(byte[] data, byte[] key) throws Exception {
 
@@ -91,6 +92,7 @@ public class RSACoder {
      * @param data 待加密数据
      * @param key       密钥
      * @return byte[] 加密数据
+     * @throws Exception Exception
      */
     public static byte[] encryptByPublicKey(byte[] data, byte[] key) throws Exception {
 
@@ -114,6 +116,7 @@ public class RSACoder {
      * @param data 待解密数据
      * @param key  密钥
      * @return byte[] 解密数据
+     * @throws Exception Exception
      */
     public static byte[] decryptByPrivateKey(byte[] data, byte[] key) throws Exception {
         //取得私钥
@@ -133,6 +136,7 @@ public class RSACoder {
      * @param data 待解密数据
      * @param key  密钥
      * @return byte[] 解密数据
+     * @throws Exception Exception
      */
     public static byte[] decryptByPublicKey(byte[] data, byte[] key) throws Exception {
 
@@ -166,14 +170,14 @@ public class RSACoder {
      * @param keyMap 密钥map
      * @return byte[] 公钥
      */
-    public static byte[] getPublicKey(Map<String, Object> keyMap) throws Exception {
+    public static byte[] getPublicKey(Map<String, Object> keyMap)  {
         Key key = (Key) keyMap.get(PUBLIC_KEY);
         return key.getEncoded();
     }
 
     /**
-     * @param args
-     * @throws Exception
+     * @param args args
+     * @throws Exception Exception
      */
     public static void main(String[] args) throws Exception {
         //初始化密钥

@@ -88,6 +88,7 @@ public class Response {
 	
 	/**
 	 * 添加一个cookie
+	 * @param cookie cookie
 	 */
 	public void addCookie(Cookie cookie) {
 		cookies.add(cookie);
