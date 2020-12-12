@@ -36,7 +36,7 @@ public class LoginProtoProcessor  extends ProtoProcessor<MsgLoginRequest> {
             final String token = TokenUtil.getToken();
             String setResult = null;
             try {
-                setResult = redisCacheClient.setValueExpire(key, 60 * 1000, token);
+//                setResult = redisCacheClient.setValueExpire(key, 60 * 1000, token);
             } catch (Exception e) {
                 e.printStackTrace();
             }
