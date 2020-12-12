@@ -16,6 +16,20 @@
 		<maven.test.skip>true</maven.test.skip>
 	</properties>
 
+	<licenses>
+		<license>
+			<name>Mulan Permissive Software License，Version 1</name>
+			<url>http://license.coscl.org.cn/MulanPSL</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>jiayaoguang</name>
+			<email>1090196116@qq.com</email>
+		</developer>
+	</developers>
+
 	<scm>
 		<url>https://github.com/:jiayaoguang/gameserver.git</url>
 		<connection>scm:git:https://github.com/:jiayaoguang/gameserver.git</connection>
@@ -36,6 +50,21 @@
 				</configuration>
 			</plugin>
 		</plugins>
+
+		<!--<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-javadoc-plugin</artifactId>
+			<version>3.1.1</version>
+			<executions>
+				<execution>
+					<phase>package</phase>
+					<goals>
+						<goal>jar</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>-->
+
 	</build>
 
 
@@ -83,6 +112,9 @@
 								</goals>
 							</execution>
 						</executions>
+						<configuration>
+							<skip>true</skip>
+						</configuration>
 						<!--<configuration>
 							<tagNameFormat>v@{project.version}</tagNameFormat>
 							<autoVersionSubmodules>true</autoVersionSubmodules>
