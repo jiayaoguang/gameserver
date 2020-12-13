@@ -63,9 +63,5 @@ public class Md5Util {
 		return md5.digest();
 	}
 	
-	@Test
-	public void test() {
-		System.out.println(getMD5String("123456"));
-	}
-	
+
 }

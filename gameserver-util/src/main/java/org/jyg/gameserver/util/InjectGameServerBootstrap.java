@@ -7,6 +7,7 @@ import org.jyg.gameserver.core.processor.HttpProcessor;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.AllUtil;
+import org.jyg.gameserver.core.util.Logs;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class InjectGameServerBootstrap extends GameServerBootstrap {
             for(Constructor constructor :constructors){
                 if(constructor.getDeclaredAnnotation(Inject.class) != null){
 
-                    AllUtil.println("==============" + constructor.getDeclaredAnnotation(Inject.class) + " ...."+ clazz);
+                    Logs.DEFAULT_LOGGER.info("==============" + constructor.getDeclaredAnnotation(Inject.class) + " ...."+ clazz);
                 }
             }
         }

@@ -14,6 +14,7 @@ import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.timer.DelayCloseTimer;
 import org.jyg.gameserver.core.timer.TimerManager;
 import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.Logs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -161,7 +162,7 @@ public abstract class Consumer {
 //		MessageLite msg = event.getData();
         Processor processor = protoProcessorMap.get(event.getEventId());
         if (processor == null) {
-            System.out.println("unknown socket eventid :" + event.getEventId());
+            Logs.DEFAULT_LOGGER.info("unknown socket eventid :" + event.getEventId());
             return;
         }
 
@@ -178,7 +179,7 @@ public abstract class Consumer {
 //		MessageLite msg = event.getData();
 
         if (textProcessor == null) {
-            System.out.println("textProcessor == null :" + event.getEventId());
+            Logs.DEFAULT_LOGGER.info("textProcessor == null :" + event.getEventId());
             return;
         }
 

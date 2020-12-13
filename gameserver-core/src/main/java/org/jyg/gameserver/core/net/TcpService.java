@@ -5,6 +5,7 @@ import io.netty.channel.epoll.EpollChannelOption;
 import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.handle.initializer.MyChannelInitializer;
 import org.jyg.gameserver.core.manager.EventLoopGroupManager;
+import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.core.util.RemotingUtil;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -91,7 +92,7 @@ public abstract class TcpService extends AbstractService {
 			bootstrap.bind(host,port).sync().channel();
 		}
 
-		System.out.println("正在开启端口监听，端口号 :" + port);
+		Logs.DEFAULT_LOGGER.info("正在开启端口监听，端口号 :" + port);
 	}
 
 	public void stop() {

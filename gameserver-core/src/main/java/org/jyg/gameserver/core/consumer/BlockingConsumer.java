@@ -4,6 +4,7 @@ import org.jyg.gameserver.core.bean.LogicEvent;
 import org.jyg.gameserver.core.enums.EventType;
 import io.netty.channel.Channel;
 import org.jyg.gameserver.core.util.AllUtil;
+import org.jyg.gameserver.core.util.Logs;
 
 import java.util.concurrent.*;
 
@@ -51,7 +52,7 @@ public class BlockingConsumer extends Consumer {
                 e.printStackTrace();
             }
         }
-        AllUtil.println("stop success....");
+        Logs.DEFAULT_LOGGER.info("stop success....");
     }
 
     @Override
@@ -118,7 +119,7 @@ public class BlockingConsumer extends Consumer {
                 }
 
             }
-            AllUtil.println(" stop.... ");
+            Logs.DEFAULT_LOGGER.info(" stop.... ");
         }
 
         public void setStop(){

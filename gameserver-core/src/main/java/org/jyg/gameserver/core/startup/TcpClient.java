@@ -7,6 +7,7 @@ import org.jyg.gameserver.core.handle.initializer.SocketClientInitializer;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.core.util.RemotingUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -73,7 +74,7 @@ public class TcpClient extends AbstractBootstrap{
 
 
 	public void start(MyChannelInitializer<Channel> channelInitializer){
-		System.out.println("客户端成功启动...");
+		Logs.DEFAULT_LOGGER.info("客户端成功启动...");
 		bootstrap.group(getContext().getEventLoopGroupManager().getWorkGroup());
 		bootstrap.channel( getDefaultConsumer().getContext().isUseEpoll() ? EpollSocketChannel.class : NioSocketChannel.class);
 		bootstrap.handler(channelInitializer);

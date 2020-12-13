@@ -3,6 +3,7 @@ package org.jyg.gameserver.core.manager;
 import org.jyg.gameserver.core.bean.LogicEvent;
 import org.jyg.gameserver.core.session.Session;
 import io.netty.channel.Channel;
+import org.jyg.gameserver.core.util.Logs;
 
 import java.util.*;
 
@@ -80,7 +81,7 @@ public class ChannelManager {
             if ((session.getLastContactMill() + 60 * 1000L) < System.currentTimeMillis()) {
                 channel.close();
                 it.remove();
-                System.out.println("移除超时的channel" + channel);
+                Logs.DEFAULT_LOGGER.info("移除超时的channel" + channel);
             }
         }
     }

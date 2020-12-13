@@ -9,6 +9,7 @@ import io.netty.handler.codec.EncoderException;
 import io.netty.handler.codec.MessageToByteEncoder;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.Logs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +64,7 @@ public class ProtoMergeHandler  extends MessageToByteEncoder<MessageLite> {
 
             try {
                 channelHandlerContext.write(cacheBuf);
-                AllUtil.println(" ontime flush " + Thread.currentThread().getName() + " mergeMsgNum :" + onceMergeMsgNum);
+                Logs.DEFAULT_LOGGER.info(" ontime flush " + Thread.currentThread().getName() + " mergeMsgNum :" + onceMergeMsgNum);
             } catch (Exception e) {
                 e.printStackTrace();
             }finally {

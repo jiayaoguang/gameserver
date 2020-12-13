@@ -6,6 +6,7 @@ import org.jyg.gameserver.core.processor.HttpProcessor;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
 //import org.jyg.gameserver.core.util.redis.RedisCacheClient;
+import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.core.util.TokenUtil;
 
 import io.netty.handler.codec.http.cookie.Cookie;
@@ -29,7 +30,7 @@ public class LoginHttpProcessor extends HttpProcessor {
 	public void service(Request request, Response response) {
 		String account = request.getParameter("username");
 		String password = request.getParameter("password");
-		System.out.println(account + " >> " + password);
+		Logs.DEFAULT_LOGGER.info(account + " >> " + password);
 
 		if (!checkLogin(account, password)) {
 			response.sendRedirect("/login.html");
@@ -49,9 +50,9 @@ public class LoginHttpProcessor extends HttpProcessor {
 			}
 
 			if (setResult == null) {
-				System.out.println(" set value fail ");
+				Logs.DEFAULT_LOGGER.info(" set value fail ");
 			} else {
-				System.out.println(" set value success " + setResult);
+				Logs.DEFAULT_LOGGER.info(" set value success " + setResult);
 			}
 			request.decodeCookies();
 

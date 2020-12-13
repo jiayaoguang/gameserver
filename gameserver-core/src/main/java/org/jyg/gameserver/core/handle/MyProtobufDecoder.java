@@ -8,6 +8,7 @@ import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.util.Context;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
+import org.jyg.gameserver.core.util.Logs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +64,7 @@ public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
             return null;
         }
         int msgId = frame.readInt();
-        System.out.println("cnf:" + frame.refCnt());
+        Logs.DEFAULT_LOGGER.debug("cnf:" + frame.refCnt());
         AbstractMsgCodec<?> msgCodec = context.getMsgCodec(msgId);
         if (msgCodec == null) {
             LOGGER.error(" protoParser not found ,id : {} ", msgId);

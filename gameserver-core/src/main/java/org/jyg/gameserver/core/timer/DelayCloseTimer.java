@@ -1,6 +1,7 @@
 package org.jyg.gameserver.core.timer;
 
 import io.netty.channel.Channel;
+import org.jyg.gameserver.core.util.Logs;
 
 /**
  * created by jiayaoguang at 2018年4月15日
@@ -21,7 +22,7 @@ public class DelayCloseTimer extends Timer{
 	public void onTime() {
 		//open -> register ->active
 		if(channel.isOpen()){
-			System.out.println("out of time,just close it");
+			Logs.DEFAULT_LOGGER.info("out of time,just close it");
 			channel.close();
 		}
 	}

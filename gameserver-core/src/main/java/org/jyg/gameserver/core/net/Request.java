@@ -10,6 +10,7 @@ import io.netty.handler.codec.http.multipart.Attribute;
 import io.netty.handler.codec.http.multipart.DefaultHttpDataFactory;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
+import org.jyg.gameserver.core.util.Logs;
 
 /**
  * created by jiayaoguang at 2018年3月20日
@@ -90,7 +91,7 @@ public class Request {
 
     public Set<Cookie> decodeCookies() {
         String cookiesValue = headers.get(HttpHeaderNames.COOKIE);
-        System.out.println("cookiesValue : " + cookiesValue);
+        Logs.DEFAULT_LOGGER.info("cookiesValue : " + cookiesValue);
         if (cookiesValue == null) {
             return Collections.emptySet();
         }

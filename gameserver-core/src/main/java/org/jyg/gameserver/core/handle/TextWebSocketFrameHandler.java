@@ -9,6 +9,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
+import org.jyg.gameserver.core.util.Logs;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +30,7 @@ public class TextWebSocketFrameHandler extends
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception { // (5)
 		Channel incoming = ctx.channel();
-		System.out.println("Client:" + incoming.remoteAddress() + "在线");
+		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "在线");
 
 		defaultConsumer.publicEvent(EventType.SOCKET_CONNECT_ACTIVE, null, ctx.channel() );
 		
@@ -54,10 +55,10 @@ public class TextWebSocketFrameHandler extends
 			defaultConsumer.publicEvent(EventType.TEXT_MESSAGE_COME, text, ctx.channel() );
 			
 		}else if(frame instanceof BinaryWebSocketFrame) {
-			System.out.println("this frame is BinaryWebSocketFrame");
+			Logs.DEFAULT_LOGGER.info("this frame is BinaryWebSocketFrame");
 			
 		}else {
-			System.out.println("this frame is unkonwn");
+			Logs.DEFAULT_LOGGER.info("this frame is unkonwn");
 		}
 		
 //		if(frame instanceof PingWebSocketFrame) {
@@ -78,7 +79,7 @@ public class TextWebSocketFrameHandler extends
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception { // (6)
 		Channel incoming = ctx.channel();
-		System.out.println("Client:" + incoming.remoteAddress() + "掉线");
+		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "掉线");
 		
 		defaultConsumer.publicEvent(EventType.SOCKET_CONNECT_INACTIVE, null, ctx.channel() );
 		
@@ -111,7 +112,7 @@ public class TextWebSocketFrameHandler extends
 //		}
 //		channels.add(ctx.channel());
 //		System.out.println("Client:" + incoming.remoteAddress() + "加入");
-		System.out.println("add");
+		Logs.DEFAULT_LOGGER.info("add");
 	}
 
 	@Override
@@ -124,7 +125,7 @@ public class TextWebSocketFrameHandler extends
 //		}
 //		System.out.println("Client:" + incoming.remoteAddress() + "离开");
 //		channels.remove(ctx.channel());
-		System.out.println("remove");
+		Logs.DEFAULT_LOGGER.info("remove");
 	}
 
 

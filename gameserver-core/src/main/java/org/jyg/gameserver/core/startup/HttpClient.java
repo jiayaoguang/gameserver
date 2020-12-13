@@ -10,6 +10,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.jyg.gameserver.core.util.Logs;
 
 /**
  * created by jiayaoguang at 2018年4月3日
@@ -44,13 +45,13 @@ public class HttpClient {
 
 			@Override
 			public void onFailure(Call call, IOException e) {
-				System.out.println("fail");
+				Logs.DEFAULT_LOGGER.info("fail");
 				call.cancel();
 			}
 
 			@Override
 			public void onResponse(Call call, Response response) throws IOException {
-				System.out.println("success");
+				Logs.DEFAULT_LOGGER.info("success");
 				response.close();
 			}
 			

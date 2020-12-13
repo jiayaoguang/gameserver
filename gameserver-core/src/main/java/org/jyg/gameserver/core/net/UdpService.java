@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.net;
 
 import org.jyg.gameserver.core.handle.initializer.InnerSocketServerInitializer;
 import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.core.util.RemotingUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -54,7 +55,7 @@ public class UdpService extends AbstractService {
 
         serverChannel = bootstrap.bind(port).sync().channel();
 
-        System.out.print("bind port : " + port);
+        Logs.DEFAULT_LOGGER.info("bind port : " + port);
     }
 
     public Channel getChannel() {

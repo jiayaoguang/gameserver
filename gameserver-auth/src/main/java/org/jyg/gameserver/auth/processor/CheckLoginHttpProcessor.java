@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
 import org.jyg.gameserver.core.processor.HttpProcessor;
+import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.core.util.TokenUtil;
 //import org.jyg.gameserver.core.util.redis.RedisCacheClient;
 
@@ -29,7 +30,7 @@ public class CheckLoginHttpProcessor extends HttpProcessor {
 	public void service(Request request, Response response) {
 		String account = request.getParameter("account");
 		String myToken = request.getParameter("token");
-		System.out.println(account + " >> " + myToken);
+		Logs.DEFAULT_LOGGER.info(account + " >> " + myToken);
 
 		if (!StringUtils.isEmpty(account) || StringUtils.isEmpty(myToken)) {
 			JSONObject jsonObject = new JSONObject();
@@ -51,7 +52,7 @@ public class CheckLoginHttpProcessor extends HttpProcessor {
 			}
 			boolean isTokenRight = false;
 			if (StringUtils.isEmpty(token)) {
-				System.out.println(" token is null ");
+				Logs.DEFAULT_LOGGER.info(" token is null ");
 			}else if(token.equals(myToken)){
 				isTokenRight = true;
 			}

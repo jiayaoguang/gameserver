@@ -7,6 +7,7 @@ import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.Logs;
 
 import java.util.List;
 
@@ -31,14 +32,14 @@ public class MyProtobufListEncoder extends MessageToByteEncoder<List<? extends M
 
 		for (MessageLite msg:msgList){
 			Class<? extends MessageLite> protoClazz = msg.getClass();
-			System.out.println("deal threadName : "+Thread.currentThread().getName());
+			Logs.DEFAULT_LOGGER.info("deal threadName : "+Thread.currentThread().getName());
 			byte[] bytes = msg.toByteArray();
 			if (bytes == null) {
 				throw new IllegalArgumentException("not MessageLiteOrBuilder");
 			}
 			int eventId = context.getMsgIdByProtoClass(protoClazz);
 			if(eventId <= 0) {
-				System.out.println("unknow eventid");
+				Logs.DEFAULT_LOGGER.info("unknow eventid");
 				continue;
 			}
 
