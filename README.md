@@ -2,6 +2,15 @@
 ![Java CI](https://github.com/jiayaoguang/gameserver/workflows/Java%20CI/badge.svg)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 ------
+Maven 
+
+    <dependency>
+        <groupId>com.github.jiayaoguang</groupId>
+        <artifactId>gameserver-core</artifactId>
+        <version>0.0.1</version>
+    </dependency>
+
+
 * core模块-主要的网络库
 * auth模块-登录服
 * center模块-场景服管理
