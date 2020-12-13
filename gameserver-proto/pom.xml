@@ -7,7 +7,6 @@
 		<version>0.0.1</version>
 	</parent>
 	<artifactId>gameserver-proto</artifactId>
-	<version>${project.version}</version>
 	<name>gameserver-proto</name>
 	<url>http://maven.apache.org</url>
 	<properties>
