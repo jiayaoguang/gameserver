@@ -151,12 +151,12 @@ public class AllUtil {
         File file = new File(fileName);
 
         if(!file.exists()){
-            MyLoggerFactory.DEFAULT_LOGGER.error(" config {} file not exist " , fileName);
+            Logs.DEFAULT_LOGGER.error(" config {} file not exist " , fileName);
             return;
         }
 
         if(file.isDirectory()){
-            MyLoggerFactory.DEFAULT_LOGGER.error(" config {} file isDirectory " , fileName);
+            Logs.DEFAULT_LOGGER.error(" config {} file isDirectory " , fileName);
             return;
         }
 
@@ -224,7 +224,7 @@ public class AllUtil {
                     default:
                         continue;
                 }
-                MyLoggerFactory.DEFAULT_LOGGER.info("set field : {} value : {} " , key , arg);
+                Logs.DEFAULT_LOGGER.info("set field : {} value : {} " , key , arg);
                 method.invoke(object, arg);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -240,7 +240,7 @@ public class AllUtil {
      */
     public static void writeToBuf(Context context, MessageLite msg, ByteBuf buf) {
         Class<? extends MessageLite> protoClazz = msg.getClass();
-        MyLoggerFactory.DEFAULT_LOGGER.info("deal threadName : " + Thread.currentThread().getName());
+        Logs.DEFAULT_LOGGER.info("deal threadName : " + Thread.currentThread().getName());
         byte[] msgBytes = msg.toByteArray();
 //    if (msg instanceof GeneratedMessageV3) {
 //       bytes = msg.toByteArray();
@@ -259,7 +259,7 @@ public class AllUtil {
         }
         int eventId = context.getMsgIdByProtoClass(protoClazz);
         if (eventId <= 0) {
-            MyLoggerFactory.DEFAULT_LOGGER.error("unknow eventid  protoClazz : {}" , protoClazz);
+            Logs.DEFAULT_LOGGER.error("unknow eventid  protoClazz : {}" , protoClazz);
             return;
         }
 
@@ -279,12 +279,12 @@ public class AllUtil {
      */
     public static void writeToBuf(Context context, ByteMsgObj byteMsgObj, ByteBuf buf) {
         Class<? extends ByteMsgObj> byteMsgObjClazz = byteMsgObj.getClass();
-        MyLoggerFactory.DEFAULT_LOGGER.info("deal threadName : " + Thread.currentThread().getName());
+        Logs.DEFAULT_LOGGER.info("deal threadName : " + Thread.currentThread().getName());
 
 
         int eventId = context.getMsgIdByByteMsgObj(byteMsgObjClazz);
         if (eventId <= 0) {
-            MyLoggerFactory.DEFAULT_LOGGER.error("unknow eventid");
+            Logs.DEFAULT_LOGGER.error("unknow eventid");
             return;
         }
 

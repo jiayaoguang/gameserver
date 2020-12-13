@@ -6,7 +6,7 @@ import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.FTLLoader;
-import org.jyg.gameserver.core.util.MyLoggerFactory;
+import org.jyg.gameserver.core.util.Logs;
 
 /**
  * created by jiayaoguang at 2017年12月16日 
@@ -49,7 +49,7 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 		}finally {
 
 			long afterExecTime = System.currentTimeMillis();
-			MyLoggerFactory.DEFAULT_LOGGER.info(" exec {} cost {} mills ,ip {}" , path , (afterExecTime - beforeExecTime) , response.getChannel().remoteAddress().toString());
+			Logs.DEFAULT_LOGGER.info(" exec {} cost {} mills ,ip {}" , path , (afterExecTime - beforeExecTime) , response.getChannel().remoteAddress().toString());
 		}
 
 		// .addListener(ChannelFutureListener.CLOSE);//关闭连接由客户端关闭或者timer

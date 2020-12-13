@@ -30,7 +30,6 @@ import java.util.regex.Pattern;
 import javax.activation.MimetypesFileTypeMap;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jyg.gameserver.core.util.Constants;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -56,7 +55,7 @@ import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.stream.ChunkedFile;
 import io.netty.util.CharsetUtil;
 import io.netty.util.internal.SystemPropertyUtil;
-import org.jyg.gameserver.core.util.MyLoggerFactory;
+import org.jyg.gameserver.core.util.Logs;
 
 /**
  * A simple handler that serves incoming HTTP requests to send their respective
@@ -132,13 +131,13 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 			if (!request.uri().endsWith("/")) {
 				request.retain();
 				ctx.fireChannelRead(request);
-				MyLoggerFactory.DEFAULT_LOGGER.info("static :" + request.refCnt());
+				Logs.DEFAULT_LOGGER.info("static :" + request.refCnt());
 				return;
 			}
 		}
 
 		if (request.method() != GET) {
-			MyLoggerFactory.DEFAULT_LOGGER.info("request.method() != GET :" + request.uri());
+			Logs.DEFAULT_LOGGER.info("request.method() != GET :" + request.uri());
 			sendError(ctx, METHOD_NOT_ALLOWED);
 			return;
 		}
@@ -153,7 +152,7 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 			return;
 		}
 
-		MyLoggerFactory.DEFAULT_LOGGER.info(uri);
+		Logs.DEFAULT_LOGGER.info(uri);
 		
 		File file = new File( path);
 		if (file.isHidden() || !file.exists()) {
