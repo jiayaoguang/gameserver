@@ -7,7 +7,8 @@
 	<version>0.0.1</version>
 	<packaging>pom</packaging>
 	<name>gameserver</name>
-	<url>http://maven.apache.org</url>
+	<description>gameserver是一个游戏服务器框架，让游戏服务器开发更简单。</description>
+	<url>https://github.com/jiayaoguang/gameserver</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

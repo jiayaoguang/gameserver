@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>gameserver-core</artifactId>
-	<version>0.0.1</version>
+	<version>${project.version}</version>
 	<packaging>jar</packaging>
 
 	<name>gameserver-core</name>
