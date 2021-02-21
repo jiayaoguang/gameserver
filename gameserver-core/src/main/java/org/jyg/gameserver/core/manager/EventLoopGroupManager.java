@@ -15,7 +15,7 @@ public class EventLoopGroupManager {
     private final EventLoopGroup workGroup;
 
     public EventLoopGroupManager(boolean useEpoll) {
-        this(useEpoll,Runtime.getRuntime().availableProcessors() * 2);
+        this(useEpoll, Math.min(Runtime.getRuntime().availableProcessors() + 1, 32));
     }
 
     public EventLoopGroupManager(boolean useEpoll, int selectorThreadNum) {
