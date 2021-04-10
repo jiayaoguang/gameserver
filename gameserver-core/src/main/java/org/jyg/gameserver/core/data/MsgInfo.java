@@ -1,4 +1,4 @@
-package org.jyg.gameserver.core.bean;
+package org.jyg.gameserver.core.data;
 
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 

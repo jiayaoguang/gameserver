@@ -2,9 +2,8 @@ package org.jyg.gameserver.core.processor;
 
 import com.google.protobuf.MessageLite;
 import com.google.protobuf.Parser;
-import org.jyg.gameserver.core.bean.LogicEvent;
+import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.util.Context;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -58,7 +57,7 @@ public abstract class ProtoProcessor<T extends MessageLite> extends AbstractProc
 
 
 	@Override
-	public void process(Session session, LogicEvent<T> event) {
+	public void process(Session session, EventData<T> event) {
 		process(session,event.getData());
 	}
 //	public void process(LogicEvent<T> event) {

@@ -1,10 +1,9 @@
 package org.jyg.gameserver.test;
 
 import cn.hutool.core.util.ZipUtil;
-import com.google.protobuf.ByteString;
 import io.netty.util.internal.shaded.org.jctools.queues.MpscUnboundedArrayQueue;
 import org.junit.Test;
-import org.jyg.gameserver.core.bean.ServerConfig;
+import org.jyg.gameserver.core.data.ServerConfig;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.ExecTimeUtil;
 import org.jyg.gameserver.core.util.IdUtil;

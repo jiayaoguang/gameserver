@@ -1,4 +1,4 @@
-package org.jyg.gameserver.core.bean;
+package org.jyg.gameserver.core.data;
 
 import org.jyg.gameserver.core.enums.EventType;
 
@@ -7,7 +7,7 @@ import io.netty.channel.Channel;
 /**
  * created by jiayaoguang at 2017年12月6日
  */
-public class LogicEvent<T>{
+public class EventData<T>{
 
 	private Channel channel;
 	

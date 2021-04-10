@@ -1,6 +1,6 @@
 package org.jyg.gameserver.core.processor;
 
-import org.jyg.gameserver.core.bean.LogicEvent;
+import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.session.Session;
 
 /**
@@ -13,7 +13,7 @@ public abstract class TextProcessor extends AbstractProcessor<String>{
     }
 
     @Override
-    public abstract void process(Session session, LogicEvent<String> event);
+    public abstract void process(Session session, EventData<String> event);
 
 
 

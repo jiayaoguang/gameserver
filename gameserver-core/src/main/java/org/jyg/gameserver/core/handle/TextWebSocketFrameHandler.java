@@ -1,6 +1,5 @@
 package org.jyg.gameserver.core.handle;
 
-import org.jyg.gameserver.core.bean.LogicEvent;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.consumer.Consumer;
 import io.netty.channel.Channel;

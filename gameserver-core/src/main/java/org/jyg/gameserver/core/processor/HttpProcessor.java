@@ -1,7 +1,7 @@
 package org.jyg.gameserver.core.processor;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.jyg.gameserver.core.bean.LogicEvent;
+import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
 import org.jyg.gameserver.core.session.Session;
@@ -26,11 +26,11 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 	}
 
 	@Override
-	public final void process(Session session, LogicEvent<Request> event) {
+	public final void process(Session session, EventData<Request> event) {
 		process(event);
 	}
 
-	public final void process(LogicEvent<Request> event) {
+	public final void process(EventData<Request> event) {
 
 		Request request = event.getData();
 		Response response = this.createResponse(event);
@@ -55,7 +55,7 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 		// .addListener(ChannelFutureListener.CLOSE);//关闭连接由客户端关闭或者timer
 	}
 
-	private Response createResponse(LogicEvent<Request> event) {
+	private Response createResponse(EventData<Request> event) {
 
 		Response response = new Response();
 		response.setChannel(event.getChannel());

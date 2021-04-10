@@ -1,9 +1,8 @@
 package org.jyg.gameserver.core.consumer;
 
-import org.jyg.gameserver.core.bean.LogicEvent;
+import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.enums.EventType;
 import io.netty.channel.Channel;
-import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.util.concurrent.*;
@@ -13,7 +12,7 @@ import java.util.concurrent.*;
  */
 public class BlockingConsumer extends Consumer {
 
-    private final BlockingQueue<LogicEvent<Object>> queue;
+    private final BlockingQueue<EventData<Object>> queue;
 
     private ConsumerThread consumerThread;
 
@@ -25,7 +24,7 @@ public class BlockingConsumer extends Consumer {
         this(new LinkedBlockingQueue<>(size));
     }
 
-    public BlockingConsumer(BlockingQueue<LogicEvent<Object>> queue) {
+    public BlockingConsumer(BlockingQueue<EventData<Object>> queue) {
         this.queue = queue;
         this.eventConsumerFactory = new DefaultConsumerHandlerFactory();
     }
@@ -63,7 +62,7 @@ public class BlockingConsumer extends Consumer {
     @Override
     public void publicEvent(EventType evenType, Object data, Channel channel, int eventId) {
 
-        LogicEvent<Object> logicEvent = new LogicEvent<>();
+        EventData<Object> logicEvent = new EventData<>();
         logicEvent.setChannel(channel);
         logicEvent.setChannelEventType(evenType);
         logicEvent.setData(data);
@@ -79,12 +78,12 @@ public class BlockingConsumer extends Consumer {
 
 
     private static class ConsumerThread extends Thread{
-        private final BlockingQueue<LogicEvent<Object>> queue;
+        private final BlockingQueue<EventData<Object>> queue;
         private final ConsumerHandler eventConsumer;
 
         private volatile boolean isStop = false;
 
-        private ConsumerThread(BlockingQueue<LogicEvent<Object>> queue, ConsumerHandler eventConsumer) {
+        private ConsumerThread(BlockingQueue<EventData<Object>> queue, ConsumerHandler eventConsumer) {
             this.queue = queue;
             this.eventConsumer = eventConsumer;
         }
@@ -94,7 +93,7 @@ public class BlockingConsumer extends Consumer {
             int pollNullNum = 0;
             for (;!isStop;){
 
-                LogicEvent<Object> object = queue.poll();
+                EventData<Object> object = queue.poll();
                 if(object == null) {
                     pollNullNum++;
                     if (pollNullNum > 1000) {

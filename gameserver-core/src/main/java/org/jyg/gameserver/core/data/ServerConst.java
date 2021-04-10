@@ -1,4 +1,4 @@
-package org.jyg.gameserver.core.bean;
+package org.jyg.gameserver.core.data;
 
 /**
  * create by jiayaoguang on 2020/5/23

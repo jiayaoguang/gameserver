@@ -5,7 +5,7 @@ import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.apache.commons.lang3.StringUtils;
-import org.jyg.gameserver.core.bean.LogicEvent;
+import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.manager.ChannelManager;
 import org.jyg.gameserver.core.net.Request;
@@ -158,7 +158,7 @@ public abstract class Consumer {
      * @param session session
      * @param event event
      */
-    public void processEventMsg(Session session , LogicEvent<? extends MessageLite> event) {
+    public void processEventMsg(Session session , EventData<? extends MessageLite> event) {
 //		MessageLite msg = event.getData();
         Processor processor = protoProcessorMap.get(event.getEventId());
         if (processor == null) {
@@ -175,7 +175,7 @@ public abstract class Consumer {
      * @param session session
      * @param event event
      */
-    public void processTextEvent(Session session , LogicEvent<String> event) {
+    public void processTextEvent(Session session , EventData<String> event) {
 //		MessageLite msg = event.getData();
 
         if (textProcessor == null) {
@@ -186,7 +186,7 @@ public abstract class Consumer {
         textProcessor.process(session , event);
     }
 
-    public void processHttpEvent(LogicEvent<Request> event) {
+    public void processHttpEvent(EventData<Request> event) {
         getHttpProcessor(event.getData().noParamUri()).process(null , event);
         //六十秒后关闭
         timerManager.addTimer(new DelayCloseTimer(event.getChannel(), 60 * 1000L));

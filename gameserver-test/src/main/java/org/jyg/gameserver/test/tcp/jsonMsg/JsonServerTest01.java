@@ -1,12 +1,11 @@
 package org.jyg.gameserver.test.tcp.jsonMsg;
 
-import org.jyg.gameserver.core.bean.LogicEvent;
+import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.AllUtil;
-import org.jyg.gameserver.test.proto.MsgChat;
 
 
 /**
@@ -40,7 +39,7 @@ public class JsonServerTest01 {
 
         ByteMsgObjProcessor<ChatMsgObj> chatProcessor = new ByteMsgObjProcessor<ChatMsgObj>(ChatMsgObj.class) {
             @Override
-            public void process(Session session, LogicEvent<ChatMsgObj> event) {
+            public void process(Session session, EventData<ChatMsgObj> event) {
                 AllUtil.println(" ========================= get json " + event.getData().getConetnt());
             }
         };

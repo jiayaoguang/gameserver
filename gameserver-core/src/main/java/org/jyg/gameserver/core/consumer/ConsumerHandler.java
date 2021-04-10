@@ -1,6 +1,6 @@
 package org.jyg.gameserver.core.consumer;
 
-import org.jyg.gameserver.core.bean.LogicEvent;
+import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.manager.ChannelManager;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.session.Session;
@@ -34,7 +34,7 @@ public class ConsumerHandler {
     }
 
 
-    public final void onReciveEvent(LogicEvent<?> event) {
+    public final void onReciveEvent(EventData<?> event) {
 
         // System.out.println(event.getChannel());
         try {
@@ -47,7 +47,7 @@ public class ConsumerHandler {
 
     }
 
-    private void doEvent(LogicEvent event) {
+    private void doEvent(EventData event) {
         switch (event.getChannelEventType()) {
 
 //			case CLIENT_SOCKET_CONNECT_ACTIVE:

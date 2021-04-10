@@ -1,6 +1,6 @@
 package org.jyg.gameserver.core.manager;
 
-import org.jyg.gameserver.core.bean.LogicEvent;
+import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.session.Session;
 import io.netty.channel.Channel;
 import org.jyg.gameserver.core.util.Logs;
@@ -35,18 +35,18 @@ public class ChannelManager {
 //    }
 
 
-    public final <T> void doLink(LogicEvent<T> event) {
+    public final <T> void doLink(EventData<T> event) {
         int sessionId = incAndGetSessionId();
         Session session = new Session(event.getChannel(), sessionId);
         channelObjectMap.put(event.getChannel(), session);
         afterLink(event);
     }
 
-    public <T> void afterLink(LogicEvent<T> event) {
+    public <T> void afterLink(EventData<T> event) {
 
     }
 
-    public final <T> void doUnlink(LogicEvent<T> event) {
+    public final <T> void doUnlink(EventData<T> event) {
         Session session = channelObjectMap.remove(event.getChannel());
         afterUnlink(session);
     }

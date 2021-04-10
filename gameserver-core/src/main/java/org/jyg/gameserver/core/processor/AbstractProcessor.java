@@ -1,6 +1,6 @@
 package org.jyg.gameserver.core.processor;
 
-import org.jyg.gameserver.core.bean.LogicEvent;
+import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.Context;
 import org.jyg.gameserver.core.util.FTLLoader;
@@ -32,7 +32,7 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 	}
 
 
-	public abstract void process(Session session , LogicEvent<T> event);
+	public abstract void process(Session session , EventData<T> event);
 
 
 	public Consumer getConsumer() {
