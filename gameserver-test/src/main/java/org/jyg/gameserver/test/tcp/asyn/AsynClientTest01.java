@@ -16,7 +16,7 @@ public class AsynClientTest01
         TcpClient client = new TcpClient();
         
 
-        client.registerSendEventIdByProto(1, p_sm_scene_request_ping.class);
+        client.registerSendEventIdByProto(101, p_sm_scene_request_ping.class);
         
         client.start();
 

@@ -19,7 +19,7 @@ public class AsynServerTest01
 
 		PingProcessor pingProcessor = new PingProcessor();
 		System.out.println(pingProcessor.getProtoClassName());
-        bootstarp.registerSocketEvent(1, pingProcessor);
+        bootstarp.registerSocketEvent(101, pingProcessor);
         
 		bootstarp.addTcpService(8080);
         

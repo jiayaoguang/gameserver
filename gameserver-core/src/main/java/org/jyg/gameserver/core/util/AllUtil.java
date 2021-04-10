@@ -283,7 +283,7 @@ public class AllUtil {
 
 
         int eventId = context.getMsgIdByByteMsgObj(byteMsgObjClazz);
-        if (eventId <= 0) {
+        if (eventId < 0) {
             Logs.DEFAULT_LOGGER.error("unknow eventid");
             return;
         }

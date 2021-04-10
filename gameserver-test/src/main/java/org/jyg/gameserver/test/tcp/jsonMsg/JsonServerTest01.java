@@ -46,7 +46,7 @@ public class JsonServerTest01 {
 
 
 //        bootstarp.getContext().addMsgId2JsonMsgCLassMapping(8, ChatMsgObj.class);
-        bootstarp.getDefaultConsumer().addProcessor(8, chatProcessor);
+        bootstarp.getDefaultConsumer().addProcessor(108, chatProcessor);
 
         bootstarp.addTcpService(8088);
 

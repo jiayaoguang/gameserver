@@ -38,7 +38,7 @@ public class ClientTest01
 //		client.addMsgId2ProtoMapping(3, p_scene_sm_chat.getDefaultInstance());
 //		client.addMsgId2ProtoMapping(4, p_sm_scene_chat.getDefaultInstance());
 
-		client.addMsgId2ProtoMapping(5, MsgChat.getDefaultInstance());
+		client.addMsgId2ProtoMapping(105, MsgChat.getDefaultInstance());
 
 		client.addProtoProcessor(chatProcessor);
 

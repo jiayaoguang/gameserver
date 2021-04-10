@@ -28,8 +28,8 @@ public class PingCLient {
 
 		final TcpClient client = new TcpClient();
 
-		client.registerSendEventIdByProto(1, p_test.p_sm_scene_request_ping.class);
-		client.registerSocketEvent(2, pongProcessor);
+		client.registerSendEventIdByProto(101, p_test.p_sm_scene_request_ping.class);
+		client.registerSocketEvent(102, pongProcessor);
 
 		client.start();
 

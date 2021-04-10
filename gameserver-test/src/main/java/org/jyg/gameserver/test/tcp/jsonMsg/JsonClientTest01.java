@@ -1,6 +1,7 @@
 package org.jyg.gameserver.test.tcp.jsonMsg;
 
 import org.junit.Test;
+import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.TcpClient;
@@ -19,7 +20,7 @@ public class JsonClientTest01 {
 //		client.addMsgId2ProtoMapping(3, p_scene_sm_chat.getDefaultInstance());
 //		client.addMsgId2ProtoMapping(4, p_sm_scene_chat.getDefaultInstance());
 
-        client.getContext().addMsgId2JsonMsgCLassMapping(8, JsonServerTest01.ChatMsgObj.class);
+        client.getContext().addMsgId2JsonMsgCLassMapping(108, JsonServerTest01.ChatMsgObj.class);
 //		client.getDefaultConsumer().addProcessor(8, chatProcessor);
 
 //		client.addProtoProcessor(chatProcessor);

@@ -13,8 +13,8 @@ import org.jyg.gameserver.test.proto.p_test.p_sm_scene_request_ping;
 public class PingServer {
     public static void main(String[] args) throws Exception {
         GameServerBootstrap bootstarp = new GameServerBootstrap();
-        bootstarp.registerSocketEvent(1, new PingProcessor());
-        bootstarp.registerSendEventIdByProto(2, p_test.p_scene_sm_response_pong.class);
+        bootstarp.registerSocketEvent(101, new PingProcessor());
+        bootstarp.registerSendEventIdByProto(102, p_test.p_scene_sm_response_pong.class);
         //开端口服务
         bootstarp.addTcpService(8080);
         bootstarp.start();
