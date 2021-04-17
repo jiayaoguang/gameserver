@@ -15,7 +15,6 @@ public class JsonClientTest01 {
         TcpClient client = new TcpClient();
 
         client.start();
-        client.connect("localhost", 8088);
 
         client.connect("localhost", 8088);
 
