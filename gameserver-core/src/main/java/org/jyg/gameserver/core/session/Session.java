@@ -4,6 +4,7 @@ import com.google.protobuf.MessageLite;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.jyg.gameserver.core.data.RemoteInvokeData;
+import org.jyg.gameserver.core.msg.ByteMsgObj;
 
 import java.util.List;
 
@@ -65,7 +66,9 @@ public class Session {
 	public void writeMessage(RemoteInvokeData remoteInvokeData){
 		this.channel.writeAndFlush(remoteInvokeData);
 	}
-	
-	
+
+	public void writeMessage(ByteMsgObj byteMsgObj){
+		this.channel.writeAndFlush(byteMsgObj);
+	}
 }
 
