@@ -7,6 +7,7 @@ import org.jyg.gameserver.core.handle.initializer.SocketClientInitializer;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.ExecTimeUtil;
 import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.core.util.RemotingUtil;
 import io.netty.bootstrap.Bootstrap;
@@ -67,6 +68,7 @@ public class TcpClient extends AbstractBootstrap{
 		
 	}
 
+
 	@Override
 	public void doStart(){
 		start(new SocketClientInitializer(getContext()));
@@ -93,6 +95,10 @@ public class TcpClient extends AbstractBootstrap{
 	
 	// 连接服务端
 	public Channel connect(String host,int port) throws InterruptedException {
+		if(channel != null) {
+			channel.close();
+		}
+
 
 		ChannelFuture channelFuture = bootstrap.connect(host, port).sync();
 
@@ -104,6 +110,9 @@ public class TcpClient extends AbstractBootstrap{
 		isStart = true;
 
 		channel = channelFuture.channel();
+
+		session = new Session(channel , 0);
+
 		
 //		EventDispatcher.getInstance().addTimer( new IdleTimer(channel) );
 
@@ -137,4 +146,7 @@ public class TcpClient extends AbstractBootstrap{
 		getContext().getEventLoopGroupManager().stopAllEventLoop();
 	}
 
+	public Session getSession() {
+		return session;
+	}
 }

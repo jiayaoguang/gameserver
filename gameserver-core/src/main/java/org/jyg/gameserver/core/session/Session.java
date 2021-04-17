@@ -3,6 +3,7 @@ package org.jyg.gameserver.core.session;
 import com.google.protobuf.MessageLite;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import org.jyg.gameserver.core.data.RemoteInvokeData;
 
 import java.util.List;
 
@@ -13,11 +14,9 @@ public class Session {
 
 	private final int sessionId;
 	
-	private Channel channel;
+	private final Channel channel;
 	
 	private long lastContactMill = 0;
-	
-	private Object data;
 	
 	public Session(Channel channel,int sessionId){
 		this.channel = channel;
@@ -37,9 +36,6 @@ public class Session {
 		return channel;
 	}
 
-	public void setChannel(Channel channel) {
-		this.channel = channel;
-	}
 
 	public long getLastContactMill() {
 		return lastContactMill;
@@ -63,6 +59,11 @@ public class Session {
 
 	public void writeMessage( List<? extends MessageLite> messageList) {
 		this.channel.writeAndFlush(messageList);
+	}
+
+
+	public void writeMessage(RemoteInvokeData remoteInvokeData){
+		this.channel.writeAndFlush(remoteInvokeData);
 	}
 	
 	

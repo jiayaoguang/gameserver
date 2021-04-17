@@ -1,11 +1,14 @@
 package org.jyg.gameserver.core.consumer;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.protobuf.MessageLite;
 import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.apache.commons.lang3.StringUtils;
+import org.jyg.gameserver.core.anno.InvokeName;
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.manager.ChannelManager;
 import org.jyg.gameserver.core.net.Request;
@@ -14,6 +17,7 @@ import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.timer.DelayCloseTimer;
 import org.jyg.gameserver.core.timer.TimerManager;
 import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.IRemoteInvoke;
 import org.jyg.gameserver.core.util.Logs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +54,7 @@ public abstract class Consumer {
 
     private int id;
 
-    private final List<Consumer> childConsumerList = new ArrayList<>() ;
+    private final List<Consumer> childConsumerList = new ArrayList<>();
 
     public Consumer() {
 
@@ -76,7 +80,7 @@ public abstract class Consumer {
 
     public abstract void stop();
 
-    public void publicEvent(EventType evenType, Object data, Channel channel){
+    public void publicEvent(EventType evenType, Object data, Channel channel) {
         publicEvent(evenType, data, channel, 0);
     }
 
@@ -127,15 +131,15 @@ public abstract class Consumer {
      * @param msgId     消息id
      * @param processor 事件处理器
      */
-    public void addProcessor(int msgId, AbstractProcessor processor ) {
+    public void addProcessor(int msgId, AbstractProcessor processor) {
         if (protoProcessorMap.containsKey(msgId)) {
             throw new IllegalArgumentException("dupilcated eventid");
         }
-        if(processor instanceof ProtoProcessor){
-            getContext().addMsgId2ProtoMapping(msgId , ((ProtoProcessor)processor).getProtoDefaultInstance());
+        if (processor instanceof ProtoProcessor) {
+            getContext().addMsgId2ProtoMapping(msgId, ((ProtoProcessor) processor).getProtoDefaultInstance());
         }
-        if(processor instanceof ByteMsgObjProcessor){
-            getContext().addMsgId2JsonMsgCLassMapping(msgId , ((ByteMsgObjProcessor)processor).getByteMsgObjClazz());
+        if (processor instanceof ByteMsgObjProcessor) {
+            getContext().addMsgId2JsonMsgCLassMapping(msgId, ((ByteMsgObjProcessor) processor).getByteMsgObjClazz());
         }
 
         processor.setConsumer(this);
@@ -144,6 +148,7 @@ public abstract class Consumer {
 
     /**
      * 注册普通socket事件
+     *
      * @param textProcessor textProcessor
      */
     public void setTextProcessor(TextProcessor textProcessor) {
@@ -155,10 +160,11 @@ public abstract class Consumer {
 
     /**
      * 处理普通socket事件
+     *
      * @param session session
-     * @param event event
+     * @param event   event
      */
-    public void processEventMsg(Session session , EventData<? extends MessageLite> event) {
+    public void processEventMsg(Session session, EventData<? extends MessageLite> event) {
 //		MessageLite msg = event.getData();
         Processor processor = protoProcessorMap.get(event.getEventId());
         if (processor == null) {
@@ -166,16 +172,17 @@ public abstract class Consumer {
             return;
         }
 
-        processor.process(session , event);
+        processor.process(session, event);
     }
 
 
     /**
      * 处理普通socket事件
+     *
      * @param session session
-     * @param event event
+     * @param event   event
      */
-    public void processTextEvent(Session session , EventData<String> event) {
+    public void processTextEvent(Session session, EventData<String> event) {
 //		MessageLite msg = event.getData();
 
         if (textProcessor == null) {
@@ -183,18 +190,18 @@ public abstract class Consumer {
             return;
         }
 
-        textProcessor.process(session , event);
+        textProcessor.process(session, event);
     }
 
     public void processHttpEvent(EventData<Request> event) {
-        getHttpProcessor(event.getData().noParamUri()).process(null , event);
+        getHttpProcessor(event.getData().noParamUri()).process(null, event);
         //六十秒后关闭
         timerManager.addTimer(new DelayCloseTimer(event.getChannel(), 60 * 1000L));
     }
 
 
-    public void initChildConsumers(int num , ProcessorsInitializer processorsInitializer) {
-        if(context!=null && context.isStart()){
+    public void initChildConsumers(int num, ProcessorsInitializer processorsInitializer) {
+        if (context != null && context.isStart()) {
             return;
         }
         for (int i = 0; i < num; i++) {
@@ -204,7 +211,7 @@ public abstract class Consumer {
         }
     }
 
-    public void initProcessors(ProcessorsInitializer processorsInitializer){
+    public void initProcessors(ProcessorsInitializer processorsInitializer) {
         processorsInitializer.initProcessors(this);
     }
 
@@ -220,30 +227,30 @@ public abstract class Consumer {
         childConsumerList.add(consumer);
     }
 
-    public Consumer getChildConsumer(int num){
-        if(childConsumerList.isEmpty()){
+    public Consumer getChildConsumer(int num) {
+        if (childConsumerList.isEmpty()) {
             return null;
         }
-        return childConsumerList.get( num % childConsumerList.size());
+        return childConsumerList.get(num % childConsumerList.size());
     }
 
     public void addProcessor(Processor<?> processor) {
-        if(processor instanceof ProtoProcessor){
-            ProtoProcessor protoProcessor = (ProtoProcessor)processor;
-            addProcessor(protoProcessor.getProtoMsgId() , protoProcessor );
+        if (processor instanceof ProtoProcessor) {
+            ProtoProcessor protoProcessor = (ProtoProcessor) processor;
+            addProcessor(protoProcessor.getProtoMsgId(), protoProcessor);
             return;
         }
-        if(processor instanceof ByteMsgObjProcessor){
-            ByteMsgObjProcessor byteMsgObjProcessor = (ByteMsgObjProcessor)processor;
-            addProcessor(byteMsgObjProcessor.getMsgId() , byteMsgObjProcessor );
+        if (processor instanceof ByteMsgObjProcessor) {
+            ByteMsgObjProcessor byteMsgObjProcessor = (ByteMsgObjProcessor) processor;
+            addProcessor(byteMsgObjProcessor.getMsgId(), byteMsgObjProcessor);
             return;
         }
-        if(processor instanceof HttpProcessor){
-            HttpProcessor httpProcessor = (HttpProcessor)processor;
-            addHttpProcessor(httpProcessor.getPath() , httpProcessor );
+        if (processor instanceof HttpProcessor) {
+            HttpProcessor httpProcessor = (HttpProcessor) processor;
+            addHttpProcessor(httpProcessor.getPath(), httpProcessor);
             return;
         }
-        logger.error(" unknown processor type  : {} " , processor.getClass());
+        logger.error(" unknown processor type  : {} ", processor.getClass());
     }
 
 
@@ -258,4 +265,38 @@ public abstract class Consumer {
     public TimerManager getTimerManager() {
         return timerManager;
     }
+
+
+    public IRemoteInvoke createRemoteInvoke(Class<? extends IRemoteInvoke> remoteInvokeClass, Session session) {
+
+        IRemoteInvoke remoteInvoke = new IRemoteInvoke() {
+            @Override
+            public void invoke(JSONObject paramJson) {
+
+                try {
+
+                    RemoteInvokeData remoteInvokeData = new RemoteInvokeData();
+                    remoteInvokeData.setConsumerId(getId());
+
+                    InvokeName invokeName = remoteInvokeClass.getAnnotation(InvokeName.class);
+                    if (invokeName != null) {
+                        remoteInvokeData.setInvokeName(invokeName.name());
+                    } else {
+                        remoteInvokeData.setInvokeName(remoteInvokeClass.getName());
+                    }
+
+                    remoteInvokeData.setParamJson(paramJson);
+
+                    session.writeMessage(remoteInvokeData);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        return remoteInvoke;
+    }
+
 }

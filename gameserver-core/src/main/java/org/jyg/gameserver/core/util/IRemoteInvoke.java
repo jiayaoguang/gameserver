@@ -7,6 +7,6 @@ import com.alibaba.fastjson.JSONObject;
  */
 public interface IRemoteInvoke {
 
-    JSONObject invoke(JSONObject paramJson);
+    void invoke(JSONObject paramJson);
 
 }
