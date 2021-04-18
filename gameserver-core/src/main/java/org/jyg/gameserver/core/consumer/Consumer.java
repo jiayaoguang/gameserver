@@ -269,6 +269,23 @@ public abstract class Consumer {
 
     public IRemoteInvoke createRemoteInvoke(Class<? extends IRemoteInvoke> remoteInvokeClass, Session session) {
 
+        String invokeName;
+
+        InvokeName invokeNameAnno = remoteInvokeClass.getAnnotation(InvokeName.class);
+        if (invokeNameAnno != null) {
+            invokeName = invokeNameAnno.name();
+        } else {
+            invokeName = remoteInvokeClass.getName();
+        }
+
+        return createRemoteInvoke(invokeName , session);
+    }
+
+
+
+
+    public IRemoteInvoke createRemoteInvoke(final String remoteInvokeName, Session session) {
+
         IRemoteInvoke remoteInvoke = new IRemoteInvoke() {
             @Override
             public void invoke(JSONObject paramJson) {
@@ -278,12 +295,7 @@ public abstract class Consumer {
                     RemoteInvokeData remoteInvokeData = new RemoteInvokeData();
                     remoteInvokeData.setConsumerId(getId());
 
-                    InvokeName invokeName = remoteInvokeClass.getAnnotation(InvokeName.class);
-                    if (invokeName != null) {
-                        remoteInvokeData.setInvokeName(invokeName.name());
-                    } else {
-                        remoteInvokeData.setInvokeName(remoteInvokeClass.getName());
-                    }
+                    remoteInvokeData.setInvokeName(remoteInvokeName);
 
                     remoteInvokeData.setParamJson(paramJson);
 
@@ -298,5 +310,6 @@ public abstract class Consumer {
 
         return remoteInvoke;
     }
+
 
 }

@@ -4,6 +4,7 @@ import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.IRemoteInvoke;
+import org.jyg.gameserver.core.util.Logs;
 
 /**
  * create by jiayaoguang on 2021/4/10
@@ -19,10 +20,15 @@ public class RemoteInvokeProcessor extends ByteMsgObjProcessor<RemoteInvokeData>
     public void process(Session session, EventData<RemoteInvokeData> event) {
 
         RemoteInvokeData remoteInvokeData = event.getData();
-        String className =  remoteInvokeData.getInvokeName();
+        String invokeName =  remoteInvokeData.getInvokeName();
+        Class<? extends IRemoteInvoke> c = getContext().getRemoteInvokeManager().getInvokeClass(invokeName);
+
+        if(c == null) {
+            Logs.DEFAULT_LOGGER.info("invokeName {} not found", invokeName);
+            return;
+        }
 
         try {
-            Class<?> c = Class.forName(className);
             Object instance = c.newInstance();
 
             if(instance instanceof IRemoteInvoke){
@@ -30,9 +36,6 @@ public class RemoteInvokeProcessor extends ByteMsgObjProcessor<RemoteInvokeData>
                 remoteInvoke.invoke(remoteInvokeData.getParamJson());
             }
 
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {

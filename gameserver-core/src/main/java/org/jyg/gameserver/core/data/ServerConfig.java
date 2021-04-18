@@ -16,6 +16,8 @@ public class ServerConfig {
 
     private boolean preferEpoll = false;
 
+    private String sacnInvokeClassPath = "";
+
     public boolean isUseGzip() {
         return useGzip;
     }
@@ -55,5 +57,13 @@ public class ServerConfig {
 
     public void setPreferEpoll(boolean preferEpoll) {
         this.preferEpoll = preferEpoll;
+    }
+
+    public String getSacnInvokeClassPath() {
+        return sacnInvokeClassPath;
+    }
+
+    public void setSacnInvokeClassPath(String sacnInvokeClassPath) {
+        this.sacnInvokeClassPath = sacnInvokeClassPath;
     }
 }

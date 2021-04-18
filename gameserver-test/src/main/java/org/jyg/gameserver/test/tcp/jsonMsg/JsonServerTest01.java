@@ -41,6 +41,10 @@ public class JsonServerTest01 {
             @Override
             public void process(Session session, EventData<ChatMsgObj> event) {
                 AllUtil.println(" ========================= get json " + event.getData().getConetnt());
+                ChatMsgObj chatMsgObj = new ChatMsgObj();
+                chatMsgObj.setType(1009);
+                chatMsgObj.setConetnt("hello world");
+                session.writeMessage(chatMsgObj);
             }
         };
 
