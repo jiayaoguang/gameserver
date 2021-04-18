@@ -1,7 +1,6 @@
 package org.jyg.gameserver.core.manager;
 
 import cn.hutool.core.lang.ClassScanner;
-import cn.hutool.core.lang.Filter;
 import cn.hutool.core.util.StrUtil;
 import org.jyg.gameserver.core.anno.InvokeName;
 import org.jyg.gameserver.core.util.IRemoteInvoke;
@@ -34,14 +33,18 @@ public class RemoteInvokeManager {
             boolean isInvokeClass = false;
 
             for (Class<?> interClazz : clazz.getInterfaces()) {
-                if(interClazz == IRemoteInvoke.class){
+                if (interClazz == IRemoteInvoke.class) {
                     isInvokeClass = true;
+                    break;
                 }
             }
             if(!isInvokeClass){
                 continue;
             }
+
+            @SuppressWarnings("unchecked")
             Class<? extends IRemoteInvoke> invokeClazz = (Class<? extends IRemoteInvoke>)clazz;
+
             InvokeName invokeNameAnno = invokeClazz.getAnnotation(InvokeName.class);
             final String invokeName ;
 

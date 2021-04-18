@@ -1,7 +1,6 @@
 package org.jyg.gameserver.core.manager;
 
 import org.jyg.gameserver.core.util.PrefixNameThreadFactory;
-import org.jyg.gameserver.core.util.RemotingUtil;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
