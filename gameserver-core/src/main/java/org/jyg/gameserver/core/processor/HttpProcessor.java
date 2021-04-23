@@ -39,17 +39,17 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 			response.write500Error();
 			return;
 		}
-		long beforeExecTime = System.currentTimeMillis();
+		long beforeExecNanoTime = System.nanoTime();
 		try {
 			this.service(request, response);
 //			fullHttpResponse = response.createDefaultFullHttpResponse();
 		}catch(Exception e){
-			logger.error(" make exception {} " , ExceptionUtils.getStackTrace(e));
-			response.write500Error();
+			String exceptionMsg = ExceptionUtils.getStackTrace(e);
+			logger.error(" make exception {} " , exceptionMsg);
+			response.write500Error(exceptionMsg);
 		}finally {
 
-			long afterExecTime = System.currentTimeMillis();
-			Logs.DEFAULT_LOGGER.info(" exec {} cost {} mills ,ip {}" , path , (afterExecTime - beforeExecTime) , response.getChannel().remoteAddress().toString());
+			Logs.DEFAULT_LOGGER.info(" exec {} cost {} mills ,ip {}" , path , (System.nanoTime() - beforeExecNanoTime)/1000L , response.getChannel().remoteAddress().toString());
 		}
 
 		// .addListener(ChannelFutureListener.CLOSE);//关闭连接由客户端关闭或者timer
