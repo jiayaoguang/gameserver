@@ -3,8 +3,10 @@ package org.jyg.gameserver.core.manager;
 import cn.hutool.core.lang.ClassScanner;
 import cn.hutool.core.util.StrUtil;
 import org.jyg.gameserver.core.anno.InvokeName;
+import org.jyg.gameserver.core.invoke.FileClassLoader;
 import org.jyg.gameserver.core.invoke.IRemoteInvoke;
 import org.jyg.gameserver.core.invoke.InvokeClassFilter;
+import org.jyg.gameserver.core.util.Logs;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,10 +17,17 @@ import java.util.Set;
  */
 public class RemoteInvokeManager {
 
+    /**
+     * 动态加载 invoke 类的加载器
+     */
+    private final FileClassLoader invokeClassLoader;
+
     private final Map<String , Class<? extends IRemoteInvoke>> remoteInvokeClassMap;
 
     public RemoteInvokeManager() {
         this.remoteInvokeClassMap = new HashMap<>();
+
+        this.invokeClassLoader = new FileClassLoader();
     }
 
     public void init(String packagePath){
@@ -67,7 +76,21 @@ public class RemoteInvokeManager {
 
 
     public Class<? extends IRemoteInvoke> getInvokeClass(String invokeName){
-        return remoteInvokeClassMap.get(invokeName);
+
+        Class<? extends IRemoteInvoke> invokeClass = remoteInvokeClassMap.get(invokeName);
+        if(invokeClass != null){
+            return invokeClass;
+        }
+
+        try {
+            invokeClass = (Class<? extends IRemoteInvoke>)invokeClassLoader.loadClass(invokeName);
+            return invokeClass;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            Logs.DEFAULT_LOGGER.error(" invokeName {} not found" , invokeName);
+            return null;
+        }
+
     }
 
 }
