@@ -3,7 +3,7 @@ package org.jyg.gameserver.core.processor;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.util.IRemoteInvoke;
+import org.jyg.gameserver.core.invoke.IRemoteInvoke;
 import org.jyg.gameserver.core.util.Logs;
 
 /**

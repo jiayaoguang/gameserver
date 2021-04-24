@@ -3,8 +3,8 @@ package org.jyg.gameserver.core.manager;
 import cn.hutool.core.lang.ClassScanner;
 import cn.hutool.core.util.StrUtil;
 import org.jyg.gameserver.core.anno.InvokeName;
-import org.jyg.gameserver.core.util.IRemoteInvoke;
-import org.jyg.gameserver.core.util.InvokeClassFilter;
+import org.jyg.gameserver.core.invoke.IRemoteInvoke;
+import org.jyg.gameserver.core.invoke.InvokeClassFilter;
 
 import java.util.HashMap;
 import java.util.Map;

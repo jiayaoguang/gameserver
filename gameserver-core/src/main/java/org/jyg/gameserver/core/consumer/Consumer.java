@@ -17,7 +17,7 @@ import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.timer.DelayCloseTimer;
 import org.jyg.gameserver.core.timer.TimerManager;
 import org.jyg.gameserver.core.util.Context;
-import org.jyg.gameserver.core.util.IRemoteInvoke;
+import org.jyg.gameserver.core.invoke.IRemoteInvoke;
 import org.jyg.gameserver.core.util.Logs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package org.jyg.gameserver.core.util;
+package org.jyg.gameserver.core.invoke;
 
 import com.alibaba.fastjson.JSONObject;
 
