@@ -13,9 +13,9 @@ public class ExecTimeUtil {
     }
 
     public static void exec(String operatorName , Runnable runnable){
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
         runnable.run();
-        System.out.println(operatorName + " exec cost : " + (System.currentTimeMillis() - startTime));
+        System.out.println(operatorName + " exec cost : " + (System.nanoTime() - startTime)/(1000L*1000L));
     }
 
 }
