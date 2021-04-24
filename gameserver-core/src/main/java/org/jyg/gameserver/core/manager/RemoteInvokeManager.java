@@ -22,22 +22,22 @@ public class RemoteInvokeManager {
      */
     private final FileClassLoader invokeClassLoader;
 
-    private final Map<String , Class<? extends IRemoteInvoke>> remoteInvokeClassMap;
+    private final Map<String, IRemoteInvoke> remoteInvokeMap;
 
     public RemoteInvokeManager() {
-        this.remoteInvokeClassMap = new HashMap<>();
+        this.remoteInvokeMap = new HashMap<>();
 
         this.invokeClassLoader = new FileClassLoader();
     }
 
-    public void init(String packagePath){
-        if(packagePath == null){
+    public void init(String packagePath) {
+        if (packagePath == null) {
             packagePath = StrUtil.EMPTY;
         }
 
-        Set<Class<?>> classSet = ClassScanner.scanPackage(packagePath,new InvokeClassFilter());
+        Set<Class<?>> classSet = ClassScanner.scanPackage(packagePath, new InvokeClassFilter());
 
-        for(Class<?> clazz : classSet){
+        for (Class<?> clazz : classSet) {
 
             boolean isInvokeClass = false;
 
@@ -47,47 +47,89 @@ public class RemoteInvokeManager {
                     break;
                 }
             }
-            if(!isInvokeClass){
+            if (!isInvokeClass) {
                 continue;
             }
 
             @SuppressWarnings("unchecked")
-            Class<? extends IRemoteInvoke> invokeClazz = (Class<? extends IRemoteInvoke>)clazz;
+            Class<? extends IRemoteInvoke> invokeClazz = (Class<? extends IRemoteInvoke>) clazz;
 
-            InvokeName invokeNameAnno = invokeClazz.getAnnotation(InvokeName.class);
-            final String invokeName ;
-
-            if(invokeNameAnno != null){
-                invokeName = invokeNameAnno.name();
-            }else {
-                invokeName = invokeClazz.getName();
-            }
-
-            if(remoteInvokeClassMap.containsKey(invokeName)){
-                throw  new RuntimeException("duplicate invokeName" + invokeName);
-            }
-
-            remoteInvokeClassMap.put(invokeName , invokeClazz);
+            addRemoteInvoke(invokeClazz);
 
         }
 
 
     }
 
+    private IRemoteInvoke addRemoteInvoke(Class<? extends IRemoteInvoke> invokeClazz) {
 
-    public Class<? extends IRemoteInvoke> getInvokeClass(String invokeName){
+        final String invokeClassName = invokeClazz.getName();
 
-        Class<? extends IRemoteInvoke> invokeClass = remoteInvokeClassMap.get(invokeName);
-        if(invokeClass != null){
-            return invokeClass;
+
+        if (remoteInvokeMap.containsKey(invokeClassName)) {
+            throw new RuntimeException("duplicate invokeClassName " + invokeClassName);
         }
 
         try {
-            invokeClass = (Class<? extends IRemoteInvoke>)invokeClassLoader.loadClass(invokeName);
-            return invokeClass;
+            IRemoteInvoke remoteInvoke = invokeClazz.newInstance();
+
+            remoteInvokeMap.put(invokeClassName, remoteInvoke);
+
+            InvokeName invokeNameAnno = invokeClazz.getAnnotation(InvokeName.class);
+            if (invokeNameAnno != null) {
+                String invokeName = invokeNameAnno.name();
+                if (remoteInvokeMap.containsKey(invokeName)) {
+                    throw new RuntimeException("duplicate invokeName " + invokeName);
+                }
+                remoteInvokeMap.put(invokeName, remoteInvoke);
+            }
+
+            return remoteInvoke;
+
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+            throw new RuntimeException("InstantiationException");
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            throw new RuntimeException("IllegalAccessException");
+        }
+
+    }
+
+
+    private void removeRemoteInvoke(Class<? extends IRemoteInvoke> invokeClazz) {
+
+        remoteInvokeMap.remove(invokeClazz.getName());
+
+
+        InvokeName invokeNameAnno = invokeClazz.getAnnotation(InvokeName.class);
+        if (invokeNameAnno != null) {
+            String invokeName = invokeNameAnno.name();
+            if (remoteInvokeMap.containsKey(invokeName)) {
+                throw new RuntimeException("duplicate invokeName " + invokeName);
+            }
+            remoteInvokeMap.remove(invokeName);
+        }
+
+    }
+
+
+    public IRemoteInvoke getInvokeClass(String invokeName) {
+
+        IRemoteInvoke remoteInvoke = remoteInvokeMap.get(invokeName);
+        if (remoteInvoke != null) {
+            return remoteInvoke;
+        }
+
+
+
+        try {
+            Class<? extends IRemoteInvoke> invokeClass = (Class<? extends IRemoteInvoke>) invokeClassLoader.loadClass(invokeName);
+            remoteInvoke = addRemoteInvoke(invokeClass);
+            return remoteInvoke;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            Logs.DEFAULT_LOGGER.error(" invokeName {} not found" , invokeName);
+            Logs.DEFAULT_LOGGER.error(" invokeName {} not found", invokeName);
             return null;
         }
 

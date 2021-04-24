@@ -36,6 +36,8 @@ public abstract class Consumer {
 
     public static final Logger logger = LoggerFactory.getLogger("Consumer");
 
+    private final Map<Class<?>, Object> instanceMap = new HashMap<>();
+
     private final HttpProcessor notFOundProcessor = new NotFoundHttpProcessor();
 
     private Context context;
@@ -311,5 +313,20 @@ public abstract class Consumer {
         return remoteInvoke;
     }
 
+
+
+    @SuppressWarnings("unchecked")
+    public<T> T getInstance(Class<T> tClass){
+        return (T)instanceMap.get(tClass);
+    }
+
+    public void addInstance(Object obj){
+
+        if(instanceMap.containsKey(obj.getClass())){
+            throw new RuntimeException("instanceMap.containsKey(obj.getClass()) : " + obj.getClass().getName());
+        }
+
+        instanceMap.put(obj.getClass(),obj);
+    }
 
 }

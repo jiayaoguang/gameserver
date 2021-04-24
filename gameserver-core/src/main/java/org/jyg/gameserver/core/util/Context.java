@@ -17,6 +17,8 @@ import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.msg.JsonMsgCodec;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * create by jiayaoguang on 2020/5/3
@@ -25,6 +27,9 @@ public class Context {
 
     private static final String DEFAULT_CONFIG_FILE_NAME = "jyg.properties";
 //    private String configFileName = DEFAULT_CONFIG_FILE_NAME;
+
+
+    private final Map<Class<?>, Object> instanceMap = new HashMap<>();
 
     private final Consumer defaultConsumer;
     private final EventLoopGroupManager eventLoopGroupManager;
@@ -186,4 +191,20 @@ public class Context {
     public RemoteInvokeManager getRemoteInvokeManager() {
         return remoteInvokeManager;
     }
+
+
+    @SuppressWarnings("unchecked")
+    public<T> T getInstance(Class<T> tClass){
+        return (T)instanceMap.get(tClass);
+    }
+
+    public void addInstance(Object obj){
+
+        if(instanceMap.containsKey(obj.getClass())){
+            throw new RuntimeException("instanceMap.containsKey(obj.getClass()) : " + obj.getClass().getName());
+        }
+
+        instanceMap.put(obj.getClass(),obj);
+    }
+
 }
