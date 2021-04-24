@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.manager;
 
 import cn.hutool.core.lang.ClassScanner;
 import cn.hutool.core.util.StrUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.anno.InvokeName;
 import org.jyg.gameserver.core.invoke.FileClassLoader;
 import org.jyg.gameserver.core.invoke.IRemoteInvoke;
@@ -39,6 +40,10 @@ public class RemoteInvokeManager {
 
         for (Class<?> clazz : classSet) {
 
+            if(clazz.isAnonymousClass() || clazz.isMemberClass()){
+                return;
+            }
+
             boolean isInvokeClass = false;
 
             for (Class<?> interClazz : clazz.getInterfaces()) {
@@ -50,6 +55,7 @@ public class RemoteInvokeManager {
             if (!isInvokeClass) {
                 continue;
             }
+
 
             @SuppressWarnings("unchecked")
             Class<? extends IRemoteInvoke> invokeClazz = (Class<? extends IRemoteInvoke>) clazz;
@@ -81,8 +87,23 @@ public class RemoteInvokeManager {
                 if (remoteInvokeMap.containsKey(invokeName)) {
                     throw new RuntimeException("duplicate invokeName " + invokeName);
                 }
+
+                if(StringUtils.isEmpty(invokeName)){
+                    throw new RuntimeException(" invokeName isEmpty " + invokeName);
+                }
+
+                if(invokeName.equals("null")){
+                    throw new RuntimeException(" invokeName can not is string \"null\" ");
+                }
+
                 remoteInvokeMap.put(invokeName, remoteInvoke);
+
+                Logs.DEFAULT_LOGGER.info("add invoke class : {} , invokeName {}", invokeClassName, invokeName);
+            }else {
+                Logs.DEFAULT_LOGGER.info("add invoke class : {} , not have Annotation invokeName", invokeClassName);
             }
+
+
 
             return remoteInvoke;
 

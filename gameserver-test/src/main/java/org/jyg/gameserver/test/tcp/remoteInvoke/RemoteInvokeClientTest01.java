@@ -18,7 +18,7 @@ public class RemoteInvokeClientTest01 {
 
         client.connect("localhost", 8088);
 
-        IRemoteInvoke remoteInvoke = client.getDefaultConsumer().createRemoteInvoke( In.class ,  client.getSession());
+        IRemoteInvoke remoteInvoke = client.getDefaultConsumer().createRemoteInvoke( Test03Invoke.class ,  client.getSession());
         remoteInvoke.invoke(new JSONObject());
 
 
