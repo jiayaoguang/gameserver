@@ -49,7 +49,7 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 			response.write500Error(exceptionMsg);
 		}finally {
 
-			Logs.DEFAULT_LOGGER.info(" exec {} cost {} mills ,ip {}" , path , (System.nanoTime() - beforeExecNanoTime)/1000L , response.getChannel().remoteAddress().toString());
+			Logs.DEFAULT_LOGGER.info(" exec {} cost {} mills ,ip {}" , path , (System.nanoTime() - beforeExecNanoTime)/(1000L*1000L) , response.getChannel().remoteAddress().toString());
 		}
 
 		// .addListener(ChannelFutureListener.CLOSE);//关闭连接由客户端关闭或者timer
