@@ -320,7 +320,7 @@ public abstract class Consumer {
         return (T)instanceMap.get(tClass);
     }
 
-    public void addInstance(Object obj){
+    public void putInstance(Object obj){
 
         if(instanceMap.containsKey(obj.getClass())){
             throw new RuntimeException("instanceMap.containsKey(obj.getClass()) : " + obj.getClass().getName());
