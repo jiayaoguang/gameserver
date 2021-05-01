@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * create by jiayaoguang on 2020/5/3
  */
-public class ChannelManager {
+public class ChannelManager  {
 
     private final Map<Channel, Session> channelObjectMap;
 

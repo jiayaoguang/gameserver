@@ -8,8 +8,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import org.jyg.gameserver.core.data.ServerConfig;
 import org.jyg.gameserver.core.consumer.Consumer;
+import org.jyg.gameserver.core.data.ServerConfig;
 import org.jyg.gameserver.core.handle.NettyHandlerFactory;
 import org.jyg.gameserver.core.manager.*;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
@@ -17,8 +17,6 @@ import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.msg.JsonMsgCodec;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * create by jiayaoguang on 2020/5/3
@@ -28,8 +26,6 @@ public class Context {
     private static final String DEFAULT_CONFIG_FILE_NAME = "jyg.properties";
 //    private String configFileName = DEFAULT_CONFIG_FILE_NAME;
 
-
-    private final Map<Class<?>, Object> instanceMap = new HashMap<>();
 
     private final Consumer defaultConsumer;
     private final EventLoopGroupManager eventLoopGroupManager;
@@ -57,6 +53,8 @@ public class Context {
 
     private final NettyHandlerFactory nettyHandlerFactory;
 
+    private final InstanceManager instanceManager;
+
     public Context(Consumer defaultConsumer) {
         this(defaultConsumer ,DEFAULT_CONFIG_FILE_NAME );
     }
@@ -81,6 +79,8 @@ public class Context {
         this.nettyHandlerFactory = new NettyHandlerFactory(this);
 
         this.remoteInvokeManager = new RemoteInvokeManager();
+
+        this.instanceManager = new InstanceManager();
 
     }
 
@@ -193,18 +193,20 @@ public class Context {
     }
 
 
-    @SuppressWarnings("unchecked")
     public<T> T getInstance(Class<T> tClass){
-        return (T)instanceMap.get(tClass);
+        return instanceManager.getInstance(tClass);
     }
 
     public void putInstance(Object obj){
-
-        if(instanceMap.containsKey(obj.getClass())){
-            throw new RuntimeException("instanceMap.containsKey(obj.getClass()) : " + obj.getClass().getName());
-        }
-
-        instanceMap.put(obj.getClass(),obj);
+        instanceManager.putInstance(obj.getClass(),obj);
     }
 
+    public void putInstance(Class<?> clazz ) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+        instanceManager.putInstance(clazz);
+    }
+
+
+    public InstanceManager getInstanceManager() {
+        return instanceManager;
+    }
 }

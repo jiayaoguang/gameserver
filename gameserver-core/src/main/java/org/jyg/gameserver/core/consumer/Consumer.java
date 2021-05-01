@@ -11,6 +11,7 @@ import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.manager.ChannelManager;
+import org.jyg.gameserver.core.manager.InstanceManager;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.processor.*;
 import org.jyg.gameserver.core.session.Session;
@@ -22,6 +23,7 @@ import org.jyg.gameserver.core.util.Logs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,8 +37,6 @@ public abstract class Consumer {
     public static final int DEFAULT_QUEUE_SIZE = 1024 * 64;
 
     public static final Logger logger = LoggerFactory.getLogger("Consumer");
-
-    private final Map<Class<?>, Object> instanceMap = new HashMap<>();
 
     private final HttpProcessor notFOundProcessor = new NotFoundHttpProcessor();
 
@@ -54,12 +54,14 @@ public abstract class Consumer {
 
     protected ConsumerHandler consumerHandler;
 
+    private InstanceManager instanceManager;
+
     private int id;
 
     private final List<Consumer> childConsumerList = new ArrayList<>();
 
     public Consumer() {
-
+        this.instanceManager = new InstanceManager();
     }
 
     public Consumer(ConsumerHandler consumerHandler) {
@@ -315,18 +317,21 @@ public abstract class Consumer {
 
 
 
-    @SuppressWarnings("unchecked")
     public<T> T getInstance(Class<T> tClass){
-        return (T)instanceMap.get(tClass);
+        return instanceManager.getInstance(tClass);
     }
 
     public void putInstance(Object obj){
+        instanceManager.putInstance(obj.getClass(),obj);
+    }
 
-        if(instanceMap.containsKey(obj.getClass())){
-            throw new RuntimeException("instanceMap.containsKey(obj.getClass()) : " + obj.getClass().getName());
-        }
+    public void putInstance(Class<?> clazz ) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+        instanceManager.putInstance(clazz);
+    }
 
-        instanceMap.put(obj.getClass(),obj);
+
+    public InstanceManager getInstanceManager() {
+        return instanceManager;
     }
 
 }

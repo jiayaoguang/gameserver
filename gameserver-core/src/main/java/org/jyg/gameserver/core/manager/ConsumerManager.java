@@ -11,10 +11,11 @@ import java.util.List;
 /**
  * create by jiayaoguang on 2020/5/23
  */
-public class ConsumerManager {
+public class ConsumerManager implements Lifecycle{
     public static final int DEFAULT_CONSUMER_ID = 0;
     private final Int2ObjectMap<Consumer> consumerMap = new Int2ObjectLinkedOpenHashMap<>();
     private final Context context;
+
 
     public ConsumerManager(Context context) {
         this.context = context;
@@ -46,5 +47,13 @@ public class ConsumerManager {
     }
 
 
+    @Override
+    public void start() {
 
+    }
+
+    @Override
+    public void stop() {
+
+    }
 }
