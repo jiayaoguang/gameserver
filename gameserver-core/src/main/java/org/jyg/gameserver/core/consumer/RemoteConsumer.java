@@ -28,7 +28,7 @@ public class RemoteConsumer extends Consumer {
     }
 
     @Override
-    public void start() {
+    public void doStart() {
         connect();
         //定时检测重连 TODO think do it in other thread ?
         getContext().getDefaultConsumer().timerManager.addTimer(Integer.MAX_VALUE , TimeUnit.SECONDS.toMillis(5) , ()->{

@@ -36,7 +36,7 @@ public class RingBufferConsumer extends Consumer {
     }
 
     @Override
-    public synchronized void start() {
+    public synchronized void doStart() {
         if(this.isStart){
             return;
         }

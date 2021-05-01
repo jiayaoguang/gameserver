@@ -147,7 +147,10 @@ public class Context {
         this.protoClazz2MsgIdMap = Object2IntMaps.unmodifiable(this.protoClazz2MsgIdMap);
         this.msgId2MsgCodecMap = Int2ObjectMaps.unmodifiable(this.msgId2MsgCodecMap);
 
-        this.remoteInvokeManager.init(getServerConfig().getSacnInvokeClassPath());
+        this.remoteInvokeManager.scan(getServerConfig().getSacnInvokeClassPath());
+
+        this.instanceManager.start();
+
 
 //        loadServerConfig(configFileName);
     }

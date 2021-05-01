@@ -30,7 +30,7 @@ public class BlockingConsumer extends Consumer {
     }
 
     @Override
-    public void start() {
+    public void doStart() {
         ConsumerHandler eventConsumer = this.eventConsumerFactory.createAndInit(getContext());
         eventConsumer.setTimerManager(timerManager);
         consumerThread = new ConsumerThread(queue , eventConsumer);

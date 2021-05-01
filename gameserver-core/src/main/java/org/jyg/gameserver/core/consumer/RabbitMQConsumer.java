@@ -14,7 +14,7 @@ public class RabbitMQConsumer extends Consumer {
 
 
     @Override
-    public void start() {
+    public void doStart() {
 
     }
 

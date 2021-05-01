@@ -6,6 +6,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -18,18 +19,38 @@ public class InstanceManager implements Lifecycle {
     private final Map<Class<?>, Object> instanceMap;
 
     public InstanceManager() {
-        this.instanceMap = new HashMap<>();
+        this.instanceMap = new LinkedHashMap<>();
     }
 
 
     @Override
     public void start(){
+        if(isStart){
+            return;
+        }
+
         isStart = true;
+
+
+        for(Object obj : instanceMap.values() ){
+            if(obj instanceof Lifecycle){
+                Lifecycle lifecycle = (Lifecycle)obj;
+                lifecycle.start();
+            }
+
+        }
+
     }
 
     @Override
     public void stop(){
+        for(Object obj : instanceMap.values() ){
+            if(obj instanceof Lifecycle){
+                Lifecycle lifecycle = (Lifecycle)obj;
+                lifecycle.stop();
+            }
 
+        }
     }
 
 

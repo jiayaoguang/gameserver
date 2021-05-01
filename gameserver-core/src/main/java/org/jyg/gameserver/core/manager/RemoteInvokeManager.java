@@ -25,13 +25,14 @@ public class RemoteInvokeManager {
 
     private final Map<String, IRemoteInvoke> remoteInvokeMap;
 
+
     public RemoteInvokeManager() {
         this.remoteInvokeMap = new HashMap<>();
 
         this.invokeClassLoader = new FileClassLoader();
     }
 
-    public void init(String packagePath) {
+    public void scan(String packagePath) {
         if (packagePath == null) {
             packagePath = StrUtil.EMPTY;
         }

@@ -80,7 +80,18 @@ public abstract class Consumer {
         this.id = id;
     }
 
-    public abstract void start();
+    public final void start(){
+        this.instanceManager.start();
+        doStart();
+    }
+
+
+
+    public abstract void doStart();
+
+    public final void beforeStop(){
+        this.instanceManager.start();
+    }
 
     public abstract void stop();
 
