@@ -54,23 +54,21 @@ public abstract class Consumer {
 
     protected ConsumerHandler consumerHandler;
 
-    private InstanceManager instanceManager;
+    private final InstanceManager instanceManager;
 
     private int id;
 
     private final List<Consumer> childConsumerList = new ArrayList<>();
 
     public Consumer() {
-        this.instanceManager = new InstanceManager();
+        this(new ConsumerHandler());
     }
 
     public Consumer(ConsumerHandler consumerHandler) {
         this.consumerHandler = consumerHandler;
+        this.instanceManager = new InstanceManager();
     }
 
-    public Consumer(int id) {
-        this.id = id;
-    }
 
     public int getId() {
         return id;
