@@ -8,13 +8,12 @@ import org.redisson.api.RedissonRxClient;
 import org.redisson.config.Config;
 import org.redisson.config.TransportMode;
 
-import javax.inject.Inject;
 
 /**
  * create on 2019/8/13 by jiayaoguang
  */
 public class RedissonCacheClient implements RedisCacheClient {
-	@Inject
+
 	public RedissonCacheClient() {
 	}
 

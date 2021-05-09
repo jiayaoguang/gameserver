@@ -26,15 +26,12 @@ public class DrawWsServer {
             }
         });
 
-        gameServerBootstrap.addHttpService(8080);
-        gameServerBootstrap.addWebSocketService(9998);
+        gameServerBootstrap.addHttpConnector(8080);
+        gameServerBootstrap.addWebSocketConnector(9998);
 
 
-        try {
-            gameServerBootstrap.start();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        gameServerBootstrap.start();
+
 
 
     }

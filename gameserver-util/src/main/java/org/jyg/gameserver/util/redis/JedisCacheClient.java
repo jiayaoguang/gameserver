@@ -4,7 +4,6 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-import javax.inject.Inject;
 
 /**
  * create on 2019/8/13 by jiayaoguang
@@ -13,7 +12,6 @@ public class JedisCacheClient implements RedisCacheClient {
 
 	private JedisPool pool;
 
-	@Inject
 	public JedisCacheClient() {
 	}
 
