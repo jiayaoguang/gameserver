@@ -1,12 +1,9 @@
 package org.jyg.gameserver.auth;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import org.jyg.gameserver.auth.processor.*;
 import org.jyg.gameserver.core.enums.ProtoEnum;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 //import org.jyg.gameserver.core.util.redis.RedisCacheClient;
-import org.jyg.gameserver.auth.module.AuthModule;
 import org.jyg.gameserver.proto.p_auth_sm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,18 +21,16 @@ public class AuthBootstarp
     public static void main ( String[] args ) throws Exception 
     {
     	
-    	Injector injector = Guice.createInjector(new AuthModule());
-    	
-    	
+
     	GameServerBootstrap bootstarp = new GameServerBootstrap();
 //	    RedisCacheClient redisCacheClient = injector.getInstance(RedisCacheClient.class);
 //	    redisCacheClient.init();
 
 //        bootstarp.registerHttpEvent("/index000", injector.getInstance(TokenSendHttpProcessor.class));
         
-        bootstarp.registerHttpEvent("/index", injector.getInstance(LoginHttpProcessor.class));
+        bootstarp.registerHttpEvent("/index", new LoginHttpProcessor());
 
-        bootstarp.registerHttpEvent("/checkToken", injector.getInstance(CheckLoginHttpProcessor.class));
+        bootstarp.registerHttpEvent("/checkToken", new CheckLoginHttpProcessor());
 
         bootstarp.registerSendEventIdByProto(ProtoEnum.P_AUTH_SM_REQUEST_SEND_TOKEN.getEventId(),
         		p_auth_sm.p_auth_sm_request_send_token.class);
@@ -46,12 +41,12 @@ public class AuthBootstarp
 //        bootstarp.addProtoProcessor(1000, injector.getInstance(LoginProtoProcessor.class));
 
 
-        bootstarp.addHttpService(8088);
+        bootstarp.addHttpConnector(8088);
 
 //        bootstarp.addTcpService(8081);
         
-        bootstarp.registerSocketEvent(ProtoEnum.P_SM_AUTH_RESPONSE_RECEIVE_TOKEN.getEventId(), 
-        		injector.getInstance(TokenReceiveSuccessProtoProcessor.class));
+//        bootstarp.registerSocketEvent(ProtoEnum.P_SM_AUTH_RESPONSE_RECEIVE_TOKEN.getEventId(),
+//        		new TokenReceiveSuccessProtoProcessor());
         
         bootstarp.start();
         logger.info(" start success ");

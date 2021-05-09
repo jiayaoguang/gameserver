@@ -4,6 +4,7 @@ import org.jyg.gameserver.core.net.*;
 import org.jyg.gameserver.core.net.Connector;
 import org.jyg.gameserver.core.net.SocketConnector;
 import org.jyg.gameserver.core.consumer.Consumer;
+import org.jyg.gameserver.core.util.Context;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,11 @@ public class GameServerBootstrap extends AbstractBootstrap {
 
     public GameServerBootstrap(Consumer defaultConsumer) {
         super(defaultConsumer);
+    }
+
+
+    public GameServerBootstrap(Context context) {
+        super(context);
     }
 
     /**

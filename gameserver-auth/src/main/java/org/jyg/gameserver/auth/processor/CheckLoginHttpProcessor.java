@@ -1,18 +1,13 @@
 package org.jyg.gameserver.auth.processor;
 
 import com.alibaba.fastjson.JSONObject;
-import io.netty.handler.codec.http.cookie.Cookie;
-import io.netty.handler.codec.http.cookie.DefaultCookie;
 import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
 import org.jyg.gameserver.core.processor.HttpProcessor;
 import org.jyg.gameserver.core.util.Logs;
-import org.jyg.gameserver.core.util.TokenUtil;
 //import org.jyg.gameserver.core.util.redis.RedisCacheClient;
 
-import javax.inject.Inject;
-import java.util.Set;
 
 /**
  * create by jiayaoguang on 2020/7/11
@@ -21,7 +16,6 @@ public class CheckLoginHttpProcessor extends HttpProcessor {
 
 //	private final RedisCacheClient redisCacheClient;
 
-	@Inject
 	public CheckLoginHttpProcessor() {
 //		this.redisCacheClient = redisCacheClient;
 	}

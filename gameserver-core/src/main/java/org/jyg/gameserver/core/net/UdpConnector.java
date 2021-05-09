@@ -38,7 +38,7 @@ public class UdpConnector extends AbstractConnector {
     }
 
     @Override
-    public void start() throws InterruptedException {
+    public void start() {
 
         Bootstrap bootstrap = new Bootstrap();
 
@@ -52,7 +52,12 @@ public class UdpConnector extends AbstractConnector {
         bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 
 
-        serverChannel = bootstrap.bind(port).sync().channel();
+        try {
+            serverChannel = bootstrap.bind(port).sync().channel();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
 
         Logs.DEFAULT_LOGGER.info("bind port : " + port);
     }

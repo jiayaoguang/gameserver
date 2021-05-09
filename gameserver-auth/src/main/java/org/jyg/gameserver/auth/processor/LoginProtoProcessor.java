@@ -1,14 +1,13 @@
 package org.jyg.gameserver.auth.processor;
 
-import com.google.inject.Inject;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.util.AsynCallEvent;
 import org.jyg.gameserver.core.util.CallBackEvent;
 import org.jyg.gameserver.core.util.TokenUtil;
-//import org.jyg.gameserver.core.util.redis.RedisCacheClient;
 import org.jyg.gameserver.proto.MsgLoginReply;
 import org.jyg.gameserver.proto.MsgLoginRequest;
+
+//import org.jyg.gameserver.core.util.redis.RedisCacheClient;
 
 /**
  * create by jiayaoguang on 2020/7/5
@@ -18,7 +17,6 @@ public class LoginProtoProcessor  extends ProtoProcessor<MsgLoginRequest> {
 
 //    private final RedisCacheClient redisCacheClient;
 
-    @Inject
     public LoginProtoProcessor() {
         super(MsgLoginRequest.getDefaultInstance());
 //        this.redisCacheClient = redisCacheClient;

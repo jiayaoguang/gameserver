@@ -1,6 +1,7 @@
 package org.jyg.gameserver.core.startup;
 
 import com.google.protobuf.MessageLite;
+import org.jyg.gameserver.core.manager.Lifecycle;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.processor.HttpProcessor;
@@ -17,7 +18,7 @@ import org.slf4j.LoggerFactory;
  * 抽象启动类
  */
 
-public abstract class AbstractBootstrap {
+public abstract class AbstractBootstrap implements Lifecycle {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -117,7 +118,7 @@ public abstract class AbstractBootstrap {
         return context;
     }
 
-    public final synchronized void start() throws InterruptedException{
+    public final synchronized void start(){
         if (isStart) {
 //            throw new IllegalStateException("server is already start");
             logger.error("server is already start ");
@@ -129,7 +130,11 @@ public abstract class AbstractBootstrap {
         isStart = true;
         context.start();
         beforeStart();
-        doStart();
+        try {
+            doStart();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         for(Consumer consumer : context.getConsumerManager().getConsumers()){
             consumer.start();
@@ -147,7 +152,7 @@ public abstract class AbstractBootstrap {
 
     public abstract void doStart() throws InterruptedException;
 
-    public void stop() throws InterruptedException{
+    public void stop(){
         for(Consumer consumer : context.getConsumerManager().getConsumers()){
             consumer.stop();
         }

@@ -1,12 +1,11 @@
 package org.jyg.gameserver.auth.processor;
 
-import com.google.inject.Inject;
-import org.jyg.gameserver.core.net.Request;
-import org.jyg.gameserver.core.net.Response;
-import org.jyg.gameserver.core.processor.HttpProcessor;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.jyg.gameserver.auth.bean.UserLoginInfo;
+import org.jyg.gameserver.core.net.Request;
+import org.jyg.gameserver.core.net.Response;
+import org.jyg.gameserver.core.processor.HttpProcessor;
 import org.jyg.gameserver.proto.p_auth_sm;
 
 /**
@@ -20,7 +19,6 @@ public class TokenSendHttpProcessor extends HttpProcessor{
 		return requestidTohttpChannelMap.get(requestId);
 	}
 	
-	@Inject
 	public TokenSendHttpProcessor(){
 
 	}

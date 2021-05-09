@@ -1,11 +1,9 @@
 package org.jyg.gameserver.auth.processor;
 
-import com.google.inject.Inject;
+import org.jyg.gameserver.auth.bean.UserLoginInfo;
 import org.jyg.gameserver.core.net.Response;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.auth.bean.UserLoginInfo;
-import org.jyg.gameserver.proto.p_auth_sm;
 import org.jyg.gameserver.proto.p_auth_sm.p_sm_auth_response_receive_token;
 
 import java.util.HashMap;
@@ -20,7 +18,6 @@ public class TokenReceiveSuccessProtoProcessor extends ProtoProcessor<p_sm_auth_
 	TokenSendHttpProcessor tokenSendHttpProcessor;
 	
 	
-	@Inject
 	public TokenReceiveSuccessProtoProcessor(TokenSendHttpProcessor tokenSendHttpProcessor) throws InstantiationException, IllegalAccessException {
 		super(p_sm_auth_response_receive_token.newBuilder().build());
 		this.tokenSendHttpProcessor =tokenSendHttpProcessor;

@@ -9,7 +9,6 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.inject.Inject;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -22,7 +21,6 @@ public class FTLLoader {
     
     static Configuration configuration = new Configuration( Configuration.VERSION_2_3_23 );
     
-    @Inject
     public FTLLoader(){
     	
     	configuration.setClassForTemplateLoading(FTLLoader.class, "/");

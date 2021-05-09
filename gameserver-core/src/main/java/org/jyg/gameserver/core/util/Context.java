@@ -15,13 +15,14 @@ import org.jyg.gameserver.core.manager.*;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.msg.JsonMsgCodec;
+import org.jyg.gameserver.core.startup.TcpClient;
 
 import java.lang.reflect.InvocationTargetException;
 
 /**
  * create by jiayaoguang on 2020/5/3
  */
-public class Context {
+public class Context implements Lifecycle{
 
     private static final String DEFAULT_CONFIG_FILE_NAME = "jyg.properties";
 //    private String configFileName = DEFAULT_CONFIG_FILE_NAME;
@@ -155,6 +156,10 @@ public class Context {
 //        loadServerConfig(configFileName);
     }
 
+    public synchronized void stop() {
+
+    }
+
     public synchronized void loadServerConfig(String configFileName){
         if(isStart){
             AllUtil.println(" already start .... ");
@@ -212,4 +217,10 @@ public class Context {
     public InstanceManager getInstanceManager() {
         return instanceManager;
     }
+
+
+    public TcpClient createTcpClient(){
+        return new TcpClient(this);
+    }
+
 }

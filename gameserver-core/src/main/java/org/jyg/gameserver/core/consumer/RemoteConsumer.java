@@ -6,6 +6,7 @@ import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.timer.ITimerHandler;
 import org.jyg.gameserver.core.timer.Timer;
+import org.jyg.gameserver.core.util.Context;
 
 import java.util.concurrent.TimeUnit;
 
@@ -20,6 +21,12 @@ public class RemoteConsumer extends Consumer {
     private final int port;
 
     private Channel channel;
+
+    public RemoteConsumer(Context context, String remoteAddress , int port) {
+        this.tcpClient = context.createTcpClient();
+        this.remoteAddress = remoteAddress;
+        this.port = port;
+    }
 
     public RemoteConsumer(TcpClient tcpClient, String remoteAddress , int port) {
         this.tcpClient = tcpClient;
