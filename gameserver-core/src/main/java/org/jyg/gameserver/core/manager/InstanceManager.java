@@ -64,6 +64,17 @@ public class InstanceManager implements Lifecycle {
     public synchronized void putInstance(Class<?> supperClazz, Class<?> clazz) throws IllegalAccessException, InstantiationException, InvocationTargetException {
 
 
+        if(isStart){
+            Logs.DEFAULT_LOGGER.error(String.format(" server is start putInstance %s fail" , clazz.getCanonicalName()));
+            throw new IllegalArgumentException("server is start putInstance fail : " + clazz.getCanonicalName());
+        }
+
+
+        if(getInstance(supperClazz) != null){
+            Logs.DEFAULT_LOGGER.error(String.format(" already havs this instance putInstance %s fail" , clazz.getCanonicalName()));
+            throw new IllegalArgumentException("already havs this instance putInstance fail : " + clazz.getCanonicalName());
+        }
+
         Constructor<?>[] constructors = clazz.getConstructors();
 
         if (constructors.length != 1) {
@@ -74,7 +85,7 @@ public class InstanceManager implements Lifecycle {
 
         Object instance = createInstance(constructor);
 
-        this.putInstance(supperClazz, instance);
+        putInstance(supperClazz, instance);
 
     }
 
@@ -101,16 +112,32 @@ public class InstanceManager implements Lifecycle {
     }
 
 
+    public synchronized void putInstance(Class<?> clazz, Object instance) {
 
-
-    public synchronized void putInstance(Class<?> clazz, Object obj) {
 
         if(isStart){
-            Logs.DEFAULT_LOGGER.error(String.format(" server is start putInstance %s fail" , clazz.getName()));
-            return;
+            Logs.DEFAULT_LOGGER.error(String.format(" server is start putInstance %s fail" , clazz.getCanonicalName()));
+            throw new IllegalArgumentException("server is start putInstance fail : " + clazz.getCanonicalName());
         }
 
-        instanceMap.put(clazz, obj);
+
+        if(getInstance(clazz) != null){
+            Logs.DEFAULT_LOGGER.error(String.format(" already havs this instance putInstance %s fail" , clazz.getCanonicalName()));
+            throw new IllegalArgumentException("already havs this instance putInstance fail : " + clazz.getCanonicalName());
+        }
+
+
+        instanceMap.put(clazz, instance);
+
+    }
+
+
+    private synchronized void putInstanceIfNotExist(Class<?> clazz) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+
+        if(getInstance(clazz) == null){
+            putInstance(clazz);
+        }
+
     }
 
     @SuppressWarnings("unchecked")
