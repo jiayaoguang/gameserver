@@ -7,13 +7,13 @@ import org.jyg.gameserver.core.util.Context;
  * create by jiayaoguang at 2018年3月1日
  */
 
-public class HttpService extends TcpService {
+public class HttpConnector extends TcpConnector {
 
 	/**
 	 * @param port 端口
 	 * @param context context
 	 */
-	public HttpService(int port , Context context) {
+	public HttpConnector(int port , Context context) {
 		super(port , new HttpServerInitializer(context) , true);
 	}
 

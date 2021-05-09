@@ -3,7 +3,6 @@ package org.jyg.gameserver.core.net;
 import org.jyg.gameserver.core.handle.initializer.InnerSocketServerInitializer;
 import org.jyg.gameserver.core.util.Context;
 import org.jyg.gameserver.core.util.Logs;
-import org.jyg.gameserver.core.util.RemotingUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
@@ -15,7 +14,7 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
 /**
  * Created by jiayaoguang on 2018/7/6.
  */
-public class UdpService extends AbstractService {
+public class UdpConnector extends AbstractConnector {
 
     protected final EventLoopGroup bossGroup ;
 
@@ -27,7 +26,7 @@ public class UdpService extends AbstractService {
 
     private final Context context;
 
-    public UdpService(int port, Context context) {
+    public UdpConnector(int port, Context context) {
         super(context.getDefaultConsumer());
         if (port < 0) {
             throw new IllegalArgumentException("port number cannot be negative ");

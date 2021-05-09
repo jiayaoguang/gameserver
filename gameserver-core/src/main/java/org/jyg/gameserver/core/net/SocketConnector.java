@@ -7,10 +7,10 @@ import org.jyg.gameserver.core.util.Context;
  * create by jiayaoguang at 2018年3月1日
  */
 
-public class SocketService extends TcpService {
+public class SocketConnector extends TcpConnector {
 
 	
-	public SocketService(int port , Context context) {
+	public SocketConnector(int port , Context context) {
 		super(port ,new InnerSocketServerInitializer(context));
 	}
 

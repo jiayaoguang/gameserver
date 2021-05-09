@@ -1,12 +1,11 @@
 package org.jyg.gameserver.core.net;
 
-import io.netty.channel.epoll.Epoll;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.epoll.EpollChannelOption;
 import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.handle.initializer.MyChannelInitializer;
 import org.jyg.gameserver.core.manager.EventLoopGroupManager;
 import org.jyg.gameserver.core.util.Logs;
-import org.jyg.gameserver.core.util.RemotingUtil;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
@@ -19,7 +18,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
  * create by jiayaoguang at 2018年3月6日
  */
 
-public abstract class TcpService extends AbstractService {
+public abstract class TcpConnector extends AbstractConnector {
 
 	private final MyChannelInitializer<Channel> initializer;
 
@@ -27,11 +26,11 @@ public abstract class TcpService extends AbstractService {
 
 	private final boolean isHttp;
 
-	public TcpService(int port, MyChannelInitializer<Channel> initializer) {
+	public TcpConnector(int port, MyChannelInitializer<Channel> initializer) {
 		this(port, initializer, false);
 	}
 
-	public TcpService(int port, MyChannelInitializer<Channel> initializer , boolean isHttp) {
+	public TcpConnector(int port, MyChannelInitializer<Channel> initializer , boolean isHttp) {
 		super(initializer.getDefaultConsumer());
 		if (port < 0) {
 			throw new IllegalArgumentException("port number cannot be negative ");
@@ -49,7 +48,7 @@ public abstract class TcpService extends AbstractService {
 	 * 启动端口监听方法
 	 * @throws InterruptedException InterruptedException
 	 */
-	public synchronized void start() throws InterruptedException {
+	public synchronized void start() {
 
 		if (initializer == null) {
 			throw new IllegalArgumentException("initializer must not null");
@@ -86,10 +85,19 @@ public abstract class TcpService extends AbstractService {
 		bootstrap.childOption(ChannelOption.TCP_NODELAY, true);
 		bootstrap.childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 		String host = getContext().getServerConfig().getHost();
+
+		ChannelFuture bindChannelFuture;
 		if(StringUtils.isEmpty(host)){
-			bootstrap.bind(port).sync().channel();
+			bindChannelFuture = bootstrap.bind(port);
 		}else {
-			bootstrap.bind(host,port).sync().channel();
+			bindChannelFuture = bootstrap.bind(host,port);
+		}
+
+		try {
+			bindChannelFuture.sync().channel();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 
 		Logs.DEFAULT_LOGGER.info("正在开启端口监听，端口号 :" + port);

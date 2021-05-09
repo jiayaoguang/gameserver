@@ -7,9 +7,9 @@ import org.jyg.gameserver.core.util.Context;
  * create by jiayaoguang at 2018年3月1日
  */
 
-public class WebSocketService extends TcpService {
+public class WebSocketConnector extends TcpConnector {
 
-    public WebSocketService(int port, Context context) {
+    public WebSocketConnector(int port, Context context) {
         super(port, new WebSocketServerInitializer(context));
     }
 }
