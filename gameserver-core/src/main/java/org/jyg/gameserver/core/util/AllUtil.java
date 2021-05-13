@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.util;
 
 import com.google.protobuf.MessageLite;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 
@@ -10,6 +11,7 @@ import java.lang.reflect.Method;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.SocketAddress;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -305,5 +307,26 @@ public class AllUtil {
         buf.writeBytes(msgBytes);
     }
 
+
+
+
+    public static String getChannelRemoteAddr(final Channel channel) {
+        if (null == channel) {
+            return "";
+        }
+        SocketAddress remote = channel.remoteAddress();
+        final String addr = remote != null ? remote.toString() : "";
+
+        if (addr.length() > 0) {
+            int index = addr.lastIndexOf("/");
+            if (index >= 0) {
+                return addr.substring(index + 1);
+            }
+
+            return addr;
+        }
+
+        return "";
+    }
 
 }
