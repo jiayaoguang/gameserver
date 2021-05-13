@@ -17,6 +17,7 @@ import org.jyg.gameserver.core.processor.*;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.timer.DelayCloseTimer;
 import org.jyg.gameserver.core.timer.TimerManager;
+import org.jyg.gameserver.core.util.CallBackEvent;
 import org.jyg.gameserver.core.util.Context;
 import org.jyg.gameserver.core.invoke.IRemoteInvoke;
 import org.jyg.gameserver.core.util.Logs;
@@ -42,17 +43,15 @@ public abstract class Consumer {
 
     private Context context;
 
-    protected ConsumerHandlerFactory eventConsumerFactory;
-
 
     protected final TimerManager timerManager = new TimerManager();
+
+    private final ChannelManager channelManager = new ChannelManager();
 
     private Map<String, HttpProcessor> httpProcessorMap = new HashMap<>();
     private Int2ObjectMap<Processor> protoProcessorMap = new Int2ObjectOpenHashMap<>();
 
     private TextProcessor textProcessor;
-
-    protected ConsumerHandler consumerHandler;
 
     private final InstanceManager instanceManager;
 
@@ -60,12 +59,12 @@ public abstract class Consumer {
 
     private final List<Consumer> childConsumerList = new ArrayList<>();
 
-    public Consumer() {
-        this(new ConsumerHandler());
-    }
 
-    public Consumer(ConsumerHandler consumerHandler) {
-        this.consumerHandler = consumerHandler;
+    public static final int DEFAULT_CONSUMER_ID = 0;
+
+    private int requestId = 1;
+
+    public Consumer() {
         this.instanceManager = new InstanceManager();
     }
 
@@ -99,14 +98,6 @@ public abstract class Consumer {
 
     public abstract void publicEvent(EventType evenType, Object data, Channel channel, int eventId);
 
-
-    public ConsumerHandlerFactory getEventConsumerFactory() {
-        return eventConsumerFactory;
-    }
-
-    public void setEventConsumerFactory(ConsumerHandlerFactory eventConsumerFactory) {
-        this.eventConsumerFactory = eventConsumerFactory;
-    }
 
     public Context getContext() {
         return context;
@@ -267,12 +258,9 @@ public abstract class Consumer {
     }
 
 
-    public ConsumerHandler getConsumerHandler() {
-        return consumerHandler;
-    }
 
     public ChannelManager getChannelManager() {
-        return consumerHandler.getChannelManager();
+        return channelManager;
     }
 
     public TimerManager getTimerManager() {
@@ -326,6 +314,112 @@ public abstract class Consumer {
 
 
 
+    public final void onReciveEvent(EventData<?> event) {
+
+        // System.out.println(event.getChannel());
+        try {
+            doEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            update();
+        }
+
+    }
+
+    /**
+     *
+     */
+    protected void update() {
+        timerManager.updateTimer();
+    }
+
+    private void doEvent(EventData event) {
+        switch (event.getChannelEventType()) {
+
+//			case CLIENT_SOCKET_CONNECT_ACTIVE:
+//				dispatcher.as_on_client_active(event);
+//				break;
+//			case CLIENT_SOCKET_CONNECT_INACTIVE:
+//				dispatcher.as_on_client_inactive(event);
+//				break;
+
+            case SOCKET_CONNECT_ACTIVE:
+//				dispatcher.as_on_inner_server_active(event);
+                if (isDefaultConsumer()) {
+                    channelManager.doLink(event);
+                }
+                break;
+            case SOCKET_CONNECT_INACTIVE:
+                if (isDefaultConsumer()) {
+                    channelManager.doUnlink(event);
+                }
+                break;
+
+            case HTTP_MESSAGE_COME:
+                ((Request) event.getData()).setRequestid(getAndIncRequestId());
+                context.getDefaultConsumer().processHttpEvent(event);
+//				event.getChannel().close();
+                // 5秒后关闭
+//				dispatcher.getTimerManager().addTimer(new DelayCloseTimer(event.getChannel(), 60 * 1000L));
+                break;
+//            case ON_MESSAGE_COME:
+//				dispatcher.webSocketProcess(event);
+//				break;
+            case RROTO_MSG_COME: {
+                Session session = null;
+                if (isDefaultConsumer()) {
+                    session = channelManager.getSession(event.getChannel());
+                }
+                context.getDefaultConsumer().processEventMsg(session, event);
+                break;
+            }
+            case BYTE_OBJ_MSG_COME:{
+                Session session = null;
+                if (isDefaultConsumer()) {
+                    session = channelManager.getSession(event.getChannel());
+                }
+                context.getDefaultConsumer().processEventMsg(session, event);
+                break;
+            }
+
+            case TEXT_MESSAGE_COME: {
+                Session session = null;
+                if (isDefaultConsumer()) {
+                    session = channelManager.getSession(event.getChannel());
+                }
+                context.getDefaultConsumer().processTextEvent(session, event);
+                break;
+            }
+
+            case INNER_MSG:
+                doInnerMsg(event.getData());
+                break;
+
+            default:
+                throw new IllegalArgumentException("unknown channelEventType <" + event.getChannelEventType() + ">");
+        }
+    }
+
+    private void doInnerMsg(Object msg) {
+        if (!(msg instanceof CallBackEvent)) {
+            return;
+        }
+        CallBackEvent callBackEvent = (CallBackEvent) msg;
+        callBackEvent.execte();
+    }
+
+
+    private int getAndIncRequestId() {
+        if (requestId == Integer.MAX_VALUE) {
+            requestId = 0;
+        }
+        return requestId++;
+    }
+
+
+
+
     public<T> T getInstance(Class<T> tClass){
         return instanceManager.getInstance(tClass);
     }
@@ -341,6 +435,11 @@ public abstract class Consumer {
 
     public InstanceManager getInstanceManager() {
         return instanceManager;
+    }
+
+
+    public boolean isDefaultConsumer() {
+        return getId() == DEFAULT_CONSUMER_ID;
     }
 
 }

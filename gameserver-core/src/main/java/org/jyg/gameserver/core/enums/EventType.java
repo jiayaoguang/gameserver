@@ -16,7 +16,7 @@ public enum EventType {
 	
 	CLIENT_SOCKET_CONNECT_INACTIVE,
 	
-	ON_MESSAGE_COME,
+//	ON_MESSAGE_COME,
 
 	HTTP_MESSAGE_COME,
 
@@ -29,7 +29,10 @@ public enum EventType {
 	BYTE_OBJ_MSG_COME,
 
 	INNER_MSG,
-	
+
+
+	GENERAL_MSG,
+
 	;
 	
 }

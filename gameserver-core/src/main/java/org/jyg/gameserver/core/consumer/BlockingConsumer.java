@@ -6,6 +6,7 @@ import io.netty.channel.Channel;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.util.concurrent.*;
+import java.util.concurrent.locks.LockSupport;
 
 /**
  * create by jiayaoguang on 2020/5/1
@@ -26,14 +27,12 @@ public class BlockingConsumer extends Consumer {
 
     public BlockingConsumer(BlockingQueue<EventData<Object>> queue) {
         this.queue = queue;
-        this.eventConsumerFactory = new DefaultConsumerHandlerFactory();
     }
 
     @Override
     public void doStart() {
-        ConsumerHandler eventConsumer = this.eventConsumerFactory.createAndInit(getContext());
-        eventConsumer.setTimerManager(timerManager);
-        consumerThread = new ConsumerThread(queue , eventConsumer);
+
+        consumerThread = new ConsumerThread(queue, this);
         consumerThread.setName("blockingQueue_consumer_thread");
         consumerThread.setDaemon(false);
 
@@ -71,21 +70,17 @@ public class BlockingConsumer extends Consumer {
         this.queue.offer(logicEvent);
     }
 
-    @Override
-    public void setEventConsumerFactory(ConsumerHandlerFactory eventConsumerFactory) {
-        throw new UnsupportedOperationException("todo");
-    }
 
 
     private static class ConsumerThread extends Thread{
         private final BlockingQueue<EventData<Object>> queue;
-        private final ConsumerHandler eventConsumer;
+        private final Consumer consumer;
 
         private volatile boolean isStop = false;
 
-        private ConsumerThread(BlockingQueue<EventData<Object>> queue, ConsumerHandler eventConsumer) {
+        private ConsumerThread(BlockingQueue<EventData<Object>> queue, Consumer consumer) {
             this.queue = queue;
-            this.eventConsumer = eventConsumer;
+            this.consumer = consumer;
         }
 
         @Override
@@ -96,23 +91,21 @@ public class BlockingConsumer extends Consumer {
                 EventData<Object> object = queue.poll();
                 if(object == null) {
                     pollNullNum++;
+
                     if (pollNullNum > 1000) {
-                        if (pollNullNum % 100 == 0) {
-                            eventConsumer.update();
-                            try {
-                                Thread.sleep(10L);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
+                        consumer.update();
+                        LockSupport.parkNanos(1000 * 1000L);
+                    } else if (pollNullNum > 200) {
+                        Thread.yield();
                     }
+
                     continue;
                 }
 
 
                 pollNullNum = 0;
                 try {
-                    eventConsumer.onReciveEvent(object);
+                    consumer.onReciveEvent(object);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
