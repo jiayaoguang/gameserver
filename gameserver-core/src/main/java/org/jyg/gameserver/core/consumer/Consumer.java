@@ -209,7 +209,7 @@ public abstract class Consumer {
             return;
         }
         for (int i = 0; i < num; i++) {
-            Consumer consumer = new BlockingConsumer();
+            Consumer consumer = new BlockingQueueConsumer();
             processorsInitializer.initProcessors(consumer);
             childConsumerList.add(consumer);
         }

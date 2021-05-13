@@ -1,38 +1,30 @@
 package org.jyg.gameserver.core.consumer;
 
+import io.netty.channel.Channel;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.enums.EventType;
-import io.netty.channel.Channel;
 import org.jyg.gameserver.core.util.Logs;
 
-import java.util.concurrent.*;
+import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.LockSupport;
 
 /**
  * create by jiayaoguang on 2020/5/1
  */
-public class BlockingConsumer extends Consumer {
+public abstract class AbstractQueueConsumer extends Consumer {
 
-    private final BlockingQueue<EventData<Object>> queue;
+    private Thread consumerThread;
 
-    private ConsumerThread consumerThread;
+    private volatile boolean isStop = false;
 
-    public BlockingConsumer() {
-        this(new LinkedBlockingQueue<>());
-    }
-
-    public BlockingConsumer(int size) {
-        this(new LinkedBlockingQueue<>(size));
-    }
-
-    public BlockingConsumer(BlockingQueue<EventData<Object>> queue) {
-        this.queue = queue;
-    }
 
     @Override
     public void doStart() {
 
-        consumerThread = new ConsumerThread(queue, this);
+        consumerThread = new Thread(this::run);
         consumerThread.setName("blockingQueue_consumer_thread");
         consumerThread.setDaemon(false);
 
@@ -42,10 +34,15 @@ public class BlockingConsumer extends Consumer {
 
     @Override
     public void stop() {
-        consumerThread.setStop();
-        while (consumerThread.isAlive()){
+        isStop = true;
+
+        for (int i = 0; consumerThread.isAlive(); i++) {
+            if(i > 1000){
+                Logs.DEFAULT_LOGGER.error( "consumer {} consumerThread stop fail " , getId());
+                break;
+            }
             try {
-                Thread.sleep(100);
+                Thread.sleep(10L);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -67,19 +64,52 @@ public class BlockingConsumer extends Consumer {
         logicEvent.setData(data);
         logicEvent.setEventId(eventId);
 
-        this.queue.offer(logicEvent);
+        offerEvent(logicEvent);
     }
 
 
+    protected abstract EventData<Object> pollEvent();
 
+
+    protected abstract void offerEvent(EventData<Object> eventData);
+
+    public void run() {
+        int pollNullNum = 0;
+        for (;!isStop;){
+
+            EventData<Object> object = pollEvent();
+            if(object == null) {
+                pollNullNum++;
+
+                if (pollNullNum > 1000) {
+                    update();
+                    LockSupport.parkNanos(1000 * 1000L);
+                } else if (pollNullNum > 200) {
+                    Thread.yield();
+                }
+
+                continue;
+            }
+
+            pollNullNum = 0;
+            try {
+                onReciveEvent(object);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        Logs.DEFAULT_LOGGER.info(" stop.... ");
+    }
+
+
+    @Deprecated
     private static class ConsumerThread extends Thread{
-        private final BlockingQueue<EventData<Object>> queue;
-        private final Consumer consumer;
+        private final AbstractQueueConsumer consumer;
 
         private volatile boolean isStop = false;
 
-        private ConsumerThread(BlockingQueue<EventData<Object>> queue, Consumer consumer) {
-            this.queue = queue;
+        private ConsumerThread( AbstractQueueConsumer consumer) {
             this.consumer = consumer;
         }
 
@@ -88,7 +118,7 @@ public class BlockingConsumer extends Consumer {
             int pollNullNum = 0;
             for (;!isStop;){
 
-                EventData<Object> object = queue.poll();
+                EventData<Object> object = consumer.pollEvent();
                 if(object == null) {
                     pollNullNum++;
 
@@ -101,7 +131,6 @@ public class BlockingConsumer extends Consumer {
 
                     continue;
                 }
-
 
                 pollNullNum = 0;
                 try {
