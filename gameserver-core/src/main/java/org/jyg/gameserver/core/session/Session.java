@@ -4,6 +4,7 @@ import com.google.protobuf.MessageLite;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.jyg.gameserver.core.data.RemoteInvokeData;
+import org.jyg.gameserver.core.manager.Lifecycle;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 /**
  * created by jiayaoguang at 2017年12月6日
  */
-public class Session {
+public class Session implements Lifecycle {
 
 	private final int sessionId;
 	
@@ -69,6 +70,22 @@ public class Session {
 
 	public void writeMessage(ByteMsgObj byteMsgObj){
 		this.channel.writeAndFlush(byteMsgObj);
+	}
+
+	@Override
+	public void start() {
+
+	}
+
+	@Override
+	public void stop() {
+		if(channel != null){
+			try{
+				channel.close();
+			}catch (Exception e){
+				e.printStackTrace();
+			}
+		}
 	}
 }
 

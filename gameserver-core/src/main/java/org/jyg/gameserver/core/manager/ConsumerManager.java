@@ -26,6 +26,11 @@ public class ConsumerManager implements Lifecycle{
         if(context.isStart()){
             throw new UnsupportedOperationException(" context.isStart , addConsumer operation fail ");
         }
+
+        if(consumerMap.containsKey(consumer.getId())){
+            throw new IllegalArgumentException("dumplicate context id , addConsumer operation fail ");
+        }
+
         consumer.setContext(context);
         consumerMap.put(consumer.getId(), consumer);
     }
@@ -49,7 +54,9 @@ public class ConsumerManager implements Lifecycle{
 
     @Override
     public void start() {
-
+        for(Consumer consumer : getConsumers()){
+            consumer.start();
+        }
     }
 
     @Override

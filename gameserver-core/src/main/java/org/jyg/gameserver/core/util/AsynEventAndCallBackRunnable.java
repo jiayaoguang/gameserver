@@ -28,7 +28,7 @@ public class AsynEventAndCallBackRunnable implements Runnable{
             e.printStackTrace();
             callBackEvent.setSuccess(false);
         }
-        consumer.publicEvent(EventType.INNER_MSG, callBackEvent, null);
+        consumer.publicEvent(EventType.INNER_MSG, callBackEvent, null , 0);
 
     }
 

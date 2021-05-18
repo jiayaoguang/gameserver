@@ -1,6 +1,8 @@
 package org.jyg.gameserver.core.consumer;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.ExceptionHandler;
@@ -58,17 +60,13 @@ public class RingBufferConsumer extends Consumer {
     }
 
     @Override
-    public void stop() {
+    public void doStop() {
         disruptor.shutdown();
     }
 
-    @Override
-    public void publicEvent(EventType evenType, Object data, Channel channel) {
-        publicEvent(evenType, data, channel, 0);
-    }
 
     @Override
-    public void publicEvent(EventType evenType, Object data, Channel channel, int eventId) {
+    public void publicEvent(EventType evenType, Object data, Channel channel, int eventId , EventExtData eventExtData) {
         long sequence = this.ringBuffer.next();
         try {
             EventData<Object> event = this.ringBuffer.get(sequence);
@@ -76,30 +74,32 @@ public class RingBufferConsumer extends Consumer {
             event.setChannel(channel);
             event.setEventId(eventId);
             event.setChannelEventType(evenType);
+            event.setEventExtData(eventExtData);
         } finally {
             this.ringBuffer.publish(sequence);
         }
     }
 
 
-    private static class LogExceptionHandler implements ExceptionHandler<EventData> {
+    private static class LogExceptionHandler implements ExceptionHandler<EventData<?>> {
 
         private static final Logger LOGGER = LoggerFactory.getLogger(LogExceptionHandler.class);
 
         @Override
         public void handleEventException(Throwable ex, long sequence, EventData event) {
             LOGGER.error("handleEventException seq {}  Throwable {} , eventType  {}  , eventId {}",
-                    sequence, ex, event.getChannelEventType(), event.getEventId());
+                    sequence, ExceptionUtils.getStackTrace(ex), event.getChannelEventType(), event.getEventId());
         }
 
         @Override
         public void handleOnStartException(Throwable ex) {
-            LOGGER.error("handleOnStartException  Throwable {}", ex);
+            LOGGER.error("handleOnStartException  Throwable {}", ExceptionUtils.getStackTrace(ex));
+            throw new RuntimeException("start make Exception");
         }
 
         @Override
         public void handleOnShutdownException(Throwable ex) {
-            LOGGER.error("handleOnStartException  Throwable {}", ex);
+            LOGGER.error("handleOnStartException  Throwable {}", ExceptionUtils.getStackTrace(ex));
         }
     }
 }

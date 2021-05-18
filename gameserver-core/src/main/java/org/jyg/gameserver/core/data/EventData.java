@@ -14,6 +14,10 @@ public class EventData<T>{
 	private EventType channelEventType;
 
 	private T data;
+
+	private int fromConsumerId;
+
+	private EventExtData eventExtData;
 	
 	
 	//http用不到
@@ -62,6 +66,21 @@ public class EventData<T>{
 	public String toString() {
 		return ""+channelEventType+","+this.eventId+data;
 	}
-	
+
+	public int getFromConsumerId() {
+		return fromConsumerId;
+	}
+
+	public void setFromConsumerId(int fromConsumerId) {
+		this.fromConsumerId = fromConsumerId;
+	}
+
+	public EventExtData getEventExtData() {
+		return eventExtData;
+	}
+
+	public void setEventExtData(EventExtData eventExtData) {
+		this.eventExtData = eventExtData;
+	}
 }
 

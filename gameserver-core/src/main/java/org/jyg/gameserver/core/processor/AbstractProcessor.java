@@ -15,8 +15,6 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	protected static final FTLLoader ftlLoader = new FTLLoader();
-
 //	private Context context;
 
 	private Consumer consumer;
@@ -42,5 +40,6 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 	public void setConsumer(Consumer consumer) {
 		this.consumer = consumer;
 	}
+
 }
 

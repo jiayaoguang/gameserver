@@ -8,6 +8,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.anno.InvokeName;
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.manager.ChannelManager;
@@ -36,8 +37,12 @@ import java.util.Map;
 public abstract class Consumer {
 
     public static final int DEFAULT_QUEUE_SIZE = 1024 * 64;
+    public static final int DEFAULT_CONSUMER_ID = 1;
 
-    public static final Logger logger = LoggerFactory.getLogger("Consumer");
+    public static final int MAP_DEFAULT_SIZE = 64;
+    public static final float MAP_DEFAULT_LOADFACTOR = 0.5f;
+
+    public static final Logger logger = Logs.CONSUMER;
 
     private final HttpProcessor notFOundProcessor = new NotFoundHttpProcessor();
 
@@ -48,8 +53,8 @@ public abstract class Consumer {
 
     private final ChannelManager channelManager = new ChannelManager();
 
-    private Map<String, HttpProcessor> httpProcessorMap = new HashMap<>();
-    private Int2ObjectMap<Processor> protoProcessorMap = new Int2ObjectOpenHashMap<>();
+    private Map<String, HttpProcessor> httpProcessorMap = new HashMap<>(MAP_DEFAULT_SIZE,MAP_DEFAULT_LOADFACTOR);
+    private Int2ObjectMap<Processor> protoProcessorMap = new Int2ObjectOpenHashMap<>(MAP_DEFAULT_SIZE,MAP_DEFAULT_LOADFACTOR);
 
     private TextProcessor textProcessor;
 
@@ -57,12 +62,12 @@ public abstract class Consumer {
 
     private int id;
 
-    private final List<Consumer> childConsumerList = new ArrayList<>();
-
-
-    public static final int DEFAULT_CONSUMER_ID = 0;
+//    private final List<Consumer> childConsumerList = new ArrayList<>();
 
     private int requestId = 1;
+
+    private final Map<Class<?>,EventClassHandler<?>> eventClassHandlerMap = new HashMap<>(MAP_DEFAULT_SIZE,MAP_DEFAULT_LOADFACTOR);
+
 
     public Consumer() {
         this.instanceManager = new InstanceManager();
@@ -86,17 +91,28 @@ public abstract class Consumer {
 
     public abstract void doStart();
 
-    public final void beforeStop(){
-        this.instanceManager.start();
+//    public final void beforeStop(){
+//        this.instanceManager.start();
+//    }
+
+    public final void stop(){
+        instanceManager.stop();
+        channelManager.stop();
+        doStop();
     }
 
-    public abstract void stop();
 
-    public void publicEvent(EventType evenType, Object data, Channel channel) {
-        publicEvent(evenType, data, channel, 0);
+    public abstract void doStop();
+
+//    public void publicEvent(EventType evenType, Object data, Channel channel) {
+//        publicEvent(evenType, data, channel, 0);
+//    }
+
+    public void publicEvent(EventType evenType, Object data, Channel channel, int eventId){
+        publicEvent(evenType, data, channel, eventId , null);
     }
 
-    public abstract void publicEvent(EventType evenType, Object data, Channel channel, int eventId);
+    public abstract void publicEvent(EventType evenType, Object data, Channel channel, int eventId , EventExtData eventExtData);
 
 
     public Context getContext() {
@@ -179,6 +195,20 @@ public abstract class Consumer {
         processor.process(session, event);
     }
 
+    protected void processDefaultEvent(int eventId , Object data ) {
+
+        EventClassHandler<?> eventClassHandler = eventClassHandlerMap.get(data.getClass());
+        if(eventClassHandler == null){
+            handleUnknowEventClassHandler(eventId , data);
+        }else {
+            eventClassHandler.handle(eventId , data);
+        }
+    }
+
+    protected void handleUnknowEventClassHandler(int eventId , Object data ){
+        Logs.DEFAULT_LOGGER.error("eventClassHandler not found class : {} eventId : {} " , data.getClass() , eventId);
+    }
+
 
     /**
      * 处理普通socket事件
@@ -204,39 +234,12 @@ public abstract class Consumer {
     }
 
 
-    public void initChildConsumers(int num, ProcessorsInitializer processorsInitializer) {
-        if (context != null && context.isStart()) {
-            return;
-        }
-        for (int i = 0; i < num; i++) {
-            Consumer consumer = new BlockingQueueConsumer();
-            processorsInitializer.initProcessors(consumer);
-            childConsumerList.add(consumer);
-        }
-    }
-
     public void initProcessors(ProcessorsInitializer processorsInitializer) {
         processorsInitializer.initProcessors(this);
     }
 
-    public void addChildConsumer(Consumer consumer, ProcessorsInitializer processorsInitializer) {
-        processorsInitializer.initProcessors(consumer);
-        addChildConsumer(consumer);
-    }
 
-    public void addChildConsumer(Consumer consumer) {
-        if (context != null && context.isStart()) {
-            return;
-        }
-        childConsumerList.add(consumer);
-    }
 
-    public Consumer getChildConsumer(int num) {
-        if (childConsumerList.isEmpty()) {
-            return null;
-        }
-        return childConsumerList.get(num % childConsumerList.size());
-    }
 
     public void addProcessor(Processor<?> processor) {
         if (processor instanceof ProtoProcessor) {
@@ -366,12 +369,12 @@ public abstract class Consumer {
 //            case ON_MESSAGE_COME:
 //				dispatcher.webSocketProcess(event);
 //				break;
-            case RROTO_MSG_COME: {
+            case PROTO_MSG_COME: {
                 Session session = null;
                 if (isDefaultConsumer()) {
                     session = channelManager.getSession(event.getChannel());
                 }
-                context.getDefaultConsumer().processEventMsg(session, event);
+                this.processEventMsg(session, event);
                 break;
             }
             case BYTE_OBJ_MSG_COME:{
@@ -379,7 +382,7 @@ public abstract class Consumer {
                 if (isDefaultConsumer()) {
                     session = channelManager.getSession(event.getChannel());
                 }
-                context.getDefaultConsumer().processEventMsg(session, event);
+                this.processEventMsg(session, event);
                 break;
             }
 
@@ -388,12 +391,16 @@ public abstract class Consumer {
                 if (isDefaultConsumer()) {
                     session = channelManager.getSession(event.getChannel());
                 }
-                context.getDefaultConsumer().processTextEvent(session, event);
+                this.processTextEvent(session, event);
                 break;
             }
 
             case INNER_MSG:
                 doInnerMsg(event.getData());
+                break;
+
+            case DEFAULT_EVENT:
+                processDefaultEvent(event.getEventId() , event.getData());
                 break;
 
             default:
@@ -440,6 +447,11 @@ public abstract class Consumer {
 
     public boolean isDefaultConsumer() {
         return getId() == DEFAULT_CONSUMER_ID;
+    }
+
+
+    public <C> void addEventClassHandler(Class<C> c , EventClassHandler<C> eventClassHandler){
+        eventClassHandlerMap.put(c , eventClassHandler);
     }
 
 }

@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * create by jiayaoguang on 2020/5/3
  */
-public class ChannelManager  {
+public class ChannelManager implements Lifecycle {
 
     private final Map<Channel, Session> channelObjectMap;
 
@@ -100,4 +100,17 @@ public class ChannelManager  {
         return new ArrayList<>(channelObjectMap.values());
     }
 
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void stop() {
+
+        for(Session session : channelObjectMap.values()){
+            session.getChannel().close();
+        }
+
+    }
 }

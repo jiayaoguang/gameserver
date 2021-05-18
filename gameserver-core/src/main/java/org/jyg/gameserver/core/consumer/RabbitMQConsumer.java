@@ -1,6 +1,7 @@
 package org.jyg.gameserver.core.consumer;
 
 import io.netty.channel.Channel;
+import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
 
 /**
@@ -19,17 +20,12 @@ public class RabbitMQConsumer extends Consumer {
     }
 
     @Override
-    public void stop() {
+    public void doStop() {
 
     }
 
     @Override
-    public void publicEvent(EventType evenType, Object data, Channel channel) {
-
-    }
-
-    @Override
-    public void publicEvent(EventType evenType, Object data, Channel channel, int eventId) {
+    public void publicEvent(EventType evenType, Object data, Channel channel, int eventId, EventExtData eventExtData) {
 
     }
 

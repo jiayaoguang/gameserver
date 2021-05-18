@@ -132,12 +132,13 @@ public class TcpClient extends AbstractBootstrap{
 	public Channel getChannel() {
 		return channel;
 	}
-	
+
 	public void close() {
-		if(channel !=null && channel.isOpen()) {
-			channel.close();
+
+		if(session !=null) {
+			session.stop();
 		}
-		getContext().getEventLoopGroupManager().stopAllEventLoop();
+
 	}
 
 	public Session getSession() {

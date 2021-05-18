@@ -3,9 +3,11 @@ package org.jyg.gameserver.core.timer;
  * created by jiayaoguang at 2018年3月22日
  */
 
+import org.jyg.gameserver.core.manager.Lifecycle;
+
 import java.util.PriorityQueue;
 
-public class TimerManager {
+public class TimerManager implements Lifecycle {
 
     private final PriorityQueue<Timer> timerQueue = new PriorityQueue<>(128);
 
@@ -51,6 +53,16 @@ public class TimerManager {
                 timerQueue.offer(timer);
             }
         }
+
+    }
+
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void stop() {
 
     }
 }

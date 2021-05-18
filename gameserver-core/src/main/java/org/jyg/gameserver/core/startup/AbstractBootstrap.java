@@ -127,35 +127,31 @@ public abstract class AbstractBootstrap implements Lifecycle {
 
         initCommonProcessor();
 
+
         isStart = true;
         context.start();
-        beforeStart();
+
         try {
             doStart();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
-        for(Consumer consumer : context.getConsumerManager().getConsumers()){
-            consumer.start();
-        }
     }
 
     private void initCommonProcessor(){
         addByteMsgObjProcessor(new RemoteInvokeProcessor());
     }
 
-    protected void beforeStart() {
 
-    }
 
 
     public abstract void doStart() throws InterruptedException;
 
     public void stop(){
-        for(Consumer consumer : context.getConsumerManager().getConsumers()){
-            consumer.stop();
-        }
+
+        context.stop();
+
     }
 
 }

@@ -6,7 +6,6 @@ import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.AllUtil;
-import org.jyg.gameserver.core.util.FTLLoader;
 import org.jyg.gameserver.core.util.Logs;
 
 /**
@@ -67,9 +66,7 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 		return getDefaultConsumer().getHttpProcessor(path);
 	}
 
-	public FTLLoader getFTLLoader() {
-		return ftlLoader;
-	}
+
 
 	public abstract void service(Request request, Response response);
 

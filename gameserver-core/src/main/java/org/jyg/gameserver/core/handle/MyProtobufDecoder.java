@@ -96,7 +96,7 @@ public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
         switch (msgCodec.getMsgType()) {
             case PROTO:
                 MessageLite messageLite = (MessageLite) msgObj;
-                context.getDefaultConsumer().publicEvent(EventType.RROTO_MSG_COME, messageLite, ctx.channel(), msgId);
+                context.getDefaultConsumer().publicEvent(EventType.PROTO_MSG_COME, messageLite, ctx.channel(), msgId);
                 break;
             case BYTE_OBJ:
                 ByteMsgObj byteMsgObj = (ByteMsgObj) msgObj;

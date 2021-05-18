@@ -2,13 +2,10 @@ package org.jyg.gameserver.core.consumer;
 
 import io.netty.channel.Channel;
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.util.Logs;
 
-import java.util.Queue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.LockSupport;
 
 /**
@@ -22,7 +19,7 @@ public abstract class AbstractQueueConsumer extends Consumer {
 
 
     @Override
-    public void doStart() {
+    public final void doStart() {
 
         consumerThread = new Thread(this::run);
         consumerThread.setName("blockingQueue_consumer_thread");
@@ -30,10 +27,16 @@ public abstract class AbstractQueueConsumer extends Consumer {
 
         consumerThread.start();
 
+        afterStart();
+
+    }
+
+    public void afterStart() {
+
     }
 
     @Override
-    public void stop() {
+    public void doStop() {
         isStop = true;
 
         for (int i = 0; consumerThread.isAlive(); i++) {
@@ -50,28 +53,29 @@ public abstract class AbstractQueueConsumer extends Consumer {
         Logs.DEFAULT_LOGGER.info("stop success....");
     }
 
-    @Override
-    public void publicEvent(EventType evenType, Object data, Channel channel) {
-        this.publicEvent(evenType,data,channel,0);
-    }
+//    @Override
+//    public void publicEvent(EventType evenType, Object data, Channel channel) {
+//        this.publicEvent(evenType,data,channel,0);
+//    }
 
     @Override
-    public void publicEvent(EventType evenType, Object data, Channel channel, int eventId) {
+    public void publicEvent(EventType evenType, Object data, Channel channel, int eventId , EventExtData eventExtData) {
 
-        EventData<Object> logicEvent = new EventData<>();
-        logicEvent.setChannel(channel);
-        logicEvent.setChannelEventType(evenType);
-        logicEvent.setData(data);
-        logicEvent.setEventId(eventId);
+        EventData<Object> event = new EventData<>();
+        event.setChannel(channel);
+        event.setChannelEventType(evenType);
+        event.setData(data);
+        event.setEventId(eventId);
+        event.setEventExtData(eventExtData);
 
-        offerEvent(logicEvent);
+        publicEvent(event);
     }
 
 
     protected abstract EventData<Object> pollEvent();
 
 
-    protected abstract void offerEvent(EventData<Object> eventData);
+    protected abstract void publicEvent(EventData<Object> eventData);
 
     public void run() {
         int pollNullNum = 0;

@@ -223,6 +223,25 @@ public class AllUtil {
                     case "String":
                         arg = property;
                         break;
+                    case "String[]":{
+                        String[] strArray = property.split(";");
+                        for(int i=0;i<strArray.length;i++){
+                            String str = strArray[i];
+                            strArray[i] = str.trim();
+                        }
+                        arg = strArray;
+                        break;
+                    }
+                    case "int[]":{
+                        String[] strArray = property.split(";");
+                        int[] intArray = new int[strArray.length];
+                        for(int i=0;i<strArray.length;i++){
+                            String str = strArray[i];
+                            intArray[i] = Integer.parseInt(str.trim());
+                        }
+                        arg = intArray;
+                        break;
+                    }
                     default:
                         continue;
                 }

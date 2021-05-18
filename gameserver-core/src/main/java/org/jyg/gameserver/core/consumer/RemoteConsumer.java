@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.consumer;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
+import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.timer.ITimerHandler;
@@ -23,6 +24,7 @@ public class RemoteConsumer extends Consumer {
     private Channel channel;
 
     public RemoteConsumer(Context context, String remoteAddress , int port) {
+        this.setContext(context);
         this.tcpClient = context.createTcpClient();
         this.remoteAddress = remoteAddress;
         this.port = port;
@@ -58,7 +60,7 @@ public class RemoteConsumer extends Consumer {
     }
 
     @Override
-    public void stop() {
+    public void doStop() {
         if(channel != null){
             ChannelFuture closeFuture = channel.close();
             closeFuture.isSuccess();
@@ -70,8 +72,9 @@ public class RemoteConsumer extends Consumer {
 //
 //    }
 
+
     @Override
-    public void publicEvent(EventType evenType, Object data, Channel channel, int eventId) {
+    public void publicEvent(EventType evenType, Object data, Channel channel, int eventId, EventExtData eventExtData) {
         if(!isConnectAvailable()){
             logger.error("  isConnectAvailable false , reconnect ");
             connect();

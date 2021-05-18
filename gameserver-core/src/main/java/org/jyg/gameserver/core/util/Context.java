@@ -56,6 +56,8 @@ public class Context implements Lifecycle{
 
     private final InstanceManager instanceManager;
 
+    private final FTLLoader ftlLoader = new FTLLoader();
+
     public Context(Consumer defaultConsumer) {
         this(defaultConsumer ,DEFAULT_CONFIG_FILE_NAME );
     }
@@ -63,12 +65,14 @@ public class Context implements Lifecycle{
     public Context(Consumer defaultConsumer , String configFileName) {
         this.defaultConsumer = defaultConsumer;
 
-        loadServerConfig(configFileName);
+        AllUtil.properties2Object(configFileName, serverConfig);
+
+//        loadServerConfig(configFileName);
 
         this.useEpoll = (RemotingUtil.isLinuxPlatform() && Epoll.isAvailable() && serverConfig.isPreferEpoll());
 
 
-        this.eventLoopGroupManager = new EventLoopGroupManager(useEpoll);
+        this.eventLoopGroupManager = new EventLoopGroupManager(useEpoll , serverConfig.getNettyIOThreadNum());
 //        this.executorManager = new ExecutorManager(10, defaultConsumer);
         this.singleThreadExecutorManagerPool = new SingleThreadExecutorManagerPool(defaultConsumer);
 
@@ -152,12 +156,19 @@ public class Context implements Lifecycle{
 
         this.instanceManager.start();
 
+        this.getConsumerManager().start();
+
 
 //        loadServerConfig(configFileName);
     }
 
     public synchronized void stop() {
 
+        this.instanceManager.stop();
+
+        for(Consumer consumer : getConsumerManager().getConsumers()){
+            consumer.stop();
+        }
     }
 
     public synchronized void loadServerConfig(String configFileName){
@@ -223,4 +234,8 @@ public class Context implements Lifecycle{
         return new TcpClient(this);
     }
 
+
+    public FTLLoader getFtlLoader() {
+        return ftlLoader;
+    }
 }

@@ -8,7 +8,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 /**
  * create by jiayaoguang on 2020/5/4
  */
-public class EventLoopGroupManager {
+public class EventLoopGroupManager implements Lifecycle{
 
     private final EventLoopGroup bossGroup;
     private final EventLoopGroup workGroup;
@@ -17,13 +17,13 @@ public class EventLoopGroupManager {
         this(useEpoll, Math.min(Runtime.getRuntime().availableProcessors() + 1, 32));
     }
 
-    public EventLoopGroupManager(boolean useEpoll, int selectorThreadNum) {
+    public EventLoopGroupManager(boolean useEpoll, int nettyIOThreadNum) {
         if (useEpoll) {
             this.bossGroup = new EpollEventLoopGroup(1, new PrefixNameThreadFactory("NettyEpollBossThread_"));
-            this.workGroup = new EpollEventLoopGroup(selectorThreadNum, new PrefixNameThreadFactory("NettyEpollWorkThread_"));
+            this.workGroup = new EpollEventLoopGroup(nettyIOThreadNum, new PrefixNameThreadFactory("NettyEpollWorkThread_"));
         } else {
             this.bossGroup = new NioEventLoopGroup(1, new PrefixNameThreadFactory("NettyNioBossThread_"));
-            this.workGroup = new NioEventLoopGroup(selectorThreadNum, new PrefixNameThreadFactory("NettyNioWorkThread_"));
+            this.workGroup = new NioEventLoopGroup(nettyIOThreadNum, new PrefixNameThreadFactory("NettyNioWorkThread_"));
         }
     }
 
@@ -36,6 +36,17 @@ public class EventLoopGroupManager {
     }
 
     public void stopAllEventLoop() {
+        this.bossGroup.shutdownGracefully();
+        this.workGroup.shutdownGracefully();
+    }
+
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void stop() {
         this.bossGroup.shutdownGracefully();
         this.workGroup.shutdownGracefully();
     }

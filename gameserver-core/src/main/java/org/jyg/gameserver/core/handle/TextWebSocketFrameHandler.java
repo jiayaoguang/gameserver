@@ -31,7 +31,7 @@ public class TextWebSocketFrameHandler extends
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "在线");
 
-		defaultConsumer.publicEvent(EventType.SOCKET_CONNECT_ACTIVE, null, ctx.channel() );
+		defaultConsumer.publicEvent(EventType.SOCKET_CONNECT_ACTIVE, null, ctx.channel() , 0 );
 		
 		super.channelActive(ctx);
 	}
@@ -51,7 +51,7 @@ public class TextWebSocketFrameHandler extends
 			String text = ((TextWebSocketFrame) frame).text();
 			
 
-			defaultConsumer.publicEvent(EventType.TEXT_MESSAGE_COME, text, ctx.channel() );
+			defaultConsumer.publicEvent(EventType.TEXT_MESSAGE_COME, text, ctx.channel() , 0);
 			
 		}else if(frame instanceof BinaryWebSocketFrame) {
 			Logs.DEFAULT_LOGGER.info("this frame is BinaryWebSocketFrame");
@@ -80,7 +80,7 @@ public class TextWebSocketFrameHandler extends
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "掉线");
 		
-		defaultConsumer.publicEvent(EventType.SOCKET_CONNECT_INACTIVE, null, ctx.channel() );
+		defaultConsumer.publicEvent(EventType.SOCKET_CONNECT_INACTIVE, null, ctx.channel() , 0);
 		
 		super.channelInactive(ctx);
 	}

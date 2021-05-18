@@ -28,7 +28,7 @@ public class ConcurrentQueueConsumer extends AbstractQueueConsumer {
     }
 
     @Override
-    protected void offerEvent(EventData<Object> eventData) {
+    protected void publicEvent(EventData<Object> eventData) {
         queue.offer(eventData);
     }
 

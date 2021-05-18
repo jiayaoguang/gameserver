@@ -6,10 +6,15 @@ public enum EventType {
 
 	ACTIVE,
 	INACTIVE,
-	
-	//服务器之间的连接激活
+
+	/**
+	 * 连接激活
+	 */
 	SOCKET_CONNECT_ACTIVE,
-	//服务器之间的连接断开
+
+	/**
+	 * 连接断开
+	 */
 	SOCKET_CONNECT_INACTIVE,
 	
 	CLIENT_SOCKET_CONNECT_ACTIVE,
@@ -20,7 +25,7 @@ public enum EventType {
 
 	HTTP_MESSAGE_COME,
 
-	RROTO_MSG_COME,
+	PROTO_MSG_COME,
 
 
 	TEXT_MESSAGE_COME,
@@ -31,7 +36,7 @@ public enum EventType {
 	INNER_MSG,
 
 
-	GENERAL_MSG,
+	DEFAULT_EVENT,
 
 	;
 	

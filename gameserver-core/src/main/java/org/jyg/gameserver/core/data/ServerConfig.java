@@ -18,6 +18,8 @@ public class ServerConfig {
 
     private String sacnInvokeClassPath = "";
 
+    private int nettyIOThreadNum = 0;
+
     public boolean isUseGzip() {
         return useGzip;
     }
@@ -66,4 +68,15 @@ public class ServerConfig {
     public void setSacnInvokeClassPath(String sacnInvokeClassPath) {
         this.sacnInvokeClassPath = sacnInvokeClassPath;
     }
+
+
+    public int getNettyIOThreadNum() {
+        return nettyIOThreadNum;
+    }
+
+    public void setNettyIOThreadNum(int nettyIOThreadNum) {
+        this.nettyIOThreadNum = nettyIOThreadNum;
+    }
+
+
 }
