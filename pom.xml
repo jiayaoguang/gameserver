@@ -163,6 +163,7 @@
 		<module>gameserver-proto</module>
 		<module>gameserver-util</module>
 		<module>gameserver-test</module>
+		<module>gameserver-db</module>
 	</modules>
 
 	<dependencies>
