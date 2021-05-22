@@ -16,10 +16,6 @@ public abstract class MyChannelInitializer<C extends Channel> extends ChannelIni
         this.context = context;
     }
 
-    public Consumer getDefaultConsumer() {
-        return context.getDefaultConsumer();
-    }
-
     public Context getContext() {
         return context;
     }

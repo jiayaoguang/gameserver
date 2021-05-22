@@ -42,7 +42,7 @@ public class HttpServerInitializer extends MyChannelInitializer<Channel> {
 		pipeline.addLast(new HttpObjectAggregator(64 * 1024));
 		// pipeline.addLast(new ChunkedWriteHandler());//主要用于处理大数据流,比如一个1G大小的文件
 		pipeline.addLast(new HttpStaticFileServerHandler());
-		pipeline.addLast(new HttpServerHandler(context.getDefaultConsumer()));
+		pipeline.addLast(new HttpServerHandler(context));
 
 	}
 }

@@ -19,7 +19,7 @@ public class DrawWsServer {
         gameServerBootstrap.getContext().getDefaultConsumer().setTextProcessor(new TextProcessor() {
             public void process(Session session, EventData<String> event) {
 
-                for (Session otherSession : getDefaultConsumer().getChannelManager().getSessions()) {
+                for (Session otherSession : getConsumer().getChannelManager().getSessions()) {
                     otherSession.writeWsMessage(event.getData());
                 }
 

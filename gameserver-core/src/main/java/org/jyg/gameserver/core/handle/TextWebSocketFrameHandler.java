@@ -8,6 +8,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
+import org.jyg.gameserver.core.util.Context;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.util.HashMap;
@@ -20,10 +21,10 @@ public class TextWebSocketFrameHandler extends
 		SimpleChannelInboundHandler<WebSocketFrame> {
 
 //	public static Set<Channel> channels = new HashSet<>();
-	private final Consumer defaultConsumer;
+	private final Context context;
 
-	public TextWebSocketFrameHandler(Consumer defaultConsumer) {
-		this.defaultConsumer = defaultConsumer;
+	public TextWebSocketFrameHandler(Context context) {
+		this.context = context;
 	}
 
 	@Override
@@ -31,7 +32,7 @@ public class TextWebSocketFrameHandler extends
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "在线");
 
-		defaultConsumer.publicEvent(EventType.SOCKET_CONNECT_ACTIVE, null, ctx.channel() , 0 );
+		context.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_ACTIVE, null, ctx.channel() , 0 );
 		
 		super.channelActive(ctx);
 	}
@@ -49,9 +50,9 @@ public class TextWebSocketFrameHandler extends
 //			TextWebSocketFrame responseFrame = new TextWebSocketFrame(frame.content());
 			
 			String text = ((TextWebSocketFrame) frame).text();
-			
 
-			defaultConsumer.publicEvent(EventType.TEXT_MESSAGE_COME, text, ctx.channel() , 0);
+
+			context.getConsumerManager().publicEventToDefault(EventType.TEXT_MESSAGE_COME, text, ctx.channel() , 0);
 			
 		}else if(frame instanceof BinaryWebSocketFrame) {
 			Logs.DEFAULT_LOGGER.info("this frame is BinaryWebSocketFrame");
@@ -79,8 +80,8 @@ public class TextWebSocketFrameHandler extends
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception { // (6)
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "掉线");
-		
-		defaultConsumer.publicEvent(EventType.SOCKET_CONNECT_INACTIVE, null, ctx.channel() , 0);
+
+		context.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_INACTIVE, null, ctx.channel() , 0);
 		
 		super.channelInactive(ctx);
 	}

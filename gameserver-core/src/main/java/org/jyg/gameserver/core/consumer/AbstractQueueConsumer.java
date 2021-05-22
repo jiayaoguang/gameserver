@@ -21,19 +21,18 @@ public abstract class AbstractQueueConsumer extends Consumer {
     @Override
     public final void doStart() {
 
+
         consumerThread = new Thread(this::run);
         consumerThread.setName("blockingQueue_consumer_thread_" + getId());
         consumerThread.setDaemon(false);
 
         consumerThread.start();
 
-        afterStart();
+
 
     }
 
-    public void afterStart() {
 
-    }
 
     @Override
     public void doStop() {

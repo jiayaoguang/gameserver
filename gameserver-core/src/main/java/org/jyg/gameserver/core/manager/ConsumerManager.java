@@ -71,6 +71,14 @@ public class ConsumerManager implements Lifecycle{
         this.publicEvent(targetConsumerId , evenType , data ,channel ,eventId , EventData.EMPTY_EVENT_EXT_DATA);
     }
 
+    public void publicEventToDefault(EventType evenType, Object data, Channel channel, int eventId ){
+        this.publicEvent(DEFAULT_CONSUMER_ID , evenType , data ,channel ,eventId , EventData.EMPTY_EVENT_EXT_DATA);
+    }
+
+    public void publicEventToDefault(EventType evenType, Object data, int eventId) {
+        this.publicEvent(DEFAULT_CONSUMER_ID, evenType, data, null, eventId, EventData.EMPTY_EVENT_EXT_DATA);
+    }
+
     public void publicEvent(int targetConsumerId, EventType evenType, Object data, int eventId ){
         this.publicEvent(targetConsumerId , evenType , data ,null ,eventId , EventData.EMPTY_EVENT_EXT_DATA);
     }

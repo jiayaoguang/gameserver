@@ -30,7 +30,7 @@ public class WebSocketClientInitializer extends
 		
 		//WebSocketClientProtocolHandler TODO
 		pipeline.addLast(new WebSocketServerProtocolHandler("/"));
-		pipeline.addLast(new TextWebSocketFrameHandler(context.getDefaultConsumer()));
+		pipeline.addLast(new TextWebSocketFrameHandler(context));
 		
 	}
 }

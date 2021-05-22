@@ -247,7 +247,7 @@ public class DBConsumer extends BlockingQueueConsumer {
     }
 
     @Override
-    public void afterStart() {
+    public void beforeStart() {
         tryConnectIfCLose();
     }
 

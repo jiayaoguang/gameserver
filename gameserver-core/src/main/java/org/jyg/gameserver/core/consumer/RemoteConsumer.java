@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * create by jiayaoguang on 2020/5/24
  */
-public class RemoteConsumer extends Consumer {
+public class RemoteConsumer extends BlockingQueueConsumer {
 
 
     private final TcpClient tcpClient;
@@ -35,10 +35,10 @@ public class RemoteConsumer extends Consumer {
     }
 
     @Override
-    public void doStart() {
+    public void beforeStart() {
         tcpClient.start();
         //定时检测重连 TODO think do it in other thread ?
-        getContext().getDefaultConsumer().timerManager.addTimer(Integer.MAX_VALUE , TimeUnit.SECONDS.toMillis(5) , ()->{
+        this.timerManager.addTimer(Integer.MAX_VALUE , TimeUnit.SECONDS.toMillis(5) , ()->{
             if(!isConnectAvailable()){
                 logger.error("connect lose, try reconnect");
                 connect();

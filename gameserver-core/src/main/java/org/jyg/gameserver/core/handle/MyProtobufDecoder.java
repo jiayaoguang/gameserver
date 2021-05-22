@@ -7,6 +7,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.manager.ConsumerManager;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.Context;
@@ -102,11 +103,11 @@ public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
             switch (msgCodec.getMsgType()) {
                 case PROTO:
                     MessageLite messageLite = (MessageLite) msgObj;
-                    context.getDefaultConsumer().publicEvent(EventType.PROTO_MSG_COME, messageLite, ctx.channel(), msgId);
+                    context.getConsumerManager().publicEventToDefault( EventType.PROTO_MSG_COME, messageLite, ctx.channel(), msgId);
                     break;
                 case BYTE_OBJ:
                     ByteMsgObj byteMsgObj = (ByteMsgObj) msgObj;
-                    context.getDefaultConsumer().publicEvent(EventType.BYTE_OBJ_MSG_COME, byteMsgObj, ctx.channel(), msgId);
+                    context.getConsumerManager().publicEventToDefault(EventType.BYTE_OBJ_MSG_COME, byteMsgObj, ctx.channel(), msgId);
                     break;
                 default:
                     LOGGER.error(" unknown msg type type : {} ", msgCodec.getMsgType());

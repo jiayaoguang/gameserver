@@ -7,16 +7,17 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpRequest;
+import org.jyg.gameserver.core.util.Context;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.io.IOException;
 
 public class HttpServerHandler extends SimpleChannelInboundHandler<HttpRequest> {
 
-	private final Consumer defaultConsumer;
+	private final Context context;
 
-	public HttpServerHandler(Consumer defaultConsumer) {
-		this.defaultConsumer = defaultConsumer;
+	public HttpServerHandler(Context context) {
+		this.context = context;
 	}
 
 	// 是否是线程同步的http
@@ -58,7 +59,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpRequest> 
 
 		Request request = this.createRequest((HttpRequest) msg);
 
-		defaultConsumer.publicEvent(EventType.HTTP_MESSAGE_COME, request, ctx.channel(), 0);
+		context.getConsumerManager().publicEventToDefault(EventType.HTTP_MESSAGE_COME, request, ctx.channel(), 0);
 
 		// HttpRequest request = (HttpRequest) msg;
 

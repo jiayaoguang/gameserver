@@ -89,8 +89,13 @@ public abstract class Consumer {
     }
 
     public final void start(){
+        beforeStart();
         this.instanceManager.start();
         doStart();
+    }
+
+    public void beforeStart() {
+
     }
 
 
@@ -393,17 +398,21 @@ public abstract class Consumer {
 //				dispatcher.as_on_inner_server_active(event);
                 if (isDefaultConsumer()) {
                     channelManager.doLink(event.getChannel());
+                }else {
+                    Logs.DEFAULT_LOGGER.error("event SOCKET_CONNECT_ACTIVE only in DefaultConsumer");
                 }
                 break;
             case SOCKET_CONNECT_INACTIVE:
                 if (isDefaultConsumer()) {
                     channelManager.doUnlink(event.getChannel());
+                }else {
+                    Logs.DEFAULT_LOGGER.error("event SOCKET_CONNECT_INACTIVE only in DefaultConsumer");
                 }
                 break;
 
             case HTTP_MESSAGE_COME:
                 ((Request) event.getData()).setRequestid(getAndIncRequestId());
-                context.getDefaultConsumer().processHttpEvent(event);
+                this.processHttpEvent(event);
 //				event.getChannel().close();
                 // 5秒后关闭
 //				dispatcher.getTimerManager().addTimer(new DelayCloseTimer(event.getChannel(), 60 * 1000L));
