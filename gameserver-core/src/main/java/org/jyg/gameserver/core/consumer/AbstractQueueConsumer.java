@@ -23,7 +23,7 @@ public abstract class AbstractQueueConsumer extends Consumer {
 
 
         consumerThread = new Thread(this::run);
-        consumerThread.setName("blockingQueue_consumer_thread_" + getId());
+        consumerThread.setName(getClass().getSimpleName() + "_" + getId());
         consumerThread.setDaemon(false);
 
         consumerThread.start();
