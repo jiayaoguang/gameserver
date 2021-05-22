@@ -35,19 +35,19 @@ public class ChannelManager implements Lifecycle {
 //    }
 
 
-    public final <T> void doLink(EventData<T> event) {
+    public final <T> void doLink(Channel channel) {
         int sessionId = incAndGetSessionId();
-        Session session = new Session(event.getChannel(), sessionId);
-        channelObjectMap.put(event.getChannel(), session);
-        afterLink(event);
+        Session session = new Session(channel, sessionId);
+        channelObjectMap.put(channel, session);
+        afterLink(session);
     }
 
-    public <T> void afterLink(EventData<T> event) {
+    public <T> void afterLink(Session session) {
 
     }
 
-    public final <T> void doUnlink(EventData<T> event) {
-        Session session = channelObjectMap.remove(event.getChannel());
+    public final <T> void doUnlink(Channel channel) {
+        Session session = channelObjectMap.remove(channel);
         afterUnlink(session);
     }
 

@@ -17,14 +17,26 @@ public class EventData<T>{
 
 	private T data;
 
-	private int fromConsumerId;
-
 	private EventExtData eventExtData = EMPTY_EVENT_EXT_DATA;
 	
 	
 	//http用不到
 	private int eventId;
-	
+
+
+	public EventData() {
+	}
+
+	public EventData(Channel channel, EventType eventType, T data, EventExtData eventExtData, int eventId) {
+		this.channel = channel;
+		this.eventType = eventType;
+		this.data = data;
+		if(eventExtData != null){
+			this.eventExtData = eventExtData;
+		}
+		this.eventId = eventId;
+	}
+
 	public Channel getChannel() {
 		return channel;
 	}

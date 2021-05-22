@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.processor;
 
+import io.netty.channel.Channel;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.net.Request;
@@ -27,13 +28,13 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 
 	@Override
 	public final void process(Session session, EventData<Request> event) {
-		process(event);
+		process(event.getData() ,event.getChannel());
 	}
 
-	public final void process(EventData<Request> event) {
+	public final void process(Request request ,Channel channel) {
 
-		Request request = event.getData();
-		Response response = this.createResponse(event);
+//		Request request = event.getData();
+		Response response = this.createResponse(channel);
 
 		if(request.isMakeExecption()){
 			response.write500Error();
@@ -48,17 +49,17 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 			logger.error(" make exception {} " , exceptionMsg);
 			response.write500Error(exceptionMsg);
 		}finally {
-			String reomoteAddr = AllUtil.getChannelRemoteAddr(event.getChannel());
+			String reomoteAddr = AllUtil.getChannelRemoteAddr(channel);
 			Logs.DEFAULT_LOGGER.info(" exec {} cost {} mills ,ip {}", path, (System.nanoTime() - beforeExecNanoTime) / (1000L * 1000L), reomoteAddr);
 		}
 
 		// .addListener(ChannelFutureListener.CLOSE);//关闭连接由客户端关闭或者timer
 	}
 
-	private Response createResponse(EventData<Request> event) {
+	private Response createResponse(Channel channel) {
 
 		Response response = new Response();
-		response.setChannel(event.getChannel());
+		response.setChannel(channel);
 		return response;
 	}
 

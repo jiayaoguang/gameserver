@@ -111,9 +111,19 @@ public class InstanceManager implements Lifecycle {
         return instance;
     }
 
-    public synchronized void putInstance( Object instance) {
+    public synchronized void putInstance(Object instance) {
+        this.putInstance(instance.getClass(), instance);
+    }
+
+    public synchronized void putInstance( Lifecycle instance) {
         this.putInstance(instance.getClass() , instance);
     }
+
+    public synchronized void putInstance(Class<? extends Lifecycle> clazz, Lifecycle instance) {
+        putInstance(clazz , instance);
+    }
+
+
     public synchronized void putInstance(Class<?> clazz, Object instance) {
 
 
@@ -134,11 +144,9 @@ public class InstanceManager implements Lifecycle {
     }
 
 
-    private synchronized void putInstanceIfNotExist(Class<?> clazz) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+    private synchronized void removeInstance(Class<?> clazz) throws IllegalAccessException, InvocationTargetException, InstantiationException {
 
-        if(getInstance(clazz) == null){
-            putInstance(clazz);
-        }
+        instanceMap.remove(clazz);
 
     }
 

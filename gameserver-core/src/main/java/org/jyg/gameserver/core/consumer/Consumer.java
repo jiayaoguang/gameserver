@@ -354,7 +354,7 @@ public abstract class Consumer {
         // System.out.println(event.getChannel());
         try {
             long startNano = System.nanoTime();
-            doEvent(event);
+            doEvent(new EventData(event.getChannel(), event.getEventType(), event.getEventExtData(), event.getEventExtData(), event.getEventId()));
             long costMill = (System.nanoTime() - startNano)/1000000L;
             if(costMill > 10){
                 Logs.DEFAULT_LOGGER.error(" event  cost more time {} ", costMill);
@@ -362,7 +362,11 @@ public abstract class Consumer {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            update();
+            try{
+                update();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
     }
@@ -374,9 +378,6 @@ public abstract class Consumer {
         timerManager.updateTimer();
     }
 
-    private void doEvent(int eventId ,Channel channel,EventType eventType,Object data, EventData event){
-
-    }
 
     private void doEvent(EventData event) {
         switch (event.getEventType()) {
@@ -391,12 +392,12 @@ public abstract class Consumer {
             case SOCKET_CONNECT_ACTIVE:
 //				dispatcher.as_on_inner_server_active(event);
                 if (isDefaultConsumer()) {
-                    channelManager.doLink(event);
+                    channelManager.doLink(event.getChannel());
                 }
                 break;
             case SOCKET_CONNECT_INACTIVE:
                 if (isDefaultConsumer()) {
-                    channelManager.doUnlink(event);
+                    channelManager.doUnlink(event.getChannel());
                 }
                 break;
 

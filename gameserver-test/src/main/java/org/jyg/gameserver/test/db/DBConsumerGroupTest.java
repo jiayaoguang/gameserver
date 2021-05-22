@@ -22,14 +22,14 @@ public class DBConsumerGroupTest {
         GameServerBootstrap gameServerBootstrap = new GameServerBootstrap();
         gameServerBootstrap.addHttpConnector(8088);
 
-        DBConsumerGroup consumerGroup = new DBConsumerGroup();
-        consumerGroup.setId(100);
-        consumerGroup.addTableInfo(Maik.class);
+        DBConsumerGroup dbConsumerGroup = new DBConsumerGroup();
+//        consumerGroup.setId(100);
+        dbConsumerGroup.addTableInfo(Maik.class);
 
-        gameServerBootstrap.getContext().getConsumerManager().addConsumer(consumerGroup);
+        gameServerBootstrap.getContext().getConsumerManager().addConsumer(dbConsumerGroup);
 
         gameServerBootstrap.getContext().getDefaultConsumer().getInstanceManager()
-                .putInstance(new ConsumerDBManager(gameServerBootstrap.getContext().getDefaultConsumer() , 100));
+                .putInstance(new ConsumerDBManager(gameServerBootstrap.getContext().getDefaultConsumer() , dbConsumerGroup.getDbConfig().getDbConsumerGroupId()));
 
         gameServerBootstrap.start();
 

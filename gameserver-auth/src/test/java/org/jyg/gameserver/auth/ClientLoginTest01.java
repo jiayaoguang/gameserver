@@ -30,7 +30,7 @@ public class ClientLoginTest01
         
         
     	
-        TcpClient client = new TcpClient();
+        TcpClient client = new TcpClient("localhost",8081);
 //		client.addMsgId2ProtoMapping(1, p_sm_scene_request_ping.getDefaultInstance());
 //		client.addMsgId2ProtoMapping(2, p_scene_sm_response_pong.getDefaultInstance());
 //
@@ -43,7 +43,7 @@ public class ClientLoginTest01
 		client.addProtoProcessor(1001 , chatProcessor);
 
         client.start();
-        client.connect("localhost",8081);
+//        client.connect("localhost",8081);
 
         client.write(MsgLoginRequest.newBuilder().setAccount("jyg").build());
 

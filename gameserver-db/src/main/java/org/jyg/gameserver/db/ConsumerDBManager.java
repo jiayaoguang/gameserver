@@ -4,11 +4,12 @@ import org.jyg.gameserver.core.consumer.ResultHandler;
 import org.jyg.gameserver.core.consumer.Consumer;
 import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.manager.Lifecycle;
 
 /**
  * create by jiayaoguang at 2021/5/22
  */
-public class ConsumerDBManager{
+public class ConsumerDBManager implements Lifecycle {
 
     private final Consumer consumer;
 
@@ -71,4 +72,13 @@ public class ConsumerDBManager{
     }
 
 
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void stop() {
+
+    }
 }
