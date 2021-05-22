@@ -16,7 +16,7 @@ public class ServerConfig {
 
     private boolean preferEpoll = false;
 
-    private String sacnInvokeClassPath = "";
+    private String scanInvokeClassPath = "";
 
     private int nettyIOThreadNum = 0;
 
@@ -61,12 +61,12 @@ public class ServerConfig {
         this.preferEpoll = preferEpoll;
     }
 
-    public String getSacnInvokeClassPath() {
-        return sacnInvokeClassPath;
+    public String getScanInvokeClassPath() {
+        return scanInvokeClassPath;
     }
 
-    public void setSacnInvokeClassPath(String sacnInvokeClassPath) {
-        this.sacnInvokeClassPath = sacnInvokeClassPath;
+    public void setScanInvokeClassPath(String scanInvokeClassPath) {
+        this.scanInvokeClassPath = scanInvokeClassPath;
     }
 
 

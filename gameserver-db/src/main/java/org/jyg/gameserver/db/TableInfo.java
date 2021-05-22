@@ -1,7 +1,7 @@
 package org.jyg.gameserver.db;
 
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.util.LinkedHashMap;
 
 /**
  * create by jiayaoguang at 2021/5/14
@@ -22,7 +22,9 @@ public class TableInfo {
     /**
      * 字段列表
      */
-    private Map<String,TableFieldInfo> fieldInfoMap;
+    private LinkedHashMap<String,TableFieldInfo> fieldInfoLinkedMap;
+
+    private Field primaryKeyField;
 
     public String getTableName() {
         return tableName;
@@ -48,11 +50,19 @@ public class TableInfo {
         this.primaryKey = primaryKey;
     }
 
-    public Map<String, TableFieldInfo> getFieldInfoMap() {
-        return fieldInfoMap;
+    public LinkedHashMap<String, TableFieldInfo> getFieldInfoLinkedMap() {
+        return fieldInfoLinkedMap;
     }
 
-    public void setFieldInfoMap(Map<String, TableFieldInfo> fieldInfoMap) {
-        this.fieldInfoMap = fieldInfoMap;
+    public void setFieldInfoLinkedMap(LinkedHashMap<String, TableFieldInfo> fieldInfoLinkedMap) {
+        this.fieldInfoLinkedMap = fieldInfoLinkedMap;
+    }
+
+    public Field getPrimaryKeyField() {
+        return primaryKeyField;
+    }
+
+    public void setPrimaryKeyField(Field primaryKeyField) {
+        this.primaryKeyField = primaryKeyField;
     }
 }

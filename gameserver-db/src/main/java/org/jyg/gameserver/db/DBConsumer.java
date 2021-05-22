@@ -2,26 +2,38 @@ package org.jyg.gameserver.db;
 
 import cn.hutool.core.collection.CollectionUtil;
 import org.jyg.gameserver.core.consumer.BlockingQueueConsumer;
-import org.jyg.gameserver.core.consumer.ConcurrentQueueConsumer;
+import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.db.anno.DBTable;
 import org.jyg.gameserver.db.anno.DBTableField;
 import org.jyg.gameserver.db.anno.DBTableFieldIgnore;
-import org.jyg.gameserver.db.serialize.DBFieldSerializer;
-import org.jyg.gameserver.db.serialize.JSONDBFieldSerializer;
+import org.jyg.gameserver.db.type.BooleanTypeHandler;
+import org.jyg.gameserver.db.type.ByteTypeHandler;
+import org.jyg.gameserver.db.type.CharacterTypeHandler;
+import org.jyg.gameserver.db.type.DoubleTypeHandler;
+import org.jyg.gameserver.db.type.FastJSONTypeHandler;
+import org.jyg.gameserver.db.type.FloatTypeHandler;
+import org.jyg.gameserver.db.type.IntegerTypeHandler;
+import org.jyg.gameserver.db.type.LongTypeHandler;
+import org.jyg.gameserver.db.type.ShortTypeHandler;
+import org.jyg.gameserver.db.type.StringTypeHandler;
+import org.jyg.gameserver.db.type.TypeHandler;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * create by jiayaoguang at 2021/5/11
+ * create by jiayaoguang at 2021/5/16
  */
 public class DBConsumer extends BlockingQueueConsumer {
 
@@ -29,25 +41,60 @@ public class DBConsumer extends BlockingQueueConsumer {
 
     private final SqlKeyWord sqlKeyWord;
 
-    private final Map<Integer, SQLMaker> sqlTextMap = new HashMap<>(MAP_DEFAULT_SIZE,MAP_DEFAULT_LOADFACTOR);
+    private final Map<Integer, SQLMaker> sqlTextMap = new HashMap<>(MAP_DEFAULT_SIZE, MAP_DEFAULT_LOADFACTOR);
 
-    private final Map<Class<?>, TableInfo> tableInfoMap = new HashMap<>(MAP_DEFAULT_SIZE,MAP_DEFAULT_LOADFACTOR);
-    /**
-     * key class value : Serializer
-     */
-    private final Map<Class<?>,DBFieldSerializer<?>> dbFieldSerializerMap = new HashMap<>(MAP_DEFAULT_SIZE,MAP_DEFAULT_LOADFACTOR);
+    private final Map<Class<?>, TableInfo> tableInfoMap = new HashMap<>(MAP_DEFAULT_SIZE, MAP_DEFAULT_LOADFACTOR);
+
+    private DBConfig dbConfig;
+
+    private final Map<Class<?>, TypeHandler<?>> typeHandlerMap = new HashMap<>();
+
 
     public DBConsumer() {
-        this.sqlKeyWord = new MySQLUpperKey();
-
-        addSQLMaker(BDEventTypeConst.DB_EVENT_INSERT, new InsertSQLMaker());
-        addSQLMaker(BDEventTypeConst.DB_EVENT_DELETE, new DeleteSQLMaker());
-        addSQLMaker(BDEventTypeConst.DB_EVENT_UPDATE, new UpdateSQLMaker());
-        addSQLMaker(BDEventTypeConst.DB_EVENT_SELECT, new SelectSQLMaker());
-
-        addDBFieldSerializer(new JSONDBFieldSerializer());
+        this(null);
 
     }
+
+    public DBConsumer(DBConfig dbConfig) {
+        this.sqlKeyWord = new MySQLUpperKey();
+
+        addSQLMaker(BDEventConst.INSERT, new InsertSQLMaker());
+        addSQLMaker(BDEventConst.DELETE, new DeleteSQLMaker());
+        addSQLMaker(BDEventConst.UPDATE, new UpdateSQLMaker());
+        addSQLMaker(BDEventConst.SELECT, new SelectSQLMaker());
+
+        addSQLMaker(BDEventConst.SELECT_BY_FIELD, new SelectByFieldSQLMaker());
+
+        typeHandlerMap.put(int.class, new IntegerTypeHandler());
+        typeHandlerMap.put(long.class, new LongTypeHandler());
+
+
+        registerTypeHandler(new StringTypeHandler());
+
+        registerTypeHandler(new LongTypeHandler());
+        registerTypeHandler(new IntegerTypeHandler());
+        registerTypeHandler(new ShortTypeHandler());
+        registerTypeHandler(new ByteTypeHandler());
+        registerTypeHandler(new DoubleTypeHandler());
+        registerTypeHandler(new FloatTypeHandler());
+        registerTypeHandler(new CharacterTypeHandler());
+        registerTypeHandler(new BooleanTypeHandler());
+
+        registerTypeHandler(new FastJSONTypeHandler());
+
+        this.dbConfig = dbConfig;
+
+    }
+
+    public void registerTypeHandler(TypeHandler<?> typeHandler) {
+
+        if (typeHandlerMap.containsKey(typeHandler.getBindClassType())) {
+            throw new RuntimeException("containsKey");
+        }
+
+        typeHandlerMap.put(typeHandler.getBindClassType(), typeHandler);
+    }
+
 
     public void addSQLMaker(int eventId, SQLMaker SQLMaker) {
         if (sqlTextMap.containsKey(eventId)) {
@@ -56,25 +103,27 @@ public class DBConsumer extends BlockingQueueConsumer {
         sqlTextMap.put(eventId, SQLMaker);
     }
 
-    public void addTableInfo(Class<?> dbEntityClass) {
+    public TableInfo addTableInfo(Class<?> dbEntityClass) {
         if (tableInfoMap.containsKey(dbEntityClass)) {
             throw new IllegalArgumentException(" addTableInfo fail contains dbEntityClass " + dbEntityClass.getCanonicalName());
         }
-        tableInfoMap.put(dbEntityClass, createTableInfo(dbEntityClass));
+        TableInfo tableInfo = null;
+        try {
+            tableInfo = createTableInfo(dbEntityClass);
+        } catch (NoSuchFieldException | NoSuchMethodException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException(e);
+        }
+        tableInfoMap.put(dbEntityClass, tableInfo);
+        return tableInfo;
     }
 
-    public void addDBFieldSerializer(DBFieldSerializer<?> dbFieldSerializer){
-        if(dbFieldSerializerMap.containsKey(dbFieldSerializer.getSerializeClass())){
-            throw new IllegalArgumentException(" addTableInfo fail contains dbFieldSerializerClass " + dbFieldSerializer.getSerializeClass().getCanonicalName());
-        }
-        dbFieldSerializerMap.put(dbFieldSerializer.getSerializeClass() , dbFieldSerializer);
-    }
 
     /**
      * @param dbEntityClass dbEntityClass
      * @return TableInfo
      */
-    private TableInfo createTableInfo(Class<?> dbEntityClass) {
+    private TableInfo createTableInfo(Class<?> dbEntityClass) throws NoSuchFieldException , NoSuchMethodException {
         TableInfo tableInfo = new TableInfo();
         tableInfo.setDbEntityClass(dbEntityClass);
 
@@ -87,10 +136,13 @@ public class DBConsumer extends BlockingQueueConsumer {
             tableInfo.setPrimaryKey("id");
         }
 
+        Field primaryKeyField = dbEntityClass.getDeclaredField(tableInfo.getPrimaryKey());
+        primaryKeyField.setAccessible(true);
+        tableInfo.setPrimaryKeyField(primaryKeyField);
 
         Field[] fields = dbEntityClass.getDeclaredFields();
 
-        Map<String, TableFieldInfo> tableFieldInfoMap = new LinkedHashMap<>();
+        LinkedHashMap<String, TableFieldInfo> tableFieldInfoMap = new LinkedHashMap<>();
 
         for (Field field : fields) {
 
@@ -98,28 +150,29 @@ public class DBConsumer extends BlockingQueueConsumer {
                 continue;
             }
 
+            field.setAccessible(true);
             TableFieldInfo tableFieldInfo = createTableFieldInfo(dbEntityClass, field);
             tableFieldInfoMap.put(field.getName(), tableFieldInfo);
 
-            field.setAccessible(true);
         }
 
-        tableInfo.setFieldInfoMap(tableFieldInfoMap);
+        tableInfo.setFieldInfoLinkedMap(tableFieldInfoMap);
 
         return tableInfo;
     }
 
-    private TableFieldInfo createTableFieldInfo(Class<?> dbEntityClass, Field dbEntityField) {
+    private TableFieldInfo createTableFieldInfo(Class<?> dbEntityClass, Field dbEntityField) throws NoSuchFieldException, NoSuchMethodException {
         TableFieldInfo tableFieldInfo = new TableFieldInfo();
         tableFieldInfo.setClassField(dbEntityField);
+//        dbEntityField.setAccessible(true);
 
         DBTableField dbTableFieldAnno = dbEntityField.getAnnotation(DBTableField.class);
         if (dbTableFieldAnno != null) {
             tableFieldInfo.setTableFieldName(dbTableFieldAnno.fieldName());
-            if(dbTableFieldAnno.fieldType() == TableFieldType.AUTO){
+            if (dbTableFieldAnno.fieldType() == TableFieldType.AUTO) {
                 TableFieldType tableFieldType = getTableFieldType(dbEntityField.getType());
                 tableFieldInfo.setFieldType(tableFieldType);
-            }else {
+            } else {
                 tableFieldInfo.setFieldType(dbTableFieldAnno.fieldType());
             }
             if (dbTableFieldAnno.fieldLength() > 0) {
@@ -140,12 +193,8 @@ public class DBConsumer extends BlockingQueueConsumer {
         String fieldGetMethodName = getFieldGetMethodName(dbEntityField);
 
 
-        try {
-            Method fiedGetMethod = dbEntityClass.getMethod(fieldGetMethodName);
-            tableFieldInfo.setFiedGetMethod(fiedGetMethod);
-        } catch (NoSuchMethodException e) {
-
-        }
+        Method fiedGetMethod = dbEntityClass.getMethod(fieldGetMethodName);
+        tableFieldInfo.setFiedGetMethod(fiedGetMethod);
 
         return tableFieldInfo;
     }
@@ -167,9 +216,15 @@ public class DBConsumer extends BlockingQueueConsumer {
         } else if (fieldCLass == boolean.class || fieldCLass == Boolean.class
                 || fieldCLass == byte.class || fieldCLass == Byte.class) {
             return TableFieldType.TINYINT;
-        }else if(dbFieldSerializerMap.containsKey(fieldCLass)){
+        } else if (typeHandlerMap.containsKey(fieldCLass)) {
             return TableFieldType.VARCHAR;
         } else {
+
+            TypeHandler<?> typeHandler = typeHandlerMap.get(fieldCLass);
+            if (typeHandler != null) {
+                return typeHandler.getTableFieldType();
+            }
+
             throw new IllegalArgumentException(fieldCLass.getName() + " field type can not to sql type");
         }
     }
@@ -177,22 +232,15 @@ public class DBConsumer extends BlockingQueueConsumer {
     private String getFieldGetMethodName(Field dbEntityField) {
         String fieldGetMethodName;
 
-        char fieldFirstChar = dbEntityField.getName().charAt(0);
 
-        if (fieldFirstChar >= 'a' && fieldFirstChar <= 'z') {
+//            if (dbEntityField.getName().startsWith("is")) {
+//
+//            }
 
-            if (dbEntityField.getName().startsWith("is")) {
-
-            }
-
-            if (dbEntityField.getName().length() <= 1) {
-                char fieldFirstCharUpper = (char) (fieldFirstChar + 26);
-                fieldGetMethodName = "get" + fieldFirstCharUpper;
-            } else {
-                fieldGetMethodName = "get" + dbEntityField.getName().indexOf(0) + dbEntityField.getName().substring(1);
-            }
+        if (dbEntityField.getName().length() <= 1) {
+            fieldGetMethodName = "get" + dbEntityField.getName().substring(0, 1).toUpperCase();
         } else {
-            fieldGetMethodName = "get" + dbEntityField.getName();
+            fieldGetMethodName = "get" + dbEntityField.getName().substring(0, 1).toUpperCase() + dbEntityField.getName().substring(1);
         }
 
         return fieldGetMethodName;
@@ -205,7 +253,7 @@ public class DBConsumer extends BlockingQueueConsumer {
 
     @Override
     public void doStop() {
-        if(connection != null){
+        if (connection != null) {
             try {
                 connection.close();
             } catch (SQLException exception) {
@@ -216,7 +264,7 @@ public class DBConsumer extends BlockingQueueConsumer {
 
 
     @Override
-    protected void processDefaultEvent(int eventId, Object dbEntity) {
+    protected void processDefaultEvent(int eventId, Object dbEntity, EventData eventData) {
         SQLMaker sqlMaker = sqlTextMap.get(eventId);
 
         if (sqlMaker == null) {
@@ -226,53 +274,134 @@ public class DBConsumer extends BlockingQueueConsumer {
 
         TableInfo tableInfo = tableInfoMap.get(dbEntity.getClass());
         if (tableInfo == null) {
-            Logs.DEFAULT_LOGGER.error(" unknow tableInfo event type {} dbEntity class {} ", eventId, dbEntity.getClass().getCanonicalName());
-            return;
+            Logs.DEFAULT_LOGGER.info(" unknow tableInfo event type {} dbEntity class {} addTableInfo ", eventId, dbEntity.getClass().getCanonicalName());
+            tableInfo = addTableInfo(dbEntity.getClass());
+//            return;
         }
 
-        PrepareSQLAndParams prepareSQLAndParams = sqlMaker.createSql(sqlKeyWord, dbEntity, tableInfo);
+        boolean needReturn;
+        if (eventData.getEventExtData() != null && eventData.getEventExtData().requestId != 0) {
+            needReturn = true;
+        } else {
+            needReturn = false;
+        }
+
+        Map<String, Object> params = null;
+        if (eventData.getEventExtData() != null) {
+            params = eventData.getEventExtData().params;
+        }
+
+        PrepareSQLAndParams prepareSQLAndParams = null;
+        try {
+            prepareSQLAndParams = sqlMaker.createSqlInfo(sqlKeyWord, dbEntity, tableInfo, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (needReturn) {
+                eventReturn(eventData.getEventExtData().fromConsumerId, 100, eventData.getEventExtData().requestId);
+            }
+        }
 
         if (prepareSQLAndParams == null) {
             return;
         }
 
+
+        List<Object> returnList = null;
+
+
         try {
-            executeSql(prepareSQLAndParams);
-        } catch (SQLException throwables) {
+            returnList = executeSql(prepareSQLAndParams, eventData, tableInfo);
+        } catch (SQLException | IllegalAccessException | InstantiationException throwables) {
             throwables.printStackTrace();
+            if (needReturn) {
+                //eventId 1 : 报错
+                eventReturn(eventData.getEventExtData().fromConsumerId, null, eventData.getEventExtData().requestId, DBErrorCode.EXCEPTION);
+            }
+            return;
+        }
+
+
+        Object returnData = null;
+
+        if (prepareSQLAndParams.sqlExecuteType == SqlExecuteType.QUERY_ONE) {
+            if (returnList != null && returnList.size() >= 1) {
+                returnData = returnList.get(0);
+            }
+        } else {
+            returnData = returnList;
+        }
+
+        int returnEventId = 0;
+        if (returnData == null) {
+            returnEventId = DBErrorCode.NULL;
+        }
+
+        if (needReturn) {
+            eventReturn(eventData.getEventExtData().fromConsumerId, returnData, eventData.getEventExtData().requestId, returnEventId);
         }
     }
 
-
-    private void executeSql(PrepareSQLAndParams prepareSQLAndParams) throws SQLException {
+    @SuppressWarnings("unchecked")
+    private List<Object> executeSql(PrepareSQLAndParams prepareSQLAndParams, EventData eventData, TableInfo tableInfo) throws SQLException, IllegalAccessException, InstantiationException {
         tryConnectIfCLose();
 
         Logs.DB.info(" prepareSQL : {} ", prepareSQLAndParams.prepareSQL);
 
-        try(PreparedStatement preparedStatement = connection.prepareStatement(prepareSQLAndParams.prepareSQL);){
+        try (PreparedStatement preparedStatement = connection.prepareStatement(prepareSQLAndParams.prepareSQL);) {
 
-            if (!CollectionUtil.isEmpty(prepareSQLAndParams.params)) {
-                for (int i = 0; i < prepareSQLAndParams.params.size(); i++) {
+            if (!CollectionUtil.isEmpty(prepareSQLAndParams.paramValues)) {
+                for (int i = 0; i < prepareSQLAndParams.paramValues.size(); i++) {
                     int parameterIndex = i + 1;
-                    Object value = prepareSQLAndParams.params.get(i);
+                    Object value = prepareSQLAndParams.paramValues.get(i);
 
-                    if (value instanceof Integer) {
-                        preparedStatement.setInt(parameterIndex, (int) value);
-                    } else if (value instanceof String) {
-                        preparedStatement.setString(parameterIndex, (String) value);
-                    } else if (value instanceof Long) {
-                        preparedStatement.setLong(parameterIndex, (long) value);
-                    } else if(dbFieldSerializerMap.containsKey(value.getClass())){
-                        DBFieldSerializer<?> dbFieldSerializer = dbFieldSerializerMap.get(value.getClass());
-                        String str = dbFieldSerializer.unserialize(value);
-                        preparedStatement.setString(parameterIndex, str);
-                    }else {
-                        preparedStatement.setInt(parameterIndex, (int) value);
+
+                    TypeHandler typeHandler = typeHandlerMap.get(value.getClass());
+                    if (typeHandler != null) {
+                        typeHandler.setParameter(preparedStatement, parameterIndex, value);
+                    } else {
+                        preparedStatement.setObject(parameterIndex, value);
                     }
                 }
             }
 
-            preparedStatement.execute();
+            switch (prepareSQLAndParams.sqlExecuteType) {
+                case QUERY_ONE:
+                case QUERY_MANY: {
+                    List<Object> returnList = new ArrayList<>();
+                    try (ResultSet resultSet = preparedStatement.executeQuery();) {
+
+                        while (!resultSet.isClosed() && resultSet.next()) {
+
+
+                            Object returnObj = eventData.getData().getClass().newInstance();
+
+                            for (TableFieldInfo tableFieldInfo : tableInfo.getFieldInfoLinkedMap().values()) {
+
+                                TypeHandler typeHandler = typeHandlerMap.get(tableFieldInfo.getClassField().getType());
+                                if (typeHandler == null) {
+                                    Logs.DB.error("typeHandler == null class field {}", tableFieldInfo.getClassField().getType());
+                                    continue;
+                                }
+
+                                Object value = typeHandler.getNullableResult(resultSet, tableFieldInfo.getTableFieldName());
+
+                                tableFieldInfo.getClassField().set(returnObj, value);
+                            }
+
+                            returnList.add(returnObj);
+                        }
+                    }
+                    return returnList;
+                }
+                case MODIFY:
+                default:
+                    preparedStatement.execute();
+                    break;
+            }
+
+            return null;
+
+
         }
 
 
@@ -282,7 +411,7 @@ public class DBConsumer extends BlockingQueueConsumer {
     private void tryConnectIfCLose() {
         if (connection == null) {
             try {
-                connection = getConn("test");
+                connection = getConn();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -290,13 +419,23 @@ public class DBConsumer extends BlockingQueueConsumer {
         }
 
 
+        boolean isClose = false;
+
         try {
-            if (connection.isClosed()) {
-                connection.close();
-                connection = getConn("test");
-            }
+            isClose = connection.isClosed();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            isClose = true;
+        }
+
+
+        if (isClose) {
+            closeQuiet();
+            try {
+                connection = getConn();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
 
 
@@ -306,16 +445,30 @@ public class DBConsumer extends BlockingQueueConsumer {
 
     }
 
+    private void closeQuiet() {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-    private Connection getConn(String databaseName) throws SQLException {
 
+    private Connection getConn() throws SQLException {
 
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/" + databaseName + "?useUnicode=true&characterEncoding=utf8&createDatabaseIfNotExist=true&serverTimezone=UTC"
-                , "root", "123456"
-        );
+        Connection connection = DriverManager.getConnection(dbConfig.getJdbcUrl(), dbConfig.getUsername(), dbConfig.getPassword());
         return connection;
 
     }
 
+    @Override
+    public boolean isDefaultConsumer(){
+        return false;
+    }
 
+    public void setDbConfig(DBConfig dbConfig) {
+        this.dbConfig = dbConfig;
+    }
 }

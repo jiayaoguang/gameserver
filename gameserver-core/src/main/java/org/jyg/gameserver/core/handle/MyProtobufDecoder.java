@@ -2,10 +2,13 @@ package org.jyg.gameserver.core.handle;
 
 import com.google.protobuf.MessageLite;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
+import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.Context;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.util.Logs;
@@ -56,56 +59,74 @@ public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
 
     @Override
     public Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
-        ByteBuf frame = null;
+//        ByteBuf frame = null;
         //TODO crc
 //		try {
-        frame = (ByteBuf) super.decode(ctx, in);
+        ByteBuf frame = (ByteBuf) super.decode(ctx, in);
         if (frame == null) {
             return null;
         }
-        int msgId = frame.readInt();
-        Logs.DEFAULT_LOGGER.debug("cnf:" + frame.refCnt());
-        AbstractMsgCodec<?> msgCodec = context.getMsgCodec(msgId);
-        if (msgCodec == null) {
-            LOGGER.error(" protoParser not found ,id : {} ", msgId);
-            return null;
-        }
-
-        int readableBytes = frame.readableBytes();
-
-        if(readableBytes <= 0){
-            LOGGER.error(" readableBytes <= 0 ,id : {} ", msgId);
-        }
-
-        final byte[] dstBytes = new byte[frame.readableBytes()];;
-        if(readableBytes > 0){
-            frame.getBytes(frame.readerIndex(), dstBytes);
-        }else {
-            LOGGER.info(" readableBytes <= 0 ,id : {} ", msgId);
-        }
-
-        Object msgObj;
 
         try{
-            msgObj = msgCodec.decode(dstBytes);
+
+            int msgId = frame.readInt();
+            Logs.DEFAULT_LOGGER.debug("cnf:" + frame.refCnt());
+            AbstractMsgCodec<?> msgCodec = context.getMsgCodec(msgId);
+            if (msgCodec == null) {
+                LOGGER.error(" protoParser not found ,id : {} ", msgId);
+                return null;
+            }
+
+            int readableBytes = frame.readableBytes();
+
+            if(readableBytes <= 0){
+                LOGGER.error(" readableBytes <= 0 ,id : {} ", msgId);
+            }
+
+            final byte[] dstBytes = new byte[frame.readableBytes()];;
+            if(readableBytes > 0){
+                frame.getBytes(frame.readerIndex(), dstBytes);
+            }else {
+                LOGGER.info(" readableBytes <= 0 ,id : {} ", msgId);
+            }
+
+            Object msgObj;
+
+            try{
+                msgObj = msgCodec.decode(dstBytes);
+            }catch (Exception e){
+                LOGGER.error(" msg decode make exception, msg type : {}  , exception {}", msgCodec.getMsgType(), e.getCause());
+                throw e;
+            }
+
+            switch (msgCodec.getMsgType()) {
+                case PROTO:
+                    MessageLite messageLite = (MessageLite) msgObj;
+                    context.getDefaultConsumer().publicEvent(EventType.PROTO_MSG_COME, messageLite, ctx.channel(), msgId);
+                    break;
+                case BYTE_OBJ:
+                    ByteMsgObj byteMsgObj = (ByteMsgObj) msgObj;
+                    context.getDefaultConsumer().publicEvent(EventType.BYTE_OBJ_MSG_COME, byteMsgObj, ctx.channel(), msgId);
+                    break;
+                default:
+                    LOGGER.error(" unknown msg type type : {} ", msgCodec.getMsgType());
+                    break;
+            }
+
+
         }catch (Exception e){
-            LOGGER.error(" msg decode make exception, msg type : {}  , exception {}", msgCodec.getMsgType(), e.getCause());
-            throw e;
+            final String addrRemote = AllUtil.getChannelRemoteAddr(ctx.channel());
+            ctx.channel().close().addListener(new ChannelFutureListener() {
+                @Override
+                public void operationComplete(ChannelFuture future) throws Exception {
+                    Logs.DEFAULT_LOGGER.info("closeChannel: close the connection to remote address[{}] result: {}", addrRemote,
+                            future.isSuccess());
+                }
+            });
+        } finally {
+
         }
 
-        switch (msgCodec.getMsgType()) {
-            case PROTO:
-                MessageLite messageLite = (MessageLite) msgObj;
-                context.getDefaultConsumer().publicEvent(EventType.PROTO_MSG_COME, messageLite, ctx.channel(), msgId);
-                break;
-            case BYTE_OBJ:
-                ByteMsgObj byteMsgObj = (ByteMsgObj) msgObj;
-                context.getDefaultConsumer().publicEvent(EventType.BYTE_OBJ_MSG_COME, byteMsgObj, ctx.channel(), msgId);
-                break;
-            default:
-                LOGGER.error(" unknown msg type type : {} ", msgCodec.getMsgType());
-                break;
-        }
 
 
 

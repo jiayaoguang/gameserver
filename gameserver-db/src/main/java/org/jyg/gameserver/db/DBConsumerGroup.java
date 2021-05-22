@@ -1,31 +1,56 @@
 package org.jyg.gameserver.db;
 
-import cn.hutool.core.collection.CollectionUtil;
 import io.netty.channel.Channel;
-import org.jyg.gameserver.core.consumer.*;
+import org.jyg.gameserver.core.consumer.ConsumerGroup;
+import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
-import org.jyg.gameserver.db.serialize.DBFieldSerializer;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.jyg.gameserver.core.util.ConfigUtil;
+import org.jyg.gameserver.db.type.TypeHandler;
 
 /**
- * create by jiayaoguang on 2021/5/15
+ * create by jiayaoguang on 2021/5/16
  */
 public class DBConsumerGroup extends ConsumerGroup<DBConsumer> {
 
+    private final DBConfig dbConfig;
 
-    public DBConsumerGroup(int childConsumerNum) {
+    public DBConsumerGroup() {
+        this(ConfigUtil.properties2Object("jyg.properties", DBConfig.class));
+    }
 
-        super(DBConsumer::new, childConsumerNum);
+
+    public DBConsumerGroup(DBConfig dbConfig) {
+
+        this.dbConfig = dbConfig;
+
+        if(this.dbConfig == null){
+            throw new IllegalArgumentException("dbconfig error");
+        }
+
+//        Configuration configuration = new Configuration();
+//
+//        SimpleDataSource simpleDataSource = new SimpleDataSource();
+//        simpleDataSource.setUrl(this.dbConfig.getJdbcUrl());
+//        simpleDataSource.setUser(this.dbConfig.getUsername());
+//        simpleDataSource.setPass(this.dbConfig.getPassword());
+//
+//        Environment environment = new Environment("1", new JdbcTransactionFactory(), simpleDataSource);
+//        configuration.setEnvironment(environment);
+//        configuration.addMapper(MybatisDao.class);
+
+
+        for(int i=0;i<dbConfig.getDbConsumerNum();i++){
+            DBConsumer dbConsumer = new DBConsumer();
+            dbConsumer.setDbConfig(dbConfig);
+            addChildConsumer(dbConsumer);
+        }
+
+        setId(dbConfig.getDbConsumerGroupId());
 
     }
 
 
-    public DBConsumerGroup(List<DBConsumer> childConsumerList) {
-        super(childConsumerList);
-    }
 
 
     public void addTableInfo(Class<?> dbEntity) {
@@ -35,17 +60,40 @@ public class DBConsumerGroup extends ConsumerGroup<DBConsumer> {
     }
 
     @Override
-    protected void processDefaultEvent(int eventId, Object dbEntity) {
+    protected void processDefaultEvent(int eventId, Object dbEntity , EventData eventData) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void publicEvent(EventType evenType, Object data, Channel channel, int eventId, EventExtData eventExtData) {
+        if(!(data instanceof BaseDBEntity)){
+            throw new IllegalArgumentException("db entity must extend BaseDBEntity");
+        }
+        switch (eventId) {
+            case BDEventConst.DELETE:
+            case BDEventConst.SELECT:
+            case BDEventConst.SELECT_BY_FIELD:
+                break;
+            default:
+                data = ((BaseDBEntity) data).clone();
+                break;
+        }
+
+        super.publicEvent(evenType , data , channel , eventId , eventExtData);
+    }
+
+    public void registerTypeHandler(TypeHandler<?> typeHandler){
+
+        //is start
+
         for (DBConsumer childDBConsumer : getChildConsumerList()) {
-            childDBConsumer.processDefaultEvent(eventId, dbEntity);
+            childDBConsumer.registerTypeHandler(typeHandler);
         }
     }
 
-    public void addDBFieldSerializer(DBFieldSerializer<?> dbFieldSerializer){
-        for (DBConsumer childDBConsumer : getChildConsumerList()) {
-            childDBConsumer.addDBFieldSerializer(dbFieldSerializer);
-        }
-    }
 
+    public DBConfig getDbConfig() {
+        return dbConfig;
+    }
 
 }

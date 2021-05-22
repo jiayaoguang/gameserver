@@ -38,6 +38,8 @@ public enum EventType {
 
 	DEFAULT_EVENT,
 
+	CALL_BACK,
+
 	;
 	
 }

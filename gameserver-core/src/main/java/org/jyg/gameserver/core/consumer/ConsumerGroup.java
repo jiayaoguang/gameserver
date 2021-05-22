@@ -7,8 +7,6 @@ import org.jyg.gameserver.core.enums.EventType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * create by jiayaoguang on 2021/5/15
@@ -18,6 +16,10 @@ public class ConsumerGroup<T extends Consumer> extends Consumer {
     private volatile boolean isStart = false;
 
     private final List<T> childConsumerList = new ArrayList<>();
+
+    public ConsumerGroup(){
+
+    }
 
 
     public ConsumerGroup(ConsumerFactory<T> childConsumerFactory, int childConsumerNum) {
@@ -36,12 +38,18 @@ public class ConsumerGroup<T extends Consumer> extends Consumer {
 
     @Override
     public void doStart() {
+
+        if(CollectionUtil.isEmpty(childConsumerList)){
+            throw new IllegalArgumentException("isEmpty(childConsumerList)");
+        }
+
         isStart = true;
         int nextId = 1;
         for (Consumer childConsumer : childConsumerList) {
             if(childConsumer.getId() == 0){
                 childConsumer.setId(nextId);
             }
+            childConsumer.setContext(getContext());
             childConsumer.start();
             nextId++;
         }
@@ -71,7 +79,7 @@ public class ConsumerGroup<T extends Consumer> extends Consumer {
             throw new RuntimeException("eventExtData == null");
         }
 
-        int childConsumerIndex = (int) (eventExtData.sessionId % childConsumerList.size());
+        int childConsumerIndex = (int) (eventExtData.childChooseId % childConsumerList.size());
         Consumer childConsumer = childConsumerList.get(childConsumerIndex);
         childConsumer.publicEvent(evenType, data, channel, eventId, eventExtData);
 

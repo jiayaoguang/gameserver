@@ -5,13 +5,16 @@ package org.jyg.gameserver.core.timer;
 
 import org.jyg.gameserver.core.manager.Lifecycle;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.PriorityQueue;
 
 public class TimerManager implements Lifecycle {
 
     private final PriorityQueue<Timer> timerQueue = new PriorityQueue<>(128);
 
-    public Timer addTimer(Timer timer) {
+
+    public <T extends Timer> T addTimer(T timer) {
         timerQueue.add(timer);
         return timer;
     }

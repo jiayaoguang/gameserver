@@ -9,15 +9,17 @@ import io.netty.channel.Channel;
  */
 public class EventData<T>{
 
+	public static final EventExtData EMPTY_EVENT_EXT_DATA = new EventExtData(0,0 , null);
+
 	private Channel channel;
 	
-	private EventType channelEventType;
+	private EventType eventType;
 
 	private T data;
 
 	private int fromConsumerId;
 
-	private EventExtData eventExtData;
+	private EventExtData eventExtData = EMPTY_EVENT_EXT_DATA;
 	
 	
 	//http用不到
@@ -33,12 +35,12 @@ public class EventData<T>{
 //		TextWebSocketFrameHandler.channels.add(channel);
 	}
 
-	public EventType getChannelEventType() {
-		return channelEventType;
+	public EventType getEventType() {
+		return eventType;
 	}
 
-	public void setChannelEventType(EventType channelEventType) {
-		this.channelEventType = channelEventType;
+	public void setEventType(EventType eventType) {
+		this.eventType = eventType;
 	}
 
 	
@@ -64,22 +66,22 @@ public class EventData<T>{
 	
 	@Override
 	public String toString() {
-		return ""+channelEventType+","+this.eventId+data;
+		return eventType + "," + this.eventId + data;
 	}
 
 	public int getFromConsumerId() {
-		return fromConsumerId;
+		return eventExtData.fromConsumerId;
 	}
 
-	public void setFromConsumerId(int fromConsumerId) {
-		this.fromConsumerId = fromConsumerId;
-	}
 
 	public EventExtData getEventExtData() {
 		return eventExtData;
 	}
 
 	public void setEventExtData(EventExtData eventExtData) {
+		if(eventExtData == null){
+			eventExtData = EMPTY_EVENT_EXT_DATA;
+		}
 		this.eventExtData = eventExtData;
 	}
 }

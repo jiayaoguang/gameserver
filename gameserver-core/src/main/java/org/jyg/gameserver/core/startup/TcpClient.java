@@ -29,10 +29,13 @@ public class TcpClient extends AbstractBootstrap{
 	// 通过nio方式来接收连接和处理连接
 	private final Bootstrap bootstrap = new Bootstrap();
 	private Channel channel;
-	private Session session;
+	private final Session session;
+
+	private  String host;
+	private  int port;
 
 	public TcpClient()  {
-		this(new Context(new RingBufferConsumer()));
+		this(new Context(new RingBufferConsumer()) , "" , 0);
 
 //		try {
 //			this.registerSendEventIdByProto(ProtoEnum.P_COMMON_REQUEST_PING.getEventId(), p_common.p_common_request_ping.class);
@@ -48,23 +51,19 @@ public class TcpClient extends AbstractBootstrap{
 //		}
 
 	}
-	public TcpClient(Context context)  {
-		super(context);
 
-//		try {
-//			this.registerSendEventIdByProto(ProtoEnum.P_COMMON_REQUEST_PING.getEventId(), p_common.p_common_request_ping.class);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		
-//		//注册pong处理器
-//		try {
-//			this.registerSocketEvent(ProtoEnum.P_COMMON_RESPONSE_PONG.getEventId() , new PongProtoProcessor());
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-		
+
+	public TcpClient(String host, int port) {
+		this(new Context(new RingBufferConsumer()), host, port);
 	}
+
+	public TcpClient(Context context ,String host, int port) {
+		super(context);
+		this.host = host;
+		this.port = port;
+		this.session = new Session(null , 1L);
+	}
+
 
 
 	@Override
@@ -85,16 +84,26 @@ public class TcpClient extends AbstractBootstrap{
 		bootstrap.option(ChannelOption.SO_LINGER, 0);
 		bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 
+		if(port > 0){
+			connect();
+		}
+
 	}
 
-	// 连接服务端
-	public Channel connect(String host,int port) throws InterruptedException {
-		if(channel != null) {
+	public Session connect(){
+		if (channel != null) {
 			channel.close();
+			Logs.DEFAULT_LOGGER.info(" close old channel ");
 		}
 
 
-		ChannelFuture channelFuture = bootstrap.connect(host, port).sync();
+		ChannelFuture channelFuture = null;
+		try {
+			channelFuture = bootstrap.connect(host, port).sync();
+		} catch (InterruptedException e) {
+//			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 
 		if(!channelFuture.isSuccess()){
 			logger.error(" connect fail ");
@@ -105,38 +114,54 @@ public class TcpClient extends AbstractBootstrap{
 
 		channel = channelFuture.channel();
 
-		session = new Session(channel , 0);
+		session.setChannel(channel);
 
-		
-//		EventDispatcher.getInstance().addTimer( new IdleTimer(channel) );
+		return session;
+	}
 
-		return channel;
+	// 连接服务端
+	@Deprecated
+	public Channel connect(String host,int port) {
+		this.host = host;
+		this.port = port;
+
+		return connect().getChannel();
 	}
 	
 
 	public void write( MessageLite msg) throws IOException {
+		checkConnect();
 		channel.writeAndFlush( msg);
 //		System.out.println("客户端发送数据>>>>");
 	}
 
 	public void write( ByteMsgObj byteMsgObj) throws IOException {
+		checkConnect();
 		channel.writeAndFlush( byteMsgObj);
 //		System.out.println("客户端发送数据>>>>");
 	}
 
 	public void write( MessageLite.Builder msgBuilder) throws IOException {
+		checkConnect();
 		write(msgBuilder.build());
 //		System.out.println("客户端发送数据>>>>");
 	}
 	
-	public Channel getChannel() {
-		return channel;
-	}
+//	private Channel getChannel() {
+//		return channel;
+//	}
 
 	public void close() {
 
 		if(session !=null) {
 			session.stop();
+		}
+
+	}
+
+	public void checkConnect(){
+		if(channel == null || !channel.isActive()){
+			connect();
 		}
 
 	}

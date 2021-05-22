@@ -8,10 +8,19 @@ import java.util.List;
 public class PrepareSQLAndParams {
 
     public final String prepareSQL;
-    public final List<Object> params;
+    public final List<Object> paramValues;
 
-    public PrepareSQLAndParams(String prepareSQL, List<Object> params) {
+    public final SqlExecuteType sqlExecuteType;
+
+    public PrepareSQLAndParams(String prepareSQL, List<Object> paramValues, SqlExecuteType sqlExecuteType) {
         this.prepareSQL = prepareSQL;
-        this.params = params;
+        this.paramValues = paramValues;
+        this.sqlExecuteType = sqlExecuteType;
+    }
+
+    public PrepareSQLAndParams(String prepareSQL, List<Object> paramValues) {
+        this.prepareSQL = prepareSQL;
+        this.paramValues = paramValues;
+        this.sqlExecuteType = SqlExecuteType.MODIFY;
     }
 }

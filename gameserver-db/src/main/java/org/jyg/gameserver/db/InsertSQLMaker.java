@@ -1,22 +1,22 @@
 package org.jyg.gameserver.db;
 
-import java.lang.reflect.InvocationTargetException;
+import org.jyg.gameserver.core.util.Logs;
+import sun.rmi.runtime.Log;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * create by jiayaoguang at 2021/5/14
  */
-public class InsertSQLMaker implements SQLMaker {
+public class InsertSQLMaker extends CachedSQLMaker {
 
-    private final StringBuilder insertSqlSb = new StringBuilder(50);
 
-    @Override
-    public PrepareSQLAndParams createSql(SqlKeyWord sqlKeyWord, Object dbEntity, TableInfo tableInfo) {
+    //    @Override
+   /* public PrepareSQLAndParams qq(SqlKeyWord sqlKeyWord, Object dbEntity, TableInfo tableInfo, Map<String, Object> params) throws Exception {
 
-        insertSqlSb.setLength(0);
-
-        List<Object> params = new ArrayList<>(tableInfo.getFieldInfoMap().size());
+        final StringBuilder insertSqlSb = new StringBuilder(50);
 
 
         insertSqlSb.append(sqlKeyWord.insert()).append(' ')
@@ -25,12 +25,12 @@ public class InsertSQLMaker implements SQLMaker {
 
         insertSqlSb.append('(').append(' ');
 
-        int insertKeyNameNum  = 0;
+        int insertKeyNameNum = 0;
 
-        for(String tableFieldName : tableInfo.getFieldInfoMap().keySet() ){
-            insertKeyNameNum ++;
+        for (String tableFieldName : tableInfo.getFieldInfoLinkedMap().keySet()) {
+            insertKeyNameNum++;
             insertSqlSb.append(tableFieldName);
-            if(insertKeyNameNum != tableInfo.getFieldInfoMap().size()){
+            if (insertKeyNameNum != tableInfo.getFieldInfoLinkedMap().size()) {
                 insertSqlSb.append(',');
             }
         }
@@ -42,38 +42,30 @@ public class InsertSQLMaker implements SQLMaker {
 
         int insertParamNum = 0;
 
-        for(TableFieldInfo tableFieldInfo : tableInfo.getFieldInfoMap().values() ){
+        List<Object> valueParams = new ArrayList<>(tableInfo.getFieldInfoLinkedMap().size());
+
+        for (TableFieldInfo tableFieldInfo : tableInfo.getFieldInfoLinkedMap().values()) {
             Object fieldValue = null;
 
-            if(tableFieldInfo.getFiedGetMethod() != null){
-                try {
-                    fieldValue = tableFieldInfo.getFiedGetMethod().invoke(dbEntity);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                }
+            if (tableFieldInfo.getFiedGetMethod() != null) {
+                fieldValue = tableFieldInfo.getFiedGetMethod().invoke(dbEntity);
             }
 
-            if(fieldValue == null){
-                try {
-                    fieldValue = tableFieldInfo.getClassField().get(dbEntity);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+            if (fieldValue == null) {
+                fieldValue = tableFieldInfo.getClassField().get(dbEntity);
             }
 
-            if(fieldValue == null){
+            if (fieldValue == null) {
                 return null;
             }
 
-            insertParamNum ++;
+            insertParamNum++;
             insertSqlSb.append('?');
-            if(insertParamNum != tableInfo.getFieldInfoMap().size()){
+            if (insertParamNum != tableInfo.getFieldInfoLinkedMap().size()) {
                 insertSqlSb.append(',');
             }
 
-            params.add(fieldValue);
+            valueParams.add(fieldValue);
 
         }
 
@@ -84,10 +76,107 @@ public class InsertSQLMaker implements SQLMaker {
 
         insertSqlSb.setLength(0);
 
-        return new PrepareSQLAndParams(prepareSql , params);
+        return new PrepareSQLAndParams(prepareSql, valueParams, SqlExecuteType.MODIFY);
+    }*/
+
+    @Override
+    protected String createPrepareSql(SqlKeyWord sqlKeyWord, Object dbEntity, TableInfo tableInfo, Map<String, Object> params) throws Exception {
+        final StringBuilder insertSqlSb = new StringBuilder(50);
+
+        List<Object> valueParams = new ArrayList<>(tableInfo.getFieldInfoLinkedMap().size());
+
+
+        insertSqlSb.append(sqlKeyWord.insert()).append(' ')
+                .append(sqlKeyWord.into()).append(' ');
+        insertSqlSb.append(tableInfo.getTableName()).append(' ');
+
+        insertSqlSb.append('(').append(' ');
+
+        int insertKeyNameNum = 0;
+
+        for (String tableFieldName : tableInfo.getFieldInfoLinkedMap().keySet()) {
+            insertKeyNameNum++;
+            insertSqlSb.append(tableFieldName);
+            if (insertKeyNameNum != tableInfo.getFieldInfoLinkedMap().size()) {
+                insertSqlSb.append(',');
+            }
+        }
+        insertSqlSb.append(')').append(' ');
+
+        insertSqlSb.append(sqlKeyWord.values()).append(' ');
+
+        insertSqlSb.append('(').append(' ');
+
+        int insertParamNum = 0;
+
+        for (TableFieldInfo tableFieldInfo : tableInfo.getFieldInfoLinkedMap().values()) {
+            Object fieldValue = null;
+
+            if (tableFieldInfo.getFiedGetMethod() != null) {
+                try{
+                    fieldValue = tableFieldInfo.getFiedGetMethod().invoke(dbEntity);
+                }catch (Exception e){
+                    tableFieldInfo.setFiedGetMethod(null);
+                    e.printStackTrace();
+                    Logs.DEFAULT_LOGGER.error("TableField {} FiedGetMethod make exception set FiedGetMethod null" , tableFieldInfo.getTableFieldName());
+                }
+            }
+
+            if (fieldValue == null) {
+                fieldValue = tableFieldInfo.getClassField().get(dbEntity);
+            }
+
+            if (fieldValue == null) {
+                return null;
+            }
+
+            insertParamNum++;
+            insertSqlSb.append('?');
+            if (insertParamNum != tableInfo.getFieldInfoLinkedMap().size()) {
+                insertSqlSb.append(',');
+            }
+
+            valueParams.add(fieldValue);
+
+        }
+
+        insertSqlSb.append(')').append(';');
+        return insertSqlSb.toString();
     }
 
+    @Override
+    public SqlExecuteType getExecuteType() {
+        return SqlExecuteType.MODIFY;
+    }
 
+    @Override
+    protected List<Object> getParamValues(SqlKeyWord sqlKeyWord, Object dbEntity, TableInfo tableInfo, Map<String, Object> params) throws Exception {
+        List<Object> valueParams = new ArrayList<>(tableInfo.getFieldInfoLinkedMap().size());
+
+        for (TableFieldInfo tableFieldInfo : tableInfo.getFieldInfoLinkedMap().values()) {
+            Object fieldValue = null;
+
+            if (tableFieldInfo.getFiedGetMethod() != null) {
+                try {
+                    fieldValue = tableFieldInfo.getFiedGetMethod().invoke(dbEntity);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            if (fieldValue == null) {
+                fieldValue = tableFieldInfo.getClassField().get(dbEntity);
+            }
+
+            if (fieldValue == null) {
+                return null;
+            }
+
+            valueParams.add(fieldValue);
+
+        }
+        return valueParams;
+    }
 
 
 }

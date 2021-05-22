@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.consumer;
 
+import io.netty.util.concurrent.DefaultThreadFactory;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.EventExtData;
@@ -44,7 +45,7 @@ public class RingBufferConsumer extends Consumer {
 
         EventFactory<EventData<Object>> eventFactory = EventData::new;
 
-        ThreadFactory consumerThreadFactory = new PrefixNameThreadFactory("ringbuffer_consumer_thread_");
+        ThreadFactory consumerThreadFactory = new DefaultThreadFactory("ringbuffer_consumer_thread_"+getId());
 
         disruptor = new Disruptor<>(eventFactory, BUFFER_SIZE, consumerThreadFactory, ProducerType.MULTI,
                 new LoopAndSleepWaitStrategy(this::update));
@@ -73,7 +74,7 @@ public class RingBufferConsumer extends Consumer {
             event.setData(data);
             event.setChannel(channel);
             event.setEventId(eventId);
-            event.setChannelEventType(evenType);
+            event.setEventType(evenType);
             event.setEventExtData(eventExtData);
         } finally {
             this.ringBuffer.publish(sequence);
@@ -88,7 +89,7 @@ public class RingBufferConsumer extends Consumer {
         @Override
         public void handleEventException(Throwable ex, long sequence, EventData event) {
             LOGGER.error("handleEventException seq {}  Throwable {} , eventType  {}  , eventId {}",
-                    sequence, ExceptionUtils.getStackTrace(ex), event.getChannelEventType(), event.getEventId());
+                    sequence, ExceptionUtils.getStackTrace(ex), event.getEventType(), event.getEventId());
         }
 
         @Override

@@ -24,7 +24,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class Context implements Lifecycle{
 
-    private static final String DEFAULT_CONFIG_FILE_NAME = "jyg.properties";
+    public static final String DEFAULT_CONFIG_FILE_NAME = "jyg.properties";
 //    private String configFileName = DEFAULT_CONFIG_FILE_NAME;
 
 
@@ -64,8 +64,8 @@ public class Context implements Lifecycle{
 
     public Context(Consumer defaultConsumer , String configFileName) {
         this.defaultConsumer = defaultConsumer;
-
-        AllUtil.properties2Object(configFileName, serverConfig);
+        this.instanceManager = new InstanceManager();
+        ConfigUtil.properties2Object(configFileName, serverConfig);
 
 //        loadServerConfig(configFileName);
 
@@ -85,7 +85,7 @@ public class Context implements Lifecycle{
 
         this.remoteInvokeManager = new RemoteInvokeManager();
 
-        this.instanceManager = new InstanceManager();
+
 
     }
 
@@ -152,7 +152,7 @@ public class Context implements Lifecycle{
         this.protoClazz2MsgIdMap = Object2IntMaps.unmodifiable(this.protoClazz2MsgIdMap);
         this.msgId2MsgCodecMap = Int2ObjectMaps.unmodifiable(this.msgId2MsgCodecMap);
 
-        this.remoteInvokeManager.scan(getServerConfig().getSacnInvokeClassPath());
+        this.remoteInvokeManager.scan(getServerConfig().getScanInvokeClassPath());
 
         this.instanceManager.start();
 
@@ -176,7 +176,7 @@ public class Context implements Lifecycle{
             AllUtil.println(" already start .... ");
             return;
         }
-        AllUtil.properties2Object(configFileName, serverConfig);
+        ConfigUtil.properties2Object(configFileName, serverConfig);
     }
 
 
@@ -230,8 +230,8 @@ public class Context implements Lifecycle{
     }
 
 
-    public TcpClient createTcpClient(){
-        return new TcpClient(this);
+    public TcpClient createTcpClient(String host , int port){
+        return new TcpClient(this , host , port);
     }
 
 

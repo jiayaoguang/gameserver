@@ -22,7 +22,7 @@ public abstract class AbstractQueueConsumer extends Consumer {
     public final void doStart() {
 
         consumerThread = new Thread(this::run);
-        consumerThread.setName("blockingQueue_consumer_thread");
+        consumerThread.setName("blockingQueue_consumer_thread_" + getId());
         consumerThread.setDaemon(false);
 
         consumerThread.start();
@@ -63,7 +63,7 @@ public abstract class AbstractQueueConsumer extends Consumer {
 
         EventData<Object> event = new EventData<>();
         event.setChannel(channel);
-        event.setChannelEventType(evenType);
+        event.setEventType(evenType);
         event.setData(data);
         event.setEventId(eventId);
         event.setEventExtData(eventExtData);

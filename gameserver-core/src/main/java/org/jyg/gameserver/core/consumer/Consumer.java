@@ -11,6 +11,7 @@ import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.manager.ResultHandlerManager;
 import org.jyg.gameserver.core.manager.ChannelManager;
 import org.jyg.gameserver.core.manager.InstanceManager;
 import org.jyg.gameserver.core.net.Request;
@@ -23,13 +24,11 @@ import org.jyg.gameserver.core.util.Context;
 import org.jyg.gameserver.core.invoke.IRemoteInvoke;
 import org.jyg.gameserver.core.util.Logs;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * created by jiayaoguang at 2017年12月18日
@@ -67,6 +66,13 @@ public abstract class Consumer {
     private int requestId = 1;
 
     private final Map<Class<?>,EventClassHandler<?>> eventClassHandlerMap = new HashMap<>(MAP_DEFAULT_SIZE,MAP_DEFAULT_LOADFACTOR);
+
+
+
+    private final Map<Integer , ResultHandler> waitCallBackMap = new HashMap<>();
+
+    private final ResultHandlerManager resultHandlerManager = new ResultHandlerManager();
+
 
 
     public Consumer() {
@@ -109,10 +115,27 @@ public abstract class Consumer {
 //    }
 
     public void publicEvent(EventType evenType, Object data, Channel channel, int eventId){
-        publicEvent(evenType, data, channel, eventId , null);
+        publicEvent(evenType, data, channel, eventId , EventData.EMPTY_EVENT_EXT_DATA);
+    }
+
+    public void publicEventToTarget(int targetConsumerId,EventType evenType, Object data, Channel channel, int eventId , EventExtData eventExtData , ResultHandler resultHandler){
+        int requestId = 0;
+        if(resultHandler != null){
+            requestId = registerCallBackMethod(resultHandler);
+        }else {
+            requestId = eventExtData.requestId;
+        }
+
+        getContext().getConsumerManager().publicEvent(targetConsumerId, evenType, data, channel, eventId, new EventExtData(getId(), requestId, eventExtData.childChooseId));
+    }
+
+    public void publicCallBackEventToTarget(int targetConsumerId, Object data,  int requestId ){
+        getContext().getConsumerManager().publicEvent(targetConsumerId, EventType.CALL_BACK, data, null, 0, new EventExtData(0, requestId, 0));
     }
 
     public abstract void publicEvent(EventType evenType, Object data, Channel channel, int eventId , EventExtData eventExtData);
+
+
 
 
     public Context getContext() {
@@ -171,6 +194,7 @@ public abstract class Consumer {
      *
      * @param textProcessor textProcessor
      */
+    @Deprecated
     public void setTextProcessor(TextProcessor textProcessor) {
         textProcessor.setConsumer(this);
         this.textProcessor = textProcessor;
@@ -184,7 +208,7 @@ public abstract class Consumer {
      * @param session session
      * @param event   event
      */
-    public void processEventMsg(Session session, EventData<? extends MessageLite> event) {
+    protected void processEventMsg(Session session, EventData<? extends MessageLite> event) {
 //		MessageLite msg = event.getData();
         Processor processor = protoProcessorMap.get(event.getEventId());
         if (processor == null) {
@@ -195,7 +219,10 @@ public abstract class Consumer {
         processor.process(session, event);
     }
 
-    protected void processDefaultEvent(int eventId , Object data ) {
+
+
+
+    protected void processDefaultEvent(int eventId , Object data  , EventData eventData) {
 
         EventClassHandler<?> eventClassHandler = eventClassHandlerMap.get(data.getClass());
         if(eventClassHandler == null){
@@ -263,6 +290,11 @@ public abstract class Consumer {
 
 
     public ChannelManager getChannelManager() {
+
+        if(!isDefaultConsumer()){
+            return null;
+        }
+
         return channelManager;
     }
 
@@ -321,7 +353,12 @@ public abstract class Consumer {
 
         // System.out.println(event.getChannel());
         try {
+            long startNano = System.nanoTime();
             doEvent(event);
+            long costMill = (System.nanoTime() - startNano)/1000000L;
+            if(costMill > 10){
+                Logs.DEFAULT_LOGGER.error(" event  cost more time {} ", costMill);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -337,8 +374,12 @@ public abstract class Consumer {
         timerManager.updateTimer();
     }
 
+    private void doEvent(int eventId ,Channel channel,EventType eventType,Object data, EventData event){
+
+    }
+
     private void doEvent(EventData event) {
-        switch (event.getChannelEventType()) {
+        switch (event.getEventType()) {
 
 //			case CLIENT_SOCKET_CONNECT_ACTIVE:
 //				dispatcher.as_on_client_active(event);
@@ -400,11 +441,14 @@ public abstract class Consumer {
                 break;
 
             case DEFAULT_EVENT:
-                processDefaultEvent(event.getEventId() , event.getData());
+                processDefaultEvent(event.getEventId() , event.getData() ,event);
+                break;
+            case CALL_BACK:
+                resultHandlerManager.onCallBack(event.getEventExtData().requestId, event.getEventId(), event.getData());
                 break;
 
             default:
-                throw new IllegalArgumentException("unknown channelEventType <" + event.getChannelEventType() + ">");
+                throw new IllegalArgumentException("unknown channelEventType <" + event.getEventType() + ">");
         }
     }
 
@@ -419,10 +463,25 @@ public abstract class Consumer {
 
     private int getAndIncRequestId() {
         if (requestId == Integer.MAX_VALUE) {
-            requestId = 0;
+            requestId = 1;
         }
         return requestId++;
     }
+
+    public int registerCallBackMethod(ResultHandler call) {
+        int requestId = getAndIncRequestId();
+//        new CallBackOutTimeTimer(TimeUnit.SECONDS.toMillis(5) , call);
+
+
+        ResultHandlerTimeOutTimer callBackTimeOutTimer = getTimerManager().addTimer(new ResultHandlerTimeOutTimer(TimeUnit.SECONDS.toMillis(5), call, resultHandlerManager, requestId));
+
+        resultHandlerManager.putCallBackOutTimeTimer(callBackTimeOutTimer);
+
+//        waitCallBackMap.put(requestId , callBackWrapper);
+
+        return requestId;
+    }
+
 
 
 
@@ -452,6 +511,30 @@ public abstract class Consumer {
 
     public <C> void addEventClassHandler(Class<C> c , EventClassHandler<C> eventClassHandler){
         eventClassHandlerMap.put(c , eventClassHandler);
+    }
+
+    /**
+     * 异步请求返回
+     * @param targetConsumerId targetConsumerId
+     * @param data data
+     * @param requestId 异步请求id
+     */
+    public void eventReturn(int targetConsumerId, Object data, int requestId) {
+        if(requestId == 0){
+            return;
+        }
+        getContext().getConsumerManager().publicCallBackEvent(targetConsumerId, data, requestId, 0);
+    }
+
+    /**
+     * 异步请求返回
+     * @param targetConsumerId targetConsumerId
+     * @param data data
+     * @param requestId 异步请求id
+     * @param eventId 事件类型 0 表示一切正常  其他表示有错误
+     */
+    public void eventReturn(int targetConsumerId, Object data,  int requestId , int eventId){
+        getContext().getConsumerManager().publicCallBackEvent(targetConsumerId , data , requestId ,eventId);
     }
 
 }

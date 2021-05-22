@@ -14,19 +14,19 @@ import java.util.List;
  */
 public class Session implements Lifecycle {
 
-	private final int sessionId;
+	private final long sessionId;
 	
-	private final Channel channel;
+	private Channel channel;
 	
 	private long lastContactMill = 0;
 	
-	public Session(Channel channel,int sessionId){
+	public Session(Channel channel,long sessionId){
 		this.channel = channel;
 		this.sessionId = sessionId;
 		setLastContactMill(System.currentTimeMillis());
 	}
 
-	public int getSessionId() {
+	public long getSessionId() {
 		return sessionId;
 	}
 
@@ -75,6 +75,10 @@ public class Session implements Lifecycle {
 	@Override
 	public void start() {
 
+	}
+
+	public void setChannel(Channel channel) {
+		this.channel = channel;
 	}
 
 	@Override

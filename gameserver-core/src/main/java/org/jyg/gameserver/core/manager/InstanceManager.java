@@ -111,7 +111,9 @@ public class InstanceManager implements Lifecycle {
         return instance;
     }
 
-
+    public synchronized void putInstance( Object instance) {
+        this.putInstance(instance.getClass() , instance);
+    }
     public synchronized void putInstance(Class<?> clazz, Object instance) {
 
 

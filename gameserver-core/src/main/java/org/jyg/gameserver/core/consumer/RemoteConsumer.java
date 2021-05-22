@@ -5,8 +5,6 @@ import io.netty.channel.ChannelFuture;
 import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.startup.TcpClient;
-import org.jyg.gameserver.core.timer.ITimerHandler;
-import org.jyg.gameserver.core.timer.Timer;
 import org.jyg.gameserver.core.util.Context;
 
 import java.util.concurrent.TimeUnit;
@@ -18,27 +16,27 @@ public class RemoteConsumer extends Consumer {
 
 
     private final TcpClient tcpClient;
-    private final String remoteAddress;
+    private final String remoteHost;
     private final int port;
 
     private Channel channel;
 
-    public RemoteConsumer(Context context, String remoteAddress , int port) {
+    public RemoteConsumer(Context context, String remoteHost , int port) {
         this.setContext(context);
-        this.tcpClient = context.createTcpClient();
-        this.remoteAddress = remoteAddress;
+        this.tcpClient = context.createTcpClient(remoteHost , port);
+        this.remoteHost = remoteHost;
         this.port = port;
     }
 
-    public RemoteConsumer(TcpClient tcpClient, String remoteAddress , int port) {
+    public RemoteConsumer(TcpClient tcpClient, String remoteHost, int port) {
         this.tcpClient = tcpClient;
-        this.remoteAddress = remoteAddress;
+        this.remoteHost = remoteHost;
         this.port = port;
     }
 
     @Override
     public void doStart() {
-        connect();
+        tcpClient.start();
         //定时检测重连 TODO think do it in other thread ?
         getContext().getDefaultConsumer().timerManager.addTimer(Integer.MAX_VALUE , TimeUnit.SECONDS.toMillis(5) , ()->{
             if(!isConnectAvailable()){
@@ -52,15 +50,14 @@ public class RemoteConsumer extends Consumer {
         if(channel != null){
             channel.close();
         }
-        try {
-            channel = tcpClient.connect(remoteAddress , port);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        channel = tcpClient.connect(remoteHost, port);
     }
 
     @Override
     public void doStop() {
+
+        tcpClient.stop();
+
         if(channel != null){
             ChannelFuture closeFuture = channel.close();
             closeFuture.isSuccess();

@@ -48,6 +48,21 @@
             <version>8.0.21</version>
         </dependency>
 
+
+        <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+        <!--<dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.5.7</version>
+        </dependency>-->
+
+        <!-- https://mvnrepository.com/artifact/cglib/cglib -->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+
     </dependencies>
 
 
