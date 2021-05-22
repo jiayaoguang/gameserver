@@ -31,7 +31,7 @@ public abstract class TcpConnector extends AbstractConnector {
 	}
 
 	public TcpConnector(int port, MyChannelInitializer<Channel> initializer , boolean isHttp) {
-		super(initializer.getDefaultConsumer());
+		super(initializer.getContext());
 		if (port < 0) {
 			throw new IllegalArgumentException("port number cannot be negative ");
 		}
@@ -60,7 +60,7 @@ public abstract class TcpConnector extends AbstractConnector {
 		bootstrap.group(eventLoopGroupManager.getBossGroup(), eventLoopGroupManager.getWorkGroup());
 
 
-		bootstrap.channel(getDefaultConsumer().getContext().isUseEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class);
+		bootstrap.channel(getContext().isUseEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class);
 //		bootstrap.handler(new LoggingHandler(LogLevel.INFO));
 		bootstrap.childHandler(initializer);
 
@@ -68,7 +68,7 @@ public abstract class TcpConnector extends AbstractConnector {
 		// tcp等待三次握手队列的长度
 		bootstrap.option(ChannelOption.SO_BACKLOG, 1024);
 
-		if(getDefaultConsumer().getContext().isUseEpoll()){
+		if(getContext().isUseEpoll()){
 			bootstrap.option(EpollChannelOption.TCP_CORK, false);
 		}
 

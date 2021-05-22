@@ -8,21 +8,17 @@ import org.jyg.gameserver.core.util.Context;
  */
 public abstract class AbstractConnector implements Connector {
 
-    protected final Consumer defaultConsumer;
+    protected Context context;
 
-
-    protected AbstractConnector(Consumer defaultConsumer) {
-        this.defaultConsumer = defaultConsumer;
+    protected AbstractConnector(Context context) {
+        this.context = context;
     }
 
-    public Consumer getDefaultConsumer() {
-        return defaultConsumer;
-    }
 
 
 
     public Context getContext(){
-        return defaultConsumer.getContext();
+        return context;
     }
 
 }

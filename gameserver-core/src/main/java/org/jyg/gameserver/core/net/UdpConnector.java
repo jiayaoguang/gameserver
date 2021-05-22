@@ -27,7 +27,7 @@ public class UdpConnector extends AbstractConnector {
     private final Context context;
 
     public UdpConnector(int port, Context context) {
-        super(context.getDefaultConsumer());
+        super(context);
         if (port < 0) {
             throw new IllegalArgumentException("port number cannot be negative ");
         }
@@ -44,7 +44,7 @@ public class UdpConnector extends AbstractConnector {
 
         bootstrap.group(workGroup);
 
-        bootstrap.channel(defaultConsumer.getContext().isUseEpoll() ? EpollDatagramChannel.class : NioDatagramChannel.class);
+        bootstrap.channel(getContext().isUseEpoll() ? EpollDatagramChannel.class : NioDatagramChannel.class);
         bootstrap.handler(new InnerSocketServerInitializer(context));
 //        bootstrap.childHandler(initializer);
         bootstrap.option(ChannelOption.SO_BROADCAST, true);

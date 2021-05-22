@@ -120,7 +120,7 @@ public class InstanceManager implements Lifecycle {
     }
 
     public synchronized void putInstance(Class<? extends Lifecycle> clazz, Lifecycle instance) {
-        putInstance(clazz , instance);
+        putInstance(clazz , (Object)instance);
     }
 
 
