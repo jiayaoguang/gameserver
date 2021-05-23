@@ -3,16 +3,21 @@ package org.jyg.gameserver.core.util;
 import com.google.protobuf.MessageLite;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
+import org.jyg.gameserver.core.consumer.BlockingQueueConsumer;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketAddress;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -355,5 +360,43 @@ public class AllUtil {
 
         return "";
     }
+
+
+
+    public static boolean isStatic(Field field){
+        return Modifier.isStatic(field.getModifiers());
+    }
+
+
+    public static List<Field> getClassObjectFields(Class<?> clazz){
+
+        List<Field> classObjectFields = new ArrayList<>();
+
+        Field[] fields = clazz.getDeclaredFields();
+        for(Field field : fields){
+            if(isStatic(field)){
+                continue;
+            }
+            classObjectFields.add(field);
+        }
+
+
+        Class<?> superClass = clazz.getSuperclass();
+
+        for(;superClass != null;){
+            Field[] superCalssFields = clazz.getDeclaredFields();
+            for(Field field : superCalssFields){
+                if(isStatic(field)){
+                    continue;
+                }
+                classObjectFields.add(field);
+            }
+            superClass = superClass.getSuperclass();
+        }
+
+
+        return classObjectFields;
+    }
+
 
 }
