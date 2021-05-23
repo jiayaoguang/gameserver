@@ -384,7 +384,7 @@ public class AllUtil {
         Class<?> superClass = clazz.getSuperclass();
 
         for(;superClass != null;){
-            Field[] superCalssFields = clazz.getDeclaredFields();
+            Field[] superCalssFields = superClass.getDeclaredFields();
             for(Field field : superCalssFields){
                 if(isStatic(field)){
                     continue;

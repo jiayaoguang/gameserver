@@ -73,7 +73,13 @@ public class UpdateSQLMaker extends CachedSQLMaker {
             valueParams.add(fieldValue);
         }
 
-        Object primaryKeyValue = tableInfo.getPrimaryKeyField().get(dbEntity);
+        Object primaryKeyValue;
+
+        if (tableInfo.getPrimaryKeyFieldInfo().getFiedGetMethod() != null) {
+            primaryKeyValue = tableInfo.getPrimaryKeyFieldInfo().getFiedGetMethod().invoke(dbEntity);
+        } else {
+            primaryKeyValue = tableInfo.getPrimaryKeyField().get(dbEntity);
+        }
 
         valueParams.add(primaryKeyValue);
 

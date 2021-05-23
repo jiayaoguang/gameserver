@@ -1,6 +1,7 @@
 package org.jyg.gameserver.db;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 
 /**
@@ -25,6 +26,8 @@ public class TableInfo {
     private LinkedHashMap<String,TableFieldInfo> fieldInfoLinkedMap;
 
     private Field primaryKeyField;
+
+    private TableFieldInfo primaryKeyFieldInfo;
 
     public String getTableName() {
         return tableName;
@@ -64,5 +67,13 @@ public class TableInfo {
 
     public void setPrimaryKeyField(Field primaryKeyField) {
         this.primaryKeyField = primaryKeyField;
+    }
+
+    public TableFieldInfo getPrimaryKeyFieldInfo() {
+        return primaryKeyFieldInfo;
+    }
+
+    public void setPrimaryKeyFieldInfo(TableFieldInfo primaryKeyFieldInfo) {
+        this.primaryKeyFieldInfo = primaryKeyFieldInfo;
     }
 }

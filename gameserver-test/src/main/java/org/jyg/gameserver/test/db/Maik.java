@@ -5,19 +5,14 @@ import org.jyg.gameserver.db.BaseDBEntity;
 /**
  * create by jiayaoguang on 2021/5/15
  */
-public class Maik extends BaseDBEntity {
+public class Maik extends BaseMaikDB {
 
-    private long id;
+
+
     private String content;
 
 
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getContent() {
         return content;

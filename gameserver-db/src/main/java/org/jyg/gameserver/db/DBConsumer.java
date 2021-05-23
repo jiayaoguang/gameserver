@@ -3,6 +3,7 @@ package org.jyg.gameserver.db;
 import cn.hutool.core.collection.CollectionUtil;
 import org.jyg.gameserver.core.consumer.BlockingQueueConsumer;
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.db.anno.DBTable;
 import org.jyg.gameserver.db.anno.DBTableField;
@@ -136,15 +137,13 @@ public class DBConsumer extends BlockingQueueConsumer {
             tableInfo.setPrimaryKey("id");
         }
 
-        Field primaryKeyField = dbEntityClass.getDeclaredField(tableInfo.getPrimaryKey());
-        primaryKeyField.setAccessible(true);
-        tableInfo.setPrimaryKeyField(primaryKeyField);
 
-        Field[] fields = dbEntityClass.getDeclaredFields();
+        List<Field> allObjectFields = AllUtil.getClassObjectFields(dbEntityClass);
+
 
         LinkedHashMap<String, TableFieldInfo> tableFieldInfoMap = new LinkedHashMap<>();
 
-        for (Field field : fields) {
+        for (Field field : allObjectFields) {
 
             if (field.getAnnotation(DBTableFieldIgnore.class) != null) {
                 continue;
@@ -165,6 +164,12 @@ public class DBConsumer extends BlockingQueueConsumer {
         }
 
         tableInfo.setFieldInfoLinkedMap(tableFieldInfoMap);
+
+
+        TableFieldInfo primaryKeyTableField = tableFieldInfoMap.get(tableInfo.getPrimaryKey());
+
+        tableInfo.setPrimaryKeyField(primaryKeyTableField.getClassField());
+        tableInfo.setPrimaryKeyFieldInfo(primaryKeyTableField);
 
         return tableInfo;
     }

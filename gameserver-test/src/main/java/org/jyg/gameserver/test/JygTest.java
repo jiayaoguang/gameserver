@@ -8,6 +8,8 @@ import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.ExecTimeUtil;
 import org.jyg.gameserver.core.util.IdUtil;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Semaphore;
@@ -286,5 +288,27 @@ public class JygTest {
         AllUtil.println("Object");
     }
 
+
+    public static class F{
+        public int id2;
+
+        public static int id3;
+    }
+
+    public static class S extends F{
+//        private int id;
+
+        public int id;
+    }
+
+    @Test
+    public void testField(){
+        Field[] fields = S.class.getFields();
+        for( Field field : fields ){
+            boolean isSTatic = Modifier.isStatic(field.getModifiers());
+
+            AllUtil.println(field.getName() + " " + isSTatic);
+        }
+    }
 
 }
