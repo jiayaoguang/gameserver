@@ -5,6 +5,7 @@ import org.jyg.gameserver.core.net.Connector;
 import org.jyg.gameserver.core.net.SocketConnector;
 import org.jyg.gameserver.core.consumer.Consumer;
 import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.Logs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,10 +94,11 @@ public class GameServerBootstrap extends AbstractBootstrap {
 
 
     @Override
-    public void doStart() throws InterruptedException {
+    public void doStart(){
 
         if (connectors.isEmpty()) {
-            throw new IllegalArgumentException("services list is empty");
+//            throw new IllegalArgumentException("connectors list is empty");
+            Logs.DEFAULT_LOGGER.info("connectors list is empty");
         }
 
         for (Connector connector : connectors) {

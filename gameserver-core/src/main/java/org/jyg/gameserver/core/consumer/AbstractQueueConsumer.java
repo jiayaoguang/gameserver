@@ -77,6 +77,9 @@ public abstract class AbstractQueueConsumer extends Consumer {
     protected abstract void publicEvent(EventData<Object> eventData);
 
     public void run() {
+
+        onThreadStart();
+
         int pollNullNum = 0;
         for (;!isStop;){
 

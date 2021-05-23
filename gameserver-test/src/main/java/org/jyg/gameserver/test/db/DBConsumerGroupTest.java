@@ -31,30 +31,34 @@ public class DBConsumerGroupTest {
         gameServerBootstrap.getContext().getDefaultConsumer().getInstanceManager()
                 .putInstance(new ConsumerDBManager(gameServerBootstrap.getContext().getDefaultConsumer() , dbConsumerGroup.getDbConfig().getDbConsumerGroupId()));
 
+        gameServerBootstrap.getContext().getDefaultConsumer().setConsumerStartHandler((consumer)->{
+
+            Maik maik = new Maik();
+            maik.setId(23);
+            maik.setContent("jjjjj");
+            consumer.getInstanceManager().getInstance(ConsumerDBManager.class).delete(maik);
+
+            maik.setContent("hello");
+
+            consumer.getInstanceManager().getInstance(ConsumerDBManager.class).insert(maik);
+
+            consumer.getInstanceManager().getInstance(ConsumerDBManager.class).select(maik, new ResultHandler() {
+                @Override
+                public void call(int eventId, Object data) {
+                    AllUtil.println(((Maik)data).getContent());
+                }
+
+                @Override
+                public void onTimeout() {
+                    AllUtil.println("timeout");
+                }
+            });
+        });
+
+
         gameServerBootstrap.start();
 
-        Maik maik = new Maik();
-        maik.setId(23);
-        maik.setContent("jjjjj");
-
-
-        gameServerBootstrap.getContext().getDefaultConsumer().getInstanceManager().getInstance(ConsumerDBManager.class).delete(maik);
-
-        gameServerBootstrap.getContext().getDefaultConsumer().getInstanceManager().getInstance(ConsumerDBManager.class).insert(maik);
-
-        gameServerBootstrap.getContext().getDefaultConsumer().getInstanceManager().getInstance(ConsumerDBManager.class).select(maik, new ResultHandler() {
-            @Override
-            public void call(int eventId, Object data) {
-                AllUtil.println(((Maik)data).getContent());
-            }
-
-            @Override
-            public void onTimeout() {
-                AllUtil.println("timeout");
-            }
-        });
     }
-
 
 
 }

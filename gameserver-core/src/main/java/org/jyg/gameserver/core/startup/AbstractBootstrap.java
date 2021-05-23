@@ -131,11 +131,7 @@ public abstract class AbstractBootstrap implements Lifecycle {
         isStart = true;
         context.start();
 
-        try {
             doStart();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
 
     }
 
@@ -146,7 +142,7 @@ public abstract class AbstractBootstrap implements Lifecycle {
 
 
 
-    public abstract void doStart() throws InterruptedException;
+    public abstract void doStart();
 
     public void stop(){
 

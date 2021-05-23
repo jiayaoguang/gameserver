@@ -148,6 +148,11 @@ public class AllUtil {
         System.out.println(sb.toString());
     }
 
+
+    /**
+     * {@link ConfigUtil#properties2Object(String, Object)}.
+     */
+    @Deprecated
     public static void properties2Object(final String fileName, final Object object) {
 
         File file = new File(fileName);
@@ -175,7 +180,10 @@ public class AllUtil {
             System.exit(1);
         }
     }
-
+    /**
+     * {@link ConfigUtil#properties2Object(Properties, Object)}.
+     */
+    @Deprecated
     public static void properties2Object(final Properties p, final Object object) {
         Method[] methods = object.getClass().getMethods();
         for (Method method : methods) {

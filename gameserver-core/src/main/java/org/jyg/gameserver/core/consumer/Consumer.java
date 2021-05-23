@@ -45,7 +45,11 @@ public abstract class Consumer {
 
     private final HttpProcessor notFOundProcessor = new NotFoundHttpProcessor();
 
+    protected volatile boolean isStart = false;
+
     private Context context;
+
+    private Thread thread;
 
 
     protected final TimerManager timerManager = new TimerManager();
@@ -73,6 +77,7 @@ public abstract class Consumer {
 
     private final ResultHandlerManager resultHandlerManager = new ResultHandlerManager();
 
+    private ConsumerStartHandler consumerStartHandler;
 
 
     public Consumer() {
@@ -88,8 +93,20 @@ public abstract class Consumer {
         this.id = id;
     }
 
-    public final void start(){
+    protected void onThreadStart(){
+        if(thread != null){
+            throw new IllegalStateException("thread != null");
+        }
+        thread = Thread.currentThread();
+
+        if(consumerStartHandler != null){
+            consumerStartHandler.onThreadStart(this);
+        }
+    }
+
+    public synchronized final void start(){
         beforeStart();
+        this.isStart = true;
         this.instanceManager.start();
         doStart();
     }
@@ -106,7 +123,7 @@ public abstract class Consumer {
 //        this.instanceManager.start();
 //    }
 
-    public final void stop(){
+    public synchronized final void stop(){
         instanceManager.stop();
         channelManager.stop();
         doStop();
@@ -547,4 +564,11 @@ public abstract class Consumer {
         getContext().getConsumerManager().publicCallBackEvent(targetConsumerId , data , requestId ,eventId);
     }
 
+
+    public void setConsumerStartHandler(ConsumerStartHandler consumerStartHandler) {
+        if(isStart){
+            throw new IllegalStateException("already start");
+        }
+        this.consumerStartHandler = consumerStartHandler;
+    }
 }

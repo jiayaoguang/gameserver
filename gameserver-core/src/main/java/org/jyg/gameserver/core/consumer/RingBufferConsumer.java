@@ -45,7 +45,15 @@ public class RingBufferConsumer extends Consumer {
 
         EventFactory<EventData<Object>> eventFactory = EventData::new;
 
-        ThreadFactory consumerThreadFactory = new DefaultThreadFactory(getClass().getSimpleName() + "_" + getId());
+        ThreadFactory consumerThreadFactory = new DefaultThreadFactory(getClass().getSimpleName() + "_" + getId()){
+            @Override
+            public Thread newThread(Runnable r) {
+                return super.newThread(() -> {
+                    RingBufferConsumer.this.onThreadStart();
+                    r.run();
+                });
+            }
+        };
 
         disruptor = new Disruptor<>(eventFactory, BUFFER_SIZE, consumerThreadFactory, ProducerType.MULTI,
                 new LoopAndSleepWaitStrategy(this::update));
