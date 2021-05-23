@@ -149,6 +149,14 @@ public class DBConsumer extends BlockingQueueConsumer {
             if (field.getAnnotation(DBTableFieldIgnore.class) != null) {
                 continue;
             }
+            //忽略静态字段
+            if(AllUtil.isStatic(field)){
+                continue;
+            }
+
+            if(tableFieldInfoMap.containsKey(field.getName())){
+                throw new IllegalArgumentException("class " + dbEntityClass.getCanonicalName() +" duplicate field "+ field.getName());
+            }
 
             field.setAccessible(true);
             TableFieldInfo tableFieldInfo = createTableFieldInfo(dbEntityClass, field);
