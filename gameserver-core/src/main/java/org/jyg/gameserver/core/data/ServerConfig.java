@@ -16,7 +16,7 @@ public class ServerConfig {
 
     private boolean preferEpoll = false;
 
-    private String scanInvokeClassPath = "";
+    private String scanInvokeClassPath = "org.jyg";
 
     private int nettyIOThreadNum = 0;
 
