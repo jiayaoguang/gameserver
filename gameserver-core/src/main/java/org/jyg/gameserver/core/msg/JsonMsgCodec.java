@@ -8,7 +8,7 @@ import java.io.IOException;
 /**
  * create by jiayaoguang on 2020/10/25
  */
-public class JsonMsgCodec extends AbstractByteMsgCodec<ByteMsgObj> {
+public class JsonMsgCodec extends AbstractByteMsgCodec {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 

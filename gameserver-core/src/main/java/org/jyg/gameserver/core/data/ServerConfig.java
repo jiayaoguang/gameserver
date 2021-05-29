@@ -12,9 +12,6 @@ public class ServerConfig {
 
     private String host = null;
 
-    /**
-     * 暂时不可用
-     */
     private boolean needMergeProto = false;
 
     private boolean preferEpoll = false;

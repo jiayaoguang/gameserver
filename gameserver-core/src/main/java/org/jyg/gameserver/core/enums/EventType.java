@@ -37,8 +37,11 @@ public enum EventType {
 
 
 	DEFAULT_EVENT,
+	/**
+	 * 回调事件
+	 */
+	RESULT_CALL_BACK,
 
-	CALL_BACK,
 
 	;
 	

@@ -2,10 +2,11 @@ package org.jyg.gameserver.core.handle.initializer;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
-import org.jyg.gameserver.core.handle.InnerSocketHandler;
-import org.jyg.gameserver.core.handle.MyProtobufDecoder;
-import org.jyg.gameserver.core.handle.MyProtobufListEncoder;
+import io.netty.handler.timeout.IdleStateHandler;
+import org.jyg.gameserver.core.handle.*;
 import org.jyg.gameserver.core.util.Context;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * created by jiayaoguang at 2017年12月6日
@@ -22,23 +23,29 @@ public class InnerSocketServerInitializer extends
 	public void initChannel(Channel ch) throws Exception {
 		ChannelPipeline pipeline = ch.pipeline();
 //		pipeline.addLast(new ProtobufVarint32FrameDecoder());
-		
-		
-		pipeline.addLast("msgDecoder" , new MyProtobufDecoder(context));
+
+
+
+		pipeline.addLast("msgDecoder" , new MsgDecoder(context));
 
 		if(context.getServerConfig().isNeedMergeProto()){
-			pipeline.addLast("protoMsgMergeEncoder" , context.getNettyHandlerFactory().createProtoMergeHandler(context));
+			pipeline.addLast("MsgMergeEncoder" , context.getNettyHandlerFactory().createMsgMergeHandler(context));
 		}else {
-			pipeline.addLast("protoMsgEncoder" , context.getNettyHandlerFactory().getMyProtobufEncoder());
+			pipeline.addLast("MsgEncoder", context.getNettyHandlerFactory().getMsgEncoder());
 		}
 
-		pipeline.addLast("byteMsgEncoder" , context.getNettyHandlerFactory().getMyByteMsgObjEncoder());
+//		pipeline.addLast("byteMsgEncoder" , context.getNettyHandlerFactory().getMyByteMsgObjEncoder());
 
 
 //		pipeline.addLast(new MyProtobufListEncoder(context));
 		
-		pipeline.addLast(new InnerSocketHandler(context));
-		
+//		pipeline.addLast(new InnerSocketHandler(context));
+
+
+		pipeline.addLast("idle",new IdleStateHandler(60,0,0 , TimeUnit.SECONDS));
+
+		pipeline.addLast("connect",new NettyConnectManageHandler(context));
+
 //		pipeline.addLast(new LastHandler());
 		
 

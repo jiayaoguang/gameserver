@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  * create by jiayaoguang on 2020/10/25
  */
-public abstract class AbstractByteMsgCodec<T> extends AbstractMsgCodec<ByteMsgObj> {
+public abstract class AbstractByteMsgCodec extends AbstractMsgCodec<ByteMsgObj> {
 
     protected final Class<? extends ByteMsgObj> byteMsgClass;
 

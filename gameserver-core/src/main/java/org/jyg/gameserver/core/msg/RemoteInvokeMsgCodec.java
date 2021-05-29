@@ -5,7 +5,7 @@ import org.jyg.gameserver.core.data.RemoteInvokeData;
 /**
  * create by jiayaoguang on 2021/04/17
  */
-public class RemoteInvokeMsgCodec extends AbstractByteMsgCodec<ByteMsgObj>{
+public class RemoteInvokeMsgCodec extends AbstractByteMsgCodec{
 
     public RemoteInvokeMsgCodec(int msgId, Class<? extends RemoteInvokeData> remoteInvokeData) {
         super(msgId, remoteInvokeData);

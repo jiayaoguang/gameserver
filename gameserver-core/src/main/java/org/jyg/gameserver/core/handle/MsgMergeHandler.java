@@ -2,11 +2,11 @@ package org.jyg.gameserver.core.handle;
 
 import com.google.protobuf.MessageLite;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import io.netty.handler.codec.EncoderException;
 import io.netty.handler.codec.MessageToByteEncoder;
+import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.Context;
 import org.jyg.gameserver.core.util.Logs;
@@ -19,8 +19,7 @@ import java.util.concurrent.TimeUnit;
  * create by jiayaoguang on 2020/9/5
  * proto 消息合并
  */
-@Deprecated
-public class ProtoMergeHandler  extends MessageToByteEncoder<MessageLite> {
+public class MsgMergeHandler extends MessageToByteEncoder<Object> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("ProtoMergeHandler");
 
@@ -76,7 +75,7 @@ public class ProtoMergeHandler  extends MessageToByteEncoder<MessageLite> {
         }
     }
 
-    public ProtoMergeHandler(Context context) {
+    public MsgMergeHandler(Context context) {
         this.context = context;
     }
 
@@ -91,9 +90,13 @@ public class ProtoMergeHandler  extends MessageToByteEncoder<MessageLite> {
 
 //        ByteBuf buf = null;
         try {
+
+            if(!(msg instanceof MessageLite) && !(msg instanceof ByteMsgObj)){
+                ctx.write(msg, promise);
+                return;
+            }
+
             if (acceptOutboundMessage(msg)) {
-                @SuppressWarnings("unchecked")
-                MessageLite originProto = (MessageLite) msg;
 
 //        if(this.nextFlushTime < now){
 //            this.nextFlushTime = now + 10;
@@ -113,8 +116,19 @@ public class ProtoMergeHandler  extends MessageToByteEncoder<MessageLite> {
 //                    this.nextFlushTime = now + 10;
 //                }
 //                msgList.add(cast);
+                if( msg instanceof MessageLite ){
+                    @SuppressWarnings("unchecked")
+                    MessageLite originProto = (MessageLite) msg;
+                    AllUtil.writeToBuf(context,originProto , cacheBuf);
+                }else if( msg instanceof ByteMsgObj ){
+                    @SuppressWarnings("unchecked")
+                    ByteMsgObj byteMsgObj = (ByteMsgObj) msg;
+                    AllUtil.writeToBuf(context,byteMsgObj , cacheBuf);
+                }else {
+                    ctx.write(msg, promise);
+                    return;
+                }
 
-                AllUtil.writeToBuf(context,originProto , cacheBuf);
                 onceMergeMsgNum++;
                 int byteSize = cacheBuf.readableBytes();
                 if(byteSize < MAX_BUF_LENGTH ){
@@ -148,7 +162,7 @@ public class ProtoMergeHandler  extends MessageToByteEncoder<MessageLite> {
     }
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, MessageLite msg, ByteBuf out) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {
         throw new UnsupportedOperationException();
     }
 

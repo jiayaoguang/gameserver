@@ -1,5 +1,7 @@
 package org.jyg.gameserver.core.manager;
 
+import org.jyg.gameserver.core.consumer.Consumer;
+import org.jyg.gameserver.core.util.Context;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.lang.reflect.Constructor;
@@ -18,8 +20,25 @@ public class InstanceManager implements Lifecycle {
 
     private final Map<Class<?>, Object> instanceMap;
 
+    private final Consumer consumer;
+    private final Context context;
+
     public InstanceManager() {
+        this(null , null);
+    }
+
+    public InstanceManager(Consumer consumer) {
+        this(consumer , consumer.getContext());
+    }
+
+    public InstanceManager(Context context) {
+        this(null , context);
+    }
+
+    public InstanceManager(Consumer consumer , Context context) {
+        this.context = context;
         this.instanceMap = new LinkedHashMap<>();
+        this.consumer = consumer;
     }
 
 
@@ -152,6 +171,16 @@ public class InstanceManager implements Lifecycle {
 
     @SuppressWarnings("unchecked")
     public <T> T getInstance(Class<T> clazz) {
+
+        if(clazz == Context.class){
+            return (T)context;
+        }
+
+        if(Consumer.class == clazz){
+            return (T)consumer;
+        }
+
+
         return (T) instanceMap.get(clazz);
     }
 

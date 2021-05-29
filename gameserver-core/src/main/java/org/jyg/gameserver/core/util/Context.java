@@ -8,13 +8,17 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import org.jyg.gameserver.core.constant.MsgIdConst;
 import org.jyg.gameserver.core.consumer.Consumer;
+import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.data.ServerConfig;
 import org.jyg.gameserver.core.handle.NettyHandlerFactory;
 import org.jyg.gameserver.core.manager.*;
-import org.jyg.gameserver.core.msg.AbstractMsgCodec;
-import org.jyg.gameserver.core.msg.ByteMsgObj;
-import org.jyg.gameserver.core.msg.JsonMsgCodec;
+import org.jyg.gameserver.core.msg.*;
+import org.jyg.gameserver.core.processor.PingProcessor;
+import org.jyg.gameserver.core.processor.PongProcessor;
+import org.jyg.gameserver.core.processor.ReadOutTimeProcessor;
+import org.jyg.gameserver.core.processor.RemoteInvokeProcessor;
 import org.jyg.gameserver.core.startup.TcpClient;
 
 import java.lang.reflect.InvocationTargetException;
@@ -64,7 +68,7 @@ public class Context implements Lifecycle{
 
     public Context(Consumer defaultConsumer , String configFileName) {
         this.defaultConsumer = defaultConsumer;
-        this.instanceManager = new InstanceManager();
+        this.instanceManager = new InstanceManager(this);
         ConfigUtil.properties2Object(configFileName, serverConfig);
 
 //        loadServerConfig(configFileName);
@@ -85,7 +89,7 @@ public class Context implements Lifecycle{
 
         this.remoteInvokeManager = new RemoteInvokeManager();
 
-
+        initCommonProcessor();
 
     }
 
@@ -112,14 +116,71 @@ public class Context implements Lifecycle{
     public void addMsgId2JsonMsgClassMapping(int msgId, Class<? extends ByteMsgObj> byteMsgObjClazz) {
 
         if(isStart){
-            throw new IllegalArgumentException("");
+            throw new IllegalArgumentException("isStart");
         }
 
-        JsonMsgCodec jsonMsgCodec = new JsonMsgCodec( msgId,byteMsgObjClazz);
-        this.msgObjClazz2MsgIdMap.put(byteMsgObjClazz ,msgId );
-        this.msgId2MsgCodecMap.put(msgId ,jsonMsgCodec );
+        AbstractMsgCodec<?> byteMsgCodec = msgId2MsgCodecMap.get(msgId);
+
+        if(byteMsgCodec == null){
+            byteMsgCodec = new JsonMsgCodec( msgId,byteMsgObjClazz);
+            msgId2MsgCodecMap.put(msgId , byteMsgCodec);
+        }
+
+//        if(msgId2MsgCodecMap.containsKey(byteMsgCodec.getMsgId())){
+//            throw new IllegalArgumentException("msgId2MsgCodecMap.containsKey(MsgId())" + byteMsgCodec.getMsgId());
+//        }
+
+        if(msgObjClazz2MsgIdMap.containsKey(byteMsgObjClazz)){
+            if(msgObjClazz2MsgIdMap.getInt(byteMsgObjClazz) !=  msgId){
+                throw new IllegalArgumentException("msgObjClazz2MsgIdMap.containsKey(ByteMsgClass()" + byteMsgObjClazz);
+            }
+        }
+
+
+        this.msgObjClazz2MsgIdMap.put(byteMsgObjClazz, byteMsgCodec.getMsgId());
+        this.msgId2MsgCodecMap.put(byteMsgCodec.getMsgId(), byteMsgCodec);
     }
 
+
+    public void addByteMsgCodec(AbstractByteMsgCodec byteMsgCodec) {
+
+        if (isStart) {
+            throw new IllegalArgumentException("isStart");
+        }
+
+//        if(msgId2MsgCodecMap.containsKey(byteMsgCodec.getMsgId())){
+//            throw new IllegalArgumentException("msgId2MsgCodecMap.containsKey(MsgId())" + byteMsgCodec.getMsgId());
+//        }
+
+        if(msgObjClazz2MsgIdMap.containsKey(byteMsgCodec.getByteMsgClass())){
+            if(msgObjClazz2MsgIdMap.getInt(byteMsgCodec.getByteMsgClass()) != byteMsgCodec.getMsgId()){
+                throw new IllegalArgumentException("msgObjClazz2MsgIdMap.containsKey(ByteMsgClass()" + byteMsgCodec.getByteMsgClass());
+            }
+        }
+
+
+        this.msgObjClazz2MsgIdMap.put(byteMsgCodec.getByteMsgClass(), byteMsgCodec.getMsgId());
+        this.msgId2MsgCodecMap.put(byteMsgCodec.getMsgId(), byteMsgCodec);
+    }
+
+
+    private void initCommonProcessor(){
+
+        addMsgId2JsonMsgClassMapping(MsgIdConst.READ_OUTTIME , ReadIdleMsgObj.class);
+        addMsgId2JsonMsgClassMapping(MsgIdConst.REMOTE_INVOKE , RemoteInvokeData.class);
+
+        addMsgId2JsonMsgClassMapping(MsgIdConst.PING , PingByteMsg.class);
+        addMsgId2JsonMsgClassMapping(MsgIdConst.PONG , PongByteMsg.class);
+
+        addByteMsgCodec(new EmptyMsgCodec(MsgIdConst.PING, new PingByteMsg()));
+        addByteMsgCodec(new EmptyMsgCodec(MsgIdConst.PONG, new PongByteMsg()));
+
+        getDefaultConsumer().addProcessor(new ReadOutTimeProcessor());
+        getDefaultConsumer().addProcessor(new RemoteInvokeProcessor());
+
+        getDefaultConsumer().addProcessor(new PingProcessor());
+        getDefaultConsumer().addProcessor(new PongProcessor());
+    }
 
 
     public<T> AbstractMsgCodec<?> getMsgCodec (int msgId){

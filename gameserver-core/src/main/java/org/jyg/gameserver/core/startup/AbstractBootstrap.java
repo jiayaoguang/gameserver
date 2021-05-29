@@ -1,12 +1,12 @@
 package org.jyg.gameserver.core.startup;
 
 import com.google.protobuf.MessageLite;
+import org.jyg.gameserver.core.constant.MsgIdConst;
+import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.manager.Lifecycle;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
-import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
-import org.jyg.gameserver.core.processor.HttpProcessor;
-import org.jyg.gameserver.core.processor.ProtoProcessor;
-import org.jyg.gameserver.core.processor.RemoteInvokeProcessor;
+import org.jyg.gameserver.core.msg.ReadIdleMsgObj;
+import org.jyg.gameserver.core.processor.*;
 import org.jyg.gameserver.core.util.Context;
 import org.jyg.gameserver.core.consumer.Consumer;
 import org.jyg.gameserver.core.consumer.RingBufferConsumer;
@@ -125,19 +125,14 @@ public abstract class AbstractBootstrap implements Lifecycle {
             return;
         }
 
-        initCommonProcessor();
-
 
         isStart = true;
         context.start();
 
-            doStart();
+        doStart();
 
     }
 
-    private void initCommonProcessor(){
-        addByteMsgObjProcessor(new RemoteInvokeProcessor());
-    }
 
 
 

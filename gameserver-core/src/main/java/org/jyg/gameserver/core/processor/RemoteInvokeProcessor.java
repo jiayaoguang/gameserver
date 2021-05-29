@@ -36,9 +36,5 @@ public class RemoteInvokeProcessor extends ByteMsgObjProcessor<RemoteInvokeData>
 
     }
 
-    @Override
-    public int getMsgId() {
-        return 0;
-    }
 
 }

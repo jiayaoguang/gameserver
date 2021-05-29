@@ -80,7 +80,7 @@ public abstract class Consumer {
 
 
     public Consumer() {
-        this.instanceManager = new InstanceManager();
+        this.instanceManager = new InstanceManager(this);
     }
 
 
@@ -155,7 +155,7 @@ public abstract class Consumer {
     }
 
     public void publicCallBackEventToTarget(int targetConsumerId, Object data,  int requestId ){
-        getContext().getConsumerManager().publicEvent(targetConsumerId, EventType.CALL_BACK, data, null, 0, new EventExtData(0, requestId, 0));
+        getContext().getConsumerManager().publicEvent(targetConsumerId, EventType.RESULT_CALL_BACK, data, null, 0, new EventExtData(0, requestId, 0));
     }
 
     public abstract void publicEvent(EventType evenType, Object data, Channel channel, int eventId , EventExtData eventExtData);
@@ -237,7 +237,7 @@ public abstract class Consumer {
 //		MessageLite msg = event.getData();
         Processor processor = protoProcessorMap.get(event.getEventId());
         if (processor == null) {
-            Logs.DEFAULT_LOGGER.info("unknown socket eventid :" + event.getEventId());
+            Logs.DEFAULT_LOGGER.info("processor not found, eventid :" + event.getEventId());
             return;
         }
 
@@ -296,12 +296,21 @@ public abstract class Consumer {
     public void addProcessor(Processor<?> processor) {
         if (processor instanceof ProtoProcessor) {
             ProtoProcessor protoProcessor = (ProtoProcessor) processor;
-            addProcessor(protoProcessor.getProtoMsgId(), protoProcessor);
+            int msgId = getContext().getMsgIdByProtoClass(protoProcessor.getProtoClass());
+            if(msgId <= 0){
+                throw new IllegalArgumentException("class msgId not found : " + protoProcessor.getProtoClass().getCanonicalName());
+            }
+            addProcessor(msgId, protoProcessor);
             return;
         }
         if (processor instanceof ByteMsgObjProcessor) {
             ByteMsgObjProcessor byteMsgObjProcessor = (ByteMsgObjProcessor) processor;
-            addProcessor(byteMsgObjProcessor.getMsgId(), byteMsgObjProcessor);
+
+            int msgId = getContext().getMsgIdByByteMsgObj(byteMsgObjProcessor.getByteMsgObjClazz());
+            if(msgId <= 0){
+                throw new IllegalArgumentException("class msgId not found : " + byteMsgObjProcessor.getByteMsgObjClazz());
+            }
+            addProcessor(msgId, byteMsgObjProcessor);
             return;
         }
         if (processor instanceof HttpProcessor) {
@@ -473,8 +482,13 @@ public abstract class Consumer {
             case DEFAULT_EVENT:
                 processDefaultEvent(event.getEventId() , event.getData() ,event);
                 break;
-            case CALL_BACK:
+            case RESULT_CALL_BACK:
                 resultHandlerManager.onCallBack(event.getEventExtData().requestId, event.getEventId(), event.getData());
+                break;
+
+            case CLIENT_SOCKET_CONNECT_ACTIVE:
+                break;
+            case CLIENT_SOCKET_CONNECT_INACTIVE:
                 break;
 
             default:

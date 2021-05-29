@@ -6,6 +6,7 @@ import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.AllUtil;
+import org.jyg.gameserver.core.util.Logs;
 
 
 /**
@@ -40,7 +41,7 @@ public class JsonServerTest01 {
         ByteMsgObjProcessor<ChatMsgObj> chatProcessor = new ByteMsgObjProcessor<ChatMsgObj>(ChatMsgObj.class) {
             @Override
             public void process(Session session, EventData<ChatMsgObj> event) {
-                AllUtil.println(" ========================= get json " + event.getData().getConetnt());
+                Logs.DEFAULT_LOGGER.info(" ========================= get json " + event.getData().getConetnt());
                 ChatMsgObj chatMsgObj = new ChatMsgObj();
                 chatMsgObj.setType(1009);
                 chatMsgObj.setConetnt("hello world");

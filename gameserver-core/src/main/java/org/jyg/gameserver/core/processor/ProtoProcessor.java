@@ -47,6 +47,8 @@ public abstract class ProtoProcessor<T extends MessageLite> extends AbstractProc
 	public Class<? extends MessageLite> getProtoClass() {
 		return clazz;
 	}
+	
+	@Deprecated
 	public int getProtoMsgId() {
 		return getContext().getMsgIdByProtoClass(clazz);
 	}

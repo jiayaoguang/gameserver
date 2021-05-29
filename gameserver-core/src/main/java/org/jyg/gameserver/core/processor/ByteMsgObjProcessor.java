@@ -22,6 +22,7 @@ public abstract class ByteMsgObjProcessor<T extends ByteMsgObj> extends Abstract
         return byteMsgObjClazz;
     }
 
+    @Deprecated
     public int getMsgId() {
         return getContext().getMsgIdByByteMsgObj(byteMsgObjClazz);
     }

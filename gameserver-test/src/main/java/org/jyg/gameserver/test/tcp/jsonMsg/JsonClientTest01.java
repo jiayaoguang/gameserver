@@ -1,11 +1,11 @@
 package org.jyg.gameserver.test.tcp.jsonMsg;
 
-import org.junit.Test;
-import org.jyg.gameserver.core.data.RemoteInvokeData;
-import org.jyg.gameserver.core.processor.ProtoProcessor;
+import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.msg.PingByteMsg;
+import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.TcpClient;
-import org.jyg.gameserver.test.proto.MsgChat;
+import org.jyg.gameserver.core.util.Logs;
 
 /**
  * Hello world!
@@ -13,7 +13,7 @@ import org.jyg.gameserver.test.proto.MsgChat;
 public class JsonClientTest01 {
     public static void main(String[] args) throws Exception {
 
-        TcpClient client = new TcpClient();
+        TcpClient client = new TcpClient("localhost", 8088);
 //		client.addMsgId2ProtoMapping(1, p_sm_scene_request_ping.getDefaultInstance());
 //		client.addMsgId2ProtoMapping(2, p_scene_sm_response_pong.getDefaultInstance());
 //
@@ -25,15 +25,27 @@ public class JsonClientTest01 {
 
 //		client.addProtoProcessor(chatProcessor);
 
+        ByteMsgObjProcessor<JsonServerTest01.ChatMsgObj> chatProcessor = new ByteMsgObjProcessor<JsonServerTest01.ChatMsgObj>(JsonServerTest01.ChatMsgObj.class) {
+            @Override
+            public void process(Session session, EventData<JsonServerTest01.ChatMsgObj> event) {
+                Logs.DEFAULT_LOGGER.info(" ========================= receive reply json " + event.getData().getConetnt());
+//                session.writeMessage(chatMsgObj);
+            }
+        };
+        client.getDefaultConsumer().addProcessor(108, chatProcessor);
+
+
         client.start();
-        client.connect("localhost", 8088);
-        for (int i = 0; i < 50; i++) {
+
+        client.write(new PingByteMsg());
+//        client.connect("localhost", 8088);
+        for (int i = 0; i < 5; i++) {
             JsonServerTest01.ChatMsgObj chatMsgObj = new JsonServerTest01.ChatMsgObj();
             chatMsgObj.setConetnt(i + "---");
             client.write(chatMsgObj);
         }
 
-        Thread.sleep(10000);
+        Thread.sleep(1000000);
 
         client.close();
         client.stop();

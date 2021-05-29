@@ -3,6 +3,7 @@ package org.jyg.gameserver.core.manager;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.session.Session;
 import io.netty.channel.Channel;
+import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.util.*;
@@ -113,4 +114,9 @@ public class ChannelManager implements Lifecycle {
         }
 
     }
+
+    public String getSessionAddr(Session session){
+        return AllUtil.getChannelRemoteAddr(session.getChannel());
+    }
+
 }

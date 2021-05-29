@@ -11,6 +11,8 @@ import org.jyg.gameserver.db.ConsumerDBManager;
 import org.jyg.gameserver.db.DBConsumer;
 import org.jyg.gameserver.db.DBConsumerGroup;
 
+import java.util.List;
+
 /**
  * create by jiayaoguang on 2021/5/15
  */
@@ -33,9 +35,16 @@ public class DBConsumerGroupTest {
 
         gameServerBootstrap.getContext().getDefaultConsumer().setConsumerStartHandler((consumer)->{
 
+
+            consumer.getTimerManager().addUnlimitedTimer(1000L,1000L,()->{
+               AllUtil.println(" hello ----------  ");
+            });
+
+
             Maik maik = new Maik();
             maik.setId(23);
             maik.setContent("jjjjj");
+
             consumer.getInstanceManager().getInstance(ConsumerDBManager.class).delete(maik);
 
             maik.setContent("hello");
@@ -45,14 +54,33 @@ public class DBConsumerGroupTest {
             consumer.getInstanceManager().getInstance(ConsumerDBManager.class).select(maik, new ResultHandler() {
                 @Override
                 public void call(int eventId, Object data) {
-                    AllUtil.println(((Maik)data).getContent());
+                    AllUtil.println(Thread.currentThread().getName() + " : "+ ((Maik)data).getContent());
                 }
 
-                @Override
-                public void onTimeout() {
-                    AllUtil.println("timeout");
-                }
+//                @Override
+//                public void onTimeout() {
+//                    AllUtil.println("timeout");
+//                }
             });
+
+            Maik selectByMaikDb = new Maik();
+            selectByMaikDb.setContent("asd");
+            consumer.getInstanceManager().getInstance(ConsumerDBManager.class).selectBy(selectByMaikDb,"content", new ResultHandler<List<Maik>>() {
+                @Override
+                public void call(int eventId, List<Maik> data) {
+
+                    for(Maik maik1 : data){
+                        AllUtil.println(Thread.currentThread().getName() + " : "+ (maik1).getContent() + " _ " + maik1.getId());
+                    }
+
+                }
+
+//                @Override
+//                public void onTimeout() {
+//                    AllUtil.println("timeout");
+//                }
+            } );
+
         });
 
 

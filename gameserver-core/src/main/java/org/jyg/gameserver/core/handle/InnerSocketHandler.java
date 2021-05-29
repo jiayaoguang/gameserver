@@ -11,6 +11,7 @@ import org.jyg.gameserver.core.util.Logs;
 /**
  * created by jiayaoguang at 2018年4月9日
  */
+@Deprecated
 public class InnerSocketHandler extends ChannelInboundHandlerAdapter {
 
 	private final Context context;

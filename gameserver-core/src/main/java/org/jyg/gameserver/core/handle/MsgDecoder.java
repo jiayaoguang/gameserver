@@ -7,7 +7,6 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import org.jyg.gameserver.core.enums.EventType;
-import org.jyg.gameserver.core.manager.ConsumerManager;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.Context;
@@ -19,13 +18,13 @@ import org.slf4j.LoggerFactory;
 /**
  * created by jiayaoguang at 2018年3月13日 protobuf解码器
  */
-public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
+public class MsgDecoder extends LengthFieldBasedFrameDecoder {
 
-    protected static final Logger LOGGER = LoggerFactory.getLogger(MyProtobufDecoder.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(MsgDecoder.class);
 
     private final Context context;
 
-    public MyProtobufDecoder(Context context) {
+    public MsgDecoder(Context context) {
         super(context.getServerConfig().getMaxFrameLength(), 0, 4, 0, 4);
         this.context = context;
     }
@@ -71,7 +70,7 @@ public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
         try{
 
             int msgId = frame.readInt();
-            Logs.DEFAULT_LOGGER.debug("cnf:" + frame.refCnt());
+//            Logs.DEFAULT_LOGGER.debug("cnf:" + frame.refCnt());
             AbstractMsgCodec<?> msgCodec = context.getMsgCodec(msgId);
             if (msgCodec == null) {
                 LOGGER.error(" protoParser not found ,id : {} ", msgId);

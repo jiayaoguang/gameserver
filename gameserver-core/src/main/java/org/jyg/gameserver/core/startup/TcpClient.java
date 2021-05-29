@@ -34,6 +34,7 @@ public class TcpClient extends AbstractBootstrap{
 	private  String host;
 	private  int port;
 
+	@Deprecated
 	public TcpClient()  {
 		this(new Context(new RingBufferConsumer()) , "" , 0);
 

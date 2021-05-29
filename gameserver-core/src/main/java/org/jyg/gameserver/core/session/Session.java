@@ -19,6 +19,11 @@ public class Session implements Lifecycle {
 	private Channel channel;
 	
 	private long lastContactMill = 0;
+
+	private SessionState sessionState;
+
+
+	private Object sessionObject;
 	
 	public Session(Channel channel,long sessionId){
 		this.channel = channel;
@@ -91,5 +96,26 @@ public class Session implements Lifecycle {
 			}
 		}
 	}
+
+
+	public SessionState getSessionState() {
+		return sessionState;
+	}
+
+	public void setSessionState(SessionState sessionState) {
+		this.sessionState = sessionState;
+	}
+
+
+	@SuppressWarnings("unchecked")
+	public <T> T getSessionObject() {
+		return (T)sessionObject;
+	}
+
+	public void setSessionObject(Object sessionObject) {
+		this.sessionObject = sessionObject;
+	}
+
+
 }
 

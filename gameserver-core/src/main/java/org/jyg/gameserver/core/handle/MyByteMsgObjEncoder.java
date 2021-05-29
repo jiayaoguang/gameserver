@@ -14,6 +14,7 @@ import org.jyg.gameserver.core.util.Context;
  * protobuf编码器
  */
 @Sharable
+@Deprecated
 public class MyByteMsgObjEncoder extends MessageToByteEncoder<ByteMsgObj> {
 
 	protected final Context context;
