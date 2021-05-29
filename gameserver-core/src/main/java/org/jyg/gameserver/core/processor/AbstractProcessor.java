@@ -20,10 +20,6 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 	private Consumer consumer;
 
 
-	public Consumer getDefaultConsumer() {
-		return consumer.getContext().getDefaultConsumer();
-	}
-
 
 	public Context getContext() {
 		return consumer.getContext();

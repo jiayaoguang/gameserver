@@ -116,4 +116,7 @@ public class ConsumerGroup<T extends Consumer> extends Consumer {
 //    }
 
 
+    protected boolean isStart() {
+        return isStart;
+    }
 }

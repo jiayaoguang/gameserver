@@ -25,6 +25,8 @@ import java.util.Properties;
  */
 public class AllUtil {
 
+    public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
+
 
     public static byte[] getIP() {
         try {
@@ -325,9 +327,15 @@ public class AllUtil {
 
         AbstractMsgCodec msgCodec = context.getMsgCodec(eventId);
 
-        byte[] msgBytes = msgCodec.encode(byteMsgObj);
+        byte[] msgBytes = EMPTY_BYTE_ARRAY;
+        try {
+            msgBytes = msgCodec.encode(byteMsgObj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         writeToBuf(eventId , buf , msgBytes);
+
 
     }
 
@@ -336,7 +344,10 @@ public class AllUtil {
 //    ByteBuf buf = ctx.alloc().directBuffer(protoLen);
         buf.writeInt(protoLen);
         buf.writeInt(msgId);
-        buf.writeBytes(msgBytes);
+
+        if(msgBytes.length > 0){
+            buf.writeBytes(msgBytes);
+        }
     }
 
 

@@ -12,6 +12,7 @@ import org.jyg.gameserver.core.util.Logs;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * create by jiayaoguang on 2021/4/18
@@ -27,7 +28,7 @@ public class RemoteInvokeManager {
 
 
     public RemoteInvokeManager() {
-        this.remoteInvokeMap = new HashMap<>();
+        this.remoteInvokeMap = new ConcurrentHashMap<>();
 
         this.invokeClassLoader = new FileClassLoader();
     }

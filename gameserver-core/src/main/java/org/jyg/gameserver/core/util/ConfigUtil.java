@@ -38,7 +38,10 @@ public class ConfigUtil {
     }
 
 
-    public static void properties2Object(final String fileName, final Object object) {
+    public static void properties2Object( String fileName, final Object object) {
+        if(fileName.indexOf('.') < 0){
+            fileName += ".properties";
+        }
 
         File file = new File(fileName);
 

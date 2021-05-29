@@ -116,6 +116,7 @@ public class MyProtobufDecoder extends LengthFieldBasedFrameDecoder {
 
 
         }catch (Exception e){
+            e.printStackTrace();
             final String addrRemote = AllUtil.getChannelRemoteAddr(ctx.channel());
             ctx.channel().close().addListener(new ChannelFutureListener() {
                 @Override

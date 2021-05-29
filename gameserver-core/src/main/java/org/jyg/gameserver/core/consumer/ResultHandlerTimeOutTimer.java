@@ -6,7 +6,7 @@ import org.jyg.gameserver.core.timer.Timer;
 /**
  * create by jiayaoguang at 2021/5/22
  */
-public class ResultHandlerTimeOutTimer extends Timer implements ResultHandler {
+public class ResultHandlerTimeOutTimer extends Timer implements ResultHandler<Object> {
     private int requestId;
 
     private final ResultHandler resultHandler;

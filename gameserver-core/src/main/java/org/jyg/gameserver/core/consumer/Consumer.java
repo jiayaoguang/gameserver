@@ -1,6 +1,5 @@
 package org.jyg.gameserver.core.consumer;
 
-import com.alibaba.fastjson.JSONObject;
 import com.google.protobuf.MessageLite;
 import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -81,7 +80,7 @@ public abstract class Consumer {
 
 
     public Consumer() {
-        this.instanceManager = new InstanceManager();
+        this.instanceManager = new InstanceManager(this);
     }
 
 
@@ -100,7 +99,11 @@ public abstract class Consumer {
         thread = Thread.currentThread();
 
         if(consumerStartHandler != null){
-            consumerStartHandler.onThreadStart(this);
+            try{
+                consumerStartHandler.onThreadStart(this);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -204,7 +207,7 @@ public abstract class Consumer {
             getContext().addMsgId2ProtoMapping(msgId, ((ProtoProcessor) processor).getProtoDefaultInstance());
         }
         if (processor instanceof ByteMsgObjProcessor) {
-            getContext().addMsgId2JsonMsgCLassMapping(msgId, ((ByteMsgObjProcessor) processor).getByteMsgObjClazz());
+            getContext().addMsgId2JsonMsgClassMapping(msgId, ((ByteMsgObjProcessor) processor).getByteMsgObjClazz());
         }
 
         processor.setConsumer(this);
@@ -346,7 +349,7 @@ public abstract class Consumer {
 
         IRemoteInvoke remoteInvoke = new IRemoteInvoke() {
             @Override
-            public void invoke(JSONObject paramJson) {
+            public void invoke(Map<String,Object> paramMap) {
 
                 try {
 
@@ -355,7 +358,7 @@ public abstract class Consumer {
 
                     remoteInvokeData.setInvokeName(remoteInvokeName);
 
-                    remoteInvokeData.setParamJson(paramJson);
+                    remoteInvokeData.setParamMap(paramMap);
 
                     session.writeMessage(remoteInvokeData);
 

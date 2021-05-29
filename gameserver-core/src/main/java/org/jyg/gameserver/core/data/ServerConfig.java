@@ -12,13 +12,18 @@ public class ServerConfig {
 
     private String host = null;
 
-    private boolean needMergeProto = true;
+    /**
+     * 暂时不可用
+     */
+    private boolean needMergeProto = false;
 
     private boolean preferEpoll = false;
 
     private String scanInvokeClassPath = "org.jyg";
 
     private int nettyIOThreadNum = 0;
+
+    private int serverUid = 0;
 
     public boolean isUseGzip() {
         return useGzip;
@@ -79,4 +84,11 @@ public class ServerConfig {
     }
 
 
+    public int getServerUid() {
+        return serverUid;
+    }
+
+    public void setServerUid(int serverUid) {
+        this.serverUid = serverUid;
+    }
 }

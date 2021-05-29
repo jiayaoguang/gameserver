@@ -64,7 +64,7 @@ public class Context implements Lifecycle{
 
     public Context(Consumer defaultConsumer , String configFileName) {
         this.defaultConsumer = defaultConsumer;
-        this.instanceManager = new InstanceManager();
+        this.instanceManager = new InstanceManager(this);
         ConfigUtil.properties2Object(configFileName, serverConfig);
 
 //        loadServerConfig(configFileName);
@@ -109,7 +109,12 @@ public class Context implements Lifecycle{
         this.msgId2MsgCodecMap.put(msgId ,protoMsgCodec );
     }
 
-    public void addMsgId2JsonMsgCLassMapping(int msgId,  Class<? extends ByteMsgObj> byteMsgObjClazz) {
+    public void addMsgId2JsonMsgClassMapping(int msgId, Class<? extends ByteMsgObj> byteMsgObjClazz) {
+
+        if(isStart){
+            throw new IllegalArgumentException("");
+        }
+
         JsonMsgCodec jsonMsgCodec = new JsonMsgCodec( msgId,byteMsgObjClazz);
         this.msgObjClazz2MsgIdMap.put(byteMsgObjClazz ,msgId );
         this.msgId2MsgCodecMap.put(msgId ,jsonMsgCodec );
