@@ -64,7 +64,7 @@ public class Context implements Lifecycle{
 
     public Context(Consumer defaultConsumer , String configFileName) {
         this.defaultConsumer = defaultConsumer;
-        this.instanceManager = new InstanceManager(this);
+        this.instanceManager = new InstanceManager();
         ConfigUtil.properties2Object(configFileName, serverConfig);
 
 //        loadServerConfig(configFileName);

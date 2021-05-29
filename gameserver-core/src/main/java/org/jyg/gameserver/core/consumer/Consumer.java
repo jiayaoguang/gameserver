@@ -80,7 +80,7 @@ public abstract class Consumer {
 
 
     public Consumer() {
-        this.instanceManager = new InstanceManager(this);
+        this.instanceManager = new InstanceManager();
     }
 
 
