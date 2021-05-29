@@ -1,6 +1,7 @@
 package org.jyg.gameserver.core.timer;
 
 import io.netty.channel.Channel;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,11 +46,15 @@ public abstract class Timer implements Comparable<Timer>{
 		return triggerTime;
 	}
 
+	public long getDelayTimeMills() {
+		return delayTimeMills;
+	}
+
 	public int getExecNum() {
 		return execNum;
 	}
 
-	public void setExecNum(int execNum) {
+	void setExecNum(int execNum) {
 		this.execNum = execNum;
 	}
 
@@ -61,6 +66,10 @@ public abstract class Timer implements Comparable<Timer>{
 		this.triggerTime = System.currentTimeMillis() + this.delayTimeMills;
 	}
 
+	void setTriggerTime(long triggerTime) {
+		this.triggerTime = triggerTime;
+	}
+
 	public void cancel() {
 		isCancel = true;
 	}
@@ -70,21 +79,26 @@ public abstract class Timer implements Comparable<Timer>{
 	}
 
 	public boolean isEnd() {
+		if(execNum == -1){
+			return false;
+		}
 		return execNum <= 0;
 	}
 
 
-	final void trigger() {
-
-		updateNextTriggerTime();
-		reduceExecNum(1);
-
-		try {
-			this.onTime();
-		} catch (Exception e) {
-			LOGGER.error(" timer onTime make execption {} ", e);
-		}
-	}
+//	final void trigger() {
+//
+//		updateNextTriggerTime();
+//		if(execNum != -1){
+//			reduceExecNum(1);
+//		}
+//
+//		try {
+//			this.onTime();
+//		} catch (Exception e) {
+//			LOGGER.error(" timer onTime make execption {} ", ExceptionUtils.getStackTrace(e));
+//		}
+//	}
 
 
 	protected abstract void onTime();

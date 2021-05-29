@@ -18,4 +18,6 @@ public class Logs {
 
     public static final Logger CONSUMER = LoggerFactory.getLogger("consumer");
 
+    public static final Logger TIMER = LoggerFactory.getLogger("timer");
+
 }
