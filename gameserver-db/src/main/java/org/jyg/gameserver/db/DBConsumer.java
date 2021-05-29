@@ -8,17 +8,7 @@ import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.db.anno.DBTable;
 import org.jyg.gameserver.db.anno.DBTableField;
 import org.jyg.gameserver.db.anno.DBTableFieldIgnore;
-import org.jyg.gameserver.db.type.BooleanTypeHandler;
-import org.jyg.gameserver.db.type.ByteTypeHandler;
-import org.jyg.gameserver.db.type.CharacterTypeHandler;
-import org.jyg.gameserver.db.type.DoubleTypeHandler;
-import org.jyg.gameserver.db.type.FastJSONTypeHandler;
-import org.jyg.gameserver.db.type.FloatTypeHandler;
-import org.jyg.gameserver.db.type.IntegerTypeHandler;
-import org.jyg.gameserver.db.type.LongTypeHandler;
-import org.jyg.gameserver.db.type.ShortTypeHandler;
-import org.jyg.gameserver.db.type.StringTypeHandler;
-import org.jyg.gameserver.db.type.TypeHandler;
+import org.jyg.gameserver.db.type.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -38,27 +28,37 @@ import java.util.Map;
  */
 public class DBConsumer extends BlockingQueueConsumer {
 
-    private Connection connection = null;
-
     private final SqlKeyWord sqlKeyWord;
 
     private final Map<Integer, SQLMaker> sqlTextMap = new HashMap<>(MAP_DEFAULT_SIZE, MAP_DEFAULT_LOADFACTOR);
 
     private final Map<Class<?>, TableInfo> tableInfoMap = new HashMap<>(MAP_DEFAULT_SIZE, MAP_DEFAULT_LOADFACTOR);
 
-    private DBConfig dbConfig;
+    private final DBConfig dbConfig;
 
-    private final Map<Class<?>, TypeHandler<?>> typeHandlerMap = new HashMap<>();
+    private final SimpleDataSource dataSource;
+    private final TypeHandlerRegistry typeHandlerRegistry;
+
+    private final SqlExecutor sqlExecutor;
 
 
-    public DBConsumer() {
-        this(null);
+//    public DBConsumer() {
+//        this(null);
+//
+//    }
+
+    public DBConsumer(DBConfig dbConfig) {
+        this.dbConfig = dbConfig;
+        this.sqlKeyWord = new MySQLUpperKey();
+        this.dataSource = new SimpleDataSource(dbConfig);
+        this.typeHandlerRegistry = new TypeHandlerRegistry();
+        this.sqlExecutor = new SqlExecutor(dataSource , typeHandlerRegistry);
+
+        init();
 
     }
 
-    public DBConsumer(DBConfig dbConfig) {
-        this.sqlKeyWord = new MySQLUpperKey();
-
+    private void init() {
         addSQLMaker(BDEventConst.INSERT, new InsertSQLMaker());
         addSQLMaker(BDEventConst.DELETE, new DeleteSQLMaker());
         addSQLMaker(BDEventConst.UPDATE, new UpdateSQLMaker());
@@ -66,34 +66,27 @@ public class DBConsumer extends BlockingQueueConsumer {
 
         addSQLMaker(BDEventConst.SELECT_BY_FIELD, new SelectByFieldSQLMaker());
 
-        typeHandlerMap.put(int.class, new IntegerTypeHandler());
-        typeHandlerMap.put(long.class, new LongTypeHandler());
 
+//        registerTypeHandler(new StringTypeHandler());
+//
+//        registerTypeHandler(new LongTypeHandler());
+//        registerTypeHandler(new IntegerTypeHandler());
+//        registerTypeHandler(new ShortTypeHandler());
+//        registerTypeHandler(new ByteTypeHandler());
+//        registerTypeHandler(new DoubleTypeHandler());
+//        registerTypeHandler(new FloatTypeHandler());
+//        registerTypeHandler(new CharacterTypeHandler());
+//        registerTypeHandler(new BooleanTypeHandler());
 
-        registerTypeHandler(new StringTypeHandler());
-
-        registerTypeHandler(new LongTypeHandler());
-        registerTypeHandler(new IntegerTypeHandler());
-        registerTypeHandler(new ShortTypeHandler());
-        registerTypeHandler(new ByteTypeHandler());
-        registerTypeHandler(new DoubleTypeHandler());
-        registerTypeHandler(new FloatTypeHandler());
-        registerTypeHandler(new CharacterTypeHandler());
-        registerTypeHandler(new BooleanTypeHandler());
-
-        registerTypeHandler(new FastJSONTypeHandler());
-
-        this.dbConfig = dbConfig;
 
     }
 
-    public void registerTypeHandler(TypeHandler<?> typeHandler) {
+    public void registerTypeHandler(Class<?> clazz , TypeHandler<?> typeHandler) {
+        typeHandlerRegistry.registerTypeHandler(clazz,typeHandler);
+    }
 
-        if (typeHandlerMap.containsKey(typeHandler.getBindClassType())) {
-            throw new RuntimeException("containsKey");
-        }
-
-        typeHandlerMap.put(typeHandler.getBindClassType(), typeHandler);
+    public TypeHandler<?> getTypeHandler(Class<?> clazz) {
+        return typeHandlerRegistry.getTypeHandler(clazz);
     }
 
 
@@ -124,12 +117,13 @@ public class DBConsumer extends BlockingQueueConsumer {
      * @param dbEntityClass dbEntityClass
      * @return TableInfo
      */
-    private TableInfo createTableInfo(Class<?> dbEntityClass) throws NoSuchFieldException , NoSuchMethodException {
+    private TableInfo createTableInfo(Class<?> dbEntityClass) throws NoSuchFieldException, NoSuchMethodException {
         TableInfo tableInfo = new TableInfo();
         tableInfo.setDbEntityClass(dbEntityClass);
 
         DBTable dbTableAnno = dbEntityClass.getAnnotation(DBTable.class);
         if (dbTableAnno != null) {
+            tableInfo.setDbTableAnno(dbTableAnno);
             tableInfo.setTableName(dbTableAnno.tableName());
             tableInfo.setPrimaryKey(dbTableAnno.primaryKey());
         } else {
@@ -149,12 +143,12 @@ public class DBConsumer extends BlockingQueueConsumer {
                 continue;
             }
             //忽略静态字段
-            if(AllUtil.isStatic(field)){
+            if (AllUtil.isStatic(field)) {
                 continue;
             }
 
-            if(tableFieldInfoMap.containsKey(field.getName())){
-                throw new IllegalArgumentException("class " + dbEntityClass.getCanonicalName() +" duplicate field "+ field.getName());
+            if (tableFieldInfoMap.containsKey(field.getName())) {
+                throw new IllegalArgumentException("class " + dbEntityClass.getCanonicalName() + " duplicate field " + field.getName());
             }
 
             field.setAccessible(true);
@@ -181,6 +175,7 @@ public class DBConsumer extends BlockingQueueConsumer {
 
         DBTableField dbTableFieldAnno = dbEntityField.getAnnotation(DBTableField.class);
         if (dbTableFieldAnno != null) {
+            tableFieldInfo.setDbTableFieldAnno(dbTableFieldAnno);
             tableFieldInfo.setTableFieldName(dbTableFieldAnno.fieldName());
             if (dbTableFieldAnno.fieldType() == TableFieldType.AUTO) {
                 TableFieldType tableFieldType = getTableFieldType(dbEntityField.getType());
@@ -205,41 +200,53 @@ public class DBConsumer extends BlockingQueueConsumer {
 
         String fieldGetMethodName = getFieldGetMethodName(dbEntityField);
 
+        try {
+            Method fiedGetMethod = dbEntityClass.getMethod(fieldGetMethodName);
+            tableFieldInfo.setFiedGetMethod(fiedGetMethod);
+        } catch (Exception e) {
+            //ignore
+        }
 
-        Method fiedGetMethod = dbEntityClass.getMethod(fieldGetMethodName);
-        tableFieldInfo.setFiedGetMethod(fiedGetMethod);
 
         return tableFieldInfo;
     }
 
 
-    private TableFieldType getTableFieldType(Class<?> fieldCLass) {
-        if (fieldCLass == int.class || fieldCLass == Integer.class) {
+    public TableFieldType getTableFieldType(Class<?> fieldClass) {
+        if (fieldClass == int.class || fieldClass == Integer.class) {
             return TableFieldType.INTEGER;
-        } else if (fieldCLass == String.class) {
+        } else if (fieldClass == String.class) {
             return TableFieldType.VARCHAR;
-        } else if (fieldCLass == long.class || fieldCLass == Long.class) {
+        } else if (fieldClass == long.class || fieldClass == Long.class) {
             return TableFieldType.BIGINT;
-        } else if (fieldCLass == short.class || fieldCLass == Short.class) {
+        } else if (fieldClass == short.class || fieldClass == Short.class) {
             return TableFieldType.SMALLINT;
-        } else if (fieldCLass == float.class || fieldCLass == Float.class) {
+        } else if (fieldClass == float.class || fieldClass == Float.class) {
             return TableFieldType.FLOAT;
-        } else if (fieldCLass == double.class || fieldCLass == Double.class) {
+        } else if (fieldClass == double.class || fieldClass == Double.class) {
             return TableFieldType.DOUBLE;
-        } else if (fieldCLass == boolean.class || fieldCLass == Boolean.class
-                || fieldCLass == byte.class || fieldCLass == Byte.class) {
+        } else if (fieldClass == byte.class || fieldClass == Byte.class) {
             return TableFieldType.TINYINT;
-        } else if (typeHandlerMap.containsKey(fieldCLass)) {
-            return TableFieldType.VARCHAR;
-        } else {
-
-            TypeHandler<?> typeHandler = typeHandlerMap.get(fieldCLass);
-            if (typeHandler != null) {
-                return typeHandler.getTableFieldType();
-            }
-
-            throw new IllegalArgumentException(fieldCLass.getName() + " field type can not to sql type");
+        } else if (fieldClass == boolean.class || fieldClass == Boolean.class) {
+            return TableFieldType.BOOLEAN;
+        } else if (fieldClass == char.class || fieldClass == Character.class) {
+            //char 类型对应数据库定长字符串
+            return TableFieldType.CHAR;
         }
+//        else if (typeHandlerMap.containsKey(fieldClass)) {
+//            return TableFieldType.VARCHAR;
+//        }
+        else {
+            throw new IllegalArgumentException(fieldClass.getName() + " field type can not to sql type");
+        }
+
+//            TypeHandler<?> typeHandler = typeHandlerMap.get(fieldClass);
+//            if (typeHandler != null) {
+//                return typeHandler.getTableFieldType();
+//            }
+//
+//            throw new IllegalArgumentException(fieldClass.getName() + " field type can not to sql type");
+//        }
     }
 
     private String getFieldGetMethodName(Field dbEntityField) {
@@ -261,18 +268,12 @@ public class DBConsumer extends BlockingQueueConsumer {
 
     @Override
     public void beforeStart() {
-        tryConnectIfCLose();
+        sqlExecutor.tryConnectIfClose();
     }
 
     @Override
     public void doStop() {
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
-        }
+        sqlExecutor.closeQuiet();
     }
 
 
@@ -284,6 +285,7 @@ public class DBConsumer extends BlockingQueueConsumer {
             Logs.DEFAULT_LOGGER.error(" unknow db event type {} ", eventId);
             return;
         }
+
 
         TableInfo tableInfo = tableInfoMap.get(dbEntity.getClass());
         if (tableInfo == null) {
@@ -319,11 +321,10 @@ public class DBConsumer extends BlockingQueueConsumer {
         }
 
 
-        List<Object> returnList = null;
-
+        Object returnData = null;
 
         try {
-            returnList = executeSql(prepareSQLAndParams, eventData, tableInfo);
+            returnData = sqlExecutor.executeSql(prepareSQLAndParams, eventData, tableInfo);
         } catch (SQLException | IllegalAccessException | InstantiationException throwables) {
             throwables.printStackTrace();
             if (needReturn) {
@@ -333,16 +334,6 @@ public class DBConsumer extends BlockingQueueConsumer {
             return;
         }
 
-
-        Object returnData = null;
-
-        if (prepareSQLAndParams.sqlExecuteType == SqlExecuteType.QUERY_ONE) {
-            if (returnList != null && returnList.size() >= 1) {
-                returnData = returnList.get(0);
-            }
-        } else {
-            returnData = returnList;
-        }
 
         int returnEventId = 0;
         if (returnData == null) {
@@ -354,134 +345,12 @@ public class DBConsumer extends BlockingQueueConsumer {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private List<Object> executeSql(PrepareSQLAndParams prepareSQLAndParams, EventData eventData, TableInfo tableInfo) throws SQLException, IllegalAccessException, InstantiationException {
-        tryConnectIfCLose();
-
-        Logs.DB.info(" prepareSQL : {} ", prepareSQLAndParams.prepareSQL);
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(prepareSQLAndParams.prepareSQL);) {
-
-            if (!CollectionUtil.isEmpty(prepareSQLAndParams.paramValues)) {
-                for (int i = 0; i < prepareSQLAndParams.paramValues.size(); i++) {
-                    int parameterIndex = i + 1;
-                    Object value = prepareSQLAndParams.paramValues.get(i);
-
-
-                    TypeHandler typeHandler = typeHandlerMap.get(value.getClass());
-                    if (typeHandler != null) {
-                        typeHandler.setParameter(preparedStatement, parameterIndex, value);
-                    } else {
-                        preparedStatement.setObject(parameterIndex, value);
-                    }
-                }
-            }
-
-            switch (prepareSQLAndParams.sqlExecuteType) {
-                case QUERY_ONE:
-                case QUERY_MANY: {
-                    List<Object> returnList = new ArrayList<>();
-                    try (ResultSet resultSet = preparedStatement.executeQuery();) {
-
-                        while (!resultSet.isClosed() && resultSet.next()) {
-
-
-                            Object returnObj = eventData.getData().getClass().newInstance();
-
-                            for (TableFieldInfo tableFieldInfo : tableInfo.getFieldInfoLinkedMap().values()) {
-
-                                TypeHandler typeHandler = typeHandlerMap.get(tableFieldInfo.getClassField().getType());
-                                if (typeHandler == null) {
-                                    Logs.DB.error("typeHandler == null class field {}", tableFieldInfo.getClassField().getType());
-                                    continue;
-                                }
-
-                                Object value = typeHandler.getNullableResult(resultSet, tableFieldInfo.getTableFieldName());
-
-                                tableFieldInfo.getClassField().set(returnObj, value);
-                            }
-
-                            returnList.add(returnObj);
-                        }
-                    }
-                    return returnList;
-                }
-                case MODIFY:
-                default:
-                    preparedStatement.execute();
-                    break;
-            }
-
-            return null;
-
-
-        }
-
-
-    }
-
-
-    private void tryConnectIfCLose() {
-        if (connection == null) {
-            try {
-                connection = getConn();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-            return;
-        }
-
-
-        boolean isClose = false;
-
-        try {
-            isClose = connection.isClosed();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-            isClose = true;
-        }
-
-
-        if (isClose) {
-            closeQuiet();
-            try {
-                connection = getConn();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        }
-
-
-//        if(connection.isClosed()){
-//            return;
-//        }
-
-    }
-
-    private void closeQuiet() {
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
-    private Connection getConn() throws SQLException {
-
-        Connection connection = DriverManager.getConnection(dbConfig.getJdbcUrl(), dbConfig.getUsername(), dbConfig.getPassword());
-        return connection;
-
-    }
-
     @Override
-    public boolean isDefaultConsumer(){
+    public boolean isDefaultConsumer() {
         return false;
     }
 
-    public void setDbConfig(DBConfig dbConfig) {
-        this.dbConfig = dbConfig;
-    }
+//    public void setDbConfig(DBConfig dbConfig) {
+//        this.dbConfig = dbConfig;
+//    }
 }

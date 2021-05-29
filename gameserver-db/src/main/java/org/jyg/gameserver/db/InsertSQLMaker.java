@@ -1,7 +1,6 @@
 package org.jyg.gameserver.db;
 
 import org.jyg.gameserver.core.util.Logs;
-import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
 import java.util.List;

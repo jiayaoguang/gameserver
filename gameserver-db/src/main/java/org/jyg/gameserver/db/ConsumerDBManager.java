@@ -6,6 +6,9 @@ import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.manager.Lifecycle;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * create by jiayaoguang at 2021/5/22
  */
@@ -66,9 +69,20 @@ public class ConsumerDBManager implements Lifecycle {
     }
 
     public void select(BaseDBEntity dbEntity, ResultHandler onSelectResult) {
+        select(dbEntity , onSelectResult , dbEntity.getClass().hashCode());
+    }
+
+
+    public void selectBy(BaseDBEntity dbEntity,String fieldName, ResultHandler onSelectResult, long childChooseId) {
         int requestId = consumer.registerCallBackMethod(onSelectResult);
-        consumer.getContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, dbEntity, null, BDEventConst.SELECT
-                , new EventExtData(consumer.getId(), requestId, dbEntity.getClass().hashCode()));
+        Map<String , Object> params = new HashMap<>();
+        params.put("field" , fieldName);
+        consumer.getContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, dbEntity, null, BDEventConst.SELECT_BY_FIELD
+                , new EventExtData(consumer.getId(), requestId, childChooseId,params));
+    }
+
+    public void selectBy(BaseDBEntity dbEntity,String fieldName, ResultHandler onSelectResult) {
+        selectBy(dbEntity,fieldName, onSelectResult,  dbEntity.getClass().hashCode());
     }
 
 

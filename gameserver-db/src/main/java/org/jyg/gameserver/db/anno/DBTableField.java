@@ -1,6 +1,7 @@
 package org.jyg.gameserver.db.anno;
 
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
+import org.jyg.gameserver.db.FieldIndexType;
 import org.jyg.gameserver.db.TableFieldInfo;
 import org.jyg.gameserver.db.TableFieldType;
 
@@ -26,4 +27,8 @@ public @interface DBTableField {
     int fieldLength() default 0;
 
     TableFieldType fieldType() default TableFieldType.AUTO;
+
+    String comment() default "";
+
+    FieldIndexType indexType() default FieldIndexType.NONE;
 }

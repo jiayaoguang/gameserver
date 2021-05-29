@@ -29,9 +29,5 @@ public class LongTypeHandler implements TypeHandler<Long> {
         return result == 0 && rs.wasNull() ? null : result;
     }
 
-    @Override
-    public Class<Long> getBindClassType() {
-        return Long.class;
-    }
 
 }

@@ -29,9 +29,5 @@ public class IntegerTypeHandler implements TypeHandler<Integer> {
         return result == 0 && rs.wasNull() ? null : result;
     }
 
-    @Override
-    public Class<Integer> getBindClassType() {
-        return Integer.class;
-    }
 
 }

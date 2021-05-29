@@ -41,8 +41,8 @@ public class DBConsumerGroup extends ConsumerGroup<DBConsumer> {
 
 
         for(int i=0;i<dbConfig.getDbConsumerNum();i++){
-            DBConsumer dbConsumer = new DBConsumer();
-            dbConsumer.setDbConfig(dbConfig);
+            DBConsumer dbConsumer = new DBConsumer(dbConfig);
+//            dbConsumer.setDbConfig(dbConfig);
             addChildConsumer(dbConsumer);
         }
 
@@ -69,25 +69,19 @@ public class DBConsumerGroup extends ConsumerGroup<DBConsumer> {
         if(!(data instanceof BaseDBEntity)){
             throw new IllegalArgumentException("db entity must extend BaseDBEntity");
         }
-        switch (eventId) {
-            case BDEventConst.DELETE:
-            case BDEventConst.SELECT:
-            case BDEventConst.SELECT_BY_FIELD:
-                break;
-            default:
-                data = ((BaseDBEntity) data).clone();
-                break;
-        }
+        Object cloneData = ((BaseDBEntity) data).clone();
 
-        super.publicEvent(evenType , data , channel , eventId , eventExtData);
+        super.publicEvent(evenType , cloneData , channel , eventId , eventExtData);
     }
 
-    public void registerTypeHandler(TypeHandler<?> typeHandler){
+    public void registerTypeHandler(Class<?> clazz , TypeHandler<?> typeHandler){
 
-        //is start
+        if(isStart()){
+            throw new IllegalStateException("registerTypeHandler fail isStart");
+        }
 
         for (DBConsumer childDBConsumer : getChildConsumerList()) {
-            childDBConsumer.registerTypeHandler(typeHandler);
+            childDBConsumer.registerTypeHandler(clazz, typeHandler);
         }
     }
 

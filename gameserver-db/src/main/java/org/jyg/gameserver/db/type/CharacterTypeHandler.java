@@ -37,9 +37,5 @@ public class CharacterTypeHandler implements TypeHandler<Character> {
         }
     }
 
-    @Override
-    public Class<Character> getBindClassType() {
-        return Character.class;
-    }
 
 }

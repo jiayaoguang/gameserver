@@ -29,9 +29,5 @@ public class ShortTypeHandler implements TypeHandler<Short> {
         return result == 0 && rs.wasNull() ? null : result;
     }
 
-    @Override
-    public Class<Short> getBindClassType() {
-        return Short.class;
-    }
 
 }

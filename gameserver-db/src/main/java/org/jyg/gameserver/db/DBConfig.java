@@ -9,6 +9,8 @@ public class DBConfig {
     private String username;
     private String password;
 
+    private String driverClassName;
+
     private int dbConsumerNum = 3;
     private int dbConsumerGroupId = 100;
 
@@ -51,5 +53,14 @@ public class DBConfig {
 
     public void setDbConsumerGroupId(int dbConsumerGroupId) {
         this.dbConsumerGroupId = dbConsumerGroupId;
+    }
+
+
+    public String getDriverClassName() {
+        return driverClassName;
+    }
+
+    public void setDriverClassName(String driverClassName) {
+        this.driverClassName = driverClassName;
     }
 }

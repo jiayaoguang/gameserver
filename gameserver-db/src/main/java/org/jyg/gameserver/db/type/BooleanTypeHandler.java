@@ -29,9 +29,5 @@ public class BooleanTypeHandler implements TypeHandler<Boolean> {
         return !result && rs.wasNull() ? null : result;
     }
 
-    @Override
-    public Class<Boolean> getBindClassType() {
-        return Boolean.class;
-    }
 
 }

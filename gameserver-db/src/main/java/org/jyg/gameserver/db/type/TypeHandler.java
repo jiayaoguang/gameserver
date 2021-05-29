@@ -13,14 +13,8 @@ public interface TypeHandler<T> {
 
     void setParameter(PreparedStatement ps, int index, T parameter) throws SQLException;
 
-    public T getNullableResult(ResultSet rs, int columnIndex) throws SQLException;
+    T getNullableResult(ResultSet rs, int columnIndex) throws SQLException;
 
-    public T getNullableResult(ResultSet rs, String columnName)throws SQLException;
-
-    Class<T> getBindClassType();
-
-    default TableFieldType getTableFieldType(){
-        return TableFieldType.VARCHAR;
-    }
+    T getNullableResult(ResultSet rs, String columnName) throws SQLException;
 
 }

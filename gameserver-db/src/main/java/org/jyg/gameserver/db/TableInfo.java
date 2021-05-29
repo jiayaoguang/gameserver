@@ -1,7 +1,8 @@
 package org.jyg.gameserver.db;
 
+import org.jyg.gameserver.db.anno.DBTable;
+
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 
 /**
@@ -28,6 +29,8 @@ public class TableInfo {
     private Field primaryKeyField;
 
     private TableFieldInfo primaryKeyFieldInfo;
+
+    private DBTable dbTableAnno;
 
     public String getTableName() {
         return tableName;
@@ -75,5 +78,13 @@ public class TableInfo {
 
     public void setPrimaryKeyFieldInfo(TableFieldInfo primaryKeyFieldInfo) {
         this.primaryKeyFieldInfo = primaryKeyFieldInfo;
+    }
+
+    public DBTable getDbTableAnno() {
+        return dbTableAnno;
+    }
+
+    public void setDbTableAnno(DBTable dbTableAnno) {
+        this.dbTableAnno = dbTableAnno;
     }
 }

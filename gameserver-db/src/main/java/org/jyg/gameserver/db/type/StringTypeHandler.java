@@ -1,8 +1,5 @@
 package org.jyg.gameserver.db.type;
 
-import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.lang3.StringUtils;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,9 +25,5 @@ public class StringTypeHandler implements TypeHandler<String> {
         return result;
     }
 
-    @Override
-    public Class<String> getBindClassType() {
-        return String.class;
-    }
 
 }

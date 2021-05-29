@@ -24,6 +24,8 @@ public enum TableFieldType {
 
     FLOAT("FLOAT", 10),
     DOUBLE("DOUBLE", 20),
+
+    BOOLEAN("BOOLEAN", 1),
     ;
 
     public final String name;

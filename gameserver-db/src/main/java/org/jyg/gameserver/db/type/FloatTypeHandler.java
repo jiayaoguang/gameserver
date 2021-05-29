@@ -29,9 +29,5 @@ public class FloatTypeHandler implements TypeHandler<Float> {
         return result == 0 && rs.wasNull() ? null : result;
     }
 
-    @Override
-    public Class<Float> getBindClassType() {
-        return Float.class;
-    }
 
 }

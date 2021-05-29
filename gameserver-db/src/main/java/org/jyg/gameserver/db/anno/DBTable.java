@@ -20,4 +20,6 @@ public @interface DBTable {
 
     String primaryKey() default "id";
 
+    String comment() default "";
+
 }

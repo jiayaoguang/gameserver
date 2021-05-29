@@ -1,5 +1,7 @@
 package org.jyg.gameserver.db;
 
+import org.jyg.gameserver.db.anno.DBTableField;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -14,6 +16,8 @@ public class TableFieldInfo {
     private Field classField;
 
     private Method fiedGetMethod;
+
+    private DBTableField dbTableFieldAnno;
 
 
     public String getTableFieldName() {
@@ -56,4 +60,23 @@ public class TableFieldInfo {
     public void setFiedGetMethod(Method fiedGetMethod) {
         this.fiedGetMethod = fiedGetMethod;
     }
+
+
+    public DBTableField getDbTableFieldAnno() {
+        return dbTableFieldAnno;
+    }
+
+    public void setDbTableFieldAnno(DBTableField dbTableFieldAnno) {
+        this.dbTableFieldAnno = dbTableFieldAnno;
+    }
+
+
+    public FieldIndexType getFieldIndexType(){
+        if(dbTableFieldAnno == null){
+            return FieldIndexType.NONE;
+        }
+
+        return dbTableFieldAnno.indexType();
+    }
+
 }

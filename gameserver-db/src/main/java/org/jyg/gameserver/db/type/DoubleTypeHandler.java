@@ -29,9 +29,5 @@ public class DoubleTypeHandler implements TypeHandler<Double> {
         return result == 0 && rs.wasNull() ? null : result;
     }
 
-    @Override
-    public Class<Double> getBindClassType() {
-        return Double.class;
-    }
 
 }

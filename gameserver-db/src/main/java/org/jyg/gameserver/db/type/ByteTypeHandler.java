@@ -29,9 +29,5 @@ public class ByteTypeHandler implements TypeHandler<Byte> {
         return result == 0 && rs.wasNull() ? null : result;
     }
 
-    @Override
-    public Class<Byte> getBindClassType() {
-        return Byte.class;
-    }
 
 }
