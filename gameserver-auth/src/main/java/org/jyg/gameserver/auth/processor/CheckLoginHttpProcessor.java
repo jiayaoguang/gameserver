@@ -1,11 +1,15 @@
 package org.jyg.gameserver.auth.processor;
 
-import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
 import org.jyg.gameserver.core.processor.HttpProcessor;
 import org.jyg.gameserver.core.util.Logs;
+
+import java.util.HashMap;
+import java.util.Map;
 //import org.jyg.gameserver.core.util.redis.RedisCacheClient;
 
 
@@ -15,6 +19,9 @@ import org.jyg.gameserver.core.util.Logs;
 public class CheckLoginHttpProcessor extends HttpProcessor {
 
 //	private final RedisCacheClient redisCacheClient;
+
+	private final JsonMapper jsonMapper = new JsonMapper();
+
 
 	public CheckLoginHttpProcessor() {
 //		this.redisCacheClient = redisCacheClient;
@@ -27,11 +34,16 @@ public class CheckLoginHttpProcessor extends HttpProcessor {
 		Logs.DEFAULT_LOGGER.info(account + " >> " + myToken);
 
 		if (!StringUtils.isEmpty(account) || StringUtils.isEmpty(myToken)) {
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("account" , account);
-			jsonObject.put("isTokenRight" , false);
+			Map<String,Object> returnParams = new HashMap<>();
+			returnParams.put("account" , account);
+			returnParams.put("isTokenRight" , false);
 
-			response.writeAndFlush(jsonObject.toJSONString());
+			try {
+				response.writeAndFlush(jsonMapper.writeValueAsString(returnParams));
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+				response.write500Error();
+			}
 			return;
 		}
 
@@ -52,11 +64,16 @@ public class CheckLoginHttpProcessor extends HttpProcessor {
 			}
 			response.setContentType(Response.CONTENT_TYPE_JSON);
 
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("account" , account);
-			jsonObject.put("isTokenRight" , isTokenRight);
+			Map<String,Object> params = new HashMap<>();
+			params.put("account" , account);
+			params.put("isTokenRight" , isTokenRight);
 
-			response.writeAndFlush(jsonObject.toJSONString());
+			try {
+				response.writeAndFlush(jsonMapper.writeValueAsString(params));
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+				response.write500Error();
+			}
 
 		});
 

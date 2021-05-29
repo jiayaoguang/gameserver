@@ -1,12 +1,13 @@
 package org.jyg.gameserver.core.invoke;
 
-import com.alibaba.fastjson.JSONObject;
+
+import java.util.Map;
 
 /**
  * create by jiayaoguang on 2021/4/10
  */
 public interface IRemoteInvoke {
 
-    void invoke(JSONObject paramJson);
+    void invoke(Map<String,Object> paramMap);
 
 }

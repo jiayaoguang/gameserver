@@ -1,25 +1,26 @@
 package org.jyg.gameserver.core.data;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
+
+import java.util.Map;
 
 /**
  * create by jiayaoguang on 2021/4/10
  */
 public class RemoteInvokeData implements ByteMsgObj {
 
-    @JSONField(name="1")
+    @JsonProperty(value="1")
     private int consumerId = 0;
 
-    @JSONField(name="2")
+    @JsonProperty(value="2")
     private String invokeName = "";
 
-    @JSONField(name="3")
-    private JSONObject paramJson = null;
+    @JsonProperty(value="3")
+    private Map<String,Object> paramMap = null;
 
 
-    @JSONField(name="4")
+    @JsonProperty(value="4")
     private int invokeId = 0;
 
 
@@ -39,12 +40,12 @@ public class RemoteInvokeData implements ByteMsgObj {
         this.invokeName = invokeName;
     }
 
-    public JSONObject getParamJson() {
-        return paramJson;
+    public Map<String,Object> getParamMap() {
+        return paramMap;
     }
 
-    public void setParamJson(JSONObject paramJson) {
-        this.paramJson = paramJson;
+    public void setParamMap(Map<String,Object> paramMap) {
+        this.paramMap = paramMap;
     }
 
     public int getInvokeId() {

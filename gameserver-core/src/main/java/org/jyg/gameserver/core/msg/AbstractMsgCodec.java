@@ -25,7 +25,7 @@ public abstract class AbstractMsgCodec<T> {
         return msgType;
     }
 
-    public abstract byte[] encode(T t);
+    public abstract byte[] encode(T t) throws Exception;
 
     public abstract T decode(byte[] bytes) throws Exception;
 

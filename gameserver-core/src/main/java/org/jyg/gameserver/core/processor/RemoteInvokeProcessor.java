@@ -29,7 +29,7 @@ public class RemoteInvokeProcessor extends ByteMsgObjProcessor<RemoteInvokeData>
         }
 
         try {
-            remoteInvoke.invoke(remoteInvokeData.getParamJson());
+            remoteInvoke.invoke(remoteInvokeData.getParamMap());
         } catch (Exception e) {
             e.printStackTrace();
         }

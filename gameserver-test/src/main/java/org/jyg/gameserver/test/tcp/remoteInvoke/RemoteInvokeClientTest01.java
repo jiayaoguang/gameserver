@@ -1,10 +1,12 @@
 package org.jyg.gameserver.test.tcp.remoteInvoke;
 
-import com.alibaba.fastjson.JSONObject;
 import org.jyg.gameserver.core.anno.InvokeName;
 import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.invoke.IRemoteInvoke;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Hello world!
@@ -12,14 +14,13 @@ import org.jyg.gameserver.core.invoke.IRemoteInvoke;
 public class RemoteInvokeClientTest01 {
     public static void main(String[] args) throws Exception {
 
-        TcpClient client = new TcpClient();
+        TcpClient client = new TcpClient("localhost", 8088);
 
         client.start();
 
-        client.connect("localhost", 8088);
 
         IRemoteInvoke remoteInvoke = client.getDefaultConsumer().createRemoteInvoke( Test03Invoke.class ,  client.getSession());
-        remoteInvoke.invoke(new JSONObject());
+        remoteInvoke.invoke(new HashMap<>());
 
 
         Thread.sleep(10000);
@@ -33,7 +34,7 @@ public class RemoteInvokeClientTest01 {
     public static class In implements IRemoteInvoke{
 
         @Override
-        public void invoke(JSONObject paramJson) {
+        public void invoke(Map<String,Object> paramMap) {
             AllUtil.println("hello world");
         }
     }
