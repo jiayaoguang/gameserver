@@ -1,13 +1,11 @@
 package org.jyg.gameserver.db;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.sun.xml.internal.ws.Closeable;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.db.type.TypeHandler;
 import org.jyg.gameserver.db.type.TypeHandlerRegistry;
 
-import javax.xml.ws.WebServiceException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
