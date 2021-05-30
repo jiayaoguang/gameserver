@@ -319,13 +319,18 @@ public class AllUtil {
 
 
         int eventId = context.getMsgIdByByteMsgObj(byteMsgObjClazz);
-        if (eventId < 0) {
-            Logs.DEFAULT_LOGGER.error("unknow eventid");
-            return;
+        if (eventId <= 0) {
+            Logs.DEFAULT_LOGGER.error("unknow eventid ,class {}" + byteMsgObjClazz.getSimpleName());
+            throw new IllegalArgumentException("unknow eventid "+ byteMsgObjClazz.getSimpleName());
         }
 
 
         AbstractMsgCodec msgCodec = context.getMsgCodec(eventId);
+
+        if(msgCodec == null){
+            Logs.DEFAULT_LOGGER.error("unknow msgCodec eventId : {}",eventId);
+            throw new IllegalArgumentException("unknow msgCodec eventId : "+eventId);
+        }
 
         byte[] msgBytes = EMPTY_BYTE_ARRAY;
         try {
