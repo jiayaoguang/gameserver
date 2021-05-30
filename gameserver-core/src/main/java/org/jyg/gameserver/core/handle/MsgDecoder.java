@@ -79,15 +79,12 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
 
             int readableBytes = frame.readableBytes();
 
-            if(readableBytes <= 0){
-                LOGGER.error(" readableBytes <= 0 ,id : {} ", msgId);
-            }
 
             final byte[] dstBytes = new byte[frame.readableBytes()];;
             if(readableBytes > 0){
                 frame.getBytes(frame.readerIndex(), dstBytes);
             }else {
-                LOGGER.info(" readableBytes <= 0 ,id : {} ", msgId);
+//                LOGGER.info(" readableBytes <= 0 ,id : {} ", msgId);
             }
 
             Object msgObj;

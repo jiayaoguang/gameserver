@@ -26,7 +26,12 @@ public class SocketClientInitializer extends
 //		pipeline.addLast(new ProtobufVarint32FrameDecoder());
 
 
+		if(context.getServerConfig().getClientWriteOutTimeSec() > 0 || context.getServerConfig().getReadOutTimeSec() > 0){
+			pipeline.addLast("idle", new IdleStateHandler(context.getServerConfig().getReadOutTimeSec()
+					, context.getServerConfig().getClientWriteOutTimeSec(), 0, TimeUnit.SECONDS));
+		}
 
+		pipeline.addLast("connect",new NettyClientConnectManageHandler(context));
 
 
 //		if(context.getServerConfig().isNeedMergeProto()){
@@ -39,10 +44,6 @@ public class SocketClientInitializer extends
 		pipeline.addLast("MsgDecoder" , context.getNettyHandlerFactory().createMsgDecoder());
 		pipeline.addLast("MsgEncoder" , context.getNettyHandlerFactory().getMsgEncoder());
 
-
-		pipeline.addLast("idle",new IdleStateHandler(0,10,0 , TimeUnit.SECONDS));
-
-		pipeline.addLast("connect",new NettyClientConnectManageHandler(context));
 
 //		pipeline.addLast(new MyProtobufListEncoder(context));
 		

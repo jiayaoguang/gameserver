@@ -21,6 +21,21 @@ public class ServerConfig {
     private int nettyIOThreadNum = 0;
 
     private int serverUid = 0;
+    /**
+     * 服务器读协议超时时间
+     * 超时会关闭连接
+     * (单位 : 秒)
+     * 0 表示不启用
+     */
+    private int readOutTimeSec = 20;
+    /**
+     * 客户端写超时时间协议超时时间
+     * 超时会关闭连接
+     * (单位 : 秒)
+     * 0 表示不启用
+     */
+    private int clientWriteOutTimeSec = 5;
+
 
     public boolean isUseGzip() {
         return useGzip;
@@ -87,5 +102,21 @@ public class ServerConfig {
 
     public void setServerUid(int serverUid) {
         this.serverUid = serverUid;
+    }
+
+    public int getReadOutTimeSec() {
+        return readOutTimeSec;
+    }
+
+    public void setReadOutTimeSec(int readOutTimeSec) {
+        this.readOutTimeSec = readOutTimeSec;
+    }
+
+    public int getClientWriteOutTimeSec() {
+        return clientWriteOutTimeSec;
+    }
+
+    public void setClientWriteOutTimeSec(int clientWriteOutTimeSec) {
+        this.clientWriteOutTimeSec = clientWriteOutTimeSec;
     }
 }

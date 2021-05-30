@@ -25,8 +25,13 @@ public class InnerSocketServerInitializer extends
 //		pipeline.addLast(new ProtobufVarint32FrameDecoder());
 
 
+		if(context.getServerConfig().getReadOutTimeSec() > 0){
+			pipeline.addLast("idle",new IdleStateHandler(context.getServerConfig().getReadOutTimeSec(),0,0 , TimeUnit.SECONDS));
+		}
 
-		pipeline.addLast("msgDecoder" , new MsgDecoder(context));
+		pipeline.addLast("connect",new NettyConnectManageHandler(context));
+
+		pipeline.addLast("MsgDecoder" , new MsgDecoder(context));
 
 		if(context.getServerConfig().isNeedMergeProto()){
 			pipeline.addLast("MsgMergeEncoder" , context.getNettyHandlerFactory().createMsgMergeHandler(context));
@@ -41,10 +46,6 @@ public class InnerSocketServerInitializer extends
 		
 //		pipeline.addLast(new InnerSocketHandler(context));
 
-
-		pipeline.addLast("idle",new IdleStateHandler(60,0,0 , TimeUnit.SECONDS));
-
-		pipeline.addLast("connect",new NettyConnectManageHandler(context));
 
 //		pipeline.addLast(new LastHandler());
 		
