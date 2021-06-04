@@ -8,12 +8,12 @@ import java.io.IOException;
 /**
  * create by jiayaoguang on 2020/10/25
  */
-public class JsonMsgCodec extends AbstractByteMsgCodec {
+public class JsonMsgCodec extends AbstractByteMsgCodec<ByteMsgObj> {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public JsonMsgCodec(int msgId, Class<? extends ByteMsgObj> byteMsgClass) {
-        super(msgId, byteMsgClass);
+    public JsonMsgCodec( Class<? extends ByteMsgObj> byteMsgClass) {
+        super( byteMsgClass);
     }
 
     @Override

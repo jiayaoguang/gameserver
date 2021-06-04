@@ -14,8 +14,8 @@ public class EmptyMsgCodec extends AbstractByteMsgCodec {
     private final ByteMsgObj instance;
 
 
-    public EmptyMsgCodec(int msgId, ByteMsgObj instance) {
-        super(msgId, instance.getClass());
+    public EmptyMsgCodec( ByteMsgObj instance) {
+        super( instance.getClass());
         this.instance = instance;
     }
 

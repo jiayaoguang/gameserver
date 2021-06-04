@@ -7,20 +7,20 @@ import java.io.IOException;
 /**
  * create by jiayaoguang on 2020/10/25
  */
-public abstract class AbstractByteMsgCodec extends AbstractMsgCodec<ByteMsgObj> {
+public abstract class AbstractByteMsgCodec<T extends ByteMsgObj> extends AbstractMsgCodec<T> {
 
     protected final Class<? extends ByteMsgObj> byteMsgClass;
 
-    public AbstractByteMsgCodec(int msgId, Class<? extends ByteMsgObj> byteMsgClass) {
-        super(msgId, MsgType.BYTE_OBJ);
+    public AbstractByteMsgCodec( Class<? extends ByteMsgObj> byteMsgClass) {
+        super( MsgType.BYTE_OBJ);
         this.byteMsgClass = byteMsgClass;
     }
 
     @Override
-    public abstract byte[] encode(ByteMsgObj jsonMsg) throws Exception;
+    public abstract byte[] encode(T jsonMsg) throws Exception;
 
     @Override
-    public abstract ByteMsgObj decode(byte[] bytes) throws Exception;
+    public abstract T decode(byte[] bytes) throws Exception;
 
     public Class<? extends ByteMsgObj> getByteMsgClass() {
         return byteMsgClass;

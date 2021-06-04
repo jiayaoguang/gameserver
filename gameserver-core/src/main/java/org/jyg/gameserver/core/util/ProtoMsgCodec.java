@@ -14,13 +14,13 @@ public class ProtoMsgCodec extends AbstractMsgCodec<MessageLite> {
 
     private final MessageLite defaultMessageLite;
 
-    public ProtoMsgCodec(int msgId, Class<MessageLite> messageLiteClass) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        super(msgId, MsgType.PROTO);
+    public ProtoMsgCodec(Class<MessageLite> messageLiteClass) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        super(MsgType.PROTO);
         this.defaultMessageLite = (MessageLite) messageLiteClass.getMethod("getDefaultInstance").invoke(null);
     }
 
-    public ProtoMsgCodec(int msgId, MessageLite defaultMessageLite) {
-        super(msgId, MsgType.PROTO);
+    public ProtoMsgCodec( MessageLite defaultMessageLite) {
+        super(MsgType.PROTO);
         this.defaultMessageLite = defaultMessageLite;
     }
 
