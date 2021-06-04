@@ -29,7 +29,7 @@ public class TcpClient extends AbstractBootstrap{
 	// 通过nio方式来接收连接和处理连接
 	private final Bootstrap bootstrap = new Bootstrap();
 	private Channel channel;
-	private final Session session;
+	private Session session;
 
 	private  String host;
 	private  int port;
@@ -62,7 +62,6 @@ public class TcpClient extends AbstractBootstrap{
 		super(context);
 		this.host = host;
 		this.port = port;
-		this.session = new Session(null , 1L);
 	}
 
 
@@ -115,7 +114,8 @@ public class TcpClient extends AbstractBootstrap{
 
 		channel = channelFuture.channel();
 
-		session.setChannel(channel);
+
+		session = getDefaultConsumer().getChannelManager().doLink(channel);
 
 		return session;
 	}
@@ -167,6 +167,7 @@ public class TcpClient extends AbstractBootstrap{
 
 	}
 
+	@Deprecated
 	public Session getSession() {
 		return session;
 	}

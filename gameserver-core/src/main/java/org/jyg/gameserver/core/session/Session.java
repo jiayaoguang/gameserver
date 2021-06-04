@@ -16,7 +16,7 @@ public class Session implements Lifecycle {
 
 	private final long sessionId;
 	
-	private Channel channel;
+	private final Channel channel;
 	
 	private long lastContactMill = 0;
 
@@ -56,6 +56,7 @@ public class Session implements Lifecycle {
 		this.channel.writeAndFlush(message);
 	}
 
+	@Deprecated
 	public void writeWsMessage(String message) {
 		this.channel.writeAndFlush(new TextWebSocketFrame(message));
 	}
@@ -82,9 +83,6 @@ public class Session implements Lifecycle {
 
 	}
 
-	public void setChannel(Channel channel) {
-		this.channel = channel;
-	}
 
 	@Override
 	public void stop() {

@@ -1,6 +1,8 @@
 package org.jyg.gameserver.core.manager;
 
+import com.google.protobuf.MessageLite;
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.session.Session;
 import io.netty.channel.Channel;
 import org.jyg.gameserver.core.util.AllUtil;
@@ -36,11 +38,12 @@ public class ChannelManager implements Lifecycle {
 //    }
 
 
-    public final <T> void doLink(Channel channel) {
+    public final <T> Session doLink(Channel channel) {
         int sessionId = incAndGetSessionId();
         Session session = new Session(channel, sessionId);
         channelObjectMap.put(channel, session);
         afterLink(session);
+        return session;
     }
 
     public <T> void afterLink(Session session) {
@@ -93,8 +96,16 @@ public class ChannelManager implements Lifecycle {
     }
 
 
-    public void broadcast(Object data){
-        throw new UnsupportedOperationException();
+    public void broadcast(ByteMsgObj byteMsgObj){
+        for(Channel channel : channelObjectMap.keySet()){
+            channel.writeAndFlush(byteMsgObj);
+        }
+    }
+ 
+    public void broadcast(MessageLite protoMessage){
+        for(Channel channel : channelObjectMap.keySet()){
+            channel.writeAndFlush(protoMessage);
+        }
     }
 
     public List<Session> getSessions(){

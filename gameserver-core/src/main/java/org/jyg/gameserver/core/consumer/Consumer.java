@@ -268,6 +268,7 @@ public abstract class Consumer {
      * @param session session
      * @param event   event
      */
+    @Deprecated
     public void processTextEvent(Session session, EventData<String> event) {
 //		MessageLite msg = event.getData();
 
@@ -489,6 +490,11 @@ public abstract class Consumer {
             case CLIENT_SOCKET_CONNECT_ACTIVE:
                 break;
             case CLIENT_SOCKET_CONNECT_INACTIVE:
+                if (isDefaultConsumer()) {
+                    channelManager.doUnlink(event.getChannel());
+                }else {
+                    Logs.DEFAULT_LOGGER.error("event SOCKET_CONNECT_INACTIVE only in DefaultConsumer");
+                }
                 break;
 
             default:
