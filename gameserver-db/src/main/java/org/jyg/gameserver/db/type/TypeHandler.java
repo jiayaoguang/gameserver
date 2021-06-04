@@ -13,7 +13,10 @@ public interface TypeHandler<T> {
 
     void setParameter(PreparedStatement ps, int index, T parameter) throws SQLException;
 
-    T getNullableResult(ResultSet rs, int columnIndex) throws SQLException;
+    @Deprecated
+    default T getNullableResult(ResultSet rs, int columnIndex) throws SQLException{
+        return null;
+    }
 
     T getNullableResult(ResultSet rs, String columnName) throws SQLException;
 

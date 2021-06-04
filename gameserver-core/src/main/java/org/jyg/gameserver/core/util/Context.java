@@ -108,7 +108,7 @@ public class Context implements Lifecycle{
     }
 
     public void addMsgId2ProtoMapping(int msgId,  MessageLite defaultInstance) {
-        ProtoMsgCodec protoMsgCodec = new ProtoMsgCodec( msgId,defaultInstance);
+        ProtoMsgCodec protoMsgCodec = new ProtoMsgCodec(defaultInstance);
         this.protoClazz2MsgIdMap.put(defaultInstance.getClass(), msgId);
         this.msgId2MsgCodecMap.put(msgId ,protoMsgCodec );
     }
@@ -122,7 +122,7 @@ public class Context implements Lifecycle{
         AbstractMsgCodec<?> byteMsgCodec = msgId2MsgCodecMap.get(msgId);
 
         if(byteMsgCodec == null){
-            byteMsgCodec = new JsonMsgCodec( msgId,byteMsgObjClazz);
+            byteMsgCodec = new JsonMsgCodec(byteMsgObjClazz);
             msgId2MsgCodecMap.put(msgId , byteMsgCodec);
         }
 
@@ -137,12 +137,12 @@ public class Context implements Lifecycle{
         }
 
 
-        this.msgObjClazz2MsgIdMap.put(byteMsgObjClazz, byteMsgCodec.getMsgId());
-        this.msgId2MsgCodecMap.put(byteMsgCodec.getMsgId(), byteMsgCodec);
+        this.msgObjClazz2MsgIdMap.put(byteMsgObjClazz, msgId);
+        this.msgId2MsgCodecMap.put(msgId, byteMsgCodec);
     }
 
 
-    public void addByteMsgCodec(AbstractByteMsgCodec byteMsgCodec) {
+    public void addByteMsgCodec(AbstractByteMsgCodec<?> byteMsgCodec) {
 
         if (isStart) {
             throw new IllegalArgumentException("isStart");
@@ -152,15 +152,15 @@ public class Context implements Lifecycle{
 //            throw new IllegalArgumentException("msgId2MsgCodecMap.containsKey(MsgId())" + byteMsgCodec.getMsgId());
 //        }
 
-        if(msgObjClazz2MsgIdMap.containsKey(byteMsgCodec.getByteMsgClass())){
-            if(msgObjClazz2MsgIdMap.getInt(byteMsgCodec.getByteMsgClass()) != byteMsgCodec.getMsgId()){
-                throw new IllegalArgumentException("msgObjClazz2MsgIdMap.containsKey(ByteMsgClass()" + byteMsgCodec.getByteMsgClass());
-            }
+
+        if(!msgObjClazz2MsgIdMap.containsKey(byteMsgCodec.getByteMsgClass())){
+            throw new IllegalArgumentException(" addByteMsgCodec fail, !msgObjClazz2MsgIdMap.containsKey(byteMsgCodec.getByteMsgClass())" + byteMsgCodec.getByteMsgClass());
         }
 
+        int msgId = msgObjClazz2MsgIdMap.get(byteMsgCodec.getByteMsgClass());
 
-        this.msgObjClazz2MsgIdMap.put(byteMsgCodec.getByteMsgClass(), byteMsgCodec.getMsgId());
-        this.msgId2MsgCodecMap.put(byteMsgCodec.getMsgId(), byteMsgCodec);
+
+        this.msgId2MsgCodecMap.put(msgId, byteMsgCodec);
     }
 
 
@@ -172,8 +172,8 @@ public class Context implements Lifecycle{
         addMsgId2JsonMsgClassMapping(MsgIdConst.PING , PingByteMsg.class);
         addMsgId2JsonMsgClassMapping(MsgIdConst.PONG , PongByteMsg.class);
 
-        addByteMsgCodec(new EmptyMsgCodec(MsgIdConst.PING, new PingByteMsg()));
-        addByteMsgCodec(new EmptyMsgCodec(MsgIdConst.PONG, new PongByteMsg()));
+        addByteMsgCodec(new EmptyMsgCodec(new PingByteMsg()));
+        addByteMsgCodec(new EmptyMsgCodec(new PongByteMsg()));
 
         getDefaultConsumer().addProcessor(new ReadOutTimeProcessor());
         getDefaultConsumer().addProcessor(new RemoteInvokeProcessor());

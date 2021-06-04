@@ -151,6 +151,10 @@ public class DBConsumer extends BlockingQueueConsumer {
                 throw new IllegalArgumentException("class " + dbEntityClass.getCanonicalName() + " duplicate field " + field.getName());
             }
 
+            if(typeHandlerRegistry.getTypeHandler(field.getType()) == null){
+                throw new IllegalArgumentException("field type not support : " + field.getType().getCanonicalName());
+            }
+
             field.setAccessible(true);
             TableFieldInfo tableFieldInfo = createTableFieldInfo(dbEntityClass, field);
             tableFieldInfoMap.put(field.getName(), tableFieldInfo);
