@@ -75,12 +75,17 @@ public class ChannelManager implements Lifecycle {
         afterUnlink(session);
     }
 
-    public Session getTcpClientSession(Channel channel) {
-        return tcpClientChannelObjectMap.get(channel);
-    }
+//    public Session getTcpClientSession(Channel channel) {
+//        return tcpClientChannelObjectMap.get(channel);
+//    }
 
     public Session getSession(Channel channel) {
-        return channelObjectMap.get(channel);
+
+        Session session = channelObjectMap.get(channel);
+        if(session == null){
+            session = tcpClientChannelObjectMap.get(channel);
+        }
+        return session;
     }
 
 
