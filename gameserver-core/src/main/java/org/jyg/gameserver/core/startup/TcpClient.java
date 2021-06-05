@@ -115,7 +115,7 @@ public class TcpClient extends AbstractBootstrap{
 		channel = channelFuture.channel();
 
 
-		session = getDefaultConsumer().getChannelManager().doLink(channel);
+		session = getDefaultConsumer().getChannelManager().doTcpClientLink(channel);
 
 		return session;
 	}

@@ -491,7 +491,7 @@ public abstract class Consumer {
                 break;
             case CLIENT_SOCKET_CONNECT_INACTIVE:
                 if (isDefaultConsumer()) {
-                    channelManager.doUnlink(event.getChannel());
+                    channelManager.doTcpClientUnlink(event.getChannel());
                 }else {
                     Logs.DEFAULT_LOGGER.error("event SOCKET_CONNECT_INACTIVE only in DefaultConsumer");
                 }

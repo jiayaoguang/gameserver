@@ -17,14 +17,14 @@ public class ChannelManager implements Lifecycle {
 
     private final Map<Channel, Session> channelObjectMap;
 
+    private final Map<Channel, Session> tcpClientChannelObjectMap;
+
     private int sessionIdInc = 0;
 
     public ChannelManager() {
-        this(new LinkedHashMap<>(1024 * 16));
-    }
+        this.channelObjectMap = new LinkedHashMap<>(1024 * 16 , 0.5f);
 
-    public ChannelManager(Map<Channel, Session> channelObjectMap) {
-        this.channelObjectMap = channelObjectMap;
+        this.tcpClientChannelObjectMap = new LinkedHashMap<>(32 , 0.5f);
     }
 
     //    public <T>void process(LogicEvent<T> event) {
@@ -57,6 +57,26 @@ public class ChannelManager implements Lifecycle {
 
     public <T> void afterUnlink(Session session) {
 
+    }
+
+
+
+    public final <T> Session doTcpClientLink(Channel channel) {
+        int sessionId = incAndGetSessionId();
+        Session session = new Session(channel, sessionId);
+        tcpClientChannelObjectMap.put(channel, session);
+        afterLink(session);
+        return session;
+    }
+
+
+    public final <T> void doTcpClientUnlink(Channel channel) {
+        Session session = tcpClientChannelObjectMap.remove(channel);
+        afterUnlink(session);
+    }
+
+    public Session getTcpClientSession(Channel channel) {
+        return tcpClientChannelObjectMap.get(channel);
     }
 
     public Session getSession(Channel channel) {
