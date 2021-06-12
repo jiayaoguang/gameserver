@@ -29,7 +29,6 @@ public class TcpClient extends AbstractBootstrap{
 	// 通过nio方式来接收连接和处理连接
 	private final Bootstrap bootstrap = new Bootstrap();
 	private Channel channel;
-	private Session session;
 
 	private  String host;
 	private  int port;
@@ -90,7 +89,7 @@ public class TcpClient extends AbstractBootstrap{
 
 	}
 
-	public Session connect(){
+	public void connect(){
 		if (channel != null) {
 			channel.close();
 			Logs.DEFAULT_LOGGER.info(" close old channel ");
@@ -107,7 +106,7 @@ public class TcpClient extends AbstractBootstrap{
 
 		if(!channelFuture.isSuccess()){
 			logger.error(" connect fail ");
-			return null;
+			return;
 		}
 
 		isStart = true;
@@ -115,9 +114,6 @@ public class TcpClient extends AbstractBootstrap{
 		channel = channelFuture.channel();
 
 
-		session = getDefaultConsumer().getChannelManager().doTcpClientLink(channel);
-
-		return session;
 	}
 
 	// 连接服务端
@@ -125,12 +121,12 @@ public class TcpClient extends AbstractBootstrap{
 	public Channel connect(String host,int port) {
 		this.host = host;
 		this.port = port;
-
-		return connect().getChannel();
+		connect();
+		return channel;
 	}
 	
 
-	public void write( MessageLite msg) throws IOException {
+	public void write( MessageLite msg) {
 		checkConnect();
 		channel.writeAndFlush( msg);
 //		System.out.println("客户端发送数据>>>>");
@@ -154,8 +150,8 @@ public class TcpClient extends AbstractBootstrap{
 
 	public void close() {
 
-		if(session !=null) {
-			session.stop();
+		if(channel !=null) {
+			channel.close();
 		}
 
 	}
@@ -168,7 +164,7 @@ public class TcpClient extends AbstractBootstrap{
 	}
 
 	@Deprecated
-	public Session getSession() {
-		return session;
+	public TcpClient getSession() {
+		return this;
 	}
 }

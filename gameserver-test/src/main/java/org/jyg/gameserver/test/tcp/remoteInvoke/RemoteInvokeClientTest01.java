@@ -19,7 +19,7 @@ public class RemoteInvokeClientTest01 {
         client.start();
 
 
-        IRemoteInvoke remoteInvoke = client.getDefaultConsumer().createRemoteInvoke( Test03Invoke.class ,  client.getSession());
+        IRemoteInvoke remoteInvoke = client.getDefaultConsumer().createRemoteInvoke( Test03Invoke.class ,  client);
         remoteInvoke.invoke(new HashMap<>());
 
 

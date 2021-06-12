@@ -16,6 +16,7 @@ import org.jyg.gameserver.core.manager.InstanceManager;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.processor.*;
 import org.jyg.gameserver.core.session.Session;
+import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.timer.DelayCloseTimer;
 import org.jyg.gameserver.core.timer.TimerManager;
 import org.jyg.gameserver.core.util.CallBackEvent;
@@ -338,7 +339,7 @@ public abstract class Consumer {
     }
 
 
-    public IRemoteInvoke createRemoteInvoke(Class<? extends IRemoteInvoke> remoteInvokeClass, Session session) {
+    public IRemoteInvoke createRemoteInvoke(Class<? extends IRemoteInvoke> remoteInvokeClass, TcpClient tcpClient) {
 
         String invokeName;
 
@@ -349,13 +350,13 @@ public abstract class Consumer {
             invokeName = remoteInvokeClass.getName();
         }
 
-        return createRemoteInvoke(invokeName , session);
+        return createRemoteInvoke(invokeName , tcpClient);
     }
 
 
 
 
-    public IRemoteInvoke createRemoteInvoke(final String remoteInvokeName, Session session) {
+    public IRemoteInvoke createRemoteInvoke(final String remoteInvokeName, TcpClient tcpClient) {
 
         IRemoteInvoke remoteInvoke = new IRemoteInvoke() {
             @Override
@@ -370,7 +371,7 @@ public abstract class Consumer {
 
                     remoteInvokeData.setParamMap(paramMap);
 
-                    session.writeMessage(remoteInvokeData);
+                    tcpClient.write(remoteInvokeData);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -488,6 +489,11 @@ public abstract class Consumer {
                 break;
 
             case CLIENT_SOCKET_CONNECT_ACTIVE:
+                if (isDefaultConsumer()) {
+                    channelManager.doTcpClientLink(event.getChannel());
+                }else {
+                    Logs.DEFAULT_LOGGER.error("event CLIENT_SOCKET_CONNECT_ACTIVE only in DefaultConsumer");
+                }
                 break;
             case CLIENT_SOCKET_CONNECT_INACTIVE:
                 if (isDefaultConsumer()) {
