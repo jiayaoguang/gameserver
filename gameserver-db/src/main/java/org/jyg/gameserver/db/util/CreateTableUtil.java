@@ -27,9 +27,9 @@ public class CreateTableUtil {
 
 //        DBConfig dbConfig = ConfigUtil.properties2Object("jyg", DBConfig.class);
 
-        DBConsumer dbConsumer = new DBConsumer(dbConfig);
+        DBTableManager dbTableManager = new DBTableManager(null);
 
-        TableInfo tableInfo = dbConsumer.addTableInfo(dbClass);
+        TableInfo tableInfo = dbTableManager.addTableInfo(dbClass);
 
         StringBuilder sqlSB = new StringBuilder("CREATE TABLE " + tableInfo.getTableName());
         sqlSB.append("(");
@@ -37,7 +37,7 @@ public class CreateTableUtil {
         for (TableFieldInfo tableFieldInfo : tableInfo.getFieldInfoLinkedMap().values()) {
             TableFieldType tableFieldType = tableFieldInfo.getFieldType();
             if (tableFieldType == TableFieldType.AUTO) {
-                tableFieldType = dbConsumer.getTableFieldType(tableFieldInfo.getClassField().getType());
+                tableFieldType = dbTableManager.getTableFieldType(tableFieldInfo.getClassField().getType());
             }
             sqlSB.append(tableFieldInfo.getTableFieldName()).append(" ").append(tableFieldType.name)
                     .append("(").append(tableFieldInfo.getLength()).append(")").append(" ");
