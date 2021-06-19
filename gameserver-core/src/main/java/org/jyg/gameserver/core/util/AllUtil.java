@@ -276,7 +276,7 @@ public class AllUtil {
      */
     public static void writeToBuf(Context context, MessageLite msg, ByteBuf buf) {
         Class<? extends MessageLite> protoClazz = msg.getClass();
-        Logs.DEFAULT_LOGGER.info("deal threadName : " + Thread.currentThread().getName());
+//        Logs.DEFAULT_LOGGER.info("deal threadName : " + Thread.currentThread().getName());
         byte[] msgBytes = msg.toByteArray();
 //    if (msg instanceof GeneratedMessageV3) {
 //       bytes = msg.toByteArray();
@@ -315,7 +315,7 @@ public class AllUtil {
      */
     public static void writeToBuf(Context context, ByteMsgObj byteMsgObj, ByteBuf buf) {
         Class<? extends ByteMsgObj> byteMsgObjClazz = byteMsgObj.getClass();
-        Logs.DEFAULT_LOGGER.info("deal threadName : " + Thread.currentThread().getName());
+//        Logs.DEFAULT_LOGGER.info("deal threadName : " + Thread.currentThread().getName());
 
 
         int eventId = context.getMsgIdByByteMsgObj(byteMsgObjClazz);

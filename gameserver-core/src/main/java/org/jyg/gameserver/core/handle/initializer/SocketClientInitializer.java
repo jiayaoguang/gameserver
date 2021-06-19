@@ -47,7 +47,7 @@ public class SocketClientInitializer extends
 
 //		pipeline.addLast(new MyProtobufListEncoder(context));
 		
-		pipeline.addLast(new LastCodec());
+//		pipeline.addLast(new LastCodec());
 		
 
 	}
