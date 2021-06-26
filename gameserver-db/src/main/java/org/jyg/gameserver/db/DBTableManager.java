@@ -1,5 +1,6 @@
 package org.jyg.gameserver.db;
 
+import org.jyg.gameserver.core.field.UnsafeFieldOperator;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.db.anno.DBTable;
 import org.jyg.gameserver.db.anno.DBTableField;
@@ -104,6 +105,7 @@ public class DBTableManager {
     private TableFieldInfo createTableFieldInfo(Class<?> dbEntityClass, Field dbEntityField) throws NoSuchFieldException, NoSuchMethodException {
         TableFieldInfo tableFieldInfo = new TableFieldInfo();
         tableFieldInfo.setClassField(dbEntityField);
+        tableFieldInfo.setFieldOperator(new UnsafeFieldOperator<>(dbEntityField));
 //        dbEntityField.setAccessible(true);
 
         DBTableField dbTableFieldAnno = dbEntityField.getAnnotation(DBTableField.class);

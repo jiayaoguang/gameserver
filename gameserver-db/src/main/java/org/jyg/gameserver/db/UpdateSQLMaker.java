@@ -52,34 +52,22 @@ public class UpdateSQLMaker extends CachedSQLMaker {
                 continue;
             }
 
-            Object fieldValue = null;
+//            Object fieldValue = null;
 
-            if (tableFieldInfo.getFiedGetMethod() != null) {
-                try {
-                    fieldValue = tableFieldInfo.getFiedGetMethod().invoke(dbEntity);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
+//            if (tableFieldInfo.getFiedGetMethod() != null) {
+//                try {
+//                    fieldValue = tableFieldInfo.getFiedGetMethod().invoke(dbEntity);
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//            }
 
-            if (fieldValue == null) {
-                fieldValue = tableFieldInfo.getClassField().get(dbEntity);
-            }
-
-            if (fieldValue == null) {
-                return null;
-            }
+            Object fieldValue = tableFieldInfo.getFieldOperator().readObject(dbEntity);
 
             valueParams.add(fieldValue);
         }
 
-        Object primaryKeyValue;
-
-        if (tableInfo.getPrimaryKeyFieldInfo().getFiedGetMethod() != null) {
-            primaryKeyValue = tableInfo.getPrimaryKeyFieldInfo().getFiedGetMethod().invoke(dbEntity);
-        } else {
-            primaryKeyValue = tableInfo.getPrimaryKeyField().get(dbEntity);
-        }
+        Object primaryKeyValue = tableInfo.getPrimaryKeyFieldInfo().getFieldOperator().readObject(dbEntity);
 
         valueParams.add(primaryKeyValue);
 

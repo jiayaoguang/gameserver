@@ -36,9 +36,9 @@ public class SelectByFieldSQLMaker implements SQLMaker {
 
         List<Object> values = new ArrayList<>(1);
 //        TableFieldInfo primaryField = tableInfo.getFieldInfoMap().get(tableInfo.getPrimaryKey());
-        Field selectField = selectTableField.getClassField();
+//        Field selectField = selectTableField.getClassField();
 
-        Object value = selectField.get(dbEntity);
+        Object value = selectTableField.getFieldOperator().readObject(dbEntity);
 
         values.add(value);
 

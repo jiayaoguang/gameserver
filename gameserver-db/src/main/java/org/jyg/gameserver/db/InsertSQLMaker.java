@@ -104,35 +104,14 @@ public class InsertSQLMaker extends CachedSQLMaker {
 
         insertSqlSb.append('(').append(' ');
 
-        int insertParamNum = 0;
+        final int paramNum = tableInfo.getFieldInfoLinkedMap().size();
 
-        for (TableFieldInfo tableFieldInfo : tableInfo.getFieldInfoLinkedMap().values()) {
-            Object fieldValue = null;
+        for (int i = 0; i < paramNum ; i++) {
 
-            if (tableFieldInfo.getFiedGetMethod() != null) {
-                try{
-                    fieldValue = tableFieldInfo.getFiedGetMethod().invoke(dbEntity);
-                }catch (Exception e){
-                    tableFieldInfo.setFiedGetMethod(null);
-                    e.printStackTrace();
-                    Logs.DEFAULT_LOGGER.error("TableField {} FiedGetMethod make exception set FiedGetMethod null" , tableFieldInfo.getTableFieldName());
-                }
-            }
-
-            if (fieldValue == null) {
-                fieldValue = tableFieldInfo.getClassField().get(dbEntity);
-            }
-
-            if (fieldValue == null) {
-                return null;
-            }
-
-            insertParamNum++;
             insertSqlSb.append('?');
-            if (insertParamNum != tableInfo.getFieldInfoLinkedMap().size()) {
+            if (i < paramNum - 1) {
                 insertSqlSb.append(',');
             }
-
 
         }
 
@@ -150,22 +129,20 @@ public class InsertSQLMaker extends CachedSQLMaker {
         List<Object> valueParams = new ArrayList<>(tableInfo.getFieldInfoLinkedMap().size());
 
         for (TableFieldInfo tableFieldInfo : tableInfo.getFieldInfoLinkedMap().values()) {
-            Object fieldValue = null;
+//            Object fieldValue = null;
 
-            if (tableFieldInfo.getFiedGetMethod() != null) {
-                try {
-                    fieldValue = tableFieldInfo.getFiedGetMethod().invoke(dbEntity);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
+//            if (tableFieldInfo.getFiedGetMethod() != null) {
+//                try {
+//                    fieldValue = tableFieldInfo.getFiedGetMethod().invoke(dbEntity);
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//            }
 
-            if (fieldValue == null) {
-                fieldValue = tableFieldInfo.getClassField().get(dbEntity);
-            }
+            Object fieldValue = tableFieldInfo.getFieldOperator().readObject(dbEntity);
 
-            if (fieldValue == null) {
-                return null;
+            if(fieldValue == null){
+
             }
 
             valueParams.add(fieldValue);

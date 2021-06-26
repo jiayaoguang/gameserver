@@ -28,9 +28,9 @@ public class SelectSQLMaker implements SQLMaker {
 
         List<Object> valueParams = new ArrayList<>(1);
         TableFieldInfo primaryField = tableInfo.getFieldInfoLinkedMap().get(tableInfo.getPrimaryKey());
-        Field primaryClassField = primaryField.getClassField();
+//        Field primaryClassField = primaryField.getClassField();
 
-        Object value = primaryClassField.get(dbEntity);
+        Object value = primaryField.getFieldOperator().readObject(dbEntity);
 
         valueParams.add(value);
 

@@ -1,5 +1,7 @@
 package org.jyg.gameserver.db;
 
+import org.jyg.gameserver.core.field.IFieldOperator;
+import org.jyg.gameserver.core.field.UnsafeFieldOperator;
 import org.jyg.gameserver.db.anno.DBTableField;
 
 import java.lang.reflect.Field;
@@ -19,6 +21,11 @@ public class TableFieldInfo {
 
     private DBTableField dbTableFieldAnno;
 
+    private IFieldOperator<Object> fieldOperator;
+
+    public TableFieldInfo() {
+
+    }
 
     public String getTableFieldName() {
         return tableFieldName;
@@ -77,6 +84,14 @@ public class TableFieldInfo {
         }
 
         return dbTableFieldAnno.indexType();
+    }
+
+    public IFieldOperator<Object> getFieldOperator() {
+        return fieldOperator;
+    }
+
+    public void setFieldOperator(IFieldOperator<Object> fieldOperator) {
+        this.fieldOperator = fieldOperator;
     }
 
 }

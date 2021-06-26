@@ -27,9 +27,8 @@ public class DeleteSQLMaker extends CachedSQLMaker {
     protected List<Object> getParamValues(SqlKeyWord sqlKeyWord, Object dbEntity, TableInfo tableInfo, Map<String, Object> params) throws Exception {
         List<Object> valueParams = new ArrayList<>(1);
         TableFieldInfo primaryField = tableInfo.getFieldInfoLinkedMap().get(tableInfo.getPrimaryKey());
-        Field primaryClassField = primaryField.getClassField();
 
-        Object value = primaryClassField.get(dbEntity);
+        Object value = primaryField.getFieldOperator().readObject(dbEntity);
 
         valueParams.add(value);
         return valueParams;
