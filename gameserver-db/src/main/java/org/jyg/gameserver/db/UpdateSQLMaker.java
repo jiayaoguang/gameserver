@@ -15,7 +15,7 @@ public class UpdateSQLMaker extends CachedSQLMaker {
         StringBuilder sqlSB = new StringBuilder();
 
         sqlSB.append(sqlKeyWord.update()).append(' ');
-        sqlSB.append(tableInfo.getTableName()).append(' ');
+        sqlSB.append('`').append(tableInfo.getTableName()).append('`').append(' ');
 
         List<String> fieldNameList = new ArrayList<>(tableInfo.getFieldInfoLinkedMap().keySet());
 
@@ -29,14 +29,14 @@ public class UpdateSQLMaker extends CachedSQLMaker {
         for (int i = 0; i < fieldNameList.size(); i++) {
             String fieldName = fieldNameList.get(i);
 
-            sqlSB.append(fieldName).append('=').append('?').append(' ');
+            sqlSB.append('`').append(fieldName).append('`').append('=').append('?').append(' ');
             if(i+1 < fieldNameList.size()){
                 sqlSB.append(',');
             }
         }
 
         sqlSB.append(sqlKeyWord.where()).append(' ');
-        sqlSB.append(tableInfo.getPrimaryKey()).append(' ');
+        sqlSB.append('`').append(tableInfo.getPrimaryKey()).append('`').append(' ');
         sqlSB.append('=').append('?').append(';');
 
         return sqlSB.toString();

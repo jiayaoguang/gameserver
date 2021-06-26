@@ -2,6 +2,7 @@ package org.jyg.gameserver.db;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,9 @@ import java.util.Map;
  * create by jiayaoguang at 2021/5/16
  */
 public class SelectByFieldSQLMaker implements SQLMaker {
+
+    private final Map<String,String> prepareSqlCache = new HashMap<>();
+
     @Override
     public PrepareSQLAndParams createSqlInfo(SqlKeyWord sqlKeyWord, Object dbEntity, TableInfo tableInfo, Map<String, Object> params) throws IllegalAccessException {
 
@@ -25,21 +29,10 @@ public class SelectByFieldSQLMaker implements SQLMaker {
             return null;
         }
         String selectKey = (String) obj;
+
         TableFieldInfo selectTableField = tableInfo.getFieldInfoLinkedMap().get(selectKey);
 
-
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(sqlKeyWord.select()).append(' ');
-        sb.append('*').append(' ');
-        sb.append(sqlKeyWord.from()).append(' ');
-        sb.append(tableInfo.getTableName()).append(' ');
-        sb.append(sqlKeyWord.where()).append(' ');
-        sb.append(selectKey).append('=');
-        sb.append('?').append(';');
-
-
-        String selectSql = sb.toString();
+        String selectSql = getPrepareSql(sqlKeyWord, tableInfo, selectKey);
 
         List<Object> values = new ArrayList<>(1);
 //        TableFieldInfo primaryField = tableInfo.getFieldInfoMap().get(tableInfo.getPrimaryKey());
@@ -50,6 +43,31 @@ public class SelectByFieldSQLMaker implements SQLMaker {
         values.add(value);
 
         return new PrepareSQLAndParams(selectSql, values, SqlExecuteType.QUERY_MANY);
+    }
+
+    private String getPrepareSql(SqlKeyWord sqlKeyWord,  TableInfo tableInfo , String selectKey){
+
+        String cacheKey = tableInfo.getTableName() + '_' + selectKey;
+        String sql = prepareSqlCache.get(cacheKey);
+        if(sql != null){
+            return sql;
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(sqlKeyWord.select()).append(' ');
+        sb.append('*').append(' ');
+        sb.append(sqlKeyWord.from()).append(' ');
+        sb.append('`').append(tableInfo.getTableName()).append('`').append(' ');
+        sb.append(sqlKeyWord.where()).append(' ');
+        sb.append('`').append(selectKey).append('`').append('=');
+        sb.append('?').append(';');
+
+        sql = sb.toString();
+
+        prepareSqlCache.put(cacheKey , sql);
+
+        return sql;
     }
 
 

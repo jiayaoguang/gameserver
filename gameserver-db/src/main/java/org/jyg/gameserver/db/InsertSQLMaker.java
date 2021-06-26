@@ -82,12 +82,10 @@ public class InsertSQLMaker extends CachedSQLMaker {
     protected String createPrepareSql(SqlKeyWord sqlKeyWord, Object dbEntity, TableInfo tableInfo, Map<String, Object> params) throws Exception {
         final StringBuilder insertSqlSb = new StringBuilder(50);
 
-        List<Object> valueParams = new ArrayList<>(tableInfo.getFieldInfoLinkedMap().size());
-
 
         insertSqlSb.append(sqlKeyWord.insert()).append(' ')
                 .append(sqlKeyWord.into()).append(' ');
-        insertSqlSb.append(tableInfo.getTableName()).append(' ');
+        insertSqlSb.append('`').append(tableInfo.getTableName()).append('`').append(' ');
 
         insertSqlSb.append('(').append(' ');
 
@@ -95,7 +93,7 @@ public class InsertSQLMaker extends CachedSQLMaker {
 
         for (String tableFieldName : tableInfo.getFieldInfoLinkedMap().keySet()) {
             insertKeyNameNum++;
-            insertSqlSb.append(tableFieldName);
+            insertSqlSb.append('`').append(tableFieldName).append('`');
             if (insertKeyNameNum != tableInfo.getFieldInfoLinkedMap().size()) {
                 insertSqlSb.append(',');
             }
@@ -135,7 +133,6 @@ public class InsertSQLMaker extends CachedSQLMaker {
                 insertSqlSb.append(',');
             }
 
-            valueParams.add(fieldValue);
 
         }
 

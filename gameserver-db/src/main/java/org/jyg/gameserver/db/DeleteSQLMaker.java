@@ -16,8 +16,10 @@ public class DeleteSQLMaker extends CachedSQLMaker {
 
         sb.append(sqlKeyWord.delete()).append(' ');
         sb.append(sqlKeyWord.from()).append(' ');
-        sb.append(tableInfo.getTableName()).append(' ');
-        sb.append(sqlKeyWord.where()).append(' ').append(tableInfo.getPrimaryKey()).append('=').append('?').append(';');
+        sb.append('`').append(tableInfo.getTableName()).append('`').append(' ');
+        sb.append(sqlKeyWord.where()).append(' ')
+                .append('`').append(tableInfo.getPrimaryKey()).append('`')
+                .append('=').append('?').append(';');
         return sb.toString();
     }
 

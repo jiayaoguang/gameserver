@@ -18,9 +18,9 @@ public class SelectSQLMaker implements SQLMaker {
         sb.append(sqlKeyWord.select()).append(' ');
         sb.append('*').append(' ');
         sb.append(sqlKeyWord.from()).append(' ');
-        sb.append(tableInfo.getTableName()).append(' ');
+        sb.append('`').append(tableInfo.getTableName()).append('`').append(' ');
         sb.append(sqlKeyWord.where()).append(' ');
-        sb.append(tableInfo.getPrimaryKey()).append('=');
+        sb.append('`').append(tableInfo.getPrimaryKey()).append('`').append('=');
         sb.append('?').append(';');
 
 

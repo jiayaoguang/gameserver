@@ -71,7 +71,6 @@ public class SqlExecutor {
     public Object executeSql(PrepareSQLAndParams prepareSQLAndParams, EventData eventData, TableInfo tableInfo) throws SQLException, IllegalAccessException, InstantiationException {
         tryConnectIfClose();
 
-        Logs.DB.info(" prepareSQL : {} ", prepareSQLAndParams.prepareSQL);
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(prepareSQLAndParams.prepareSQL);) {
 

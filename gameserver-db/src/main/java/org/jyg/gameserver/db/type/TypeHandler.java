@@ -20,4 +20,10 @@ public interface TypeHandler<T> {
 
     T getNullableResult(ResultSet rs, String columnName) throws SQLException;
 
+    default String typeToString(T t){
+        if(t == null){
+            return null;
+        }
+        return t.toString();
+    }
 }

@@ -14,6 +14,8 @@ public class DBConfig {
     private int dbConsumerNum = 3;
     private int dbConsumerGroupId = 100;
 
+    private int printSqlLevel = 2;// 0 : 不打印 , 1 : 只打印prepareSql 2 : 打印prepareSql和值
+
     public String getJdbcUrl() {
         return jdbcUrl;
     }
@@ -62,5 +64,14 @@ public class DBConfig {
 
     public void setDriverClassName(String driverClassName) {
         this.driverClassName = driverClassName;
+    }
+
+
+    public int getPrintSqlLevel() {
+        return printSqlLevel;
+    }
+
+    public void setPrintSqlLevel(int printSqlLevel) {
+        this.printSqlLevel = printSqlLevel;
     }
 }

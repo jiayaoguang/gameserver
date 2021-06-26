@@ -170,7 +170,11 @@ public class DBConsumer extends BlockingQueueConsumer {
 
         try {
             returnData = sqlExecutor.executeSql(prepareSQLAndParams, eventData, tableInfo);
+
+            logSql(prepareSQLAndParams);
+
         } catch (SQLException | IllegalAccessException | InstantiationException throwables) {
+            Logs.DB.info("exec sql : {} make exception" , prepareSQLAndParams.prepareSQL);
             throwables.printStackTrace();
             if (needReturn) {
                 //eventId 1 : 报错
@@ -187,6 +191,32 @@ public class DBConsumer extends BlockingQueueConsumer {
 
         if (needReturn) {
             eventReturn(eventData.getEventExtData().fromConsumerId, returnData, eventData.getEventExtData().requestId, returnEventId);
+        }
+    }
+
+
+    private void logSql(PrepareSQLAndParams prepareSQLAndParams){
+//        if(dbConfig.getPrintSqlLevel() == 0){
+//            return;
+//        }
+
+        if(dbConfig.getPrintSqlLevel() == 1){
+            Logs.DB.info("exec sql : {}" , prepareSQLAndParams.prepareSQL);
+            return;
+        }
+        if(dbConfig.getPrintSqlLevel() == 2){
+
+            StringBuilder sb = new StringBuilder(50);
+            sb.append(prepareSQLAndParams.prepareSQL);
+
+            for(Object param : prepareSQLAndParams.paramValues ){
+                TypeHandler ypeHandler =  typeHandlerRegistry.getTypeHandler(param.getClass());
+                String strValue = ypeHandler.typeToString(param);
+                sb.append(',').append(strValue);
+            }
+
+            Logs.DB.info("exec sql : {}" , sb.toString());
+            return;
         }
     }
 
