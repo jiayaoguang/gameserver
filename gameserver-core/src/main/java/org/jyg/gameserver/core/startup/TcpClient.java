@@ -29,6 +29,7 @@ public class TcpClient extends AbstractBootstrap{
 	// 通过nio方式来接收连接和处理连接
 	private final Bootstrap bootstrap = new Bootstrap();
 	private Channel channel;
+	private Session session;
 
 	private  String host;
 	private  int port;
@@ -89,7 +90,7 @@ public class TcpClient extends AbstractBootstrap{
 
 	}
 
-	public void connect(){
+	public Session connect(){
 		if (channel != null) {
 			channel.close();
 			Logs.DEFAULT_LOGGER.info(" close old channel ");
@@ -106,7 +107,7 @@ public class TcpClient extends AbstractBootstrap{
 
 		if(!channelFuture.isSuccess()){
 			logger.error(" connect fail ");
-			return;
+			return null;
 		}
 
 		isStart = true;
@@ -114,6 +115,9 @@ public class TcpClient extends AbstractBootstrap{
 		channel = channelFuture.channel();
 
 
+		session = getDefaultConsumer().getChannelManager().doTcpClientLink(channel);
+
+		return session;
 	}
 
 	// 连接服务端
@@ -121,18 +125,18 @@ public class TcpClient extends AbstractBootstrap{
 	public Channel connect(String host,int port) {
 		this.host = host;
 		this.port = port;
-		connect();
-		return channel;
-	}
-	
 
-	public void write( MessageLite msg) {
+		return connect().getChannel();
+	}
+
+
+	public void write(MessageLite msg) {
 		checkConnect();
-		channel.writeAndFlush( msg);
+		channel.writeAndFlush(msg);
 //		System.out.println("客户端发送数据>>>>");
 	}
 
-	public void write( ByteMsgObj byteMsgObj) throws IOException {
+	public void write( ByteMsgObj byteMsgObj) {
 		checkConnect();
 		channel.writeAndFlush( byteMsgObj);
 //		System.out.println("客户端发送数据>>>>");
@@ -143,6 +147,12 @@ public class TcpClient extends AbstractBootstrap{
 		write(msgBuilder.build());
 //		System.out.println("客户端发送数据>>>>");
 	}
+
+	public void write(Object data) {
+		checkConnect();
+		channel.writeAndFlush(data);
+//		System.out.println("客户端发送数据>>>>");
+	}
 	
 //	private Channel getChannel() {
 //		return channel;
@@ -150,21 +160,28 @@ public class TcpClient extends AbstractBootstrap{
 
 	public void close() {
 
-		if(channel !=null) {
-			channel.close();
+		if(session !=null) {
+			session.stop();
 		}
 
 	}
 
 	public void checkConnect(){
 		if(channel == null || !channel.isActive()){
+			logger.error("connect lose, try reconnect");
 			connect();
 		}
 
 	}
+	public boolean isConnectAvailable(){
+		if(channel == null || !channel.isActive()){
+			return false;
+		}
+		return true;
+	}
 
 	@Deprecated
-	public TcpClient getSession() {
-		return this;
+	public Session getSession() {
+		return session;
 	}
 }
