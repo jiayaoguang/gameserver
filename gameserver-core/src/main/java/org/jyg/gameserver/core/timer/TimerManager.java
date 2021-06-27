@@ -42,6 +42,17 @@ public class TimerManager implements Lifecycle {
         return addTimer(timer);
     }
 
+    /**
+     * 添加不限制次数的定时器
+     * @param intervalTime 执行时间间隔
+     * @param timerHandler 执行方法
+     * @return Timer
+     */
+    public Timer addUnlimitedTimer(long intervalTime, ITimerHandler timerHandler) {
+        Timer timer = new DefaultTimer(-1, intervalTime, intervalTime, timerHandler);
+        return addTimer(timer);
+    }
+
     public void cancelTimer(Timer timer) {
         timer.cancel();
     }

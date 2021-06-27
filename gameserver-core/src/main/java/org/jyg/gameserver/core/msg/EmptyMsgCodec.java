@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  * create by jiayaoguang on 2020/10/29
  */
-public class EmptyMsgCodec extends AbstractByteMsgCodec {
+public class EmptyMsgCodec extends AbstractByteMsgCodec<ByteMsgObj> {
 
     private final byte[] EMPTY_BYTES = new byte[0];
 

@@ -227,6 +227,11 @@ public class UnsafeFieldOperator<T> implements IFieldOperator<T> {
     public void writeObject(T obj, Object newValue) {
 
         if (primitiveFieldOperatorMethod != null) {
+
+            if(newValue == null){
+                throw new RuntimeException(" set field fail newValue is null ");
+            }
+
             primitiveFieldOperatorMethod.writeObject(obj, offset, newValue);
             return;
         }

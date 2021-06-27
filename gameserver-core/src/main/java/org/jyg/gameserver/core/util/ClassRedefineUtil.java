@@ -1,7 +1,11 @@
 package org.jyg.gameserver.core.util;
 
+import javassist.bytecode.ClassFile;
 import net.bytebuddy.agent.ByteBuddyAgent;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
 import java.lang.instrument.ClassDefinition;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
@@ -68,5 +72,25 @@ public class ClassRedefineUtil {
 
     }
 
+
+
+    public static String readClassName(byte[] bytes) {
+        DataInputStream dataInputStream = null;
+        try {
+            dataInputStream = new DataInputStream(new ByteArrayInputStream(bytes));
+            ClassFile classFile = new ClassFile(dataInputStream);
+            return classFile.getName().replaceAll("/", ".");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if(dataInputStream != null){
+                try {
+                    dataInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
 }

@@ -238,7 +238,8 @@ public abstract class Consumer {
 //		MessageLite msg = event.getData();
         Processor processor = protoProcessorMap.get(event.getEventId());
         if (processor == null) {
-            Logs.DEFAULT_LOGGER.info("processor not found, eventid :" + event.getEventId());
+            String name = event.getData() == null ? "null" :event.getData().getClass().getSimpleName();
+            Logs.DEFAULT_LOGGER.info("processor not found, eventid : {} , msg : {}" , event.getEventId() , name);
             return;
         }
 
@@ -600,4 +601,6 @@ public abstract class Consumer {
         }
         this.consumerStartHandler = consumerStartHandler;
     }
+
+
 }

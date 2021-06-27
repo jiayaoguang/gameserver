@@ -62,11 +62,17 @@ public class Context implements Lifecycle{
 
     private final FTLLoader ftlLoader = new FTLLoader();
 
+    private final UidManager uidManager = new UidManager();
+
+
+    private long startTime;
+
     public Context(Consumer defaultConsumer) {
         this(defaultConsumer ,DEFAULT_CONFIG_FILE_NAME );
     }
 
     public Context(Consumer defaultConsumer , String configFileName) {
+
         this.defaultConsumer = defaultConsumer;
         this.instanceManager = new InstanceManager(this);
         ConfigUtil.properties2Object(configFileName, serverConfig);
@@ -215,6 +221,8 @@ public class Context implements Lifecycle{
             return;
         }
         this.isStart = true;
+        this.startTime = System.currentTimeMillis();
+
         this.protoClazz2MsgIdMap = Object2IntMaps.unmodifiable(this.protoClazz2MsgIdMap);
         this.msgId2MsgCodecMap = Int2ObjectMaps.unmodifiable(this.msgId2MsgCodecMap);
 
@@ -223,6 +231,7 @@ public class Context implements Lifecycle{
         this.instanceManager.start();
 
         this.getConsumerManager().start();
+
 
 
 //        loadServerConfig(configFileName);
@@ -304,4 +313,20 @@ public class Context implements Lifecycle{
     public FTLLoader getFtlLoader() {
         return ftlLoader;
     }
+
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+
+    public UidManager getUidManager() {
+        return uidManager;
+    }
+
+
+    public long nextUid(){
+        return uidManager.nextUid();
+    }
+
 }

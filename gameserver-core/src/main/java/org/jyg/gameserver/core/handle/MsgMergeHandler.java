@@ -111,7 +111,7 @@ public class MsgMergeHandler extends MessageToByteEncoder<Object> {
                     this.lastCheckRunnable = checkRunnable;
                 }
 
-                LOGGER.info(" ========= " + cacheBuf.refCnt() + " == " + Thread.currentThread().getName());
+//                LOGGER.info(" ========= " + cacheBuf.refCnt() + " == " + Thread.currentThread().getName());
 //                if(msgList.isEmpty()){
 //                    this.nextFlushTime = now + 10;
 //                }
