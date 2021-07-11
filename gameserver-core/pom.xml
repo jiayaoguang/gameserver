@@ -130,6 +130,20 @@
             <scope>compile</scope>
         </dependency>
 
+		<!-- https://mvnrepository.com/artifact/io.protostuff/protostuff-core -->
+		<dependency>
+			<groupId>io.protostuff</groupId>
+			<artifactId>protostuff-core</artifactId>
+			<version>1.7.4</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/io.protostuff/protostuff-runtime -->
+		<dependency>
+			<groupId>io.protostuff</groupId>
+			<artifactId>protostuff-runtime</artifactId>
+			<version>1.7.4</version>
+		</dependency>
+
 
     </dependencies>
 	
