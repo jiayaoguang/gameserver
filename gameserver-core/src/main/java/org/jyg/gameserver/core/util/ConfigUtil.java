@@ -112,7 +112,7 @@ public class ConfigUtil {
                         arg = Float.parseFloat(property);
                         break;
                     case "String":
-                        arg = property;
+                        arg = property.trim();
                         break;
                     case "String[]": {
                         String[] strArray = property.split(";");
