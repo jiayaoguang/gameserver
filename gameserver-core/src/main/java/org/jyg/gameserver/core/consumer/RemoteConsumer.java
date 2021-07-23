@@ -2,7 +2,6 @@ package org.jyg.gameserver.core.consumer;
 
 import com.google.protobuf.MessageLite;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
 import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
@@ -14,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * create by jiayaoguang on 2020/5/24
  */
-public class RemoteConsumer extends BlockingQueueConsumer {
+public class RemoteConsumer extends MpscQueueConsumer {
 
 
     private final TcpClient tcpClient;

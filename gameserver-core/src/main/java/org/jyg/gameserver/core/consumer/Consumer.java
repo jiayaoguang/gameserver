@@ -394,7 +394,7 @@ public abstract class Consumer {
             doEvent(new EventData(event.getChannel(), event.getEventType(), event.getData(), event.getEventExtData(), event.getEventId()));
             long costMill = (System.nanoTime() - startNano)/1000000L;
             if(costMill > 10){
-                Logs.DEFAULT_LOGGER.error(" event  cost more time {} ", costMill);
+                Logs.DEFAULT_LOGGER.error("{} event  cost more time {} ",getClass().getSimpleName(), costMill);
             }
         } catch (Exception e) {
             e.printStackTrace();

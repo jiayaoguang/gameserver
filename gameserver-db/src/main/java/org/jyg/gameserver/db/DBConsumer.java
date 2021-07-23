@@ -1,32 +1,19 @@
 package org.jyg.gameserver.db;
 
-import cn.hutool.core.collection.CollectionUtil;
-import org.jyg.gameserver.core.consumer.BlockingQueueConsumer;
+import org.jyg.gameserver.core.consumer.MpscQueueConsumer;
 import org.jyg.gameserver.core.data.EventData;
-import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.Logs;
-import org.jyg.gameserver.db.anno.DBTable;
-import org.jyg.gameserver.db.anno.DBTableField;
-import org.jyg.gameserver.db.anno.DBTableFieldIgnore;
-import org.jyg.gameserver.db.type.*;
+import org.jyg.gameserver.db.type.TypeHandler;
+import org.jyg.gameserver.db.type.TypeHandlerRegistry;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * create by jiayaoguang at 2021/5/16
  */
-public class DBConsumer extends BlockingQueueConsumer {
+public class DBConsumer extends MpscQueueConsumer {
 
     private final SqlKeyWord sqlKeyWord;
 
@@ -169,7 +156,7 @@ public class DBConsumer extends BlockingQueueConsumer {
         Object returnData = null;
 
         try {
-            returnData = sqlExecutor.executeSql(prepareSQLAndParams, eventData, tableInfo);
+            returnData = sqlExecutor.executeSql(prepareSQLAndParams, eventData.getData().getClass(), tableInfo);
 
             logSql(prepareSQLAndParams);
 

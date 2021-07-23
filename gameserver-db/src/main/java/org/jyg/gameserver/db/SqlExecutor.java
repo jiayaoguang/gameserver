@@ -71,7 +71,7 @@ public class SqlExecutor {
     }
 
 
-    public Object executeSql(PrepareSQLAndParams prepareSQLAndParams, EventData eventData, TableInfo tableInfo) throws SQLException, IllegalAccessException, InstantiationException {
+    public Object executeSql(PrepareSQLAndParams prepareSQLAndParams, Class<?> dbEntityClass, TableInfo tableInfo) throws SQLException, IllegalAccessException, InstantiationException {
         tryConnectIfClose();
 
 
@@ -94,14 +94,14 @@ public class SqlExecutor {
 
             switch (prepareSQLAndParams.sqlExecuteType) {
                 case QUERY_ONE: {
-                    List<Object> returnList = executeQuery(eventData.getData().getClass(), tableInfo, preparedStatement);
+                    List<Object> returnList = executeQuery(dbEntityClass, tableInfo, preparedStatement);
                     if (returnList.size() == 0) {
                         return null;
                     }
                     return returnList.get(0);
                 }
                 case QUERY_MANY: {
-                    List<Object> returnList = executeQuery(eventData.getData().getClass(), tableInfo, preparedStatement);
+                    List<Object> returnList = executeQuery(dbEntityClass, tableInfo, preparedStatement);
                     return returnList;
                 }
                 case MODIFY:

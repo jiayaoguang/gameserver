@@ -3,7 +3,6 @@ package org.jyg.gameserver.core.util;
 import com.google.protobuf.MessageLite;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
-import org.jyg.gameserver.core.consumer.BlockingQueueConsumer;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 
