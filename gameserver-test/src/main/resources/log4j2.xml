@@ -53,11 +53,11 @@
         <logger name="org.springframework" level="INFO"></logger>
         <logger name="org.mybatis" level="INFO"></logger>
         <logger name="io.netty" level="INFO"></logger>
-        <root level="all">
+        <AsyncRoot level="all">
             <appender-ref ref="Console"/>
             <appender-ref ref="RollingFileInfo"/>
             <appender-ref ref="RollingFileWarn"/>
             <appender-ref ref="RollingFileError"/>
-        </root>
+        </AsyncRoot>
     </loggers>
 </configuration>
