@@ -240,6 +240,18 @@ public abstract class Consumer {
             return;
         }
 
+        if(!processor.checkFilters(session , event)){
+            String msgName;
+            if(event.getData() != null){
+                msgName = event.getData().getClass().getCanonicalName();
+            }else {
+                msgName = "unknown";
+            }
+            Logs.DEFAULT_LOGGER.info("refuse processor msg {}", msgName);
+            return;
+        }
+
+
         processor.process(session, event);
     }
 
@@ -271,7 +283,17 @@ public abstract class Consumer {
     }
 
     public void processHttpEvent(EventData<Request> event) {
-        getHttpProcessor(event.getData().noParamUri()).process(null, event);
+
+        HttpProcessor httpProcessor = getHttpProcessor(event.getData().noParamUri());
+
+        if(!httpProcessor.checkFilters(null , event)){
+            String msgName = httpProcessor.getPath();
+            Logs.DEFAULT_LOGGER.info("refuse httpProcessor path {}", httpProcessor.getPath());
+            return;
+        }
+
+
+        httpProcessor.process(null, event);
         //六十秒后关闭
         timerManager.addTimer(new DelayCloseTimer(event.getChannel(), 60 * 1000L));
     }
@@ -440,14 +462,7 @@ public abstract class Consumer {
 //            case ON_MESSAGE_COME:
 //				dispatcher.webSocketProcess(event);
 //				break;
-            case PROTO_MSG_COME: {
-                Session session = null;
-                if (isDefaultConsumer()) {
-                    session = channelManager.getSession(event.getChannel());
-                }
-                this.processEventMsg(session, event);
-                break;
-            }
+            case PROTO_MSG_COME:
             case BYTE_OBJ_MSG_COME:{
                 Session session = null;
                 if (isDefaultConsumer()) {
@@ -564,7 +579,7 @@ public abstract class Consumer {
         if(requestId == 0){
             return;
         }
-        getContext().getConsumerManager().publicCallBackEvent(targetConsumerId, data, requestId, 0);
+        eventReturn(targetConsumerId , data , requestId , 0);
     }
 
     /**
@@ -575,6 +590,10 @@ public abstract class Consumer {
      * @param eventId 事件类型 0 表示一切正常  其他表示有错误
      */
     public void eventReturn(int targetConsumerId, Object data,  int requestId , int eventId){
+        if(requestId == 0){
+            Logs.DEFAULT_LOGGER.error("eventReturn requestId == 0");
+            return;
+        }
         getContext().getConsumerManager().publicCallBackEvent(targetConsumerId , data , requestId ,eventId);
     }
 

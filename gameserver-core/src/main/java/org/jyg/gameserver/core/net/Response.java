@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.net;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class Response {
 	public static final String CONTENT_TYPE_TEXT_PLAIN = "text/plain";
 	
 	//要发给客户端的cookis
-	private List<Cookie> cookies = new LinkedList<>();
+	private final List<Cookie> cookies = new ArrayList<>(3);
 	
 	// 500错误提示信息
 	private static final byte[] internalServerErrorBytes = 
@@ -39,11 +40,7 @@ public class Response {
 	private static final String SENDR_EDIRECT_HTML = "<html><head> <meta http-equiv=\"refresh\" content=0;URL=%s /> </head></html>";
 
 
-	private Channel channel;
-	
-	public Response() {
-		
-	}
+	private final Channel channel;
 	
 	public Response(Channel channel) {
 		this.channel = channel;
@@ -54,11 +51,7 @@ public class Response {
 		return channel;
 	}
 
-	public void setChannel(Channel channel) {
-		this.channel = channel;
-	}
-	
-	
+
 	public void writeAndFlush(String msg) {
 		this.writeAndFlush(msg.getBytes());
 	}

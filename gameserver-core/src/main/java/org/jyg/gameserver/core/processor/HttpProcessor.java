@@ -58,8 +58,7 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 
 	private Response createResponse(Channel channel) {
 
-		Response response = new Response();
-		response.setChannel(channel);
+		Response response = new Response(channel);
 		return response;
 	}
 
