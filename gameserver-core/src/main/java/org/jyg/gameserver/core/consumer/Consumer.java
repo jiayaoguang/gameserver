@@ -69,9 +69,6 @@ public abstract class Consumer {
 
     private int requestId = 1;
 
-    private final Map<Class<?>,EventClassHandler<?>> eventClassHandlerMap = new HashMap<>(MAP_DEFAULT_SIZE,MAP_DEFAULT_LOADFACTOR);
-
-
 
     private final Map<Integer , ResultHandler> waitCallBackMap = new HashMap<>();
 
@@ -251,16 +248,7 @@ public abstract class Consumer {
 
     protected void processDefaultEvent(int eventId , Object data  , EventData eventData) {
 
-        EventClassHandler<?> eventClassHandler = eventClassHandlerMap.get(data.getClass());
-        if(eventClassHandler == null){
-            handleUnknowEventClassHandler(eventId , data);
-        }else {
-            eventClassHandler.handle(eventId , data);
-        }
-    }
 
-    protected void handleUnknowEventClassHandler(int eventId , Object data ){
-        Logs.DEFAULT_LOGGER.error("eventClassHandler not found class : {} eventId : {} " , data.getClass() , eventId);
     }
 
 
@@ -565,10 +553,6 @@ public abstract class Consumer {
         return getId() == DEFAULT_CONSUMER_ID;
     }
 
-
-    public <C> void addEventClassHandler(Class<C> c , EventClassHandler<C> eventClassHandler){
-        eventClassHandlerMap.put(c , eventClassHandler);
-    }
 
     /**
      * 异步请求返回
