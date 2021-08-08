@@ -8,11 +8,10 @@ import java.util.Map;
 /**
  * create by jiayaoguang at 2021/5/14
  */
-public class SelectSQLMaker implements SQLMaker {
+public class SelectSQLMaker extends CachedSQLMaker {
+
     @Override
-    public PrepareSQLAndParams createSqlInfo(SqlKeyWord sqlKeyWord, Object dbEntity, TableInfo tableInfo, Map<String,Object> params) throws IllegalAccessException {
-
-
+    protected String createPrepareSql(SqlKeyWord sqlKeyWord, Object dbEntity, TableInfo tableInfo, Map<String, Object> params) throws Exception {
         StringBuilder sb = new StringBuilder();
 
         sb.append(sqlKeyWord.select()).append(' ');
@@ -22,9 +21,12 @@ public class SelectSQLMaker implements SQLMaker {
         sb.append(sqlKeyWord.where()).append(' ');
         sb.append('`').append(tableInfo.getPrimaryKey()).append('`').append('=');
         sb.append('?').append(';');
-
-
         String selectSql = sb.toString();
+        return selectSql;
+    }
+
+    @Override
+    protected List<Object> getParamValues(SqlKeyWord sqlKeyWord, Object dbEntity, TableInfo tableInfo, Map<String, Object> params) throws Exception {
 
         List<Object> valueParams = new ArrayList<>(1);
         TableFieldInfo primaryField = tableInfo.getFieldInfoLinkedMap().get(tableInfo.getPrimaryKey());
@@ -34,7 +36,7 @@ public class SelectSQLMaker implements SQLMaker {
 
         valueParams.add(value);
 
-        return new PrepareSQLAndParams(selectSql, valueParams, SqlExecuteType.QUERY_ONE);
+        return valueParams;
     }
 
 

@@ -55,4 +55,8 @@ public interface IFieldOperator<T> {
     public T readObject(T obj);
 
     public void writeObject(T obj , Object newValue);
+
+
+    public String getFieldName();
+
 }

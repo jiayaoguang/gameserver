@@ -22,7 +22,7 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface DBTableField {
 
-    String fieldName();
+    String fieldName() default "";
 
     int fieldLength() default 0;
 

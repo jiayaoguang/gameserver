@@ -13,12 +13,14 @@ import java.util.Map;
  */
 public class UnsafeFieldOperator<T> implements IFieldOperator<T> {
 
-    private static final Unsafe unsafe = initUnsafe();
+    public static final Unsafe unsafe = initUnsafe();
 
 
     private final long offset;
 
     private final boolean primitive;
+
+    private String fieldName;
 
 
     static interface FieldOperatorMethod<T> {
@@ -132,6 +134,7 @@ public class UnsafeFieldOperator<T> implements IFieldOperator<T> {
         this.offset = unsafe.objectFieldOffset(field);
         this.primitive = field.getType().isPrimitive();
         this.primitiveFieldOperatorMethod = primitiveFieldOperatorMap.get(field.getType());
+        this.fieldName = field.getType().getSimpleName();
     }
 
 
@@ -254,5 +257,9 @@ public class UnsafeFieldOperator<T> implements IFieldOperator<T> {
         return sun.misc.Unsafe.getUnsafe();
     }
 
+    @Override
+    public String getFieldName() {
+        return fieldName;
+    }
 
 }

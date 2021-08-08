@@ -1,5 +1,6 @@
 package org.jyg.gameserver.db;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.field.UnsafeFieldOperator;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.db.anno.DBTable;
@@ -111,7 +112,13 @@ public class DBTableManager {
         DBTableField dbTableFieldAnno = dbEntityField.getAnnotation(DBTableField.class);
         if (dbTableFieldAnno != null) {
             tableFieldInfo.setDbTableFieldAnno(dbTableFieldAnno);
-            tableFieldInfo.setTableFieldName(dbTableFieldAnno.fieldName());
+            String fieldName;
+            if(StringUtils.isNotEmpty(dbTableFieldAnno.fieldName())){
+                fieldName = dbTableFieldAnno.fieldName();
+            }else {
+                fieldName = dbEntityField.getName();
+            }
+            tableFieldInfo.setTableFieldName(fieldName);
             if (dbTableFieldAnno.fieldType() == TableFieldType.AUTO) {
                 TableFieldType tableFieldType = getTableFieldType(dbEntityField.getType());
                 tableFieldInfo.setFieldType(tableFieldType);

@@ -178,5 +178,8 @@ public class ReflectFieldOperator<T> implements IFieldOperator<T> {
         }
     }
 
-
+    @Override
+    public String getFieldName() {
+        return field.getType().getSimpleName();
+    }
 }
