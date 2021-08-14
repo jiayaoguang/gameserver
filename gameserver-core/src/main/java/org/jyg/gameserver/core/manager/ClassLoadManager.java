@@ -1,0 +1,89 @@
+package org.jyg.gameserver.core.manager;
+
+import cn.hutool.core.io.FileUtil;
+import org.jyg.gameserver.core.util.AllUtil;
+import org.jyg.gameserver.core.util.ClassRedefineUtil;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * create by jiayaoguang on 2021/8/14
+ */
+public class ClassLoadManager {
+
+
+    private final URLClassLoader urlClassLoader;
+
+    private final File classFileDir;
+
+    public ClassLoadManager(String classFileDirPath) {
+        classFileDir = new File(classFileDirPath);
+
+        if(classFileDir.exists() && !classFileDir.isDirectory()){
+            throw new RuntimeException("class load path not dir");
+        }
+
+        if (classFileDir.exists() && !classFileDir.isDirectory()) {
+            throw new RuntimeException();
+        }
+        URL url = null;
+        try {
+            url = classFileDir.toURI().toURL();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+        urlClassLoader = new URLClassLoader(new URL[]{url});
+    }
+
+    public List<Class<?>> loadClasses() {
+
+        List<Class<?>> classList = new ArrayList<>();
+
+
+        List<File> childClassFiles = AllUtil.getChildFiles(classFileDir, "class");
+
+        for (File childClassFile : childClassFiles) {
+
+
+//            String className =
+//                    StringUtils.replaceOnce (childClassFile.getAbsolutePath() ,classFileDir.getAbsolutePath(),"" )
+//                    .replace("/",".").replace("\\",".").replace(".class","");
+
+            String className = ClassRedefineUtil.readClassName(FileUtil.readBytes(childClassFile));
+
+            AllUtil.println("find class: "+className);
+            try {
+                Class<?> c = urlClassLoader.loadClass(className);
+                classList.add(c);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException();
+            }
+        }
+
+
+        return classList;
+
+    }
+
+    public static void main(String[] args) throws Exception {
+
+        ClassLoadManager classLoadManager = new ClassLoadManager("C:\\project\\timePostServer\\setTimePostServer-gm\\target\\classes");
+        classLoadManager.loadClasses();
+
+//        List<File> childs = AllUtil.getChildFiles(new File("C:\\project\\timePostServer\\setTimePostServer-gm\\target\\classes"), "class");
+//
+//        for (File child : childs) {
+//            AllUtil.println(child.getPath());
+//        }
+//        String className = "C:\\project\\timePostServer\\setTimePostServer-gm\\target\\classes".replace("","").replaceAll("/",".").replaceAll("\\\\",".");
+//
+//        AllUtil.println("for replace " + className);
+//        AllUtil.println("for for for for ".replace("for" , "11"));
+    }
+
+}

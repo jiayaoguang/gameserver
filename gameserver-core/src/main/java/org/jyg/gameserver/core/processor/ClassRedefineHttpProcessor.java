@@ -16,7 +16,7 @@ public class ClassRedefineHttpProcessor extends HttpProcessor {
 
 
     public ClassRedefineHttpProcessor() {
-        super("classRedefine");
+        super("/classRedefine");
     }
 
     @Override

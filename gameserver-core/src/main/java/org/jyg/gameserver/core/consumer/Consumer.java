@@ -10,6 +10,7 @@ import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.manager.ClassLoadManager;
 import org.jyg.gameserver.core.manager.ResultHandlerManager;
 import org.jyg.gameserver.core.manager.ChannelManager;
 import org.jyg.gameserver.core.manager.InstanceManager;
@@ -62,6 +63,8 @@ public abstract class Consumer {
     private TextProcessor textProcessor;
 
     private final InstanceManager instanceManager;
+
+    private final ClassLoadManager classLoadManager = new ClassLoadManager("class");
 
     private int id;
 
@@ -334,6 +337,40 @@ public abstract class Consumer {
         logger.error(" unknown processor type  : {} ", processor.getClass());
     }
 
+    public boolean containsProcessor(Processor<?> processor) {
+        if (processor instanceof ProtoProcessor) {
+            ProtoProcessor protoProcessor = (ProtoProcessor) processor;
+            int msgId = getContext().getMsgIdByProtoClass(protoProcessor.getProtoClass());
+            if(msgId <= 0){
+                throw new IllegalArgumentException("class msgId not found : " + protoProcessor.getProtoClass().getCanonicalName());
+            }
+            if(protoProcessorMap.containsKey(msgId)){
+                return true;
+            }
+            return false;
+        }
+        if (processor instanceof ByteMsgObjProcessor) {
+            ByteMsgObjProcessor byteMsgObjProcessor = (ByteMsgObjProcessor) processor;
+
+            int msgId = getContext().getMsgIdByByteMsgObj(byteMsgObjProcessor.getByteMsgObjClazz());
+            if(msgId <= 0){
+                throw new IllegalArgumentException("class msgId not found : " + byteMsgObjProcessor.getByteMsgObjClazz());
+            }
+            if(protoProcessorMap.containsKey(msgId)){
+                return true;
+            }
+            return false;
+        }
+        if (processor instanceof HttpProcessor) {
+            HttpProcessor httpProcessor = (HttpProcessor) processor;
+            if(httpProcessorMap.containsKey(httpProcessor.getPath())){
+                return true;
+            }
+            return false;
+        }
+        logger.error(" unknown processor type  : {} ", processor.getClass());
+        return false;
+    }
 
 
     public ChannelManager getChannelManager() {
@@ -576,9 +613,6 @@ public abstract class Consumer {
      * @param requestId 异步请求id
      */
     public void eventReturn(int targetConsumerId, Object data, int requestId) {
-        if(requestId == 0){
-            return;
-        }
         eventReturn(targetConsumerId , data , requestId , 0);
     }
 
@@ -606,4 +640,7 @@ public abstract class Consumer {
     }
 
 
+    public ClassLoadManager getClassLoadManager() {
+        return classLoadManager;
+    }
 }

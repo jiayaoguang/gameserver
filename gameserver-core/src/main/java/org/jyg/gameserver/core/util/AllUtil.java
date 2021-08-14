@@ -16,8 +16,10 @@ import java.net.NetworkInterface;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Queue;
 
 /**
  * Created by jiayaoguang on 2019/8/31.
@@ -411,6 +413,47 @@ public class AllUtil {
 
 
         return classObjectFields;
+    }
+
+    /**
+     * 获取文件夹里指定后缀名的所有文件
+     * @param rootFile 根文件夹目录
+     * @param needFileSuffix 指定文件名后缀
+     * @return 文件列表
+     */
+    public static List<File> getChildFiles(File rootFile , String needFileSuffix) {
+        List<File> childFiles = new ArrayList<>();
+        if (!rootFile.exists()) {
+            return childFiles;
+        }
+        if (!rootFile.isDirectory()) {
+            Logs.DEFAULT_LOGGER.error("rootFile {} not dir" , rootFile.getAbsolutePath());
+            return childFiles;
+        }
+
+        Queue<File> dirQueue = new LinkedList<>();
+        dirQueue.add(rootFile);
+
+        for (; dirQueue.size() > 0; ) {
+
+            File curDir = dirQueue.poll();
+
+            File[] files = curDir.listFiles();
+            if (files == null) {
+                continue;
+            }
+            for (File child : files) {
+                if (child.isDirectory()) {
+                    dirQueue.add(child);
+                } else {
+                    if (child.getName().endsWith(needFileSuffix)) {
+                        childFiles.add(child);
+                    }
+                }
+            }
+        }
+
+        return childFiles;
     }
 
 
