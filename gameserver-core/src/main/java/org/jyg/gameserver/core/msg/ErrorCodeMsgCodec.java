@@ -1,15 +1,8 @@
 package org.jyg.gameserver.core.msg;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.CharsetUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import io.netty.util.internal.StringUtil;
-import org.apache.commons.lang3.CharSetUtils;
-import org.apache.commons.lang3.StringUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,6 +28,7 @@ public class ErrorCodeMsgCodec extends AbstractByteMsgCodec<ErrorCodeByteMsg> {
                 len +=4;
             }
         }
+
 
         byte[] bytes = new byte[len];
 

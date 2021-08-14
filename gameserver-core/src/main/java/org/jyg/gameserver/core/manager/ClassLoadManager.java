@@ -70,20 +70,5 @@ public class ClassLoadManager {
 
     }
 
-    public static void main(String[] args) throws Exception {
-
-        ClassLoadManager classLoadManager = new ClassLoadManager("C:\\project\\timePostServer\\setTimePostServer-gm\\target\\classes");
-        classLoadManager.loadClasses();
-
-//        List<File> childs = AllUtil.getChildFiles(new File("C:\\project\\timePostServer\\setTimePostServer-gm\\target\\classes"), "class");
-//
-//        for (File child : childs) {
-//            AllUtil.println(child.getPath());
-//        }
-//        String className = "C:\\project\\timePostServer\\setTimePostServer-gm\\target\\classes".replace("","").replaceAll("/",".").replaceAll("\\\\",".");
-//
-//        AllUtil.println("for replace " + className);
-//        AllUtil.println("for for for for ".replace("for" , "11"));
-    }
 
 }
