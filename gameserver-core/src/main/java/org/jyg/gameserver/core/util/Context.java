@@ -15,11 +15,7 @@ import org.jyg.gameserver.core.data.ServerConfig;
 import org.jyg.gameserver.core.handle.NettyHandlerFactory;
 import org.jyg.gameserver.core.manager.*;
 import org.jyg.gameserver.core.msg.*;
-import org.jyg.gameserver.core.processor.LoadClassesHttpProcessor;
-import org.jyg.gameserver.core.processor.PingProcessor;
-import org.jyg.gameserver.core.processor.PongProcessor;
-import org.jyg.gameserver.core.processor.ReadOutTimeProcessor;
-import org.jyg.gameserver.core.processor.RemoteInvokeProcessor;
+import org.jyg.gameserver.core.processor.*;
 import org.jyg.gameserver.core.startup.TcpClient;
 
 import java.lang.reflect.InvocationTargetException;
@@ -189,6 +185,7 @@ public class Context implements Lifecycle{
         getDefaultConsumer().addProcessor(new PongProcessor());
 
         getDefaultConsumer().addProcessor(new LoadClassesHttpProcessor());
+        getDefaultConsumer().addProcessor(new RedefineClassesHttpProcessor());
     }
 
 

@@ -64,7 +64,7 @@ public abstract class Consumer {
 
     private final InstanceManager instanceManager;
 
-    private final ClassLoadManager classLoadManager = new ClassLoadManager("class");
+    private final ClassLoadManager classLoadManager = new ClassLoadManager("loadClasses");
 
     private int id;
 
@@ -170,6 +170,10 @@ public abstract class Consumer {
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public void addHttpProcessor(HttpProcessor processor) {
+        addHttpProcessor(processor.getPath(),processor);
     }
 
     public void addHttpProcessor(String path, HttpProcessor processor) {
