@@ -28,9 +28,9 @@ public class AuthBootstarp
 
 //        bootstarp.registerHttpEvent("/index000", injector.getInstance(TokenSendHttpProcessor.class));
         
-        bootstarp.registerHttpEvent("/index", new LoginHttpProcessor());
+        bootstarp.addHttpProcessor(new LoginHttpProcessor());
 
-        bootstarp.registerHttpEvent("/checkToken", new CheckLoginHttpProcessor());
+        bootstarp.addHttpProcessor(new CheckLoginHttpProcessor());
 
         bootstarp.registerSendEventIdByProto(ProtoEnum.P_AUTH_SM_REQUEST_SEND_TOKEN.getEventId(),
         		p_auth_sm.p_auth_sm_request_send_token.class);

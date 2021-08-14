@@ -17,7 +17,7 @@ public class HttpServerDemo01
     	
     	GameServerBootstrap bootstarp = new GameServerBootstrap();
         
-        bootstarp.registerHttpEvent("/index", new HttpProcessor() {
+        bootstarp.addHttpProcessor(new HttpProcessor("/index") {
 			
 			@Override
 			public void service(Request request, Response response) {

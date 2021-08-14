@@ -21,6 +21,7 @@ public class LoginHttpProcessor extends HttpProcessor {
 
 	public LoginHttpProcessor() {
 //		this.redisCacheClient = redisCacheClient;
+		super("/index");
 	}
 
 	@Override

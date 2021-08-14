@@ -25,6 +25,7 @@ public class CheckLoginHttpProcessor extends HttpProcessor {
 
 	public CheckLoginHttpProcessor() {
 //		this.redisCacheClient = redisCacheClient;
+		super("/checkToken");
 	}
 
 	@Override

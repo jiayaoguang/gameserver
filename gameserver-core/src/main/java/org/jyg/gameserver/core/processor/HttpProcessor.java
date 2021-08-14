@@ -18,6 +18,7 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 	private String path;
 
 
+	@Deprecated
 	public HttpProcessor() {
 
 	}
