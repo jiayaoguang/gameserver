@@ -238,7 +238,7 @@ public abstract class Consumer {
      * @param session session
      * @param event   event
      */
-    protected void processEventMsg(Session session, EventData<? extends MessageLite> event) {
+    protected void processEventMsg(Session session, EventData<?> event) {
 //		MessageLite msg = event.getData();
         Processor processor = protoProcessorMap.get(event.getEventId());
         if (processor == null) {
