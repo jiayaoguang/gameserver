@@ -2,12 +2,17 @@ package org.jyg.gameserver.example.ygserver.msg;
 
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LoginReplyMsg implements ByteMsgObj {
 
     private long id;
 
     private String name;
-    private String password;
+
+
+    public List<WallMsg> wallMsgs = new ArrayList<>();
 
     private int errorCode;
 
@@ -27,13 +32,6 @@ public class LoginReplyMsg implements ByteMsgObj {
         this.name = name;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public int getErrorCode() {
         return errorCode;
@@ -41,5 +39,13 @@ public class LoginReplyMsg implements ByteMsgObj {
 
     public void setErrorCode(int errorCode) {
         this.errorCode = errorCode;
+    }
+
+    public List<WallMsg> getWallMsgs() {
+        return wallMsgs;
+    }
+
+    public void setWallMsgs(List<WallMsg> wallMsgs) {
+        this.wallMsgs = wallMsgs;
     }
 }

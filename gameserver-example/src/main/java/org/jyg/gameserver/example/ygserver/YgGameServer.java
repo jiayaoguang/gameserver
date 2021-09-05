@@ -13,6 +13,7 @@ import org.jyg.gameserver.db.DBConsumerGroup;
 import org.jyg.gameserver.example.ygserver.msg.*;
 
 import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -81,6 +82,21 @@ public class YgGameServer {
                             loginReplyMsg.setId(currentPlayerDB.getId());
                             loginReplyMsg.setName(currentPlayerDB.getName());
                             loginReplyMsg.setErrorCode(errorCode);
+
+                            Random random = new Random();
+                            for(int num = 0 ;num < 200;num++){
+                                WallMsg wallMsg = new WallMsg();
+//                            Vector2Msg vector2Msg = new Vector2Msg();
+//                            vector2Msg.setX(20);
+//                            vector2Msg.setY(30);
+                                wallMsg.setX(random.nextInt(600) - 300);
+                                wallMsg.setY(random.nextInt(600) - 300);
+                                wallMsg.setHeight(random.nextInt(100) - 50);
+                                wallMsg.setWidth(random.nextInt(100) - 50);
+//                            wallMsg.setPosi(vector2Msg);
+                                loginReplyMsg.wallMsgs.add(wallMsg);
+                            }
+
                             session.setSessionObject(currentPlayerDB);
                             session.writeMessage(loginReplyMsg);
 
