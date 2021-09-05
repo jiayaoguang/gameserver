@@ -2,7 +2,7 @@ package org.jyg.gameserver.example.ygserver.msg;
 
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 
-public class LoginJsonMsg implements ByteMsgObj {
+public class LoginRequestMsg implements ByteMsgObj {
 
     private String name;
     private String password;

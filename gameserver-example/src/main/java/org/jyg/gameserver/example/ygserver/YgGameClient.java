@@ -24,7 +24,7 @@ public class YgGameClient {
 //		client.addMsgId2ProtoMapping(3, p_scene_sm_chat.getDefaultInstance());
 //		client.addMsgId2ProtoMapping(4, p_sm_scene_chat.getDefaultInstance());
 
-        client.getContext().addMsgId2JsonMsgClassMapping(108, LoginJsonMsg.class);
+        client.getContext().addMsgId2JsonMsgClassMapping(108, LoginRequestMsg.class);
         client.getContext().addMsgId2JsonMsgClassMapping(109, LoginReplyMsg.class);
         client.getContext().addMsgId2JsonMsgClassMapping(110, ChatRequestJson.class);
         client.getContext().addMsgId2JsonMsgClassMapping(111, ChatReplyJson.class);
@@ -56,11 +56,11 @@ public class YgGameClient {
 //            client.write(chatMsgObj);
 //        }
 
-        LoginJsonMsg loginJsonMsg = new LoginJsonMsg();
-        loginJsonMsg.setName("maik jack");
-        loginJsonMsg.setPassword("maik");
+        LoginRequestMsg loginRequestMsg = new LoginRequestMsg();
+        loginRequestMsg.setName("maik jack");
+        loginRequestMsg.setPassword("maik");
 
-        client.write(loginJsonMsg);
+        client.write(loginRequestMsg);
 
 
 

@@ -34,12 +34,12 @@ public class YgGameServer {
 //
 //        dbConsumerGroup.addTableInfo(PlayerDB.class);
 
-        ByteMsgObjProcessor<LoginJsonMsg> loginProcessor = new ByteMsgObjProcessor<LoginJsonMsg>(LoginJsonMsg.class) {
+        ByteMsgObjProcessor<LoginRequestMsg> loginProcessor = new ByteMsgObjProcessor<LoginRequestMsg>(LoginRequestMsg.class) {
             @Override
-            public void process(Session session, EventData<LoginJsonMsg> event) {
+            public void process(Session session, EventData<LoginRequestMsg> event) {
                 ConsumerDBManager consumerDBManager = getConsumer().getInstanceManager().getInstance(ConsumerDBManager.class);
 
-                LoginJsonMsg loginJsonMsg = event.getData();
+                LoginRequestMsg loginRequestMsg = event.getData();
 
                 PlayerDB playerDB = new PlayerDB();
                 playerDB.setName(event.getData().getName());
@@ -63,15 +63,15 @@ public class YgGameServer {
                             if(playerDBList.size() == 0){
                                 currentPlayerDB = new PlayerDB();
                                 currentPlayerDB.setId(IdUtil.nextId());
-                                currentPlayerDB.setName(loginJsonMsg.getName());
-                                currentPlayerDB.setPassword(loginJsonMsg.getPassword());
+                                currentPlayerDB.setName(loginRequestMsg.getName());
+                                currentPlayerDB.setPassword(loginRequestMsg.getPassword());
                                 consumerDBManager.insert(currentPlayerDB);
 
                             }else {
                                 currentPlayerDB = playerDBList.get(0);
 
 
-                                if(!currentPlayerDB.getPassword().equals(loginJsonMsg.getPassword())){
+                                if(!currentPlayerDB.getPassword().equals(loginRequestMsg.getPassword())){
                                     errorCode = 1;
                                 }
 
@@ -96,7 +96,11 @@ public class YgGameServer {
 
                     @Override
                     public void onTimeout() {
+                        LoginReplyMsg loginReplyMsg = new LoginReplyMsg();
+                        loginReplyMsg.setErrorCode(2);
 
+                        session.writeMessage(loginReplyMsg);
+                        session.setSessionState(SessionState.NORMAL);
                     }
                 });
 
@@ -118,12 +122,12 @@ public class YgGameServer {
         bootstarp.addTcpConnector(8088);
 
 
-        bootstarp.getDefaultConsumer().setConsumerStartHandler(( consumer)->{
-            consumer.getTimerManager().addTimer(-1,5000L , ()->{
-                consumer.getChannelManager().broadcast(new CreateEnemyMsg());
-                Logs.DEFAULT_LOGGER.info(" send CreateEnemyMsg ...................... ");
-            });
-        });
+//        bootstarp.getDefaultConsumer().setConsumerStartHandler(( consumer)->{
+//            consumer.getTimerManager().addTimer(-1,5000L , ()->{
+//                consumer.getChannelManager().broadcast(new CreateEnemyMsg());
+//                Logs.DEFAULT_LOGGER.info(" send CreateEnemyMsg ...................... ");
+//            });
+//        });
 
         bootstarp.start();
     }
