@@ -17,6 +17,8 @@ public class ChannelManager implements Lifecycle {
 
     private final Map<Channel, Session> channelObjectMap;
 
+    private final Map<Long, Session> id2sessionMap;
+
     private final Map<Channel, Session> tcpClientChannelObjectMap;
 
     private int sessionIdInc = 0;
@@ -25,6 +27,8 @@ public class ChannelManager implements Lifecycle {
         this.channelObjectMap = new LinkedHashMap<>(1024 * 16 , 0.5f);
 
         this.tcpClientChannelObjectMap = new LinkedHashMap<>(32 , 0.5f);
+
+        this.id2sessionMap = new LinkedHashMap<>(32 , 0.5f);
     }
 
     //    public <T>void process(LogicEvent<T> event) {
@@ -42,6 +46,7 @@ public class ChannelManager implements Lifecycle {
         int sessionId = incAndGetSessionId();
         Session session = new Session(channel, sessionId);
         channelObjectMap.put(channel, session);
+        id2sessionMap.put(session.getSessionId() , session);
         afterLink(session);
         return session;
     }
@@ -65,6 +70,7 @@ public class ChannelManager implements Lifecycle {
         int sessionId = incAndGetSessionId();
         Session session = new Session(channel, sessionId);
         tcpClientChannelObjectMap.put(channel, session);
+//        id2sessionMap.put(session.getSessionId() , session);
         afterLink(session);
         return session;
     }
@@ -72,6 +78,9 @@ public class ChannelManager implements Lifecycle {
 
     public final <T> void doTcpClientUnlink(Channel channel) {
         Session session = tcpClientChannelObjectMap.remove(channel);
+        if(session != null){
+            id2sessionMap.remove(session.getSessionId());
+        }
         afterUnlink(session);
     }
 
@@ -85,6 +94,13 @@ public class ChannelManager implements Lifecycle {
         if(session == null){
             session = tcpClientChannelObjectMap.get(channel);
         }
+        return session;
+    }
+
+    public Session getSession(long sessionId) {
+
+        Session session = id2sessionMap.get(sessionId);
+
         return session;
     }
 

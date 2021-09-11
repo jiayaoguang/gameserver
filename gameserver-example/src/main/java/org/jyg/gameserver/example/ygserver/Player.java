@@ -7,7 +7,7 @@ public class Player {
 
     private PlayerDB playerDB;
 
-    private int sessionId;
+    private long sessionId;
 
 
     public PlayerDB getPlayerDB() {
@@ -18,11 +18,11 @@ public class Player {
         this.playerDB = playerDB;
     }
 
-    public int getSessionId() {
+    public long getSessionId() {
         return sessionId;
     }
 
-    public void setSessionId(int sessionId) {
+    public void setSessionId(long sessionId) {
         this.sessionId = sessionId;
     }
 }

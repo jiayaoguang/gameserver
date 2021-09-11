@@ -9,9 +9,6 @@ public class WallMsg {
     private int width;
     private int height;
 
-    private float x;
-    private float y;
-
 
     public Vector2Msg getPosi() {
         return posi;
@@ -37,19 +34,4 @@ public class WallMsg {
         this.height = height;
     }
 
-    public float getX() {
-        return x;
-    }
-
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public void setY(float y) {
-        this.y = y;
-    }
 }
