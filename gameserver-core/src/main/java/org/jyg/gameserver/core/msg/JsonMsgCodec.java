@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.msg;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.io.IOException;
 
@@ -14,6 +15,7 @@ public class JsonMsgCodec extends AbstractByteMsgCodec<ByteMsgObj> {
 
     public JsonMsgCodec( Class<? extends ByteMsgObj> byteMsgClass) {
         super( byteMsgClass);
+        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
     }
 
     @Override
