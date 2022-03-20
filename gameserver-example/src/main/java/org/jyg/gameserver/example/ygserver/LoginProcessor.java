@@ -47,7 +47,7 @@ public class LoginProcessor extends ByteMsgObjProcessor<LoginRequestMsg> {
 
                     PlayerDB currentPlayerDB;
 
-                    if(playerDBList.size() == 0){
+                    if(playerDBList == null || playerDBList.size() == 0){
                         currentPlayerDB = new PlayerDB();
                         currentPlayerDB.setId(IdUtil.nextId());
                         currentPlayerDB.setName(loginRequestMsg.getName());
@@ -90,6 +90,8 @@ public class LoginProcessor extends ByteMsgObjProcessor<LoginRequestMsg> {
                     Player player = new Player();
                     player.setPlayerDB(currentPlayerDB);
                     player.setSessionId(session.getSessionId());
+                    player.setSession(session);
+                    session.setSessionObject(player);
                     playerManager.getLoginPlayerMap().put(session.getSessionId(), player);
 
                 }finally {

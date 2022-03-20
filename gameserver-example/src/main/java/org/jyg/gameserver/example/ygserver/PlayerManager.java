@@ -27,4 +27,6 @@ public class PlayerManager {
     public void setLoginPlayerMap(Map<Long, Player> loginPlayerMap) {
         this.loginPlayerMap = loginPlayerMap;
     }
+
+
 }

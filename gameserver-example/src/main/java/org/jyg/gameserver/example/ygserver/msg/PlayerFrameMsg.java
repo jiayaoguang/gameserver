@@ -13,6 +13,11 @@ public class PlayerFrameMsg {
 
     private Vector2Msg dir;
 
+    private Vector2Msg bulletPosi;
+    private boolean bulletActive;
+
+    private String name;
+
 
     public long getPlayerId() {
         return playerId;
@@ -44,5 +49,30 @@ public class PlayerFrameMsg {
 
     public void setDir(Vector2Msg dir) {
         this.dir = dir;
+    }
+
+
+    public Vector2Msg getBulletPosi() {
+        return bulletPosi;
+    }
+
+    public void setBulletPosi(Vector2Msg bulletPosi) {
+        this.bulletPosi = bulletPosi;
+    }
+
+    public boolean isBulletActive() {
+        return bulletActive;
+    }
+
+    public void setBulletActive(boolean bulletActive) {
+        this.bulletActive = bulletActive;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -29,7 +29,7 @@ public class YgGameClient {
         client.getContext().addMsgId2JsonMsgClassMapping(110, ChatRequestJson.class);
         client.getContext().addMsgId2JsonMsgClassMapping(111, ChatReplyJson.class);
 
-        client.getContext().addMsgId2JsonMsgClassMapping(120, CreateEnemyMsg.class);
+        client.getContext().addMsgId2JsonMsgClassMapping(120, SCPlayerJoinMsg.class);
 
         client.getDefaultConsumer().addProcessor( new ChatReplyProcessor());
 

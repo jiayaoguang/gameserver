@@ -1,6 +1,6 @@
 package org.jyg.gameserver.example.ygserver;
 
-import io.netty.channel.Channel;
+import org.jyg.gameserver.core.msg.EmptyMsgCodec;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
@@ -17,7 +17,7 @@ public class YgGameServer {
 
     public static void main(String[] args) throws Exception {
 
-
+//        CreateTableUtil.createTable(PlayerDB.class);
         GameServerBootstrap bootstarp = new GameServerBootstrap();
 
 
@@ -29,6 +29,7 @@ public class YgGameServer {
 
         bootstarp.getContext().getDefaultConsumer().getInstanceManager().putInstance(new PlayerManager());
         bootstarp.getContext().getDefaultConsumer().getInstanceManager().putInstance(FrameManager.class);
+        bootstarp.getContext().getDefaultConsumer().getInstanceManager().putInstance(RoomManager.class);
 //
 //        dbConsumerGroup.addTableInfo(PlayerDB.class);
 
@@ -41,10 +42,24 @@ public class YgGameServer {
         bootstarp.getContext().addMsgId2JsonMsgClassMapping(110, ChatRequestJson.class);
         bootstarp.getContext().addMsgId2JsonMsgClassMapping(111, ChatReplyJson.class);
 
-        bootstarp.getContext().addMsgId2JsonMsgClassMapping(120, CreateEnemyMsg.class);
+        bootstarp.getContext().addMsgId2JsonMsgClassMapping(120, SCPlayerJoinMsg.class);
 
         bootstarp.getContext().addMsgId2JsonMsgClassMapping(121, ClientFrameMsg.class);
         bootstarp.getContext().addMsgId2JsonMsgClassMapping(122, ServerFrameMsg.class);
+
+
+        bootstarp.getContext().addMsgId2JsonMsgClassMapping(123, CSEnterRoomMsg.class);
+        bootstarp.getContext().addMsgId2JsonMsgClassMapping(124, SCEnterRoomMsg.class);
+
+
+        bootstarp.getContext().addMsgId2JsonMsgClassMapping(125, CSHitMsg.class);
+        bootstarp.getContext().addMsgId2JsonMsgClassMapping(126, SCHitMsg.class);
+
+
+        bootstarp.getContext().addMsgId2JsonMsgClassMapping(127, SCRoomEndMsg.class );
+
+        bootstarp.getContext().addByteMsgCodec(new EmptyMsgCodec(new SCRoomEndMsg()));
+
 
 
         ByteMsgObjProcessor<LoginRequestMsg> loginProcessor = new LoginProcessor();
@@ -52,13 +67,16 @@ public class YgGameServer {
         bootstarp.getDefaultConsumer().addProcessor( new ChatRequestProcessor());
         bootstarp.getDefaultConsumer().addProcessor( new CreateTableProcessor());
         bootstarp.getDefaultConsumer().addProcessor( new ClientFrameProcessor());
+        bootstarp.getDefaultConsumer().addProcessor( new EnterRoomProcessor());
+
+        bootstarp.getDefaultConsumer().addProcessor( new CSHitProcessor());
 
         bootstarp.addTcpConnector(8088);
 
-        bootstarp.addHttpConnector(80);
+//        bootstarp.addHttpConnector(80);
         bootstarp.addHttpConnector(8888);
         bootstarp.getDefaultConsumer().setConsumerStartHandler(( consumer)->{
-            consumer.getTimerManager().addTimer(-1,1000 , ()->{
+            consumer.getTimerManager().addTimer(-1,20 , ()->{
 //                consumer.getChannelManager().broadcast(new CreateEnemyMsg());
 //                Logs.DEFAULT_LOGGER.info(" send CreateEnemyMsg ...................... ");
 
@@ -69,19 +87,19 @@ public class YgGameServer {
 
                 serverFrameMsg.getPlayerFrameMsgs().addAll(frameManager.getPlayerFrameMsgMap().values());
 
-                PlayerFrameMsg robotFrameMsg = new PlayerFrameMsg();
-                robotFrameMsg.setPlayerId(100);
-                Vector2Msg vector2Msg = new Vector2Msg();
-                vector2Msg.setX(0);
-                vector2Msg.setY(0);
-                robotFrameMsg.setPosi(vector2Msg);
+//                PlayerFrameMsg robotFrameMsg = new PlayerFrameMsg();
+//                robotFrameMsg.setPlayerId(100);
+//                Vector2Msg vector2Msg = new Vector2Msg();
+//                vector2Msg.setX(0);
+//                vector2Msg.setY(0);
+//                robotFrameMsg.setPosi(vector2Msg);
+//
+//                serverFrameMsg.getPlayerFrameMsgs().add(robotFrameMsg);
 
-                serverFrameMsg.getPlayerFrameMsgs().add(robotFrameMsg);
-
-                for(long sessionId :  playerManager.getLoginPlayerMap().keySet() ){
+                for(RoomPlayer player:  consumer.getInstanceManager().getInstance(RoomManager.class).getRoom().getRoomPlayerMap().values() ){
 
 
-                    Session session = consumer.getChannelManager().getSession(sessionId);
+                    Session session = player.getPlayer().getSession();
 
                     if(session == null || !session.getChannel().isOpen()){
                         continue;

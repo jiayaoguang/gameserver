@@ -13,6 +13,9 @@ public class ClientFrameMsg implements ByteMsgObj {
 
     private Vector2Msg dir;
 
+    public Vector2Msg bulletPosi;
+    public boolean bulletActive;
+
     public long getFrameTime() {
         return frameTime;
     }
@@ -35,5 +38,21 @@ public class ClientFrameMsg implements ByteMsgObj {
 
     public void setDir(Vector2Msg dir) {
         this.dir = dir;
+    }
+
+    public Vector2Msg getBulletPosi() {
+        return bulletPosi;
+    }
+
+    public void setBulletPosi(Vector2Msg bulletPosi) {
+        this.bulletPosi = bulletPosi;
+    }
+
+    public boolean isBulletActive() {
+        return bulletActive;
+    }
+
+    public void setBulletActive(boolean bulletActive) {
+        this.bulletActive = bulletActive;
     }
 }

@@ -1,5 +1,7 @@
 package org.jyg.gameserver.example.ygserver;
 
+import org.jyg.gameserver.core.session.Session;
+
 /**
  * create by jiayaoguang at 2021/9/4
  */
@@ -8,6 +10,8 @@ public class Player {
     private PlayerDB playerDB;
 
     private long sessionId;
+
+    private Session session;
 
 
     public PlayerDB getPlayerDB() {
@@ -24,5 +28,13 @@ public class Player {
 
     public void setSessionId(long sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
     }
 }
