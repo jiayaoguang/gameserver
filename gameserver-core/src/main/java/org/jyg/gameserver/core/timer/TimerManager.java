@@ -98,7 +98,7 @@ public class TimerManager implements Lifecycle {
             long costTime = System.currentTimeMillis() - now;
 
             if(costTime > 10){
-                Logs.DEFAULT_LOGGER.info(" timer exec cost more time  {} mills " , costTime);
+                Logs.DEFAULT_LOGGER.info(" timer exec cost more time  {} mills  {} "  , costTime , timer.toString());
             }
 
             onceExecuteNum++;

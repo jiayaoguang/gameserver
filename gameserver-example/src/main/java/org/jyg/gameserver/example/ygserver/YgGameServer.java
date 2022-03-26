@@ -1,7 +1,9 @@
 package org.jyg.gameserver.example.ygserver;
 
+import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
 import org.jyg.gameserver.core.msg.EmptyMsgCodec;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
+import org.jyg.gameserver.core.processor.SysInfoHttpProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.db.ConsumerDBManager;
@@ -69,13 +71,16 @@ public class YgGameServer {
         bootstarp.getDefaultConsumer().addProcessor( new ClientFrameProcessor());
         bootstarp.getDefaultConsumer().addProcessor( new EnterRoomProcessor());
 
+
         bootstarp.getDefaultConsumer().addProcessor( new CSHitProcessor());
 
         bootstarp.addTcpConnector(8088);
 
 //        bootstarp.addHttpConnector(80);
         bootstarp.addHttpConnector(8888);
-        bootstarp.getDefaultConsumer().setConsumerStartHandler(( consumer)->{
+
+        bootstarp.getDefaultConsumer().getEventManager().addEvent(new ConsumerThreadStartEvent((consumer, b)->{
+
             consumer.getTimerManager().addTimer(-1,20 , ()->{
 //                consumer.getChannelManager().broadcast(new CreateEnemyMsg());
 //                Logs.DEFAULT_LOGGER.info(" send CreateEnemyMsg ...................... ");
@@ -115,7 +120,9 @@ public class YgGameServer {
 
 
             });
-        });
+
+        }));
+
 
         bootstarp.start();
 

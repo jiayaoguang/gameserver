@@ -1,7 +1,9 @@
 package org.jyg.gameserver.core.manager;
 
 import com.google.protobuf.MessageLite;
-import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.consumer.Consumer;
+import org.jyg.gameserver.core.event.ConnectEvent;
+import org.jyg.gameserver.core.event.DisconnectEvent;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.session.Session;
 import io.netty.channel.Channel;
@@ -23,12 +25,16 @@ public class ChannelManager implements Lifecycle {
 
     private int sessionIdInc = 0;
 
-    public ChannelManager() {
+    private final Consumer consumer;
+
+    public ChannelManager(Consumer consumer) {
         this.channelObjectMap = new LinkedHashMap<>(1024 * 16 , 0.5f);
 
         this.tcpClientChannelObjectMap = new LinkedHashMap<>(32 , 0.5f);
 
         this.id2sessionMap = new LinkedHashMap<>(32 , 0.5f);
+
+        this.consumer = consumer;
     }
 
     //    public <T>void process(LogicEvent<T> event) {
@@ -47,21 +53,24 @@ public class ChannelManager implements Lifecycle {
         Session session = new Session(channel, sessionId);
         channelObjectMap.put(channel, session);
         id2sessionMap.put(session.getSessionId() , session);
-        afterLink(session);
+        afterConnect(session);
         return session;
     }
 
-    public <T> void afterLink(Session session) {
-
+    public <T> void afterConnect(Session session) {
+        consumer.getEventManager().triggerEvent(ConnectEvent.class,session);
     }
 
     public final <T> void doUnlink(Channel channel) {
         Session session = channelObjectMap.remove(channel);
+        if(channel.isOpen()){
+            channel.close();
+        }
         afterUnlink(session);
     }
 
     public <T> void afterUnlink(Session session) {
-
+        consumer.getEventManager().triggerEvent(DisconnectEvent.class,session);
     }
 
 
@@ -71,7 +80,7 @@ public class ChannelManager implements Lifecycle {
         Session session = new Session(channel, sessionId);
         tcpClientChannelObjectMap.put(channel, session);
 //        id2sessionMap.put(session.getSessionId() , session);
-        afterLink(session);
+        afterConnect(session);
         return session;
     }
 
@@ -137,12 +146,14 @@ public class ChannelManager implements Lifecycle {
     }
 
 
+    @Deprecated
     public void broadcast(ByteMsgObj byteMsgObj){
         for(Channel channel : channelObjectMap.keySet()){
             channel.writeAndFlush(byteMsgObj);
         }
     }
- 
+
+    @Deprecated
     public void broadcast(MessageLite protoMessage){
         for(Channel channel : channelObjectMap.keySet()){
             channel.writeAndFlush(protoMessage);
@@ -151,6 +162,10 @@ public class ChannelManager implements Lifecycle {
 
     public List<Session> getSessions(){
         return new ArrayList<>(channelObjectMap.values());
+    }
+
+    public int getChannelCount(){
+        return channelObjectMap.size() + tcpClientChannelObjectMap.size();
     }
 
     @Override

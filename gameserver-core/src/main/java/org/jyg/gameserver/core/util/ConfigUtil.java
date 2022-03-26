@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -70,7 +71,7 @@ public class ConfigUtil {
     }
 
     public static void properties2Object(final Properties p, final Object object) {
-        Field[] fields = object.getClass().getDeclaredFields();
+        List<Field> fields = AllUtil.getClassObjectFields(object.getClass());
         for (Field field : fields) {
             String fieldName = field.getName();
 

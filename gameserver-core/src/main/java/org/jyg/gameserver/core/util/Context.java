@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.util;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.google.protobuf.MessageLite;
 import io.netty.channel.epoll.Epoll;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -18,7 +19,9 @@ import org.jyg.gameserver.core.msg.*;
 import org.jyg.gameserver.core.processor.*;
 import org.jyg.gameserver.core.startup.TcpClient;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 /**
  * create by jiayaoguang on 2020/5/3
@@ -125,7 +128,13 @@ public class Context implements Lifecycle{
         AbstractMsgCodec<?> byteMsgCodec = msgId2MsgCodecMap.get(msgId);
 
         if(byteMsgCodec == null){
-            byteMsgCodec = new JsonMsgCodec(byteMsgObjClazz);
+            List<Field> fieldList = AllUtil.getClassObjectFields(byteMsgObjClazz);
+            if(fieldList.isEmpty()){
+                byteMsgCodec = new EmptyJsonMsgCodec(byteMsgObjClazz);
+            }else {
+                byteMsgCodec = new JsonMsgCodec(byteMsgObjClazz);
+            }
+
             msgId2MsgCodecMap.put(msgId , byteMsgCodec);
         }
 
@@ -186,6 +195,8 @@ public class Context implements Lifecycle{
 
         getDefaultConsumer().addProcessor(new LoadClassesHttpProcessor());
         getDefaultConsumer().addProcessor(new RedefineClassesHttpProcessor());
+
+        getDefaultConsumer().addProcessor(new SysInfoHttpProcessor());
     }
 
 

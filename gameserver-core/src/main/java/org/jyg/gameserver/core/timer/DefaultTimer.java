@@ -28,4 +28,9 @@ public class DefaultTimer extends Timer {
 		}
 	}
 
+	@Override
+	public String toString(){
+		return timerHandler.getClass().getName();
+	}
+
 }

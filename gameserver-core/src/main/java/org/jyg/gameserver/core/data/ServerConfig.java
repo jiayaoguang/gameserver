@@ -27,7 +27,7 @@ public class ServerConfig {
      * (单位 : 秒)
      * 0 表示不启用
      */
-    private int readOutTimeSec = 20;
+    private int readOutTimeSec = 0;
     /**
      * 客户端写超时时间协议超时时间
      * 超时会关闭连接

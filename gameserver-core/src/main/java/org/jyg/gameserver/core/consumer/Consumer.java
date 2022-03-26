@@ -1,6 +1,5 @@
 package org.jyg.gameserver.core.consumer;
 
-import com.google.protobuf.MessageLite;
 import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -10,6 +9,8 @@ import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
+import org.jyg.gameserver.core.event.EventManager;
 import org.jyg.gameserver.core.manager.ClassLoadManager;
 import org.jyg.gameserver.core.manager.ResultHandlerManager;
 import org.jyg.gameserver.core.manager.ChannelManager;
@@ -55,7 +56,7 @@ public abstract class Consumer {
 
     protected final TimerManager timerManager = new TimerManager();
 
-    private final ChannelManager channelManager = new ChannelManager();
+    private final ChannelManager channelManager;
 
     private Map<String, HttpProcessor> httpProcessorMap = new HashMap<>(MAP_DEFAULT_SIZE,MAP_DEFAULT_LOADFACTOR);
     private Int2ObjectMap<Processor> protoProcessorMap = new Int2ObjectOpenHashMap<>(MAP_DEFAULT_SIZE,MAP_DEFAULT_LOADFACTOR);
@@ -77,11 +78,13 @@ public abstract class Consumer {
 
     private final ResultHandlerManager resultHandlerManager = new ResultHandlerManager();
 
-    private ConsumerStartHandler consumerStartHandler;
+
+    private final EventManager eventManager = new EventManager();
 
 
     public Consumer() {
         this.instanceManager = new InstanceManager(this);
+        this.channelManager = new ChannelManager(this);
     }
 
 
@@ -99,13 +102,7 @@ public abstract class Consumer {
         }
         thread = Thread.currentThread();
 
-        if(consumerStartHandler != null){
-            try{
-                consumerStartHandler.onThreadStart(this);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
+        getEventManager().triggerEvent(ConsumerThreadStartEvent.class ,this);
     }
 
     public synchronized final void start(){
@@ -496,7 +493,7 @@ public abstract class Consumer {
             case HTTP_MESSAGE_COME:
                 ((Request) event.getData()).setRequestid(getAndIncRequestId());
                 this.processHttpEvent(event);
-//				event.getChannel().close();
+				event.getChannel().close();
                 // 5秒后关闭
 //				dispatcher.getTimerManager().addTimer(new DelayCloseTimer(event.getChannel(), 60 * 1000L));
                 break;
@@ -636,15 +633,19 @@ public abstract class Consumer {
     }
 
 
+    @Deprecated
     public void setConsumerStartHandler(ConsumerStartHandler consumerStartHandler) {
-        if(isStart){
-            throw new IllegalStateException("already start");
-        }
-        this.consumerStartHandler = consumerStartHandler;
+        getEventManager().addEvent(new ConsumerThreadStartEvent((a,b)->{ consumerStartHandler.onThreadStart(this); }));
     }
 
 
     public ClassLoadManager getClassLoadManager() {
         return classLoadManager;
     }
+
+
+    public EventManager getEventManager() {
+        return eventManager;
+    }
+
 }
