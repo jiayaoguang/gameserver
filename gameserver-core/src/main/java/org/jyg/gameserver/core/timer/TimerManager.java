@@ -86,7 +86,7 @@ public class TimerManager implements Lifecycle {
             }
 
 
-            timer.setTriggerTime(now + timer.getDelayTimeMills());
+            timer.setTriggerTime(timer.getTriggerTime() + timer.getDelayTimeMills());
             if (timer.getExecNum() != -1) {
                 timer.reduceExecNum(1);
             }
@@ -104,7 +104,7 @@ public class TimerManager implements Lifecycle {
             onceExecuteNum++;
 
             if(onceExecuteNum > 1000){
-                Logs.DEFAULT_LOGGER.info(" once Execute timer more {} " , onceExecuteNum);
+                Logs.DEFAULT_LOGGER.warn(" once Execute timer more {} " , onceExecuteNum);
                 break;
             }
 

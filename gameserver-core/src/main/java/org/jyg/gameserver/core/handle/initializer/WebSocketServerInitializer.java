@@ -1,10 +1,11 @@
 package org.jyg.gameserver.core.handle.initializer;
 
-import org.jyg.gameserver.core.handle.TextWebSocketFrameHandler;
-
 /**
  * created by jiayaoguang at 2017年12月6日
  */
+import io.netty.handler.codec.http.websocketx.WebSocket13FrameEncoder;
+import org.jyg.gameserver.core.handle.WebSocketMsgDecoder;
+import org.jyg.gameserver.core.handle.WebSocketMsgEncoder;
 import org.jyg.gameserver.core.util.Context;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
@@ -29,7 +30,9 @@ public class WebSocketServerInitializer extends
 //		pipeline.addLast(new HttpStaticFileServerHandler());
 		
 		pipeline.addLast(new WebSocketServerProtocolHandler("/"));
-		pipeline.addLast(new TextWebSocketFrameHandler(context));
-		
+//		pipeline.addLast(new WebSocket13FrameEncoder(false));
+//		pipeline.addLast(new WebSocketFrameDecoder(context));
+		pipeline.addLast(new WebSocketMsgDecoder(context));
+		pipeline.addLast(new WebSocketMsgEncoder(context));
 	}
 }

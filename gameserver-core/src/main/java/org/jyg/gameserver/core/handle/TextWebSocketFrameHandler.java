@@ -17,6 +17,7 @@ import java.util.Map;
 /**
  * created by jiayaoguang at 2017年12月6日
  */
+@Deprecated
 public class TextWebSocketFrameHandler extends
 		SimpleChannelInboundHandler<WebSocketFrame> {
 

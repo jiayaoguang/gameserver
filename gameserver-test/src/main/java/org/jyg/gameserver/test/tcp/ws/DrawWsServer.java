@@ -1,6 +1,8 @@
 package org.jyg.gameserver.test.tcp.ws;
 
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
+import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.processor.TextProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
@@ -16,15 +18,18 @@ public class DrawWsServer {
 
         GameServerBootstrap gameServerBootstrap = new GameServerBootstrap();
 
-        gameServerBootstrap.getContext().getDefaultConsumer().setTextProcessor(new TextProcessor() {
-            public void process(Session session, EventData<String> event) {
-
+        gameServerBootstrap.getContext().getDefaultConsumer().addProcessor(new ByteMsgObjProcessor<DrawMsg>(DrawMsg.class) {
+            @Override
+            public void process(Session session, EventData<DrawMsg> data) {
                 for (Session otherSession : getConsumer().getChannelManager().getSessions()) {
-                    otherSession.writeWsMessage(event.getData());
+                    otherSession.writeMessage(data.getData());
                 }
 
             }
+
         });
+
+        gameServerBootstrap.getContext().addMsgId2JsonMsgClassMapping(200,DrawMsg.class);
 
         gameServerBootstrap.addHttpConnector(8080);
         gameServerBootstrap.addWebSocketConnector(9998);

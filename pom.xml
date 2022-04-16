@@ -4,7 +4,7 @@
 
 	<groupId>com.github.jiayaoguang</groupId>
 	<artifactId>gameserver</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<packaging>pom</packaging>
 	<name>gameserver</name>
 	<description>gameserver是一个游戏服务器框架，让游戏服务器开发更简单。</description>
@@ -157,13 +157,13 @@
 
 	<modules>
 		<module>gameserver-core</module>
+		<module>gameserver-db</module>
 		<module>gameserver-auth</module>
 		<module>gameserver-center</module>
 		<module>gameserver-scene</module>
 		<module>gameserver-proto</module>
 		<module>gameserver-util</module>
 		<module>gameserver-test</module>
-		<module>gameserver-db</module>
 		<module>gameserver-example</module>
 	</modules>
 

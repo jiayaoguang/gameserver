@@ -46,7 +46,6 @@ public abstract class TcpConnector extends AbstractConnector {
 
 	/**
 	 * 启动端口监听方法
-	 * @throws InterruptedException InterruptedException
 	 */
 	public synchronized void start() {
 
