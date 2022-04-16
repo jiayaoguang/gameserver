@@ -7,15 +7,15 @@ Maven
     <dependency>
         <groupId>com.github.jiayaoguang</groupId>
         <artifactId>gameserver-core</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.2</version>
     </dependency>
 
 
-* core模块-主要的网络库
-* auth模块-登录服
-* center模块-场景服管理
-* scene模块-场景服
-* proto模块-传送的相关协议
+* core模块- 主要的网络库
+* db模块- sql数据库持久化异步封装
+* example模块- 一个完整的例子
+* 其他模块- 测试用
+
 	
 服务器主要采用了netty4.1.19.Final框架处理socket连接,
 使用protobuf3.5.1作为发送消息序列化格式,
