@@ -262,7 +262,13 @@ public abstract class Consumer {
 
 
 
+    @Deprecated
     protected void processDefaultEvent(int eventId , Object data  , EventData eventData) {
+
+
+    }
+
+    protected void processDefaultEvent(int eventId , EventData eventData) {
 
 
     }
@@ -524,7 +530,7 @@ public abstract class Consumer {
                 break;
 
             case DEFAULT_EVENT:
-                processDefaultEvent(event.getEventId() , event.getData() ,event);
+                processDefaultEvent(event.getEventId() ,event);
                 break;
             case RESULT_CALL_BACK:
                 resultHandlerManager.onCallBack(event.getEventExtData().requestId, event.getEventId(), event.getData());

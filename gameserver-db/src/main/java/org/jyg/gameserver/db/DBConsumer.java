@@ -110,7 +110,10 @@ public class DBConsumer extends MpscQueueConsumer {
 
 
     @Override
-    protected void processDefaultEvent(int eventId, Object dbEntity, EventData eventData) {
+    protected void processDefaultEvent(int eventId, EventData eventData) {
+
+        Object dbEntity = eventData.getData();
+
         SQLMaker sqlMaker = sqlTextMap.get(eventId);
 
         if (sqlMaker == null) {

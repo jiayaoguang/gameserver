@@ -60,7 +60,7 @@ public class DBConsumerGroup extends ConsumerGroup<DBConsumer> {
     }
 
     @Override
-    protected void processDefaultEvent(int eventId, Object dbEntity , EventData eventData) {
+    protected void processDefaultEvent(int eventId , EventData eventData) {
         throw new UnsupportedOperationException();
     }
 
