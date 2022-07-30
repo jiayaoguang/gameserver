@@ -8,7 +8,6 @@ import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.jyg.gameserver.core.consumer.MQPushConsumer;
 import org.jyg.gameserver.core.util.AllUtil;
-import org.jyg.gameserver.core.util.MQConst;
 
 public class RocketMQPushConsumer extends MQPushConsumer {
 
@@ -73,7 +72,7 @@ public class RocketMQPushConsumer extends MQPushConsumer {
             /*
              * Create a message instance, specifying topic, tag and message body.
              */
-            Message msg = new Message(MQConst.MQ_TOPIC_SEND /* Topic */, TAG /* Tag */, bytes /* Message body */);
+            Message msg = new Message(topic /* Topic */, TAG /* Tag */, bytes /* Message body */);
 
             /*
              * Call send message to deliver message to one of brokers.

@@ -79,6 +79,6 @@ public abstract class MQPushConsumer extends MpscQueueConsumer {
 
     }
 
-    protected abstract void pushMsg(byte[] bytes);
+    protected abstract void pushMsg(byte[] bytes) throws Exception;
 
 }

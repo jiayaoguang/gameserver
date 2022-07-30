@@ -4,7 +4,7 @@ public enum SessionState {
 
     NORMAL,
 
-    WAIR_REPLY,
+    WAIT_REPLY,
 
 
 }

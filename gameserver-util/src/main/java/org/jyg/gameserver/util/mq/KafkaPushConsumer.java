@@ -5,10 +5,8 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.jyg.gameserver.core.consumer.MQPushConsumer;
-import org.jyg.gameserver.core.util.MQConst;
 
 import java.util.Properties;
-import java.util.UUID;
 import java.util.concurrent.Future;
 
 public class KafkaPushConsumer extends MQPushConsumer {
@@ -16,7 +14,10 @@ public class KafkaPushConsumer extends MQPushConsumer {
 
     private final KafkaProducer<String, byte[]> kafkaProducer;
 
-    public KafkaPushConsumer() {
+    private final String topic;
+
+    public KafkaPushConsumer(String topic) {
+        this.topic = topic;
 
         // 1. 创建用于连接Kafka的Properties配置
         Properties props = new Properties();
@@ -40,7 +41,7 @@ public class KafkaPushConsumer extends MQPushConsumer {
 
 
     public void pushMsg(byte[] bytes){
-        ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>(MQConst.MQ_TOPIC_SEND, "0", bytes);
+        ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>(topic, "0", bytes);
         Future<RecordMetadata> send = kafkaProducer.send(record);
     }
 

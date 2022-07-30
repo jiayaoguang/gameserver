@@ -6,17 +6,12 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.jyg.gameserver.core.net.MQConnector;
 import org.jyg.gameserver.core.net.PullMQConnector;
 import org.jyg.gameserver.core.util.Context;
-import org.jyg.gameserver.core.util.Logs;
-import org.jyg.gameserver.core.util.MQConst;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class KafkaMQConnector extends PullMQConnector {
 

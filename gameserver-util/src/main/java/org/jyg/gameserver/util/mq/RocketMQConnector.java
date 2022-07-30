@@ -7,7 +7,6 @@ import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.jyg.gameserver.core.net.MQConnector;
-import org.jyg.gameserver.core.util.MQConst;
 
 import java.util.List;
 

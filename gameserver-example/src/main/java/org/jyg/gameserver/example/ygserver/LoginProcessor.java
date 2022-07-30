@@ -31,7 +31,7 @@ public class LoginProcessor extends ByteMsgObjProcessor<LoginRequestMsg> {
         PlayerDB playerDB = new PlayerDB();
         playerDB.setName(event.getData().getName());
 
-        if(session.getSessionState() == SessionState.WAIR_REPLY){
+        if(session.getSessionState() == SessionState.WAIT_REPLY){
             return;
         }
 
