@@ -39,8 +39,23 @@ public class TimerManager implements Lifecycle {
      */
     public Timer addUnlimitedTimer(long delayTime,long intervalTime, ITimerHandler timerHandler) {
         Timer timer = new DefaultTimer(-1, delayTime, intervalTime, timerHandler);
+
         return addTimer(timer);
     }
+
+    /**
+     * 添加不限制次数的定时器
+     * @param delayTime 延迟时间
+     * @param intervalTime 执行时间间隔
+     * @param timerHandler 执行方法
+     * @return Timer
+     */
+    public Timer addUnlimitedTimer(long delayTime,long intervalTime,boolean ignoreExecTime, ITimerHandler timerHandler) {
+        Timer timer = new DefaultTimer(-1, delayTime, intervalTime, timerHandler);
+        timer.setIgnoreExecTime(ignoreExecTime);
+        return addTimer(timer);
+    }
+
 
     /**
      * 添加不限制次数的定时器
@@ -50,6 +65,7 @@ public class TimerManager implements Lifecycle {
      */
     public Timer addUnlimitedTimer(long intervalTime, ITimerHandler timerHandler) {
         Timer timer = new DefaultTimer(-1, intervalTime, intervalTime, timerHandler);
+
         return addTimer(timer);
     }
 
@@ -60,6 +76,7 @@ public class TimerManager implements Lifecycle {
     public void updateTimer() {
 
         int onceExecuteNum = 0;
+        final long now = System.currentTimeMillis();
 
         for (Timer timer; ; ) {
             timer = timerQueue.peek();
@@ -67,7 +84,6 @@ public class TimerManager implements Lifecycle {
                 return;
             }
 
-            long now = System.currentTimeMillis();
 
             if (timer.getTriggerTime() > now) {
                 return;
@@ -79,27 +95,31 @@ public class TimerManager implements Lifecycle {
                 continue;
             }
 
+
             try {
                 timer.onTime();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-
-            timer.setTriggerTime(timer.getTriggerTime() + timer.getDelayTimeMills());
+            if(timer.isIgnoreExecTime()){
+                timer.setTriggerTime(System.currentTimeMillis() + timer.getDelayTimeMills());
+            }else {
+                timer.setTriggerTime(timer.getTriggerTime() + timer.getDelayTimeMills());
+            }
             if (timer.getExecNum() != -1) {
                 timer.reduceExecNum(1);
+            }
+            long costTime = System.currentTimeMillis() - now;
+
+            if(costTime > 10){
+                Logs.DEFAULT_LOGGER.info(" timer exec cost more time  {} mills  {} queue size {} "  , costTime , timer.toString() , timerQueue.size());
             }
 
             if (!timer.isEnd()) {
                 timerQueue.offer(timer);
             }
 
-            long costTime = System.currentTimeMillis() - now;
-
-            if(costTime > 10){
-                Logs.DEFAULT_LOGGER.info(" timer exec cost more time  {} mills  {} "  , costTime , timer.toString());
-            }
 
             onceExecuteNum++;
 

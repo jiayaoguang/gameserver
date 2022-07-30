@@ -1,49 +1,59 @@
 package org.jyg.gameserver.core.enums;
+
 /**
  * created by jiayaoguang at 2017年12月12日
  */
 public enum EventType {
 
-	ACTIVE,
-	INACTIVE,
+	ACTIVE(1),
+	INACTIVE(2),
 
 	/**
 	 * 连接激活
 	 */
-	SOCKET_CONNECT_ACTIVE,
+	SOCKET_CONNECT_ACTIVE(3),
 
 	/**
 	 * 连接断开
 	 */
-	SOCKET_CONNECT_INACTIVE,
+	SOCKET_CONNECT_INACTIVE(4),
 	
-	CLIENT_SOCKET_CONNECT_ACTIVE,
+	CLIENT_SOCKET_CONNECT_ACTIVE(5),
 	
-	CLIENT_SOCKET_CONNECT_INACTIVE,
+	CLIENT_SOCKET_CONNECT_INACTIVE(6),
 	
 //	ON_MESSAGE_COME,
 
-	HTTP_MESSAGE_COME,
+	HTTP_MESSAGE_COME(7),
 
-	PROTO_MSG_COME,
+    REMOTE_MSG_COME(8),
 
-
-	TEXT_MESSAGE_COME,
-
-
-	BYTE_OBJ_MSG_COME,
-
-	INNER_MSG,
+	MQ_MSG_COME(9),
 
 
-	DEFAULT_EVENT,
+	TEXT_MESSAGE_COME(10),
+
+
+	INNER_MSG(11),
+
+
+	DEFAULT_EVENT(12),
 	/**
 	 * 回调事件
 	 */
-	RESULT_CALL_BACK,
+	RESULT_CALL_BACK(13),
 
 
 	;
-	
+
+	public final int type;
+
+	EventType(int type) {
+		this.type = type;
+	}
+
+	public int getType() {
+		return type;
+	}
 }
 

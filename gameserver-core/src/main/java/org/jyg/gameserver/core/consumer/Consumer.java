@@ -11,12 +11,14 @@ import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
 import org.jyg.gameserver.core.event.EventManager;
+import org.jyg.gameserver.core.filter.OnlyLocalHttpMsgFilter;
 import org.jyg.gameserver.core.manager.ClassLoadManager;
 import org.jyg.gameserver.core.manager.ResultHandlerManager;
 import org.jyg.gameserver.core.manager.ChannelManager;
 import org.jyg.gameserver.core.manager.InstanceManager;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.processor.*;
+import org.jyg.gameserver.core.session.MQSession;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.timer.DelayCloseTimer;
@@ -411,11 +413,41 @@ public abstract class Consumer {
 
 
 
+    @Deprecated
     public IRemoteInvoke createRemoteInvoke(final String remoteInvokeName, TcpClient tcpClient) {
 
         IRemoteInvoke remoteInvoke = new IRemoteInvoke() {
             @Override
-            public void invoke(Map<String,Object> paramMap) {
+            public void invoke(Consumer consumer,Map<String,Object> paramMap) {
+
+                try {
+
+                    RemoteInvokeData remoteInvokeData = new RemoteInvokeData();
+                    remoteInvokeData.setConsumerId(getId());
+
+                    remoteInvokeData.setInvokeName(remoteInvokeName);
+
+                    remoteInvokeData.setParamMap(paramMap);
+
+                    tcpClient.write(remoteInvokeData);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        return remoteInvoke;
+    }
+
+
+
+    public IRemoteInvoke invokeRemoteFunc(final String remoteInvokeName , int targetConsumer, TcpClient tcpClient) {
+
+        IRemoteInvoke remoteInvoke = new IRemoteInvoke() {
+            @Override
+            public void invoke(Consumer consumer,Map<String,Object> paramMap) {
 
                 try {
 
@@ -448,7 +480,7 @@ public abstract class Consumer {
             doEvent(new EventData(event.getChannel(), event.getEventType(), event.getData(), event.getEventExtData(), event.getEventId()));
             long costMill = (System.nanoTime() - startNano)/1000000L;
             if(costMill > 10){
-                Logs.DEFAULT_LOGGER.error("{} event  cost more time {} ",getClass().getSimpleName(), costMill);
+                Logs.DEFAULT_LOGGER.error("{} event  cost more time {} data : {}",getClass().getSimpleName(), costMill, (event.getData() == null? "null" : event.getData().getClass().getSimpleName()));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -506,12 +538,16 @@ public abstract class Consumer {
 //            case ON_MESSAGE_COME:
 //				dispatcher.webSocketProcess(event);
 //				break;
-            case PROTO_MSG_COME:
-            case BYTE_OBJ_MSG_COME:{
+            case REMOTE_MSG_COME:{
                 Session session = null;
                 if (isDefaultConsumer()) {
                     session = channelManager.getSession(event.getChannel());
                 }
+                this.processEventMsg(session, event);
+                break;
+            }
+            case MQ_MSG_COME:{
+                Session session = new MQSession(event.getFromConsumerId(), context);
                 this.processEventMsg(session, event);
                 break;
             }
@@ -652,6 +688,21 @@ public abstract class Consumer {
 
     public EventManager getEventManager() {
         return eventManager;
+    }
+
+
+
+
+    public void setAllHttpLocalPermission(){
+        if(isStart){
+            throw new RuntimeException("already start");
+        }
+
+        OnlyLocalHttpMsgFilter onlyLocalHttpMsgFilter = new OnlyLocalHttpMsgFilter();
+
+        for(HttpProcessor httpProcessor : httpProcessorMap.values()){
+            httpProcessor.addMsgFilter(onlyLocalHttpMsgFilter);
+        }
     }
 
 }

@@ -47,7 +47,7 @@ public class Room {
 
     public void broadcast(ByteMsgObj byteMsgObj){
         for(RoomPlayer roomPlayer : roomPlayerMap.values() ){
-            if(roomPlayer.getPlayer().getSession().getChannel().isOpen()){
+            if(roomPlayer.getPlayer().getSession().isOpen()){
                 roomPlayer.getPlayer().getSession().writeMessage(byteMsgObj);
             }
         }

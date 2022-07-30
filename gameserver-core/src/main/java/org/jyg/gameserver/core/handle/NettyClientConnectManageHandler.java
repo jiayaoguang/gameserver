@@ -59,7 +59,7 @@ public class NettyClientConnectManageHandler extends ChannelDuplexHandler {
                 final String remoteAddress = AllUtil.getChannelRemoteAddr(ctx.channel());
                 Logs.DEFAULT_LOGGER.warn("NETTY CLIENT PIPELINE: IDLE outtime [{}]", remoteAddress);
             } else if (event.state().equals(IdleState.READER_IDLE)) {
-                context.getConsumerManager().publicEventToDefault(EventType.BYTE_OBJ_MSG_COME, READ_IDLE_OBJ, ctx.channel(), MsgIdConst.READ_OUTTIME);
+                context.getConsumerManager().publicEventToDefault(EventType.REMOTE_MSG_COME, READ_IDLE_OBJ, ctx.channel(), MsgIdConst.READ_OUTTIME);
             } else if (event.state().equals(IdleState.WRITER_IDLE)) {
 //                context.getConsumerManager().publicEventToDefault(EventType.BYTE_OBJ_MSG_COME, READ_IDLE_OBJ, ctx.channel(), MsgIdConst.WRITE_OUTTIME);
 

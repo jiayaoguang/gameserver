@@ -12,12 +12,11 @@ import java.util.List;
 /**
  * created by jiayaoguang at 2017年12月6日
  */
-public class Session implements Lifecycle {
+public abstract class Session implements Lifecycle {
 
 	private final long sessionId;
 	
-	private final Channel channel;
-	
+
 	private long lastContactMill = 0;
 
 	private SessionState sessionState;
@@ -25,8 +24,7 @@ public class Session implements Lifecycle {
 
 	private Object sessionObject;
 	
-	public Session(Channel channel,long sessionId){
-		this.channel = channel;
+	public Session(long sessionId){
 		this.sessionId = sessionId;
 		setLastContactMill(System.currentTimeMillis());
 	}
@@ -40,8 +38,11 @@ public class Session implements Lifecycle {
 	}*/
 
 	public Channel getChannel() {
-		return channel;
+		return null;
 	}
+
+
+	public abstract boolean isOpen();
 
 
 	public long getLastContactMill() {
@@ -52,48 +53,31 @@ public class Session implements Lifecycle {
 		this.lastContactMill = lastContactMill;
 	}
 
-	public void writeMessage( MessageLite message) {
-		this.channel.writeAndFlush(message);
+	public void writeMessage( MessageLite message){
+		this.writeObjMessage(message);
 	}
 
 	@Deprecated
 	public void writeWsMessage(String message) {
-		this.channel.writeAndFlush(new TextWebSocketFrame(message));
+		this.writeObjMessage(message);
 	}
 
-	public void writeMessage( MessageLite.Builder messageBuider) {
-		this.channel.writeAndFlush(messageBuider.build());
-	}
-
-	public void writeMessage( List<? extends MessageLite> messageList) {
-		this.channel.writeAndFlush(messageList);
+	public void writeMessage( MessageLite.Builder messageBuilder) {
+		this.writeObjMessage(messageBuilder.build());
 	}
 
 
-	public void writeMessage(RemoteInvokeData remoteInvokeData){
-		this.channel.writeAndFlush(remoteInvokeData);
-	}
 
 	public void writeMessage(ByteMsgObj byteMsgObj){
-		this.channel.writeAndFlush(byteMsgObj);
-	}
-
-	@Override
-	public void start() {
-
+		this.writeObjMessage(byteMsgObj);
 	}
 
 
-	@Override
-	public void stop() {
-		if(channel != null){
-			try{
-				channel.close();
-			}catch (Exception e){
-				e.printStackTrace();
-			}
-		}
-	}
+	protected abstract void writeObjMessage(Object msgObj);
+
+
+	public abstract String getRemoteAddr();
+
 
 
 	public SessionState getSessionState() {

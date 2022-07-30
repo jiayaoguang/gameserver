@@ -32,6 +32,9 @@ public abstract class Timer implements Comparable<Timer>{
 	private boolean isCancel = false;
 
 
+	private boolean ignoreExecTime = false;
+
+
 	public Timer(int execNum, long firstDelayTimeMills, long delayTimeMills) {
 		this.execNum = execNum;
 		this.delayTimeMills = delayTimeMills;
@@ -77,6 +80,15 @@ public abstract class Timer implements Comparable<Timer>{
 	public boolean isCancel() {
 		return isCancel;
 	}
+
+	public boolean isIgnoreExecTime() {
+		return ignoreExecTime;
+	}
+
+	public void setIgnoreExecTime(boolean ignoreExecTime) {
+		this.ignoreExecTime = ignoreExecTime;
+	}
+
 
 	public boolean isEnd() {
 		if(execNum == -1){

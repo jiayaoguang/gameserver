@@ -1,6 +1,7 @@
 package org.jyg.gameserver.test.tcp.remoteInvoke;
 
 import org.jyg.gameserver.core.anno.InvokeName;
+import org.jyg.gameserver.core.consumer.Consumer;
 import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.invoke.IRemoteInvoke;
@@ -20,7 +21,7 @@ public class RemoteInvokeClientTest01 {
 
 
         IRemoteInvoke remoteInvoke = client.getDefaultConsumer().createRemoteInvoke( Test03Invoke.class ,  client);
-        remoteInvoke.invoke(new HashMap<>());
+        remoteInvoke.invoke(null,new HashMap<>());
 
 
         Thread.sleep(10000);
@@ -34,7 +35,7 @@ public class RemoteInvokeClientTest01 {
     public static class In implements IRemoteInvoke{
 
         @Override
-        public void invoke(Map<String,Object> paramMap) {
+        public void invoke(Consumer consumer, Map<String,Object> paramMap) {
             AllUtil.println("hello world");
         }
     }

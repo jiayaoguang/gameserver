@@ -1,6 +1,5 @@
 package org.jyg.gameserver.core.util;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.google.protobuf.MessageLite;
 import io.netty.channel.epoll.Epoll;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -17,8 +16,10 @@ import org.jyg.gameserver.core.handle.NettyHandlerFactory;
 import org.jyg.gameserver.core.manager.*;
 import org.jyg.gameserver.core.msg.*;
 import org.jyg.gameserver.core.processor.*;
+import org.jyg.gameserver.core.processor.*;
 import org.jyg.gameserver.core.startup.TcpClient;
 
+import javax.naming.OperationNotSupportedException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -66,6 +67,10 @@ public class Context implements Lifecycle{
 
 
     private long startTime;
+
+
+//    private final ClockManager clockManager = new ClockManager();
+
 
     public Context(Consumer defaultConsumer) {
         this(defaultConsumer ,DEFAULT_CONFIG_FILE_NAME );
@@ -169,7 +174,7 @@ public class Context implements Lifecycle{
             throw new IllegalArgumentException(" addByteMsgCodec fail, !msgObjClazz2MsgIdMap.containsKey(byteMsgCodec.getByteMsgClass())" + byteMsgCodec.getByteMsgClass());
         }
 
-        int msgId = msgObjClazz2MsgIdMap.get(byteMsgCodec.getByteMsgClass());
+        int msgId = msgObjClazz2MsgIdMap.getInt(byteMsgCodec.getByteMsgClass());
 
 
         this.msgId2MsgCodecMap.put(msgId, byteMsgCodec);
@@ -339,5 +344,6 @@ public class Context implements Lifecycle{
     public long nextUid(){
         return uidManager.nextUid();
     }
+
 
 }

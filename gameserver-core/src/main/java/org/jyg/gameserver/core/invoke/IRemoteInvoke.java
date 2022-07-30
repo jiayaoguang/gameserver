@@ -1,6 +1,8 @@
 package org.jyg.gameserver.core.invoke;
 
 
+import org.jyg.gameserver.core.consumer.Consumer;
+
 import java.util.Map;
 
 /**
@@ -8,6 +10,6 @@ import java.util.Map;
  */
 public interface IRemoteInvoke {
 
-    void invoke(Map<String,Object> paramMap);
+    void invoke(Consumer consumer, Map<String,Object> paramMap);
 
 }

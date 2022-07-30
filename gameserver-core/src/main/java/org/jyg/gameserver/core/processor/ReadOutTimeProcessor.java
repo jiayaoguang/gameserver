@@ -1,7 +1,6 @@
 package org.jyg.gameserver.core.processor;
 
 import org.jyg.gameserver.core.data.EventData;
-import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.msg.ReadIdleMsgObj;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.AllUtil;
@@ -21,7 +20,7 @@ public class ReadOutTimeProcessor extends ByteMsgObjProcessor<ReadIdleMsgObj> {
 
 //        getConsumer().getChannelManager().getSession()
 
-        String addr = AllUtil.getChannelRemoteAddr(session.getChannel());
+        String addr = session.getRemoteAddr();
 
         session.stop();
         Logs.DEFAULT_LOGGER.error(" force close addr {} , cause read timeout" , addr);

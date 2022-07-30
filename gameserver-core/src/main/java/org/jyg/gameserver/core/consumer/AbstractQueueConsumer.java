@@ -19,7 +19,7 @@ public abstract class AbstractQueueConsumer extends Consumer {
 
 
     @Override
-    public final void doStart() {
+    public void doStart() {
 
 
         consumerThread = new Thread(this::run);
@@ -76,7 +76,7 @@ public abstract class AbstractQueueConsumer extends Consumer {
 
     protected abstract void publicEvent(EventData<Object> eventData);
 
-    public void run() {
+    private void run() {
 
         onThreadStart();
 

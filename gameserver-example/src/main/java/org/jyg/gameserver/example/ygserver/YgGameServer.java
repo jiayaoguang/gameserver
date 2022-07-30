@@ -3,7 +3,6 @@ package org.jyg.gameserver.example.ygserver;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
 import org.jyg.gameserver.core.msg.EmptyMsgCodec;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
-import org.jyg.gameserver.core.processor.SysInfoHttpProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.db.ConsumerDBManager;
@@ -85,7 +84,7 @@ public class YgGameServer {
 //                consumer.getChannelManager().broadcast(new CreateEnemyMsg());
 //                Logs.DEFAULT_LOGGER.info(" send CreateEnemyMsg ...................... ");
 
-                PlayerManager playerManager = consumer.getInstance(PlayerManager.class);
+//                PlayerManager playerManager = consumer.getInstance(PlayerManager.class);
                 FrameManager frameManager = consumer.getInstance(FrameManager.class);
 
                 ServerFrameMsg serverFrameMsg = new ServerFrameMsg();
@@ -106,7 +105,7 @@ public class YgGameServer {
 
                     Session session = player.getPlayer().getSession();
 
-                    if(session == null || !session.getChannel().isOpen()){
+                    if(session == null || !session.isOpen()){
                         continue;
                     }
                     session.writeMessage(serverFrameMsg);

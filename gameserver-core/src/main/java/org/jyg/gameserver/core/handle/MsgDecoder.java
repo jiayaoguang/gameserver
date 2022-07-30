@@ -98,12 +98,8 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
 
             switch (msgCodec.getMsgType()) {
                 case PROTO:
-                    MessageLite messageLite = (MessageLite) msgObj;
-                    context.getConsumerManager().publicEventToDefault( EventType.PROTO_MSG_COME, messageLite, ctx.channel(), msgId);
-                    break;
                 case BYTE_OBJ:
-                    ByteMsgObj byteMsgObj = (ByteMsgObj) msgObj;
-                    context.getConsumerManager().publicEventToDefault(EventType.BYTE_OBJ_MSG_COME, byteMsgObj, ctx.channel(), msgId);
+                    context.getConsumerManager().publicEventToDefault(EventType.REMOTE_MSG_COME, msgObj, ctx.channel(), msgId);
                     break;
                 default:
                     LOGGER.error(" unknown msg type type : {} ", msgCodec.getMsgType());

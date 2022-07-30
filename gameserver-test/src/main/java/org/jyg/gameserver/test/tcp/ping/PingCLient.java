@@ -33,8 +33,8 @@ public class PingCLient {
 
 		client.start();
 
-		final Channel channel = client.connect("localhost", 8080);
-		channel.writeAndFlush(p_test.p_sm_scene_request_ping.newBuilder());
+		client.connect("localhost", 8080);
+		client.write(p_test.p_sm_scene_request_ping.newBuilder());
 
 
 		// client.close();

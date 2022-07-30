@@ -122,11 +122,11 @@ public class TcpClient extends AbstractBootstrap{
 
 	// 连接服务端
 	@Deprecated
-	public Channel connect(String host,int port) {
+	public Session connect(String host,int port) {
 		this.host = host;
 		this.port = port;
 
-		return connect().getChannel();
+		return connect();
 	}
 
 

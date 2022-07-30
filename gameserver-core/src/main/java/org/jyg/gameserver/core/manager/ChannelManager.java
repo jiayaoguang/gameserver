@@ -5,9 +5,9 @@ import org.jyg.gameserver.core.consumer.Consumer;
 import org.jyg.gameserver.core.event.ConnectEvent;
 import org.jyg.gameserver.core.event.DisconnectEvent;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
+import org.jyg.gameserver.core.session.TcpChannelSession;
 import org.jyg.gameserver.core.session.Session;
 import io.netty.channel.Channel;
-import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.util.*;
@@ -50,7 +50,7 @@ public class ChannelManager implements Lifecycle {
 
     public final <T> Session doLink(Channel channel) {
         int sessionId = incAndGetSessionId();
-        Session session = new Session(channel, sessionId);
+        Session session = new TcpChannelSession(channel, sessionId);
         channelObjectMap.put(channel, session);
         id2sessionMap.put(session.getSessionId() , session);
         afterConnect(session);
@@ -77,7 +77,7 @@ public class ChannelManager implements Lifecycle {
 
     public final <T> Session doTcpClientLink(Channel channel) {
         int sessionId = incAndGetSessionId();
-        Session session = new Session(channel, sessionId);
+        Session session = new TcpChannelSession(channel, sessionId);
         tcpClientChannelObjectMap.put(channel, session);
 //        id2sessionMap.put(session.getSessionId() , session);
         afterConnect(session);
@@ -177,13 +177,9 @@ public class ChannelManager implements Lifecycle {
     public void stop() {
 
         for(Session session : channelObjectMap.values()){
-            session.getChannel().close();
+            session.stop();
         }
 
-    }
-
-    public String getSessionAddr(Session session){
-        return AllUtil.getChannelRemoteAddr(session.getChannel());
     }
 
 }
