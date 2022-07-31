@@ -14,6 +14,7 @@ import java.io.IOException;
 /**
  * create by jiayaoguang on 2022/7/9
  */
+@Deprecated
 public class HttpConsumer extends MpscQueueConsumer {
 
 

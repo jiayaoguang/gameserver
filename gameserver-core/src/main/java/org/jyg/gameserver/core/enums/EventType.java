@@ -31,6 +31,7 @@ public enum EventType {
 	MQ_MSG_COME(9),
 
 
+	@Deprecated
 	TEXT_MESSAGE_COME(10),
 
 
@@ -42,6 +43,9 @@ public enum EventType {
 	 * 回调事件
 	 */
 	RESULT_CALL_BACK(13),
+
+
+	LOCAL_MSG_COME(8),
 
 
 	;

@@ -11,7 +11,6 @@ public class TcpChannelSession extends Session{
     public TcpChannelSession(Channel channel, long sessionId){
         super(sessionId);
         this.channel = channel;
-        setLastContactMill(System.currentTimeMillis());
     }
 
 

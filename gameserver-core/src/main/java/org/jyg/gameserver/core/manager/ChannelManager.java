@@ -23,7 +23,7 @@ public class ChannelManager implements Lifecycle {
 
     private final Map<Channel, Session> tcpClientChannelObjectMap;
 
-    private int sessionIdInc = 0;
+    private long sessionIdInc = 0;
 
     private final Consumer consumer;
 
@@ -49,7 +49,7 @@ public class ChannelManager implements Lifecycle {
 
 
     public final <T> Session doLink(Channel channel) {
-        int sessionId = incAndGetSessionId();
+        long sessionId = incAndGetSessionId();
         Session session = new TcpChannelSession(channel, sessionId);
         channelObjectMap.put(channel, session);
         id2sessionMap.put(session.getSessionId() , session);
@@ -76,7 +76,7 @@ public class ChannelManager implements Lifecycle {
 
 
     public final <T> Session doTcpClientLink(Channel channel) {
-        int sessionId = incAndGetSessionId();
+        long sessionId = incAndGetSessionId();
         Session session = new TcpChannelSession(channel, sessionId);
         tcpClientChannelObjectMap.put(channel, session);
 //        id2sessionMap.put(session.getSessionId() , session);
@@ -140,7 +140,7 @@ public class ChannelManager implements Lifecycle {
         }
     }
 
-    private int incAndGetSessionId() {
+    private long incAndGetSessionId() {
         sessionIdInc++;
         return sessionIdInc;
     }

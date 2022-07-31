@@ -18,6 +18,7 @@ import org.jyg.gameserver.core.manager.ChannelManager;
 import org.jyg.gameserver.core.manager.InstanceManager;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.processor.*;
+import org.jyg.gameserver.core.session.LocalSession;
 import org.jyg.gameserver.core.session.MQSession;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.TcpClient;
@@ -82,6 +83,8 @@ public abstract class Consumer {
 
 
     private final EventManager eventManager = new EventManager();
+
+    private AbstractProcessor defaultProcessor = null;
 
 
     public Consumer() {
@@ -240,11 +243,19 @@ public abstract class Consumer {
     protected void processEventMsg(Session session, EventData<?> event) {
 //		MessageLite msg = event.getData();
         Processor processor = protoProcessorMap.get(event.getEventId());
-        if (processor == null) {
-            String name = event.getData() == null ? "null" :event.getData().getClass().getSimpleName();
-            Logs.DEFAULT_LOGGER.info("processor not found, eventid : {} , msg : {}" , event.getEventId() , name);
-            return;
+
+
+        if(processor == null){
+
+            processor = defaultProcessor;
+
+            if (processor == null) {
+                String name = event.getData() == null ? "null" :event.getData().getClass().getSimpleName();
+                Logs.DEFAULT_LOGGER.info("processor not found, eventid : {} , msg : {}" , event.getEventId() , name);
+                return;
+            }
         }
+
 
         if(!processor.checkFilters(session , event)){
             String msgName;
@@ -263,12 +274,6 @@ public abstract class Consumer {
 
 
 
-
-    @Deprecated
-    protected void processDefaultEvent(int eventId , Object data  , EventData eventData) {
-
-
-    }
 
     protected void processDefaultEvent(int eventId , EventData eventData) {
 
@@ -587,6 +592,12 @@ public abstract class Consumer {
                 }
                 break;
 
+            case LOCAL_MSG_COME:{
+                Session session = new LocalSession(event.getFromConsumerId(), context);
+                this.processEventMsg(session, event);
+                break;
+            }
+
             default:
                 throw new IllegalArgumentException("unknown channelEventType <" + event.getEventType() + ">");
         }
@@ -690,6 +701,12 @@ public abstract class Consumer {
         return eventManager;
     }
 
+
+
+    public void setDefaultProcessor(AbstractProcessor defaultProcessor ){
+        defaultProcessor.setConsumer(this);
+        this.defaultProcessor = defaultProcessor;
+    }
 
 
 
