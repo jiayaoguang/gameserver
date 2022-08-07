@@ -77,7 +77,7 @@ public abstract class Consumer {
     private int requestId = 1;
 
 
-    private final Map<Integer , ResultHandler> waitCallBackMap = new HashMap<>();
+//    private final Map<Integer , ResultHandler> waitCallBackMap = new HashMap<>();
 
     private final ResultHandlerManager resultHandlerManager = new ResultHandlerManager();
 
@@ -240,7 +240,7 @@ public abstract class Consumer {
      * @param session session
      * @param event   event
      */
-    protected void processEventMsg(Session session, EventData<?> event) {
+    public void processEventMsg(Session session, EventData<?> event) {
 //		MessageLite msg = event.getData();
         Processor processor = protoProcessorMap.get(event.getEventId());
 

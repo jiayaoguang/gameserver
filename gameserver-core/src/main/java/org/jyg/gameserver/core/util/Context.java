@@ -216,6 +216,18 @@ public class Context implements Lifecycle{
     }
 
 
+    public int getMsgIdByMsgClass(Object msgClass) {
+        if(msgClass instanceof MessageLite){
+            return protoClazz2MsgIdMap.getInt(msgClass);
+        }else  if(msgClass instanceof ByteMsgObj){
+            return msgObjClazz2MsgIdMap.getInt(msgClass);
+        }else{
+            throw new IllegalArgumentException();
+        }
+    }
+
+
+
     public int getMsgIdByProtoClass( Class<? extends MessageLite> protoClass) {
 
         return protoClazz2MsgIdMap.getInt(protoClass);
