@@ -3,9 +3,12 @@ package org.jyg.gameserver.core.processor;
 import com.google.protobuf.MessageLite;
 import com.google.protobuf.Parser;
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.session.Session;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 /**
  * created by jiayaoguang at 2017年12月16日
@@ -18,8 +21,34 @@ public abstract class ProtoProcessor<T extends MessageLite> extends AbstractProc
 	private final MessageLite defaultInstance;
 
 
-	public ProtoProcessor(Class<? extends MessageLite> protoClazz) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-		this((MessageLite)protoClazz.getMethod("getDefaultInstance").invoke(null));
+	public ProtoProcessor() {
+
+
+		Type superClass = getClass().getGenericSuperclass();
+		if (superClass instanceof Class<?>) { // sanity check, should never happen
+			throw new IllegalArgumentException("Internal error: TypeReference constructed without actual type information");
+		}
+
+		Type _type = ((ParameterizedType) superClass).getActualTypeArguments()[0];
+
+
+		this.clazz = (Class<? extends MessageLite>) _type;
+		this.defaultInstance = getProtoDefaultInstance(this.clazz);
+		this.parser = this.defaultInstance.getParserForType();
+
+
+	}
+
+	public ProtoProcessor(Class<? extends MessageLite> protoClazz)  {
+		this(getProtoDefaultInstance(protoClazz));
+	}
+
+	private static MessageLite getProtoDefaultInstance(Class<? extends MessageLite> protoClazz){
+		try {
+			return (MessageLite)protoClazz.getMethod("getDefaultInstance").invoke(null);
+		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			throw new IllegalArgumentException(e);
+		}
 	}
 
 	public ProtoProcessor(MessageLite messageLite) {
