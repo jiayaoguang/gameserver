@@ -1,7 +1,6 @@
 package org.jyg.gameserver.route.test;
 
 import org.jyg.gameserver.core.constant.MsgIdConst;
-import org.jyg.gameserver.core.constant.MsgIdEnum;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.manager.RouteManager;
 import org.jyg.gameserver.core.msg.route.RouteMsg;
