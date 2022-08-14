@@ -57,7 +57,7 @@ public abstract class Consumer {
     private Thread thread;
 
 
-    protected final TimerManager timerManager = new TimerManager();
+
 
     private final ChannelManager channelManager;
 
@@ -66,9 +66,7 @@ public abstract class Consumer {
 
     private TextProcessor textProcessor;
 
-    private final InstanceManager instanceManager;
 
-    private final ClassLoadManager classLoadManager = new ClassLoadManager("loadClasses");
 
     private int id;
 
@@ -79,17 +77,35 @@ public abstract class Consumer {
 
 //    private final Map<Integer , ResultHandler> waitCallBackMap = new HashMap<>();
 
-    private final ResultHandlerManager resultHandlerManager = new ResultHandlerManager();
+    protected final TimerManager timerManager;
 
+    private final InstanceManager instanceManager;
 
-    private final EventManager eventManager = new EventManager();
+    private final ClassLoadManager classLoadManager;
+
+    private final ResultHandlerManager resultHandlerManager;
+
+    private final EventManager eventManager;
 
     private AbstractProcessor defaultProcessor = null;
 
 
     public Consumer() {
         this.instanceManager = new InstanceManager(this);
+        this.timerManager = new TimerManager();
         this.channelManager = new ChannelManager(this);
+        this.classLoadManager = new ClassLoadManager("loadClasses");
+        this.resultHandlerManager = new ResultHandlerManager();
+        this.eventManager = new EventManager();
+
+
+        instanceManager.putInstance(this.timerManager);
+        instanceManager.putInstance(this.channelManager);
+        instanceManager.putInstance(this.classLoadManager);
+        instanceManager.putInstance(this.resultHandlerManager);
+        instanceManager.putInstance(this.eventManager);
+
+
     }
 
 
@@ -178,7 +194,7 @@ public abstract class Consumer {
         addHttpProcessor(processor.getPath(),processor);
     }
 
-    public void addHttpProcessor(String path, HttpProcessor processor) {
+    private void addHttpProcessor(String path, HttpProcessor processor) {
 
         if (StringUtils.isEmpty(path) || path.charAt(0) != '/' || path.contains(".")) {
             throw new IllegalArgumentException("path cannot contain char:'.' and must start with char:'/' ");
@@ -211,10 +227,10 @@ public abstract class Consumer {
             throw new IllegalArgumentException("dupilcated eventid");
         }
         if (processor instanceof ProtoProcessor) {
-            getContext().addMsgId2ProtoMapping(msgId, ((ProtoProcessor) processor).getProtoDefaultInstance());
+            getContext().addMsgId2ProtoMapping(msgId, ((ProtoProcessor) processor).getProtoClass());
         }
         if (processor instanceof ByteMsgObjProcessor) {
-            getContext().addMsgId2JsonMsgClassMapping(msgId, ((ByteMsgObjProcessor) processor).getByteMsgObjClazz());
+            getContext().addMsgId2MsgClassMapping(msgId, ((ByteMsgObjProcessor) processor).getByteMsgObjClazz());
         }
 
         processor.setConsumer(this);
@@ -345,7 +361,7 @@ public abstract class Consumer {
         }
         if (processor instanceof HttpProcessor) {
             HttpProcessor httpProcessor = (HttpProcessor) processor;
-            addHttpProcessor(httpProcessor.getPath(), httpProcessor);
+            addHttpProcessor(httpProcessor);
             return;
         }
         logger.error(" unknown processor type  : {} ", processor.getClass());
@@ -448,36 +464,23 @@ public abstract class Consumer {
 
 
 
-    public IRemoteInvoke invokeRemoteFunc(final String remoteInvokeName , int targetConsumer, TcpClient tcpClient) {
+    public void invokeRemoteFunc(final String remoteInvokeName , int targetConsumer,Map<String,Object> paramMap, TcpClient tcpClient) {
 
-        IRemoteInvoke remoteInvoke = new IRemoteInvoke() {
-            @Override
-            public void invoke(Consumer consumer,Map<String,Object> paramMap) {
 
-                try {
+        RemoteInvokeData remoteInvokeData = new RemoteInvokeData();
+        remoteInvokeData.setConsumerId(getId());
+        remoteInvokeData.setConsumerId(targetConsumer);
+        remoteInvokeData.setInvokeName(remoteInvokeName);
 
-                    RemoteInvokeData remoteInvokeData = new RemoteInvokeData();
-                    remoteInvokeData.setConsumerId(getId());
+        remoteInvokeData.setParamMap(paramMap);
 
-                    remoteInvokeData.setInvokeName(remoteInvokeName);
+        tcpClient.write(remoteInvokeData);
 
-                    remoteInvokeData.setParamMap(paramMap);
-
-                    tcpClient.write(remoteInvokeData);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-        };
-
-        return remoteInvoke;
     }
 
 
 
-    public final void onReciveEvent(EventData<?> event) {
+    protected void onReciveEvent(EventData<?> event) {
 
         // System.out.println(event.getChannel());
         try {

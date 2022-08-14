@@ -41,7 +41,8 @@ public class RouteManager implements Lifecycle {
 
         return routeInfo.getRouteSessions().get(routeSessionId);
     }
-    public void addRouteSession(int serverId , long sessionId , Session routeSession ){
+    public void addRouteSession(int serverId ,  Session routeSession ){
+        long sessionId = routeSession.getSessionId();
         RouteInfo routeInfo = routeInfoMap.get(sessionId);
 
         if(routeInfo == null){

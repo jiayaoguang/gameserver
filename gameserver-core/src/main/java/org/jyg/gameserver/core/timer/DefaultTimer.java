@@ -8,6 +8,7 @@ public class DefaultTimer extends Timer {
 	// 回调函数
  	private final ITimerHandler timerHandler;
 
+
 	public DefaultTimer(long execDelayTimeMills , ITimerHandler timerHandler) {
 		this(1, execDelayTimeMills, execDelayTimeMills,timerHandler);
 	}
@@ -21,6 +22,8 @@ public class DefaultTimer extends Timer {
 		this.timerHandler = timerHandler;
 	}
 
+
+
 	@Override
 	protected void onTime(){
 		if(timerHandler != null){
@@ -30,7 +33,10 @@ public class DefaultTimer extends Timer {
 
 	@Override
 	public String toString(){
-		return timerHandler.getClass().getName();
+		return "DefaultTimer."+timerHandler.getClass().getName();
 	}
+
+
+
 
 }

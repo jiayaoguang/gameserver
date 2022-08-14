@@ -9,8 +9,8 @@ import org.jyg.gameserver.core.util.Context;
  */
 public class RouteSession extends Session {
 
-    private Session routeServerSession;
-    private Context context;
+    private final Session routeServerSession;
+    private final Context context;
 
     public RouteSession(Context context,Session routeServerSession,long sessionId) {
         super(sessionId);

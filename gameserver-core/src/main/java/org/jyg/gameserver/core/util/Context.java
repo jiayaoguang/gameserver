@@ -50,10 +50,13 @@ public class Context implements Lifecycle{
     //TODO I think ...
     private final SingleThreadExecutorManagerPool singleThreadExecutorManagerPool;
 
-    private Object2IntMap<Class<? extends MessageLite>> protoClazz2MsgIdMap = new Object2IntOpenHashMap<>();
-    private Int2ObjectMap<AbstractMsgCodec<?>> msgId2MsgCodecMap = new Int2ObjectOpenHashMap<>();
+    private Object2IntMap<Class<? extends MessageLite>> protoClazz2MsgIdMap = new Object2IntOpenHashMap<>(1024,0.5f);
+    private Int2ObjectMap<AbstractMsgCodec<?>> msgId2MsgCodecMap = new Int2ObjectOpenHashMap<>(1024,0.5f);
 
-    private Object2IntMap<Class<? extends ByteMsgObj>> msgObjClazz2MsgIdMap = new Object2IntOpenHashMap<>();
+    private final Object2IntMap<Class<? extends ByteMsgObj>> msgObjClazz2MsgIdMap = new Object2IntOpenHashMap<>(1024,0.5f);
+
+
+
 
     private final boolean useEpoll;
 
@@ -113,8 +116,13 @@ public class Context implements Lifecycle{
     }
 
 
-    public void addMsgId2ProtoMapping(int msgId, Class<? extends MessageLite> protoClazz) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        MessageLite defaultInstance = (MessageLite)protoClazz.getMethod("getDefaultInstance").invoke(null);
+    public void addMsgId2ProtoMapping(int msgId, Class<? extends MessageLite> protoClazz) {
+        MessageLite defaultInstance = null;
+        try {
+            defaultInstance = (MessageLite)protoClazz.getMethod("getDefaultInstance").invoke(null);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new IllegalArgumentException(e);
+        }
         addMsgId2ProtoMapping(msgId , defaultInstance);
     }
 
@@ -124,7 +132,12 @@ public class Context implements Lifecycle{
         this.msgId2MsgCodecMap.put(msgId ,protoMsgCodec );
     }
 
+    @Deprecated
     public void addMsgId2JsonMsgClassMapping(int msgId, Class<? extends ByteMsgObj> byteMsgObjClazz) {
+        addMsgId2MsgClassMapping(msgId , byteMsgObjClazz);
+    }
+
+    public void addMsgId2MsgClassMapping(int msgId, Class<? extends ByteMsgObj> byteMsgObjClazz) {
 
         if(isStart){
             throw new IllegalArgumentException("isStart");
@@ -157,6 +170,9 @@ public class Context implements Lifecycle{
         this.msgObjClazz2MsgIdMap.put(byteMsgObjClazz, msgId);
         this.msgId2MsgCodecMap.put(msgId, byteMsgCodec);
     }
+
+
+
 
 
     public void addByteMsgCodec(AbstractByteMsgCodec<?> byteMsgCodec) {

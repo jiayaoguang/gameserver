@@ -1,7 +1,6 @@
 package org.jyg.gameserver.core.processor;
 
 import org.jyg.gameserver.core.data.EventData;
-import org.jyg.gameserver.core.msg.PingByteMsg;
 import org.jyg.gameserver.core.msg.PongByteMsg;
 import org.jyg.gameserver.core.session.Session;
 

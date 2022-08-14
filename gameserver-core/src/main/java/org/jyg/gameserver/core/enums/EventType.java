@@ -5,6 +5,8 @@ package org.jyg.gameserver.core.enums;
  */
 public enum EventType {
 
+	UNKNOWN(0),
+
 	ACTIVE(1),
 	INACTIVE(2),
 

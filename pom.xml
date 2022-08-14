@@ -165,6 +165,7 @@
 		<module>gameserver-util</module>
 		<module>gameserver-test</module>
 		<module>gameserver-example</module>
+		<module>gameserver-route</module>
 	</modules>
 
 	<dependencies>

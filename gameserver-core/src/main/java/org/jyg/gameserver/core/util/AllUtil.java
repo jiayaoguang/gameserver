@@ -7,9 +7,7 @@ import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 
 import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -454,6 +452,18 @@ public class AllUtil {
         }
 
         return childFiles;
+    }
+
+
+    public static Type getClassGenericType(Class<Object> clazz){
+        Type superClass = clazz.getGenericSuperclass();
+        if (superClass instanceof Class<?>) { // sanity check, should never happen
+            throw new IllegalArgumentException("Internal error: TypeReference constructed without actual type information");
+        }
+
+        Type _type = ((ParameterizedType) superClass).getActualTypeArguments()[0];
+
+        return _type;
     }
 
 

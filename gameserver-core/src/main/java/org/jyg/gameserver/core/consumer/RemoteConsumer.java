@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.consumer;
 
 import com.google.protobuf.MessageLite;
 import io.netty.channel.Channel;
+import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
@@ -57,11 +58,32 @@ public class RemoteConsumer extends MpscQueueConsumer {
 //    }
 
 
+//    @Override
+//    public void publicEvent(EventType evenType, Object data, Channel channel, int eventId, EventExtData eventExtData) {
+//        if(!isConnectAvailable()){
+//            tcpClient.checkConnect();
+//        }
+//
+//        if(isConnectAvailable()){
+//            if(data instanceof ByteMsgObj){
+//                tcpClient.write((ByteMsgObj)data);
+//            }else if(data instanceof MessageLite){
+//                tcpClient.write((MessageLite)data);
+//            }else {
+//                logger.error(" publicEvent fail , unknow date type {} ", data.getClass().getCanonicalName());
+//            }
+//        }else {
+//            logger.error(" publicEvent fail , isConnectAvailable false ");
+//        }
+//    }
+
     @Override
-    public void publicEvent(EventType evenType, Object data, Channel channel, int eventId, EventExtData eventExtData) {
+    public void onReciveEvent(EventData<?> event) {
         if(!isConnectAvailable()){
             tcpClient.checkConnect();
         }
+
+        Object data = event.getData();
 
         if(isConnectAvailable()){
             if(data instanceof ByteMsgObj){
@@ -74,6 +96,7 @@ public class RemoteConsumer extends MpscQueueConsumer {
         }else {
             logger.error(" publicEvent fail , isConnectAvailable false ");
         }
+
     }
 
     private boolean isConnectAvailable(){

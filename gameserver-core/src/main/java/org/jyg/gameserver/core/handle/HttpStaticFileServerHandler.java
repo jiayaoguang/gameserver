@@ -418,29 +418,30 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 	 *            file to extract content type
 	 */
 	private static void setContentTypeHeader(HttpResponse response, File file) {
-		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
 		String fileName = file.getName();
 		int pointIndex = fileName.lastIndexOf('.');
 		if(pointIndex > 0 && pointIndex < fileName.length()){
 			String fileSuffix = fileName.substring(pointIndex + 1);
-			if("jpg".equals(fileSuffix) || "jpeg".equals(fileSuffix)){
-				response.headers().set(HttpHeaderNames.CONTENT_TYPE, "image/jpeg");
-				return;
-			}else if("png".equals(fileSuffix)){
-				response.headers().set(HttpHeaderNames.CONTENT_TYPE, "image/png");
-				return;
-			}else if("xml".equals(fileSuffix)){
-				response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/xml");
-				return;
-			}else if("json".equals(fileSuffix)){
-				response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json");
-				return;
-			}else if("docx".equals(fileSuffix)){
-				response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/msword");
-				return;
-			}else if("pdf".equals(fileSuffix)){
-				response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/pdf");
-				return;
+			switch (fileSuffix) {
+				case "jpg":
+				case "jpeg":
+					response.headers().set(HttpHeaderNames.CONTENT_TYPE, "image/jpeg");
+					return;
+				case "png":
+					response.headers().set(HttpHeaderNames.CONTENT_TYPE, "image/png");
+					return;
+				case "xml":
+					response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/xml");
+					return;
+				case "json":
+					response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json");
+					return;
+				case "docx":
+					response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/msword");
+					return;
+				case "pdf":
+					response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/pdf");
+					return;
 			}
 		}
 

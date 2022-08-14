@@ -9,7 +9,6 @@ import org.jyg.gameserver.core.util.ClassRedefineUtil;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.io.File;
-import java.lang.instrument.UnmodifiableClassException;
 import java.util.List;
 
 /**
@@ -44,10 +43,31 @@ public class RedefineClassesHttpProcessor extends HttpProcessor {
                 byte[] classBytes = FileUtil.readBytes(childClassFile);
                 String className = ClassRedefineUtil.readClassName(classBytes);
 
-                Class<?> redefineClass = Class.forName(className);
-                ClassRedefineUtil.redefine(redefineClass, classBytes);
-                Logs.DEFAULT_LOGGER.info(" refine class success file {}  class {}", childClassFile.getAbsolutePath(), className);
-                sendMsgSb.append("refine file :").append(childClassFile.getAbsolutePath()).append("success");
+                Class clazz = null;
+                try{
+                    clazz = Class.forName(className);
+                }catch (ClassNotFoundException e){
+//                    e.printStackTrace();
+                }
+
+                if(clazz == null){
+                    try{
+                        clazz = Class.forName(className ,true, getConsumer().getClassLoadManager().getUrlClassLoader());
+                    }catch (ClassNotFoundException e){
+//                    e.printStackTrace();
+                    }
+                }
+
+                if(clazz != null){
+                    Class<?> redefineClass = Class.forName(className);
+                    ClassRedefineUtil.redefine(redefineClass, classBytes);
+                    Logs.DEFAULT_LOGGER.info(" refine class success file {}  class {}", childClassFile.getAbsolutePath(), className);
+                    sendMsgSb.append("redefine file :").append(childClassFile.getAbsolutePath()).append("success");
+                }else {
+                    getConsumer().getClassLoadManager().loadClasses();
+                    sendMsgSb.append("redefine file :").append(childClassFile.getAbsolutePath()).append("success");
+                }
+
             } catch (Exception e) {
                 String exceptionMsg = ExceptionUtils.getStackTrace(e);
                 Logs.DEFAULT_LOGGER.info(" refine class fail file {}  msg : {}", childClassFile.getAbsolutePath(), exceptionMsg);

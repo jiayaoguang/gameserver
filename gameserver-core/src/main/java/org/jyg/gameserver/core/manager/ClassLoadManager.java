@@ -13,7 +13,9 @@ import java.util.List;
 
 /**
  * create by jiayaoguang on 2021/8/14
+ * TODO 改为可选classLoader,默认AppLoader
  */
+
 public class ClassLoadManager {
 
 
@@ -70,5 +72,7 @@ public class ClassLoadManager {
 
     }
 
-
+    public URLClassLoader getUrlClassLoader() {
+        return urlClassLoader;
+    }
 }

@@ -1,9 +1,11 @@
 package org.jyg.gameserver.core.msg.route;
 
+import org.jyg.gameserver.core.msg.ByteMsgObj;
+
 /**
  * create by jiayaoguang on 2022/8/7
  */
-public class RouteRegisterMsg {
+public class RouteRegisterMsg implements ByteMsgObj {
 
 
     private int serverId;

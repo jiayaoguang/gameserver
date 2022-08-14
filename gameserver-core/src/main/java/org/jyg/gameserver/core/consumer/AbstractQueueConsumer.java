@@ -109,48 +109,4 @@ public abstract class AbstractQueueConsumer extends Consumer {
     }
 
 
-    @Deprecated
-    private static class ConsumerThread extends Thread{
-        private final AbstractQueueConsumer consumer;
-
-        private volatile boolean isStop = false;
-
-        private ConsumerThread( AbstractQueueConsumer consumer) {
-            this.consumer = consumer;
-        }
-
-        @Override
-        public void run() {
-            int pollNullNum = 0;
-            for (;!isStop;){
-
-                EventData<Object> object = consumer.pollEvent();
-                if(object == null) {
-                    pollNullNum++;
-
-                    if (pollNullNum > 1000) {
-                        consumer.update();
-                        LockSupport.parkNanos(1000 * 1000L);
-                    } else if (pollNullNum > 200) {
-                        Thread.yield();
-                    }
-
-                    continue;
-                }
-
-                pollNullNum = 0;
-                try {
-                    consumer.onReciveEvent(object);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-            Logs.DEFAULT_LOGGER.info(" stop.... ");
-        }
-
-        public void setStop(){
-            isStop = true;
-        }
-    }
 }

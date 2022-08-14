@@ -15,13 +15,9 @@ import org.jyg.gameserver.core.util.Logs;
  */
 public abstract class HttpProcessor extends AbstractProcessor<Request> {
 
-	private String path;
+	protected final String path;
 
 
-	@Deprecated
-	public HttpProcessor() {
-
-	}
 
 	public HttpProcessor(String path) {
 		this.path = path;
@@ -75,7 +71,4 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 		return path;
 	}
 
-	public void setPath(String path) {
-		this.path = path;
-	}
 }

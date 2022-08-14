@@ -1,12 +1,11 @@
 package org.jyg.gameserver.core.startup;
 
 import com.google.protobuf.MessageLite;
-import org.jyg.gameserver.core.constant.MsgIdConst;
-import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.manager.Lifecycle;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
-import org.jyg.gameserver.core.msg.ReadIdleMsgObj;
-import org.jyg.gameserver.core.processor.*;
+import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
+import org.jyg.gameserver.core.processor.HttpProcessor;
+import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.util.Context;
 import org.jyg.gameserver.core.consumer.Consumer;
 import org.jyg.gameserver.core.consumer.RingBufferConsumer;
@@ -67,9 +66,6 @@ public abstract class AbstractBootstrap implements Lifecycle {
         this.context.getDefaultConsumer().addProcessor(msgId, protoProcessor);
     }
 
-    public void registerHttpEvent(String path, HttpProcessor processor){
-        this.addHttpProcessor( path, processor);
-    }
 
     public void addHttpProcessor(HttpProcessor processor) {
         if (isStart) {
@@ -79,27 +75,23 @@ public abstract class AbstractBootstrap implements Lifecycle {
         if (path == null) {
             throw new IllegalArgumentException(" getProtoEventId -1 ");
         }
-        this.context.getDefaultConsumer().addHttpProcessor(path, processor);
+        this.context.getDefaultConsumer().addHttpProcessor(processor);
     }
 
 
-    public void addHttpProcessor(String path, HttpProcessor processor){
-        processor.setPath(path);
-        this.addHttpProcessor(processor);
-    }
 
     public void registerSendEventIdByProto(int eventId, Class<? extends MessageLite> protoClazz) throws Exception {
         this.addMsgId2ProtoMapping(eventId, protoClazz);
     }
 
-    public void addMsgId2ProtoMapping(int eventId, Class<? extends MessageLite> protoClazz) throws Exception {
+    public void addMsgId2ProtoMapping(int eventId, Class<? extends MessageLite> protoClazz)  {
         if (isStart) {
             throw new IllegalArgumentException(" registerHttpProcessor fail ,server is start ");
         }
         this.context.addMsgId2ProtoMapping(eventId, protoClazz);
     }
 
-    public void addMsgId2ProtoMapping(int eventId, MessageLite defaultInstance) throws Exception {
+    public void addMsgId2ProtoMapping(int eventId, MessageLite defaultInstance)  {
         if (isStart) {
             throw new IllegalArgumentException(" registerHttpProcessor fail ,server is start ");
         }

@@ -1,24 +1,22 @@
-package org.jyg.gameserver.core.processor;
+package org.jyg.gameserver.route.processor;
 
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.manager.RouteManager;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
-import org.jyg.gameserver.core.msg.route.RouteMsg;
+import org.jyg.gameserver.core.msg.route.RouteReplyMsg;
+import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 
-/**
- * create by jiayaoguang on 2022/8/7
- */
-public class RouteMsgProcessor extends ByteMsgObjProcessor<RouteMsg> {
-    public RouteMsgProcessor() {
+public class RouteReplyMsgProcessor extends ByteMsgObjProcessor<RouteReplyMsg> {
+    public RouteReplyMsgProcessor() {
+        super(RouteReplyMsg.class);
     }
 
     @Override
-    public void process(Session session, EventData<RouteMsg> event) {
+    public void process(Session session, EventData<RouteReplyMsg> event) {
 
-
-        Session routeSession = this.getConsumer().getInstance(RouteManager.class).getRouteSession(session.getSessionId() , event.getData().getSessionId());
+        Session clientSession = this.getConsumer().getChannelManager().getSession(event.getData().getSessionId());
 
         int msgId = event.getData().getMsgId();
 
@@ -28,9 +26,8 @@ public class RouteMsgProcessor extends ByteMsgObjProcessor<RouteMsg> {
 
             EventData eventData = new EventData();
             eventData.setData(msgObj);
-            eventData.setEventId(msgId);
 
-            getConsumer().processEventMsg( routeSession , eventData );
+            getConsumer().processEventMsg( clientSession , eventData );
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }

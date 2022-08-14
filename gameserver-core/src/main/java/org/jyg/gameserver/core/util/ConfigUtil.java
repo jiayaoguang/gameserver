@@ -29,8 +29,7 @@ public class ConfigUtil {
         try {
             object = configClazz.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-            return null;
+            throw new IllegalArgumentException(e);
         }
 
         properties2Object(fileName , object);

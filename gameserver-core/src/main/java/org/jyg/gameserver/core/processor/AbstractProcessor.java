@@ -23,17 +23,18 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 
 	private Consumer consumer;
 
-	private final List<MsgFilter> filters = new ArrayList<>();
+	private final List<MsgFilter<?>> filters = new ArrayList<>();
 
 	@Override
 	public void addMsgFilter(MsgFilter msgFilter){
 		filters.add(msgFilter);
 	}
+
 	public boolean checkFilters(Session session , EventData eventData){
 		if(filters.size() == 0){
 			return true;
 		}
-		for(MsgFilter msgFilter : filters ){
+		for(MsgFilter<?> msgFilter : filters ){
 			if(!msgFilter.filter(session , eventData)){
 				return false;
 			}
@@ -58,6 +59,7 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 	public void setConsumer(Consumer consumer) {
 		this.consumer = consumer;
 	}
+
 
 }
 

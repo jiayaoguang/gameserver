@@ -20,7 +20,7 @@ public class ServerConfig {
 
     private int nettyIOThreadNum = 0;
 
-    private int serverUid = 0;
+    private int serverId = 0;
     /**
      * 服务器读协议超时时间
      * 超时会关闭连接
@@ -96,12 +96,12 @@ public class ServerConfig {
     }
 
 
-    public int getServerUid() {
-        return serverUid;
+    public int getServerId() {
+        return serverId;
     }
 
-    public void setServerUid(int serverUid) {
-        this.serverUid = serverUid;
+    public void setServerId(int serverId) {
+        this.serverId = serverId;
     }
 
     public int getReadOutTimeSec() {
