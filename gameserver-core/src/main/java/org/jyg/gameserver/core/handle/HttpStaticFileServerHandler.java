@@ -418,6 +418,7 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 	 *            file to extract content type
 	 */
 	private static void setContentTypeHeader(HttpResponse response, File file) {
+		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
 		String fileName = file.getName();
 		int pointIndex = fileName.lastIndexOf('.');
 		if(pointIndex > 0 && pointIndex < fileName.length()){
@@ -444,6 +445,7 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 					return;
 			}
 		}
+		
 
 		response.headers().set(HttpHeaderNames.CONTENT_TYPE, mimeTypesMap.getContentType(file.getPath()));
 	}
