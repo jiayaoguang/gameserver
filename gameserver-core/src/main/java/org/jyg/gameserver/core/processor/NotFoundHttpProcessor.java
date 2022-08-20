@@ -13,7 +13,7 @@ public class NotFoundHttpProcessor extends HttpProcessor {
 //	private ByteBuf bytebuf;
 
 	private static final String NOT_FIND_HTML_TEXT = "<html><head></head><body>" +
-			"<div align='center'><h1>404 not found </h1></div>" +
+			"<div align='center'><h1> %s 404 not found </h1></div>" +
 			"<body></html>";
 
 	private final byte[] bytes;
@@ -42,7 +42,7 @@ public class NotFoundHttpProcessor extends HttpProcessor {
 
 	@Override
 	public void service(Request request, Response response) {
-		response.writeAndFlush(bytes);
+		response.writeAndFlush(String.format(NOT_FIND_HTML_TEXT , request.noParamUri()));
 	}
 
 }

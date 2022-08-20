@@ -28,7 +28,7 @@ public class RouteLinkServerTest01
 		ByteMsgObjProcessor<ChatMsgObj> chatProcessor = new ByteMsgObjProcessor<ChatMsgObj>() {
 			@Override
 			public void process(Session session, EventData<ChatMsgObj> event) {
-				AllUtil.println("get chat msg : " + event.getData().getContent());
+				AllUtil.println("channel :" + session.getRemoteAddr() + " , get chat msg : " + event.getData().getContent());
 			}
 
 
@@ -39,18 +39,8 @@ public class RouteLinkServerTest01
 //		bootstarp.addMsgId2ProtoMapping(3, p_scene_sm_chat.getDefaultInstance());
 //		bootstarp.addMsgId2ProtoMapping(4, p_sm_scene_chat.getDefaultInstance());
 
-		bootstarp.getContext().addMsgId2MsgClassMapping(MsgIdConst.ROUTE_MSG_ID , RouteMsg.class);
-		bootstarp.getContext().addMsgId2MsgClassMapping(MsgIdConst.ROUTE_REPLY_MSG_ID , RouteReplyMsg.class);
-		bootstarp.getContext().addMsgId2MsgClassMapping(MsgIdConst.ROUTE_REGISTER_MSG_ID , RouteRegisterMsg.class);
-		bootstarp.getContext().addMsgId2MsgClassMapping(MsgIdConst.ROUTE_REGISTER_REPLY_MSG_ID , RouteRegisterReplyMsg.class);
 
 		bootstarp.getContext().addMsgId2MsgClassMapping(1001, ChatMsgObj.class);
-
-		bootstarp.addByteMsgObjProcessor(new RouteMsgProcessor());
-		bootstarp.addByteMsgObjProcessor(new RouteRegisterMsgProcessor());
-
-		bootstarp.getDefaultConsumer().putInstance(RouteManager.class);
-
 
 
 

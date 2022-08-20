@@ -15,11 +15,10 @@ import org.jyg.gameserver.core.data.ServerConfig;
 import org.jyg.gameserver.core.handle.NettyHandlerFactory;
 import org.jyg.gameserver.core.manager.*;
 import org.jyg.gameserver.core.msg.*;
-import org.jyg.gameserver.core.processor.*;
+import org.jyg.gameserver.core.msg.route.*;
 import org.jyg.gameserver.core.processor.*;
 import org.jyg.gameserver.core.startup.TcpClient;
 
-import javax.naming.OperationNotSupportedException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -200,13 +199,38 @@ public class Context implements Lifecycle{
     private void initCommonProcessor(){
 
         addMsgId2JsonMsgClassMapping(MsgIdConst.READ_OUTTIME , ReadIdleMsgObj.class);
+        addByteMsgCodec(new EmptyMsgCodec(new ReadIdleMsgObj()));
+
         addMsgId2JsonMsgClassMapping(MsgIdConst.REMOTE_INVOKE , RemoteInvokeData.class);
 
         addMsgId2JsonMsgClassMapping(MsgIdConst.PING , PingByteMsg.class);
-        addMsgId2JsonMsgClassMapping(MsgIdConst.PONG , PongByteMsg.class);
-
         addByteMsgCodec(new EmptyMsgCodec(new PingByteMsg()));
+
+        addMsgId2JsonMsgClassMapping(MsgIdConst.PONG , PongByteMsg.class);
         addByteMsgCodec(new EmptyMsgCodec(new PongByteMsg()));
+
+        addMsgId2MsgClassMapping(MsgIdConst.ROUTE_MSG_ID , RouteMsg.class);
+        addByteMsgCodec(new ProtostuffMsgCodec(RouteMsg.class));
+
+        addMsgId2MsgClassMapping(MsgIdConst.ROUTE_REPLY_MSG_ID , RouteReplyMsg.class);
+        addByteMsgCodec(new ProtostuffMsgCodec(RouteReplyMsg.class));
+
+        addMsgId2MsgClassMapping(MsgIdConst.ROUTE_REGISTER_MSG_ID , RouteRegisterMsg.class);
+        addByteMsgCodec(new ProtostuffMsgCodec(RouteRegisterMsg.class));
+
+        addMsgId2MsgClassMapping(MsgIdConst.ROUTE_REGISTER_REPLY_MSG_ID , RouteRegisterReplyMsg.class);
+        addByteMsgCodec(new ProtostuffMsgCodec(RouteRegisterReplyMsg.class));
+
+
+
+        addMsgId2MsgClassMapping(MsgIdConst.ROUTE_CLIENT_SESSION_CONNECT_MSG_ID , RouteClientSessionConnectMsg.class);
+        addByteMsgCodec(new ProtostuffMsgCodec(RouteClientSessionConnectMsg.class));
+
+        addMsgId2MsgClassMapping(MsgIdConst.ROUTE_CLIENT_SESSION_DISCONNECT_MSG_ID , RouteClientSessionDisconnectMsg.class);
+        addByteMsgCodec(new ProtostuffMsgCodec(RouteClientSessionDisconnectMsg.class));
+
+
+
 
         getDefaultConsumer().addProcessor(new ReadOutTimeProcessor());
         getDefaultConsumer().addProcessor(new RemoteInvokeProcessor());
@@ -218,6 +242,15 @@ public class Context implements Lifecycle{
         getDefaultConsumer().addProcessor(new RedefineClassesHttpProcessor());
 
         getDefaultConsumer().addProcessor(new SysInfoHttpProcessor());
+
+
+        getDefaultConsumer().addProcessor(new RouteMsgProcessor());
+        getDefaultConsumer().addProcessor(new RouteRegisterMsgProcessor());
+
+
+        getDefaultConsumer().addProcessor(new RouteClientSessionConnectProcessor());
+        getDefaultConsumer().addProcessor(new RouteClientSessionDisconnectProcessor());
+
     }
 
 
@@ -232,13 +265,13 @@ public class Context implements Lifecycle{
     }
 
 
-    public int getMsgIdByMsgClass(Object msgClass) {
-        if(msgClass instanceof MessageLite){
-            return protoClazz2MsgIdMap.getInt(msgClass);
-        }else  if(msgClass instanceof ByteMsgObj){
-            return msgObjClazz2MsgIdMap.getInt(msgClass);
+    public int getMsgIdByMsgObj(Object msgObj) {
+        if(msgObj instanceof MessageLite){
+            return protoClazz2MsgIdMap.getInt(msgObj.getClass());
+        }else  if(msgObj instanceof ByteMsgObj){
+            return msgObjClazz2MsgIdMap.getInt(msgObj.getClass());
         }else{
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("unknown msg class :" + msgObj.getClass());
         }
     }
 
@@ -275,6 +308,7 @@ public class Context implements Lifecycle{
         this.instanceManager.start();
 
         this.getConsumerManager().start();
+
 
 
 

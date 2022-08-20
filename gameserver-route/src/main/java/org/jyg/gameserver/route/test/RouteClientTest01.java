@@ -26,8 +26,10 @@ public class RouteClientTest01
 		};
         
         
-    	
-        TcpClient client = new TcpClient();
+    	int routePort = 8081;
+
+
+        TcpClient client = new TcpClient("localhost",8081);
 //		client.addMsgId2ProtoMapping(1, p_sm_scene_request_ping.getDefaultInstance());
 //		client.addMsgId2ProtoMapping(2, p_scene_sm_response_pong.getDefaultInstance());
 //
@@ -40,7 +42,7 @@ public class RouteClientTest01
 		client.addByteMsgObjProcessor(chatProcessor);
 
         client.start();
-        client.connect("localhost",8081);
+
 		for(int i=0;i<50;i++){
 			ChatMsgObj chatMsgObj = new ChatMsgObj();
 			chatMsgObj.setContent("hello world!" + i);

@@ -12,10 +12,15 @@ public class RouteSession extends Session {
     private final Session routeServerSession;
     private final Context context;
 
-    public RouteSession(Context context,Session routeServerSession,long sessionId) {
+    private String remoteAddr;
+    public RouteSession(Context context, Session routeServerSession, long sessionId){
+        this(context , routeServerSession , sessionId , null);
+    }
+    public RouteSession(Context context, Session routeServerSession, long sessionId, String remoteAddr) {
         super(sessionId);
         this.routeServerSession = routeServerSession;
         this.context = context;
+        this.remoteAddr = remoteAddr;
     }
 
     @Override
@@ -28,10 +33,10 @@ public class RouteSession extends Session {
         RouteReplyMsg routeReplyMsg = new RouteReplyMsg();
 
 
-        int msgId = context.getMsgIdByMsgClass(msgObj.getClass());
+        int msgId = context.getMsgIdByMsgObj(msgObj);
 
         if(msgId <= 0){
-//            throw new IllegalArgumentException("unknow msg class");
+            throw new IllegalArgumentException("unknow msg obj : " + msgObj);
         }
         AbstractMsgCodec msgCodec = context.getMsgCodec(msgId);
         try {
@@ -47,7 +52,7 @@ public class RouteSession extends Session {
 
     @Override
     public String getRemoteAddr() {
-        return null;
+        return remoteAddr;
     }
 
     @Override

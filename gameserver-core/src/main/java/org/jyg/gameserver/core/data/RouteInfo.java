@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.data;
 
+import org.jyg.gameserver.core.session.RouteSession;
 import org.jyg.gameserver.core.session.Session;
 
 import java.util.LinkedHashMap;
@@ -12,11 +13,14 @@ public class RouteInfo {
 
     private final int serverId;
 
-    private final Map<Long , Session> routeSessions = new LinkedHashMap<>();
+    private Session routeServerSession;
+
+    private final Map<Long , RouteSession> routeSessions = new LinkedHashMap<>();
 
 
-    public RouteInfo(int serverId) {
+    public RouteInfo(int serverId , Session routeServerSession) {
         this.serverId = serverId;
+        this.routeServerSession = routeServerSession;
     }
 
     public int getServerId() {
@@ -24,7 +28,7 @@ public class RouteInfo {
     }
 
 
-    public Map<Long, Session> getRouteSessions() {
+    public Map<Long, RouteSession> getRouteSessions() {
         return routeSessions;
     }
 

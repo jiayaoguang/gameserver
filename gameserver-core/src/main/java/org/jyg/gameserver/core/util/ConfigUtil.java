@@ -3,6 +3,8 @@ package org.jyg.gameserver.core.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.util.Logs;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -11,13 +13,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * create by jiayaoguang at 2021/5/22
  */
 public class ConfigUtil {
+
+    private static final Logger CONFIG = LoggerFactory.getLogger("config");
 
     private ConfigUtil() {
 
@@ -88,6 +91,8 @@ public class ConfigUtil {
                     continue;
                 }
 
+                property = property.trim();
+
                 String cn = field.getType().getSimpleName();
                 Object arg = null;
                 switch (cn) {
@@ -112,7 +117,7 @@ public class ConfigUtil {
                         arg = Float.parseFloat(property);
                         break;
                     case "String":
-                        arg = property.trim();
+                        arg = property;
                         break;
                     case "String[]": {
                         String[] strArray = property.split(";");
@@ -136,8 +141,21 @@ public class ConfigUtil {
                         arg = intArray;
                         break;
                     }
+                    case "Set":{
+                        String[] strArray = property.split(";");
+                        Set<String> set = new LinkedHashSet<>();
+                        for(String str : strArray ){
+                            String content = str.trim();
+                            if (StringUtils.isEmpty(content)) {
+                                throw new IllegalArgumentException(" conf Set key : " + content + " contains empty string");
+                            }
+                            set.add(content);
+                        }
+                        arg = set;
+                        break;
+                    }
                     default:
-                        continue;
+                        throw new IllegalArgumentException("unknown config field type : " + cn);
                 }
                 Logs.DEFAULT_LOGGER.info("set field : {} , value : {} ", key, arg);
 
@@ -151,7 +169,7 @@ public class ConfigUtil {
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new IllegalArgumentException(e);
             }
         }
     }

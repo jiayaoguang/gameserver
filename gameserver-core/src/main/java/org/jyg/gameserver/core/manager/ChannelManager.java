@@ -5,6 +5,7 @@ import org.jyg.gameserver.core.consumer.Consumer;
 import org.jyg.gameserver.core.event.ConnectEvent;
 import org.jyg.gameserver.core.event.DisconnectEvent;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
+import org.jyg.gameserver.core.session.EnumSessionType;
 import org.jyg.gameserver.core.session.TcpChannelSession;
 import org.jyg.gameserver.core.session.Session;
 import io.netty.channel.Channel;
@@ -51,6 +52,7 @@ public class ChannelManager implements Lifecycle {
     public final <T> Session doLink(Channel channel) {
         long sessionId = incAndGetSessionId();
         Session session = new TcpChannelSession(channel, sessionId);
+        session.setSessionType(EnumSessionType.NORMAL_CLIENT.type);
         channelObjectMap.put(channel, session);
         id2sessionMap.put(session.getSessionId() , session);
         afterConnect(session);
@@ -66,10 +68,10 @@ public class ChannelManager implements Lifecycle {
         if(channel.isOpen()){
             channel.close();
         }
-        afterUnlink(session);
+        afterDisconnect(session);
     }
 
-    public <T> void afterUnlink(Session session) {
+    public <T> void afterDisconnect(Session session) {
         consumer.getEventManager().triggerEvent(DisconnectEvent.class,session);
     }
 
@@ -78,6 +80,7 @@ public class ChannelManager implements Lifecycle {
     public final <T> Session doTcpClientLink(Channel channel) {
         long sessionId = incAndGetSessionId();
         Session session = new TcpChannelSession(channel, sessionId);
+        session.setSessionType(EnumSessionType.SERVER.type);
         tcpClientChannelObjectMap.put(channel, session);
 //        id2sessionMap.put(session.getSessionId() , session);
         afterConnect(session);
@@ -90,7 +93,7 @@ public class ChannelManager implements Lifecycle {
         if(session != null){
             id2sessionMap.remove(session.getSessionId());
         }
-        afterUnlink(session);
+        afterDisconnect(session);
     }
 
 //    public Session getTcpClientSession(Channel channel) {

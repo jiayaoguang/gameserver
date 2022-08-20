@@ -1,17 +1,16 @@
 package org.jyg.gameserver.core.handle;
 
-import com.google.protobuf.MessageLite;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import org.jyg.gameserver.core.enums.EventType;
-import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.Context;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.util.Logs;
+import org.jyg.gameserver.core.util.UnknownMsgHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,14 +72,21 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
 //            Logs.DEFAULT_LOGGER.debug("cnf:" + frame.refCnt());
             AbstractMsgCodec<?> msgCodec = context.getMsgCodec(msgId);
             if (msgCodec == null) {
-                LOGGER.error(" protoParser not found ,id : {} ", msgId);
+
+                int readableBytes = frame.readableBytes();
+                final byte[] dstBytes = new byte[frame.readableBytes()];
+                if(readableBytes > 0){
+                    frame.getBytes(frame.readerIndex(), dstBytes);
+                }
+                context.getConsumerManager().publicEventToDefault(EventType.REMOTE_UNKNOWN_MSG_COME, dstBytes, ctx.channel(), msgId );
+
                 return null;
             }
 
             int readableBytes = frame.readableBytes();
 
 
-            final byte[] dstBytes = new byte[frame.readableBytes()];;
+            final byte[] dstBytes = new byte[readableBytes];
             if(readableBytes > 0){
                 frame.getBytes(frame.readerIndex(), dstBytes);
             }else {
@@ -96,15 +102,7 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
                 throw e;
             }
 
-            switch (msgCodec.getMsgType()) {
-                case PROTO:
-                case BYTE_OBJ:
-                    context.getConsumerManager().publicEventToDefault(EventType.REMOTE_MSG_COME, msgObj, ctx.channel(), msgId);
-                    break;
-                default:
-                    LOGGER.error(" unknown msg type type : {} ", msgCodec.getMsgType());
-                    break;
-            }
+            context.getConsumerManager().publicEventToDefault(EventType.REMOTE_MSG_COME, msgObj, ctx.channel(), msgId);
 
 
         }catch (Exception e){

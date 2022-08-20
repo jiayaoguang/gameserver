@@ -3,7 +3,6 @@ package org.jyg.gameserver.core.processor;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.manager.RouteManager;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
-import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.msg.route.RouteMsg;
 import org.jyg.gameserver.core.session.Session;
 

@@ -47,7 +47,12 @@ public enum EventType {
 	RESULT_CALL_BACK(13),
 
 
-	LOCAL_MSG_COME(8),
+	LOCAL_MSG_COME(14),
+
+	/**
+	 * 未知数据
+	 */
+	REMOTE_UNKNOWN_MSG_COME(15),
 
 
 	;

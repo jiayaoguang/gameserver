@@ -2,12 +2,8 @@ package org.jyg.gameserver.core.session;
 
 import com.google.protobuf.MessageLite;
 import io.netty.channel.Channel;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.manager.Lifecycle;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
-
-import java.util.List;
 
 /**
  * created by jiayaoguang at 2017年12月6日
@@ -23,6 +19,9 @@ public abstract class Session implements Lifecycle {
 
 
 	private Object sessionObject;
+
+
+	private int sessionType;
 	
 	public Session(long sessionId){
 		this.sessionId = sessionId;
@@ -99,5 +98,13 @@ public abstract class Session implements Lifecycle {
 	}
 
 
+
+	public int getSessionType() {
+		return sessionType;
+	}
+
+	public void setSessionType(int sessionType) {
+		this.sessionType = sessionType;
+	}
 }
 

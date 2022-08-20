@@ -3,16 +3,19 @@ package org.jyg.gameserver.route;
 import org.jyg.gameserver.core.constant.MsgIdConst;
 import org.jyg.gameserver.core.consumer.RemoteConsumer;
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.ConnectEvent;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
+import org.jyg.gameserver.core.event.DisconnectEvent;
+import org.jyg.gameserver.core.event.Event;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
-import org.jyg.gameserver.core.msg.route.RouteMsg;
-import org.jyg.gameserver.core.msg.route.RouteRegisterMsg;
-import org.jyg.gameserver.core.msg.route.RouteRegisterReplyMsg;
-import org.jyg.gameserver.core.msg.route.RouteReplyMsg;
+import org.jyg.gameserver.core.msg.route.*;
 import org.jyg.gameserver.core.processor.AbstractProcessor;
+import org.jyg.gameserver.core.session.EnumSessionType;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.ConfigUtil;
+import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.UnknownMsgHandler;
 import org.jyg.gameserver.route.msg.ChatMsgObj;
 import org.jyg.gameserver.route.processor.RouteReplyMsgProcessor;
 import org.slf4j.Logger;
@@ -44,7 +47,7 @@ public class RouteBootstarp
 
         bootstarp.addHttpConnector(8082);
 
-        bootstarp.addTcpConnector(8081);
+        bootstarp.addTcpConnector(8088);
 
 
         RouteConfig routeConfig = ConfigUtil.properties2Object("jyg",RouteConfig.class );
@@ -60,32 +63,51 @@ public class RouteBootstarp
         bootstarp.getContext().putInstance(new RemoteServerManager(bootstarp.getContext() , remoteConsumerId));
 
 
-        bootstarp.getContext().addMsgId2MsgClassMapping(MsgIdConst.ROUTE_MSG_ID , RouteMsg.class);
-        bootstarp.getContext().addMsgId2MsgClassMapping(MsgIdConst.ROUTE_REPLY_MSG_ID , RouteReplyMsg.class);
-        bootstarp.getContext().addMsgId2MsgClassMapping(MsgIdConst.ROUTE_REGISTER_MSG_ID , RouteRegisterMsg.class);
-        bootstarp.getContext().addMsgId2MsgClassMapping(MsgIdConst.ROUTE_REGISTER_REPLY_MSG_ID , RouteRegisterReplyMsg.class);
-        bootstarp.getContext().addMsgId2MsgClassMapping(1001, ChatMsgObj.class);
 
         bootstarp.addByteMsgObjProcessor(new RouteReplyMsgProcessor());
 
-        bootstarp.getDefaultConsumer().setDefaultProcessor(new AbstractProcessor() {
+        final Context context = bootstarp.getContext();
+
+
+        bootstarp.getContext().getDefaultConsumer().setUnknownMsgHandler(new UnknownMsgHandler() {
+
+
             @Override
-            public void process(Session session, EventData event) {
+            public void process(Session session , int msgId, byte[] msgData) {
+
                 RouteMsg routeMsg = new RouteMsg();
-                routeMsg.setMsgId(event.getEventId());
-                AbstractMsgCodec msgCodec = getContext().getMsgCodec(event.getEventId());
+                routeMsg.setMsgId(msgId);
+                routeMsg.setData(msgData);
+                routeMsg.setSessionId(session.getSessionId());
 
-                try {
-                    byte[] msgData = msgCodec.encode(event.getData());
-                    routeMsg.setData(msgData);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return;
-                }
-
-                getContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeMsg);
+                context.getInstance(RemoteServerManager.class).sendRemoteMsg(routeMsg);
             }
+
         });
+
+
+
+        bootstarp.getDefaultConsumer().getEventManager().addEvent(new ConnectEvent((session,obj)->{
+
+            if(session.getSessionType() != EnumSessionType.NORMAL_CLIENT.type){
+                return;
+            }
+
+            RouteClientSessionConnectMsg routeClientSessionConnectMsg = new RouteClientSessionConnectMsg();
+            routeClientSessionConnectMsg.setSessionId(session.getSessionId());
+            routeClientSessionConnectMsg.setAddr(session.getRemoteAddr());
+
+            bootstarp.getContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionConnectMsg);
+        }));
+
+
+        bootstarp.getDefaultConsumer().getEventManager().addEvent(new DisconnectEvent((session, obj)->{
+
+            RouteClientSessionDisconnectMsg routeClientSessionDisconnectMsg = new RouteClientSessionDisconnectMsg();
+            routeClientSessionDisconnectMsg.setSessionId(session.getSessionId());
+            bootstarp.getContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionDisconnectMsg);
+        }));
+
 
 
         bootstarp.getDefaultConsumer().getEventManager().addEvent(new ConsumerThreadStartEvent((con,obj)->{

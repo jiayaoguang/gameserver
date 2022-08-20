@@ -31,7 +31,7 @@ public class InnerSocketServerInitializer extends
 
 		pipeline.addLast("connect",new NettyConnectManageHandler(context));
 
-		pipeline.addLast("MsgDecoder" , new MsgDecoder(context));
+		pipeline.addLast("MsgDecoder" , context.getNettyHandlerFactory().createMsgDecoder());
 
 		if(context.getServerConfig().isNeedMergeProto()){
 			pipeline.addLast("MsgMergeEncoder" , context.getNettyHandlerFactory().createMsgMergeHandler(context));

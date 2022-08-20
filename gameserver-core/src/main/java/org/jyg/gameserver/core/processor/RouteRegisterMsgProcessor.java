@@ -17,7 +17,7 @@ public class RouteRegisterMsgProcessor extends ByteMsgObjProcessor<RouteRegister
         Session routeSession = routeManager.getRouteSession(session.getSessionId() , session.getSessionId());
 
         if(routeSession == null){
-            routeManager.addRouteSession(event.getData().getServerId(),session);
+            routeManager.addRouteInfo(event.getData().getServerId(),session);
         }
     }
 

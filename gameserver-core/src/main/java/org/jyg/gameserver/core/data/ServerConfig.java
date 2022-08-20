@@ -1,5 +1,9 @@
 package org.jyg.gameserver.core.data;
 
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 /**
  * create by jiayaoguang on 2020/5/23
  * 配置文件字段都要有对应的 set 方法
@@ -35,6 +39,12 @@ public class ServerConfig {
      * 0 表示不启用
      */
     private int clientWriteOutTimeSec = 5;
+
+
+
+    private boolean openConnect = true;
+
+    private Set<String> whiteIpSet = new LinkedHashSet<>();
 
 
     public boolean isUseGzip() {
@@ -118,5 +128,22 @@ public class ServerConfig {
 
     public void setClientWriteOutTimeSec(int clientWriteOutTimeSec) {
         this.clientWriteOutTimeSec = clientWriteOutTimeSec;
+    }
+
+
+    public boolean isOpenConnect() {
+        return openConnect;
+    }
+
+    public void setOpenConnect(boolean openConnect) {
+        this.openConnect = openConnect;
+    }
+
+    public Set<String> getWhiteIpSet() {
+        return whiteIpSet;
+    }
+
+    public void setWhiteIpSet(Set<String> whiteIpSet) {
+        this.whiteIpSet = whiteIpSet;
     }
 }

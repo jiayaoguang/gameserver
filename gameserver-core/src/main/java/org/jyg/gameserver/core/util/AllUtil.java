@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
+import org.jyg.gameserver.core.msg.DefaultMsg;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -315,6 +316,13 @@ public class AllUtil {
     public static void writeToBuf(Context context, ByteMsgObj byteMsgObj, ByteBuf buf) {
         Class<? extends ByteMsgObj> byteMsgObjClazz = byteMsgObj.getClass();
 //        Logs.DEFAULT_LOGGER.info("deal threadName : " + Thread.currentThread().getName());
+
+        if(byteMsgObj instanceof DefaultMsg){
+            DefaultMsg defaultMsg = (DefaultMsg)byteMsgObj;
+            writeToBuf(defaultMsg.getMsgId() , buf , defaultMsg.getMsgData());
+            return;
+
+        }
 
 
         int eventId = context.getMsgIdByByteMsgObj(byteMsgObjClazz);

@@ -12,10 +12,7 @@ import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
 import org.jyg.gameserver.core.event.EventManager;
 import org.jyg.gameserver.core.filter.OnlyLocalHttpMsgFilter;
-import org.jyg.gameserver.core.manager.ClassLoadManager;
-import org.jyg.gameserver.core.manager.ResultHandlerManager;
-import org.jyg.gameserver.core.manager.ChannelManager;
-import org.jyg.gameserver.core.manager.InstanceManager;
+import org.jyg.gameserver.core.manager.*;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.processor.*;
 import org.jyg.gameserver.core.session.LocalSession;
@@ -24,10 +21,8 @@ import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.timer.DelayCloseTimer;
 import org.jyg.gameserver.core.timer.TimerManager;
-import org.jyg.gameserver.core.util.CallBackEvent;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.*;
 import org.jyg.gameserver.core.invoke.IRemoteInvoke;
-import org.jyg.gameserver.core.util.Logs;
 import org.slf4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
@@ -48,7 +43,7 @@ public abstract class Consumer {
 
     public static final Logger logger = Logs.CONSUMER;
 
-    private final HttpProcessor notFOundProcessor = new NotFoundHttpProcessor();
+    private final HttpProcessor notFoundHttpProcessor = new NotFoundHttpProcessor();
 
     protected volatile boolean isStart = false;
 
@@ -90,6 +85,9 @@ public abstract class Consumer {
     private AbstractProcessor defaultProcessor = null;
 
 
+    private UnknownMsgHandler unknownMsgHandler;
+
+
     public Consumer() {
         this.instanceManager = new InstanceManager(this);
         this.timerManager = new TimerManager();
@@ -104,6 +102,8 @@ public abstract class Consumer {
         instanceManager.putInstance(this.classLoadManager);
         instanceManager.putInstance(this.resultHandlerManager);
         instanceManager.putInstance(this.eventManager);
+
+        this.instanceManager.putInstance(new RouteManager());
 
 
     }
@@ -211,7 +211,7 @@ public abstract class Consumer {
     public HttpProcessor getHttpProcessor(String path) {
         HttpProcessor processor = httpProcessorMap.get(path);
         if (processor == null) {
-            processor = notFOundProcessor;
+            processor = notFoundHttpProcessor;
         }
         return processor;
     }
@@ -272,19 +272,20 @@ public abstract class Consumer {
             }
         }
 
+        String msgName;
+        if(event.getData() != null){
+            msgName = event.getData().getClass().getCanonicalName();
+        }else {
+            msgName = "unknown";
+        }
 
         if(!processor.checkFilters(session , event)){
-            String msgName;
-            if(event.getData() != null){
-                msgName = event.getData().getClass().getCanonicalName();
-            }else {
-                msgName = "unknown";
-            }
+
             Logs.DEFAULT_LOGGER.info("refuse processor msg {}", msgName);
             return;
         }
 
-
+//        Logs.DEFAULT_LOGGER.info("process msg {} msgId {}", msgName , event.getEventId());
         processor.process(session, event);
     }
 
@@ -600,6 +601,18 @@ public abstract class Consumer {
                 this.processEventMsg(session, event);
                 break;
             }
+            case REMOTE_UNKNOWN_MSG_COME:{
+                if(unknownMsgHandler != null){
+                    Session session = null;
+                    if (isDefaultConsumer()) {
+                        session = channelManager.getSession(event.getChannel());
+                    }
+                    unknownMsgHandler.process(session, event.getEventId(), (byte[]) event.getData());
+                }else {
+                    Logs.CONSUMER.error(" unknown msgId {} from channel {}", event.getEventId(), AllUtil.getChannelRemoteAddr(event.getChannel()));
+                }
+                break;
+            }
 
             default:
                 throw new IllegalArgumentException("unknown channelEventType <" + event.getEventType() + ">");
@@ -725,4 +738,8 @@ public abstract class Consumer {
         }
     }
 
+
+    public void setUnknownMsgHandler(UnknownMsgHandler unknownMsgHandler) {
+        this.unknownMsgHandler = unknownMsgHandler;
+    }
 }
