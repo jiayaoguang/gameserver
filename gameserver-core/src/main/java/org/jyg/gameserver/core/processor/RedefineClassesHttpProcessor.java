@@ -52,7 +52,7 @@ public class RedefineClassesHttpProcessor extends HttpProcessor {
 
                 if(clazz == null){
                     try{
-                        clazz = Class.forName(className ,true, getConsumer().getClassLoadManager().getUrlClassLoader());
+                        clazz = Class.forName(className ,true, getGameConsumer().getClassLoadManager().getUrlClassLoader());
                     }catch (ClassNotFoundException e){
 //                    e.printStackTrace();
                     }
@@ -64,7 +64,7 @@ public class RedefineClassesHttpProcessor extends HttpProcessor {
                     Logs.DEFAULT_LOGGER.info(" refine class success file {}  class {}", childClassFile.getAbsolutePath(), className);
                     sendMsgSb.append("redefine file :").append(childClassFile.getAbsolutePath()).append("success");
                 }else {
-                    getConsumer().getClassLoadManager().loadClasses();
+                    getGameConsumer().getClassLoadManager().loadClasses();
                     sendMsgSb.append("redefine file :").append(childClassFile.getAbsolutePath()).append("success");
                 }
 

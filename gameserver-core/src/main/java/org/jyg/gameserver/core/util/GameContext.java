@@ -9,7 +9,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.jyg.gameserver.core.constant.MsgIdConst;
-import org.jyg.gameserver.core.consumer.Consumer;
+import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.data.ServerConfig;
 import org.jyg.gameserver.core.handle.NettyHandlerFactory;
@@ -32,7 +32,7 @@ public class GameContext implements Lifecycle{
 //    private String configFileName = DEFAULT_CONFIG_FILE_NAME;
 
 
-    private final Consumer defaultConsumer;
+    private final GameConsumer defaultGameConsumer;
     private final EventLoopGroupManager eventLoopGroupManager;
 //    private final ExecutorManager executorManager;
 
@@ -74,13 +74,13 @@ public class GameContext implements Lifecycle{
 //    private final ClockManager clockManager = new ClockManager();
 
 
-    public GameContext(Consumer defaultConsumer) {
-        this(defaultConsumer ,DEFAULT_CONFIG_FILE_NAME );
+    public GameContext(GameConsumer defaultGameConsumer) {
+        this(defaultGameConsumer,DEFAULT_CONFIG_FILE_NAME );
     }
 
-    public GameContext(Consumer defaultConsumer , String configFileName) {
+    public GameContext(GameConsumer defaultGameConsumer, String configFileName) {
 
-        this.defaultConsumer = defaultConsumer;
+        this.defaultGameConsumer = defaultGameConsumer;
         this.instanceManager = new InstanceManager(this);
         ConfigUtil.properties2Object(configFileName, serverConfig);
 
@@ -91,12 +91,12 @@ public class GameContext implements Lifecycle{
 
         this.eventLoopGroupManager = new EventLoopGroupManager(useEpoll , serverConfig.getNettyIOThreadNum());
 //        this.executorManager = new ExecutorManager(10, defaultConsumer);
-        this.singleThreadExecutorManagerPool = new SingleThreadExecutorManagerPool(defaultConsumer);
+        this.singleThreadExecutorManagerPool = new SingleThreadExecutorManagerPool(defaultGameConsumer);
 
-        defaultConsumer.setId(ConsumerManager.DEFAULT_CONSUMER_ID);
-        defaultConsumer.setGameContext(this);
+        defaultGameConsumer.setId(ConsumerManager.DEFAULT_CONSUMER_ID);
+        defaultGameConsumer.setGameContext(this);
         this.consumerManager = new ConsumerManager(this);
-        this.consumerManager.addConsumer(defaultConsumer);
+        this.consumerManager.addConsumer(defaultGameConsumer);
 
         this.nettyHandlerFactory = new NettyHandlerFactory(this);
 
@@ -106,8 +106,8 @@ public class GameContext implements Lifecycle{
 
     }
 
-    public Consumer getDefaultConsumer() {
-        return defaultConsumer;
+    public GameConsumer getDefaultGameConsumer() {
+        return defaultGameConsumer;
     }
 
     public EventLoopGroupManager getEventLoopGroupManager() {
@@ -232,24 +232,24 @@ public class GameContext implements Lifecycle{
 
 
 
-        getDefaultConsumer().addProcessor(new ReadOutTimeProcessor());
-        getDefaultConsumer().addProcessor(new RemoteInvokeProcessor());
+        getDefaultGameConsumer().addProcessor(new ReadOutTimeProcessor());
+        getDefaultGameConsumer().addProcessor(new RemoteInvokeProcessor());
 
-        getDefaultConsumer().addProcessor(new PingProcessor());
-        getDefaultConsumer().addProcessor(new PongProcessor());
+        getDefaultGameConsumer().addProcessor(new PingProcessor());
+        getDefaultGameConsumer().addProcessor(new PongProcessor());
 
-        getDefaultConsumer().addProcessor(new LoadClassesHttpProcessor());
-        getDefaultConsumer().addProcessor(new RedefineClassesHttpProcessor());
+        getDefaultGameConsumer().addProcessor(new LoadClassesHttpProcessor());
+        getDefaultGameConsumer().addProcessor(new RedefineClassesHttpProcessor());
 
-        getDefaultConsumer().addProcessor(new SysInfoHttpProcessor());
-
-
-        getDefaultConsumer().addProcessor(new RouteMsgProcessor());
-        getDefaultConsumer().addProcessor(new RouteRegisterMsgProcessor());
+        getDefaultGameConsumer().addProcessor(new SysInfoHttpProcessor());
 
 
-        getDefaultConsumer().addProcessor(new RouteClientSessionConnectProcessor());
-        getDefaultConsumer().addProcessor(new RouteClientSessionDisconnectProcessor());
+        getDefaultGameConsumer().addProcessor(new RouteMsgProcessor());
+        getDefaultGameConsumer().addProcessor(new RouteRegisterMsgProcessor());
+
+
+        getDefaultGameConsumer().addProcessor(new RouteClientSessionConnectProcessor());
+        getDefaultGameConsumer().addProcessor(new RouteClientSessionDisconnectProcessor());
 
     }
 
@@ -319,8 +319,8 @@ public class GameContext implements Lifecycle{
 
         this.instanceManager.stop();
 
-        for(Consumer consumer : getConsumerManager().getConsumers()){
-            consumer.stop();
+        for(GameConsumer gameConsumer : getConsumerManager().getConsumers()){
+            gameConsumer.stop();
         }
     }
 

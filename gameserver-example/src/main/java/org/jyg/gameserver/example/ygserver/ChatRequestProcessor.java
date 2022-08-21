@@ -25,7 +25,7 @@ public class ChatRequestProcessor extends ByteMsgObjProcessor<ChatRequestJson> {
         chatReplyJson.setPlayerId(playerDB.getId());
         chatReplyJson.setSendPlayerName(playerDB.getName());
 
-        for(Session otherSession : getConsumer().getChannelManager().getSessions()){
+        for(Session otherSession : getGameConsumer().getChannelManager().getSessions()){
             otherSession.writeMessage(chatReplyJson);
         }
 

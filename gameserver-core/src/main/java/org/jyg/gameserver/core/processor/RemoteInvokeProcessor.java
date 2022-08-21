@@ -29,7 +29,7 @@ public class RemoteInvokeProcessor extends ByteMsgObjProcessor<RemoteInvokeData>
         }
 
         try {
-            remoteInvoke.invoke(getConsumer(),remoteInvokeData.getParamMap());
+            remoteInvoke.invoke(getGameConsumer(),remoteInvokeData.getParamMap());
         } catch (Exception e) {
             e.printStackTrace();
         }

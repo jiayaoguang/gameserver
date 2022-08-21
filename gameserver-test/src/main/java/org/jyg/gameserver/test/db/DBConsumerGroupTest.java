@@ -4,7 +4,7 @@ import org.jyg.gameserver.core.consumer.ResultHandler;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.db.ConsumerDBManager;
-import org.jyg.gameserver.db.DBConsumerGroup;
+import org.jyg.gameserver.db.DBGameConsumerGroup;
 
 import java.util.List;
 
@@ -19,16 +19,16 @@ public class DBConsumerGroupTest {
         GameServerBootstrap gameServerBootstrap = new GameServerBootstrap();
         gameServerBootstrap.addHttpConnector(8088);
 
-        DBConsumerGroup dbConsumerGroup = new DBConsumerGroup();
+        DBGameConsumerGroup dbConsumerGroup = new DBGameConsumerGroup();
 //        consumerGroup.setId(100);
         dbConsumerGroup.addTableInfo(Maik.class);
 
         gameServerBootstrap.getGameContext().getConsumerManager().addConsumer(dbConsumerGroup);
 
-        gameServerBootstrap.getGameContext().getDefaultConsumer().getInstanceManager()
-                .putInstance(new ConsumerDBManager(gameServerBootstrap.getGameContext().getDefaultConsumer() , dbConsumerGroup.getDbConfig().getDbConsumerGroupId()));
+        gameServerBootstrap.getGameContext().getDefaultGameConsumer().getInstanceManager()
+                .putInstance(new ConsumerDBManager(gameServerBootstrap.getGameContext().getDefaultGameConsumer() , dbConsumerGroup.getDbConfig().getDbConsumerGroupId()));
 
-        gameServerBootstrap.getGameContext().getDefaultConsumer().setConsumerStartHandler((consumer)->{
+        gameServerBootstrap.getGameContext().getDefaultGameConsumer().setConsumerStartHandler((consumer)->{
 
 
             consumer.getTimerManager().addUnlimitedTimer(1000L,1000L,()->{

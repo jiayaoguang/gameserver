@@ -1,9 +1,9 @@
 package org.jyg.gameserver.core.startup;
 
+import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.net.*;
 import org.jyg.gameserver.core.net.Connector;
 import org.jyg.gameserver.core.net.SocketConnector;
-import org.jyg.gameserver.core.consumer.Consumer;
 import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 
@@ -22,8 +22,8 @@ public class GameServerBootstrap extends AbstractBootstrap {
         super();
     }
 
-    public GameServerBootstrap(Consumer defaultConsumer) {
-        super(defaultConsumer);
+    public GameServerBootstrap(GameConsumer defaultGameConsumer) {
+        super(defaultGameConsumer);
     }
 
 

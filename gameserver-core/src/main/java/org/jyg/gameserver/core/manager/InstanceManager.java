@@ -1,6 +1,6 @@
 package org.jyg.gameserver.core.manager;
 
-import org.jyg.gameserver.core.consumer.Consumer;
+import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 
@@ -18,25 +18,25 @@ public class InstanceManager implements Lifecycle {
 
     private final Map<Class<?>, Object> instanceMap;
 
-    private final Consumer consumer;
+    private final GameConsumer gameConsumer;
     private final GameContext gameContext;
 
     public InstanceManager() {
         this(null , null);
     }
 
-    public InstanceManager(Consumer consumer) {
-        this(consumer , consumer.getGameContext());
+    public InstanceManager(GameConsumer gameConsumer) {
+        this(gameConsumer, gameConsumer.getGameContext());
     }
 
     public InstanceManager(GameContext gameContext) {
         this(null , gameContext);
     }
 
-    public InstanceManager(Consumer consumer , GameContext gameContext) {
+    public InstanceManager(GameConsumer gameConsumer, GameContext gameContext) {
         this.gameContext = gameContext;
         this.instanceMap = new LinkedHashMap<>();
-        this.consumer = consumer;
+        this.gameConsumer = gameConsumer;
     }
 
 
@@ -174,8 +174,8 @@ public class InstanceManager implements Lifecycle {
             return (T) gameContext;
         }
 
-        if(Consumer.class == clazz){
-            return (T)consumer;
+        if(GameConsumer.class == clazz){
+            return (T) gameConsumer;
         }
 
 

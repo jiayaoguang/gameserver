@@ -13,7 +13,7 @@ public class RouteRegisterMsgProcessor extends ByteMsgObjProcessor<RouteRegister
 
     @Override
     public void process(Session session, EventData<RouteRegisterMsg> event) {
-        RouteManager routeManager = this.getConsumer().getInstance(RouteManager.class);
+        RouteManager routeManager = this.getGameConsumer().getInstance(RouteManager.class);
         Session routeSession = routeManager.getRouteSession(session.getSessionId() , session.getSessionId());
 
         if(routeSession == null){

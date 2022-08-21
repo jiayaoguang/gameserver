@@ -17,7 +17,7 @@ public class RouteMsgProcessor extends ByteMsgObjProcessor<RouteMsg> {
     public void process(Session session, EventData<RouteMsg> event) {
 
 
-        Session routeSession = this.getConsumer().getInstance(RouteManager.class).getRouteSession(session.getSessionId() , event.getData().getSessionId());
+        Session routeSession = this.getGameConsumer().getInstance(RouteManager.class).getRouteSession(session.getSessionId() , event.getData().getSessionId());
 
         int msgId = event.getData().getMsgId();
 
@@ -29,7 +29,7 @@ public class RouteMsgProcessor extends ByteMsgObjProcessor<RouteMsg> {
             eventData.setData(msgObj);
             eventData.setEventId(msgId);
 
-            getConsumer().processEventMsg( routeSession , eventData );
+            getGameConsumer().processEventMsg( routeSession , eventData );
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }

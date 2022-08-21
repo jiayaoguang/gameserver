@@ -1,6 +1,6 @@
 package org.jyg.gameserver.test.tcp.remoteInvoke;
 
-import org.jyg.gameserver.core.consumer.Consumer;
+import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.invoke.IRemoteInvoke;
 import org.jyg.gameserver.core.util.AllUtil;
 
@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class Test03Invoke implements IRemoteInvoke {
     @Override
-    public void invoke(Consumer consumer, Map<String,Object> paramMap) {
+    public void invoke(GameConsumer gameConsumer, Map<String,Object> paramMap) {
         AllUtil.println("hello Test03Invoke");
     }
 }

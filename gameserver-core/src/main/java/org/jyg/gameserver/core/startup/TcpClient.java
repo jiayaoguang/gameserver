@@ -1,7 +1,7 @@
 package org.jyg.gameserver.core.startup;
 
 import com.google.protobuf.MessageLite;
-import org.jyg.gameserver.core.consumer.RingBufferConsumer;
+import org.jyg.gameserver.core.consumer.RingBufferGameConsumer;
 import org.jyg.gameserver.core.handle.initializer.MyChannelInitializer;
 import org.jyg.gameserver.core.handle.initializer.SocketClientInitializer;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
@@ -36,7 +36,7 @@ public class TcpClient extends AbstractBootstrap{
 
 	@Deprecated
 	public TcpClient()  {
-		this(new GameContext(new RingBufferConsumer()) , "" , 0);
+		this(new GameContext(new RingBufferGameConsumer()) , "" , 0);
 
 //		try {
 //			this.registerSendEventIdByProto(ProtoEnum.P_COMMON_REQUEST_PING.getEventId(), p_common.p_common_request_ping.class);
@@ -55,7 +55,7 @@ public class TcpClient extends AbstractBootstrap{
 
 
 	public TcpClient(String host, int port) {
-		this(new GameContext(new RingBufferConsumer()), host, port);
+		this(new GameContext(new RingBufferGameConsumer()), host, port);
 	}
 
 	public TcpClient(GameContext gameContext, String host, int port) {

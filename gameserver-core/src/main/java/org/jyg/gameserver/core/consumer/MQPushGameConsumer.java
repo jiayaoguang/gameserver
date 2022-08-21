@@ -6,11 +6,11 @@ import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.util.Logs;
 
-public abstract class MQPushConsumer extends MpscQueueConsumer {
+public abstract class MQPushGameConsumer extends MpscQueueGameConsumer {
 
 
 
-    public MQPushConsumer() {
+    public MQPushGameConsumer() {
 
     }
 

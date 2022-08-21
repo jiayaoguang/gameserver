@@ -12,11 +12,11 @@ public abstract class ProcessorsInitializer {
 
 //    private List<Process> processList = new ArrayList<>();
 
-    public void initProcessors(Consumer consumer) {
+    public void initProcessors(GameConsumer gameConsumer) {
         List<Processor<?>> processList = new ArrayList<>();
         initProcessors(processList);
         for (Processor<?> processor : processList) {
-            consumer.addProcessor(processor);
+            gameConsumer.addProcessor(processor);
         }
     }
 

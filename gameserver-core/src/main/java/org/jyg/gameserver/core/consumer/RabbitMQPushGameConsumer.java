@@ -10,7 +10,7 @@ import java.util.concurrent.TimeoutException;
 /**
  * create by jiayaoguang on 2022/7/30
  */
-public class RabbitMQPushConsumer extends MQPushConsumer {
+public class RabbitMQPushGameConsumer extends MQPushGameConsumer {
 
 
 
@@ -31,7 +31,7 @@ public class RabbitMQPushConsumer extends MQPushConsumer {
     //发送消息
     private String routing_key = "my_routing_key.key1";  //发送消息使用的routing-key
 
-    public RabbitMQPushConsumer(String queueName, String exchangeName) {
+    public RabbitMQPushGameConsumer(String queueName, String exchangeName) {
         this.queueName = queueName;
         this.exchangeName = exchangeName;
     }

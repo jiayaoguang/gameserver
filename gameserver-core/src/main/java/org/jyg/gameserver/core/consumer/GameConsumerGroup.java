@@ -11,18 +11,18 @@ import java.util.List;
 /**
  * create by jiayaoguang on 2021/5/15
  */
-public class ConsumerGroup<T extends Consumer> extends Consumer {
+public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
 
     private volatile boolean isStart = false;
 
     private final List<T> childConsumerList = new ArrayList<>();
 
-    public ConsumerGroup(){
+    public GameConsumerGroup(){
 
     }
 
 
-    public ConsumerGroup(ConsumerFactory<T> childConsumerFactory, int childConsumerNum) {
+    public GameConsumerGroup(ConsumerFactory<T> childConsumerFactory, int childConsumerNum) {
 
         for (int i = 0; i < childConsumerNum; i++) {
             T consumer = childConsumerFactory.createConsumer();
@@ -32,7 +32,7 @@ public class ConsumerGroup<T extends Consumer> extends Consumer {
     }
 
 
-    public ConsumerGroup(List<T> childConsumerList) {
+    public GameConsumerGroup(List<T> childConsumerList) {
         this.childConsumerList.addAll(childConsumerList);
     }
 
@@ -45,12 +45,12 @@ public class ConsumerGroup<T extends Consumer> extends Consumer {
 
         isStart = true;
         int nextId = 1;
-        for (Consumer childConsumer : childConsumerList) {
-            if(childConsumer.getId() == 0){
-                childConsumer.setId(nextId);
+        for (GameConsumer childGameConsumer : childConsumerList) {
+            if(childGameConsumer.getId() == 0){
+                childGameConsumer.setId(nextId);
             }
-            childConsumer.setGameContext(getGameContext());
-            childConsumer.start();
+            childGameConsumer.setGameContext(getGameContext());
+            childGameConsumer.start();
             nextId++;
         }
 
@@ -63,9 +63,9 @@ public class ConsumerGroup<T extends Consumer> extends Consumer {
             throw new RuntimeException(" isEmpty(childConsumerList) ");
         }
 
-        for (Consumer childConsumer : childConsumerList) {
+        for (GameConsumer childGameConsumer : childConsumerList) {
             try {
-                childConsumer.stop();
+                childGameConsumer.stop();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -80,8 +80,8 @@ public class ConsumerGroup<T extends Consumer> extends Consumer {
         }
 
         int childConsumerIndex = (int) (eventExtData.childChooseId % childConsumerList.size());
-        Consumer childConsumer = childConsumerList.get(childConsumerIndex);
-        childConsumer.publicEvent(evenType, data, channel, eventId, eventExtData);
+        GameConsumer childGameConsumer = childConsumerList.get(childConsumerIndex);
+        childGameConsumer.publicEvent(evenType, data, channel, eventId, eventExtData);
 
     }
 

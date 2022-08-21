@@ -4,19 +4,19 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.jyg.gameserver.core.consumer.MQPushConsumer;
+import org.jyg.gameserver.core.consumer.MQPushGameConsumer;
 
 import java.util.Properties;
 import java.util.concurrent.Future;
 
-public class KafkaPushConsumer extends MQPushConsumer {
+public class KafkaPushGameConsumer extends MQPushGameConsumer {
 
 
     private final KafkaProducer<String, byte[]> kafkaProducer;
 
     private final String topic;
 
-    public KafkaPushConsumer(String topic) {
+    public KafkaPushGameConsumer(String topic) {
         this.topic = topic;
 
         // 1. 创建用于连接Kafka的Properties配置

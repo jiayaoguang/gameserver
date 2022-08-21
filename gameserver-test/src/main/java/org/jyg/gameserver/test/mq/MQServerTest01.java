@@ -1,6 +1,6 @@
 package org.jyg.gameserver.test.mq;
 
-import org.jyg.gameserver.core.consumer.RabbitMQPushConsumer;
+import org.jyg.gameserver.core.consumer.RabbitMQPushGameConsumer;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.net.RabbitMQConnector;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
@@ -57,7 +57,7 @@ public class MQServerTest01 {
         bootstrap.addProtoProcessor(chatProcessor);
 
 
-        RabbitMQPushConsumer mqConsumer = new RabbitMQPushConsumer(QUEUE_NAME, EXCHANGE_NAME);
+        RabbitMQPushGameConsumer mqConsumer = new RabbitMQPushGameConsumer(QUEUE_NAME, EXCHANGE_NAME);
         bootstrap.getGameContext().getConsumerManager().addConsumer(mqConsumer);
 
 

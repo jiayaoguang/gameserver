@@ -1,6 +1,6 @@
 package org.jyg.gameserver.db;
 
-import org.jyg.gameserver.core.consumer.MpscQueueConsumer;
+import org.jyg.gameserver.core.consumer.MpscQueueGameConsumer;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.db.type.TypeHandler;
@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * create by jiayaoguang at 2021/5/16
  */
-public class DBConsumer extends MpscQueueConsumer {
+public class DBGameConsumer extends MpscQueueGameConsumer {
 
     private final SqlKeyWord sqlKeyWord;
 
@@ -36,7 +36,7 @@ public class DBConsumer extends MpscQueueConsumer {
 //
 //    }
 
-    public DBConsumer(DBConfig dbConfig) {
+    public DBGameConsumer(DBConfig dbConfig) {
         this.dbConfig = dbConfig;
         this.sqlKeyWord = new MySQLUpperKey();
         this.dataSource = new SimpleDataSource(dbConfig);

@@ -11,7 +11,7 @@ import java.util.concurrent.locks.LockSupport;
 /**
  * create by jiayaoguang on 2020/5/1
  */
-public abstract class AbstractQueueConsumer extends Consumer {
+public abstract class AbstractQueueGameConsumer extends GameConsumer {
 
     private Thread consumerThread;
 

@@ -11,18 +11,18 @@ import java.util.concurrent.TimeUnit;
 /**
  * create by jiayaoguang on 2020/5/24
  */
-public class RemoteConsumer extends MpscQueueConsumer {
+public class RemoteGameConsumer extends MpscQueueGameConsumer {
 
 
     private final TcpClient tcpClient;
 
 
-    public RemoteConsumer(GameContext gameContext, String remoteHost , int port) {
+    public RemoteGameConsumer(GameContext gameContext, String remoteHost , int port) {
         this.setGameContext(gameContext);
         this.tcpClient = gameContext.createTcpClient(remoteHost , port);
     }
 
-    public RemoteConsumer(TcpClient tcpClient) {
+    public RemoteGameConsumer(TcpClient tcpClient) {
         this.tcpClient = tcpClient;
     }
 

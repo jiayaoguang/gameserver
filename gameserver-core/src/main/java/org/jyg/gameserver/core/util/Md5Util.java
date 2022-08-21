@@ -1,6 +1,7 @@
 package org.jyg.gameserver.core.util;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -10,14 +11,16 @@ import java.security.NoSuchAlgorithmException;
  */
 public class Md5Util {
 
+	public static char HEX_DIGITS[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+
 	private Md5Util() {
 
 	}
 
 	public static String getMD5String(String s) {
-		char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+
 		try {
-			byte[] btInput = s.getBytes();
+			byte[] btInput = s.getBytes(StandardCharsets.UTF_8);
 			// 获得MD5摘要算法的 MessageDigest 对象
 			MessageDigest mdInst = MessageDigest.getInstance("MD5");
 			// 使用指定的字节更新摘要
@@ -30,8 +33,8 @@ public class Md5Util {
 			int k = 0;
 			for (int i = 0; i < j; i++) {
 				byte byte0 = md[i];
-				str[k++] = hexDigits[byte0 >>> 4 & 0xf];
-				str[k++] = hexDigits[byte0 & 0xf];
+				str[k++] = HEX_DIGITS[byte0 >>> 4 & 0xf];
+				str[k++] = HEX_DIGITS[byte0 & 0xf];
 			}
 			return new String(str);
 		} catch (Exception e) {

@@ -3,7 +3,7 @@ package org.jyg.gameserver.core.manager;
 import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import org.jyg.gameserver.core.consumer.Consumer;
+import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class ConsumerManager implements Lifecycle{
     public static final int DEFAULT_CONSUMER_ID = 1;
-    private final Int2ObjectMap<Consumer> consumerMap = new Int2ObjectLinkedOpenHashMap<>();
+    private final Int2ObjectMap<GameConsumer> consumerMap = new Int2ObjectLinkedOpenHashMap<>();
     private final GameContext gameContext;
 
 
@@ -27,43 +27,43 @@ public class ConsumerManager implements Lifecycle{
     }
 
 
-    public synchronized void addConsumer(Consumer consumer) {
+    public synchronized void addConsumer(GameConsumer gameConsumer) {
         if(gameContext.isStart()){
             throw new UnsupportedOperationException(" context.isStart , addConsumer operation fail ");
         }
 
-        if(consumerMap.containsKey(consumer.getId())){
+        if(consumerMap.containsKey(gameConsumer.getId())){
             throw new IllegalArgumentException("dumplicate context id , addConsumer operation fail ");
         }
 
-        consumer.setGameContext(gameContext);
-        consumerMap.put(consumer.getId(), consumer);
+        gameConsumer.setGameContext(gameContext);
+        consumerMap.put(gameConsumer.getId(), gameConsumer);
     }
 
 //    public synchronized void setConsumers(Int2ObjectMap<Consumer> consumerMap){
 //        this.consumerMap = Int2ObjectMaps.unmodifiable(consumerMap);
 //    }
 
-    private Consumer getConsumer(int id){
+    private GameConsumer getConsumer(int id){
         return this.consumerMap.get(id);
     }
 
-    public Consumer getDefaultConsumer(){
+    public GameConsumer getDefaultConsumer(){
         return this.consumerMap.get(DEFAULT_CONSUMER_ID);
     }
 
-    public List<Consumer> getConsumers(){
+    public List<GameConsumer> getConsumers(){
         return new ArrayList<>(this.consumerMap.values());
     }
 
 
     public void publicEvent(int targetConsumerId, EventType evenType, Object data, Channel channel, int eventId , EventExtData eventExtData ){
-        Consumer consumer = getConsumer(targetConsumerId);
-        if(consumer == null){
+        GameConsumer gameConsumer = getConsumer(targetConsumerId);
+        if(gameConsumer == null){
             Logs.DEFAULT_LOGGER.error("targetConsumer {} not found" , targetConsumerId);
             return;
         }
-        consumer.publicEvent(evenType , data ,channel ,eventId , eventExtData);
+        gameConsumer.publicEvent(evenType , data ,channel ,eventId , eventExtData);
 
     }
 
@@ -94,8 +94,8 @@ public class ConsumerManager implements Lifecycle{
 
     @Override
     public void start() {
-        for(Consumer consumer : getConsumers()){
-            consumer.start();
+        for(GameConsumer gameConsumer : getConsumers()){
+            gameConsumer.start();
         }
     }
 

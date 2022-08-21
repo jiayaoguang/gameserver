@@ -16,10 +16,10 @@ public class DrawWsServer {
 
         GameServerBootstrap gameServerBootstrap = new GameServerBootstrap();
 
-        gameServerBootstrap.getGameContext().getDefaultConsumer().addProcessor(new ByteMsgObjProcessor<DrawMsg>(DrawMsg.class) {
+        gameServerBootstrap.getGameContext().getDefaultGameConsumer().addProcessor(new ByteMsgObjProcessor<DrawMsg>(DrawMsg.class) {
             @Override
             public void process(Session session, EventData<DrawMsg> data) {
-                for (Session otherSession : getConsumer().getChannelManager().getSessions()) {
+                for (Session otherSession : getGameConsumer().getChannelManager().getSessions()) {
                     otherSession.writeMessage(data.getData());
                 }
 

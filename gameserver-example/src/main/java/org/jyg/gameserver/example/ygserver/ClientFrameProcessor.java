@@ -19,13 +19,13 @@ public class ClientFrameProcessor extends ByteMsgObjProcessor<ClientFrameMsg> {
     @Override
     public void process(Session session, EventData<ClientFrameMsg> event) {
 
-        PlayerManager playerManager = getConsumer().getInstance(PlayerManager.class);
+        PlayerManager playerManager = getGameConsumer().getInstance(PlayerManager.class);
         Player player = playerManager.getLoginPlayerMap().get(session.getSessionId());
         if(player == null){
             return;
         }
 
-        FrameManager frameManager = getConsumer().getInstance(FrameManager.class);
+        FrameManager frameManager = getGameConsumer().getInstance(FrameManager.class);
 
 //         session = getConsumer().getChannelManager().getSession(event.getChannel());
 
@@ -38,7 +38,7 @@ public class ClientFrameProcessor extends ByteMsgObjProcessor<ClientFrameMsg> {
 
         frameManager.getPlayerFrameMsgMap().put( session.getSessionId() , playerFrameMsg);
 
-        RoomPlayer roomPlayer = getConsumer().getInstance(RoomManager.class).getRoom().getRoomPlayerMap().get(player.getPlayerDB().getId());
+        RoomPlayer roomPlayer = getGameConsumer().getInstance(RoomManager.class).getRoom().getRoomPlayerMap().get(player.getPlayerDB().getId());
         if(roomPlayer != null){
             roomPlayer.setPosi(event.getData().getPosi());
         }

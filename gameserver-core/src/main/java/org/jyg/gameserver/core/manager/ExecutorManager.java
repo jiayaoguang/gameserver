@@ -1,9 +1,9 @@
 package org.jyg.gameserver.core.manager;
 
+import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.util.AsynCallEvent;
 import org.jyg.gameserver.core.util.AsynEventAndCallBackRunnable;
 import org.jyg.gameserver.core.util.CallBackEvent;
-import org.jyg.gameserver.core.consumer.Consumer;
 
 import java.util.concurrent.*;
 
@@ -13,20 +13,20 @@ import java.util.concurrent.*;
 public class ExecutorManager {
 
 	private final ExecutorService executor;
-	private final Consumer defaultConsumer;
-	public ExecutorManager(Consumer defaultConsumer) {
-		this(10 , defaultConsumer);
+	private final GameConsumer defaultGameConsumer;
+	public ExecutorManager(GameConsumer defaultGameConsumer) {
+		this(10 , defaultGameConsumer);
 	}
 
-	public ExecutorManager(int poolSize, Consumer defaultConsumer) {
-		this(poolSize,poolSize , defaultConsumer);
+	public ExecutorManager(int poolSize, GameConsumer defaultGameConsumer) {
+		this(poolSize,poolSize , defaultGameConsumer);
 	}
 
-	public ExecutorManager(int corePoolSize, int maxPoolSize, Consumer defaultConsumer) {
+	public ExecutorManager(int corePoolSize, int maxPoolSize, GameConsumer defaultGameConsumer) {
 		BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(1024*16);
 		executor = new ThreadPoolExecutor(corePoolSize, maxPoolSize, 3 * 60 * 1000L, TimeUnit.MILLISECONDS, workQueue, new ThreadPoolExecutor.DiscardPolicy());
 		((ThreadPoolExecutor) executor).allowCoreThreadTimeOut(false);
-		this.defaultConsumer = defaultConsumer;
+		this.defaultGameConsumer = defaultGameConsumer;
 	}
 
 
@@ -43,7 +43,7 @@ public class ExecutorManager {
 	 * @param callBackEvent 回调Runnable 由主逻辑线程执行
 	 */
 	public void execute(AsynCallEvent asynCallEvent, CallBackEvent callBackEvent) {
-		executor.execute(new AsynEventAndCallBackRunnable(asynCallEvent , callBackEvent, defaultConsumer));
+		executor.execute(new AsynEventAndCallBackRunnable(asynCallEvent , callBackEvent, defaultGameConsumer));
 	}
 
 

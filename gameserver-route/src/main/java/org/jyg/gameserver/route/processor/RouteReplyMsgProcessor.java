@@ -1,9 +1,7 @@
 package org.jyg.gameserver.route.processor;
 
 import org.jyg.gameserver.core.data.EventData;
-import org.jyg.gameserver.core.manager.RouteManager;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
-import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.msg.DefaultMsg;
 import org.jyg.gameserver.core.msg.route.RouteReplyMsg;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
@@ -17,7 +15,7 @@ public class RouteReplyMsgProcessor extends ByteMsgObjProcessor<RouteReplyMsg> {
     @Override
     public void process(Session session, EventData<RouteReplyMsg> event) {
 
-        Session clientSession = this.getConsumer().getChannelManager().getSession(event.getData().getSessionId());
+        Session clientSession = this.getGameConsumer().getChannelManager().getSession(event.getData().getSessionId());
 
         int msgId = event.getData().getMsgId();
 
@@ -39,7 +37,7 @@ public class RouteReplyMsgProcessor extends ByteMsgObjProcessor<RouteReplyMsg> {
             EventData eventData = new EventData();
             eventData.setData(msgObj);
 
-            getConsumer().processEventMsg( clientSession , eventData );
+            getGameConsumer().processEventMsg( clientSession , eventData );
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }

@@ -1,6 +1,6 @@
 package org.jyg.gameserver.route;
 
-import org.jyg.gameserver.core.consumer.RemoteConsumer;
+import org.jyg.gameserver.core.consumer.RemoteGameConsumer;
 import org.jyg.gameserver.core.event.ConnectEvent;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
 import org.jyg.gameserver.core.event.DisconnectEvent;
@@ -49,7 +49,7 @@ public class RouteBootstarp
             throw new IllegalArgumentException("routeConfig error");
         }
 
-        RemoteConsumer remoteConsumer = new RemoteConsumer(bootstarp.getGameContext(),routeConfig.getGameServerIp(),routeConfig.getGameServerPort());
+        RemoteGameConsumer remoteConsumer = new RemoteGameConsumer(bootstarp.getGameContext(),routeConfig.getGameServerIp(),routeConfig.getGameServerPort());
         int remoteConsumerId = 1009;
         remoteConsumer.setId(remoteConsumerId);
 
@@ -63,7 +63,7 @@ public class RouteBootstarp
         final GameContext gameContext = bootstarp.getGameContext();
 
 
-        bootstarp.getGameContext().getDefaultConsumer().setUnknownMsgHandler(new UnknownMsgHandler() {
+        bootstarp.getGameContext().getDefaultGameConsumer().setUnknownMsgHandler(new UnknownMsgHandler() {
 
 
             @Override

@@ -6,10 +6,10 @@ import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.exception.RemotingException;
-import org.jyg.gameserver.core.consumer.MQPushConsumer;
+import org.jyg.gameserver.core.consumer.MQPushGameConsumer;
 import org.jyg.gameserver.core.util.AllUtil;
 
-public class RocketMQPushConsumer extends MQPushConsumer {
+public class RocketMQPushGameConsumer extends MQPushGameConsumer {
 
     public static final String PRODUCER_GROUP = "please_rename_unique_group_name";
     public static final String DEFAULT_NAMESRVADDR = "127.0.0.1:9876";
@@ -23,7 +23,7 @@ public class RocketMQPushConsumer extends MQPushConsumer {
 
     public final String topic;
 
-    public RocketMQPushConsumer(String topic) {
+    public RocketMQPushGameConsumer(String topic) {
         this.topic = topic;
 
         /*

@@ -1,29 +1,25 @@
 package org.jyg.gameserver.core.consumer;
 
 import org.jyg.gameserver.core.data.EventData;
-import org.jyg.gameserver.core.enums.EventType;
-import io.netty.channel.Channel;
-import org.jyg.gameserver.core.util.Logs;
 
 import java.util.concurrent.*;
-import java.util.concurrent.locks.LockSupport;
 
 /**
  * create by jiayaoguang on 2020/5/1
  */
-public class BlockingQueueConsumer extends AbstractQueueConsumer {
+public class BlockingQueueGameConsumer extends AbstractQueueGameConsumer {
 
     private final BlockingQueue<EventData<Object>> queue;
 
-    public BlockingQueueConsumer() {
+    public BlockingQueueGameConsumer() {
         this(new LinkedBlockingQueue<>());
     }
 
-    public BlockingQueueConsumer(int size) {
+    public BlockingQueueGameConsumer(int size) {
         this(new LinkedBlockingQueue<>(size));
     }
 
-    public BlockingQueueConsumer(BlockingQueue<EventData<Object>> queue) {
+    public BlockingQueueGameConsumer(BlockingQueue<EventData<Object>> queue) {
         this.queue = queue;
     }
 

@@ -60,7 +60,7 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 	}
 
 	public HttpProcessor getHttpProcessor(String path) {
-		return getConsumer().getHttpProcessor(path);
+		return getGameConsumer().getHttpProcessor(path);
 	}
 
 

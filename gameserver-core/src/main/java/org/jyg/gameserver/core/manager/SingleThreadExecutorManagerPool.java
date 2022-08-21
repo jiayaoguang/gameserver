@@ -1,7 +1,7 @@
 package org.jyg.gameserver.core.manager;
 
+import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.consumer.Consumer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,18 +15,18 @@ public class SingleThreadExecutorManagerPool {
 
 	private final List<SingleThreadExecutorManager> singleThreadExecutorManagerList;
 
-	private final Consumer defaultConsumer;
+	private final GameConsumer defaultGameConsumer;
 
-	public SingleThreadExecutorManagerPool(Consumer defaultConsumer) {
-		this(defaultConsumer, DEFAULT_POOL_SIZE);
+	public SingleThreadExecutorManagerPool(GameConsumer defaultGameConsumer) {
+		this(defaultGameConsumer, DEFAULT_POOL_SIZE);
 	}
 
-	public SingleThreadExecutorManagerPool(Consumer defaultConsumer, int num) {
+	public SingleThreadExecutorManagerPool(GameConsumer defaultGameConsumer, int num) {
 		this.singleThreadExecutorManagerList = new ArrayList<>();
 		for(int i = 0;i < num ;i++){
-			this.singleThreadExecutorManagerList.add(new SingleThreadExecutorManager(defaultConsumer));
+			this.singleThreadExecutorManagerList.add(new SingleThreadExecutorManager(defaultGameConsumer));
 		}
-		this.defaultConsumer = defaultConsumer;
+		this.defaultGameConsumer = defaultGameConsumer;
 	}
 
 	public SingleThreadExecutorManager getSingleThreadExecutorManager(Session session){
@@ -41,7 +41,7 @@ public class SingleThreadExecutorManagerPool {
 	@Deprecated
 	public void expandSize(int addNum) {
 		for (int i = 0; i < addNum; i++) {
-			singleThreadExecutorManagerList.add(new SingleThreadExecutorManager(this.defaultConsumer));
+			singleThreadExecutorManagerList.add(new SingleThreadExecutorManager(this.defaultGameConsumer));
 		}
 	}
 

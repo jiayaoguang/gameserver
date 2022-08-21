@@ -3,9 +3,6 @@ package org.jyg.gameserver.core.processor;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
 
-import java.lang.management.*;
-import java.util.List;
-
 /**
  * create by jiayaoguang at 2021/8/14
  */
@@ -24,7 +21,7 @@ public class ServerInfoHttpProcessor extends HttpProcessor {
 
         sendMsgSb.append("<pre>");
 
-        sendMsgSb.append("连接数 :").append(getConsumer().getChannelManager().getChannelCount());
+        sendMsgSb.append("连接数 :").append(getGameConsumer().getChannelManager().getChannelCount());
 
 
 

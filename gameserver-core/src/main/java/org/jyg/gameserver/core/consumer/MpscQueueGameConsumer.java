@@ -4,16 +4,15 @@ import io.netty.util.internal.shaded.org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jyg.gameserver.core.data.EventData;
 
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * create by jiayaoguang on 2021/5/13
  */
-public class MpscQueueConsumer extends AbstractQueueConsumer {
+public class MpscQueueGameConsumer extends AbstractQueueGameConsumer {
 
     private final Queue<EventData<Object>> queue;
 
-    public MpscQueueConsumer() {
+    public MpscQueueGameConsumer() {
         queue = new MpscUnboundedArrayQueue<>(1024*64);
     }
 

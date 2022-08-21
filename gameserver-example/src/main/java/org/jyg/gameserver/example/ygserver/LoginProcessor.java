@@ -24,7 +24,7 @@ public class LoginProcessor extends ByteMsgObjProcessor<LoginRequestMsg> {
 
     @Override
     public void process(Session session, EventData<LoginRequestMsg> event) {
-        ConsumerDBManager consumerDBManager = getConsumer().getInstanceManager().getInstance(ConsumerDBManager.class);
+        ConsumerDBManager consumerDBManager = getGameConsumer().getInstanceManager().getInstance(ConsumerDBManager.class);
 
         LoginRequestMsg loginRequestMsg = event.getData();
 
@@ -86,7 +86,7 @@ public class LoginProcessor extends ByteMsgObjProcessor<LoginRequestMsg> {
                     session.setSessionObject(currentPlayerDB);
                     session.writeMessage(loginReplyMsg);
 
-                    PlayerManager playerManager = getConsumer().getInstance(PlayerManager.class);
+                    PlayerManager playerManager = getGameConsumer().getInstance(PlayerManager.class);
                     Player player = new Player();
                     player.setPlayerDB(currentPlayerDB);
                     player.setSessionId(session.getSessionId());

@@ -1,14 +1,14 @@
 package org.jyg.gameserver.core.startup;
 
 import com.google.protobuf.MessageLite;
+import org.jyg.gameserver.core.consumer.GameConsumer;
+import org.jyg.gameserver.core.consumer.RingBufferGameConsumer;
 import org.jyg.gameserver.core.manager.Lifecycle;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.processor.HttpProcessor;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.util.GameContext;
-import org.jyg.gameserver.core.consumer.Consumer;
-import org.jyg.gameserver.core.consumer.RingBufferConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,11 +26,11 @@ public abstract class AbstractBootstrap implements Lifecycle {
     protected volatile boolean isStart = false;
 
     public AbstractBootstrap() {
-        this(new RingBufferConsumer());
+        this(new RingBufferGameConsumer());
     }
 
-    public AbstractBootstrap(Consumer defaultConsumer) {
-        this(new GameContext(defaultConsumer));
+    public AbstractBootstrap(GameConsumer defaultGameConsumer) {
+        this(new GameContext(defaultGameConsumer));
     }
 
     public AbstractBootstrap(GameContext gameContext) {
@@ -54,16 +54,16 @@ public abstract class AbstractBootstrap implements Lifecycle {
 
     public void addProtoProcessor(ProtoProcessor<? extends MessageLite> protoProcessor) {
         int msgId = gameContext.getMsgIdByProtoClass(protoProcessor.getProtoClass());
-        this.gameContext.getDefaultConsumer().addProcessor(msgId, protoProcessor);
+        this.gameContext.getDefaultGameConsumer().addProcessor(msgId, protoProcessor);
     }
 
     public void addByteMsgObjProcessor(ByteMsgObjProcessor<? extends ByteMsgObj> byteMsgObjProcessor) {
 //        int msgId = byteMsgObjProcessor.getMsgId();
-        this.gameContext.getDefaultConsumer().addProcessor(byteMsgObjProcessor);
+        this.gameContext.getDefaultGameConsumer().addProcessor(byteMsgObjProcessor);
     }
 
     public void addProtoProcessor(int msgId,ProtoProcessor<? extends MessageLite> protoProcessor) {
-        this.gameContext.getDefaultConsumer().addProcessor(msgId, protoProcessor);
+        this.gameContext.getDefaultGameConsumer().addProcessor(msgId, protoProcessor);
     }
 
 
@@ -75,7 +75,7 @@ public abstract class AbstractBootstrap implements Lifecycle {
         if (path == null) {
             throw new IllegalArgumentException(" getProtoEventId -1 ");
         }
-        this.gameContext.getDefaultConsumer().addHttpProcessor(processor);
+        this.gameContext.getDefaultGameConsumer().addHttpProcessor(processor);
     }
 
 
@@ -102,8 +102,8 @@ public abstract class AbstractBootstrap implements Lifecycle {
         return logger;
     }
 
-    public Consumer getDefaultConsumer() {
-        return gameContext.getDefaultConsumer();
+    public GameConsumer getDefaultConsumer() {
+        return gameContext.getDefaultGameConsumer();
     }
 
     public GameContext getGameContext() {

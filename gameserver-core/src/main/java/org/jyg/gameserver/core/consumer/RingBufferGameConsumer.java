@@ -12,7 +12,6 @@ import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import io.netty.channel.Channel;
 import org.jyg.gameserver.core.util.LoopAndSleepWaitStrategy;
-import org.jyg.gameserver.core.util.PrefixNameThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +20,7 @@ import java.util.concurrent.ThreadFactory;
 /**
  * create by jiayaoguang on 2020/5/1
  */
-public class RingBufferConsumer extends Consumer {
+public class RingBufferGameConsumer extends GameConsumer {
 
     private static Disruptor<EventData<Object>> disruptor;
     private static final int BUFFER_SIZE = 1024 * 64;
@@ -30,7 +29,7 @@ public class RingBufferConsumer extends Consumer {
     private boolean isStart = false;
 
 
-    public RingBufferConsumer() {
+    public RingBufferGameConsumer() {
 
     }
 
@@ -49,7 +48,7 @@ public class RingBufferConsumer extends Consumer {
             @Override
             public Thread newThread(Runnable r) {
                 return super.newThread(() -> {
-                    RingBufferConsumer.this.onThreadStart();
+                    RingBufferGameConsumer.this.onThreadStart();
                     r.run();
                 });
             }

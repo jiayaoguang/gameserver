@@ -22,7 +22,7 @@ public class LoadClassesHttpProcessor extends HttpProcessor {
     @Override
     public void service(Request request, Response response) {
 
-        List<Class<?>> classList = getConsumer().getClassLoadManager().loadClasses();
+        List<Class<?>> classList = getGameConsumer().getClassLoadManager().loadClasses();
 
         if (CollectionUtil.isEmpty(classList)) {
             response.writeAndFlush("no class load");
@@ -59,7 +59,7 @@ public class LoadClassesHttpProcessor extends HttpProcessor {
         StringBuilder conatinsMsg = new StringBuilder();
         for (Processor<?> processor : processors) {
             try {
-                if(getConsumer().containsProcessor(processor)){
+                if(getGameConsumer().containsProcessor(processor)){
                     containsProcessor = true;
                     conatinsMsg.append(processor.getClass().getSimpleName()).append("\n");
                 }
@@ -83,7 +83,7 @@ public class LoadClassesHttpProcessor extends HttpProcessor {
         sendHtmlSb.append("load class num : ").append(classList.size()).append('\n');
         for (ClassLoadListener classLoadListener : classLoadListeners) {
             try {
-                classLoadListener.beforeLoadProcessor(getConsumer());
+                classLoadListener.beforeLoadProcessor(getGameConsumer());
                 sendHtmlSb.append("beforeLoadProcessor execute listen : ").append(classLoadListener.getClass().getSimpleName()).append('\n');
             } catch (Exception e) {
                 String exceptionMsg = ExceptionUtils.getStackTrace(e);
@@ -95,7 +95,7 @@ public class LoadClassesHttpProcessor extends HttpProcessor {
 
         for (Processor<?> processor : processors) {
             try {
-                getConsumer().addProcessor(processor);
+                getGameConsumer().addProcessor(processor);
                 sendHtmlSb.append("load processor : ").append(processor.getClass().getSimpleName()).append('\n');
             } catch (Exception e) {
                 String exceptionMsg = ExceptionUtils.getStackTrace(e);
@@ -109,7 +109,7 @@ public class LoadClassesHttpProcessor extends HttpProcessor {
         for (ClassLoadListener classLoadListener : classLoadListeners) {
 
             try {
-                classLoadListener.afterLoad(getConsumer());
+                classLoadListener.afterLoad(getGameConsumer());
                 sendHtmlSb.append("after load execute listen : ").append(classLoadListener.getClass().getSimpleName()).append('\n');
             } catch (Exception e) {
                 String exceptionMsg = ExceptionUtils.getStackTrace(e);

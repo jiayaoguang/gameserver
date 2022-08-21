@@ -1,7 +1,7 @@
 package org.jyg.gameserver.core.manager;
 
 import com.google.protobuf.MessageLite;
-import org.jyg.gameserver.core.consumer.Consumer;
+import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.event.ConnectEvent;
 import org.jyg.gameserver.core.event.DisconnectEvent;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
@@ -26,16 +26,16 @@ public class ChannelManager implements Lifecycle {
 
     private long sessionIdInc = 0;
 
-    private final Consumer consumer;
+    private final GameConsumer gameConsumer;
 
-    public ChannelManager(Consumer consumer) {
+    public ChannelManager(GameConsumer gameConsumer) {
         this.channelObjectMap = new LinkedHashMap<>(1024 * 16 , 0.5f);
 
         this.tcpClientChannelObjectMap = new LinkedHashMap<>(32 , 0.5f);
 
         this.id2sessionMap = new LinkedHashMap<>(32 , 0.5f);
 
-        this.consumer = consumer;
+        this.gameConsumer = gameConsumer;
     }
 
     //    public <T>void process(LogicEvent<T> event) {
@@ -60,7 +60,7 @@ public class ChannelManager implements Lifecycle {
     }
 
     public <T> void afterConnect(Session session) {
-        consumer.getEventManager().triggerEvent(ConnectEvent.class,session);
+        gameConsumer.getEventManager().triggerEvent(ConnectEvent.class,session);
     }
 
     public final <T> void doUnlink(Channel channel) {
@@ -72,7 +72,7 @@ public class ChannelManager implements Lifecycle {
     }
 
     public <T> void afterDisconnect(Session session) {
-        consumer.getEventManager().triggerEvent(DisconnectEvent.class,session);
+        gameConsumer.getEventManager().triggerEvent(DisconnectEvent.class,session);
     }
 
 

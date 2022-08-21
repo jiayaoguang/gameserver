@@ -1,6 +1,6 @@
 package org.jyg.gameserver.example.ygserver;
 
-import org.jyg.gameserver.core.consumer.Consumer;
+import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.manager.Lifecycle;
 import org.jyg.gameserver.example.ygserver.msg.SCRoomEndMsg;
 import org.jyg.gameserver.example.ygserver.msg.Vector2Msg;
@@ -11,13 +11,13 @@ import java.util.concurrent.TimeUnit;
 
 public class RoomManager implements Lifecycle {
 
-    private final Consumer consumer;
+    private final GameConsumer gameConsumer;
 
     private Room room = new Room();
 
 
-    public RoomManager(Consumer consumer) {
-        this.consumer = consumer;
+    public RoomManager(GameConsumer gameConsumer) {
+        this.gameConsumer = gameConsumer;
     }
 
 
@@ -35,7 +35,7 @@ public class RoomManager implements Lifecycle {
     public void start() {
         resetRoom(room);
 
-        consumer.getTimerManager().addTimer(-1, TimeUnit.SECONDS.toMillis(1), this::update);
+        gameConsumer.getTimerManager().addTimer(-1, TimeUnit.SECONDS.toMillis(1), this::update);
 
     }
 
@@ -47,7 +47,7 @@ public class RoomManager implements Lifecycle {
             endRoom(room);
             resetRoom(room);
 
-            consumer.getInstanceManager().getInstance(FrameManager.class).getPlayerFrameMsgMap().clear();
+            gameConsumer.getInstanceManager().getInstance(FrameManager.class).getPlayerFrameMsgMap().clear();
         }
 
     }

@@ -1,6 +1,6 @@
 package org.jyg.gameserver.core.util;
 
-import org.jyg.gameserver.core.consumer.Consumer;
+import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.enums.EventType;
 
 /**
@@ -10,12 +10,12 @@ public class AsynEventAndCallBackRunnable implements Runnable{
 
     private final AsynCallEvent asynCallEvent;
     private final CallBackEvent callBackEvent;
-    private final Consumer consumer;
+    private final GameConsumer gameConsumer;
 
-    public AsynEventAndCallBackRunnable(AsynCallEvent asynCallEvent, CallBackEvent callBackEvent, Consumer consumer) {
+    public AsynEventAndCallBackRunnable(AsynCallEvent asynCallEvent, CallBackEvent callBackEvent, GameConsumer gameConsumer) {
         this.asynCallEvent = asynCallEvent;
         this.callBackEvent = callBackEvent;
-        this.consumer = consumer;
+        this.gameConsumer = gameConsumer;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class AsynEventAndCallBackRunnable implements Runnable{
             e.printStackTrace();
             callBackEvent.setSuccess(false);
         }
-        consumer.publicEvent(EventType.INNER_MSG, callBackEvent, null , 0);
+        gameConsumer.publicEvent(EventType.INNER_MSG, callBackEvent, null , 0);
 
     }
 

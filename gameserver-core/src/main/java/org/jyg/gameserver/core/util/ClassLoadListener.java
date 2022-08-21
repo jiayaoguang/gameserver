@@ -1,15 +1,15 @@
 package org.jyg.gameserver.core.util;
 
-import org.jyg.gameserver.core.consumer.Consumer;
+import org.jyg.gameserver.core.consumer.GameConsumer;
 
 /**
  * create by jiayaoguang at 2021/8/14
  */
 public interface ClassLoadListener {
 
-    void beforeLoadProcessor(Consumer consumer);
+    void beforeLoadProcessor(GameConsumer gameConsumer);
 
 
-    void afterLoad(Consumer consumer);
+    void afterLoad(GameConsumer gameConsumer);
 
 }

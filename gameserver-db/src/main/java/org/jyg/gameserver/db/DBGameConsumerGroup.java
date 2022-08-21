@@ -1,7 +1,7 @@
 package org.jyg.gameserver.db;
 
 import io.netty.channel.Channel;
-import org.jyg.gameserver.core.consumer.ConsumerGroup;
+import org.jyg.gameserver.core.consumer.GameConsumerGroup;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
@@ -11,16 +11,16 @@ import org.jyg.gameserver.db.type.TypeHandler;
 /**
  * create by jiayaoguang on 2021/5/16
  */
-public class DBConsumerGroup extends ConsumerGroup<DBConsumer> {
+public class DBGameConsumerGroup extends GameConsumerGroup<DBGameConsumer> {
 
     private final DBConfig dbConfig;
 
-    public DBConsumerGroup() {
+    public DBGameConsumerGroup() {
         this(ConfigUtil.properties2Object("jyg.properties", DBConfig.class));
     }
 
 
-    public DBConsumerGroup(DBConfig dbConfig) {
+    public DBGameConsumerGroup(DBConfig dbConfig) {
 
         this.dbConfig = dbConfig;
 
@@ -41,7 +41,7 @@ public class DBConsumerGroup extends ConsumerGroup<DBConsumer> {
 
 
         for(int i=0;i<dbConfig.getDbConsumerNum();i++){
-            DBConsumer dbConsumer = new DBConsumer(dbConfig);
+            DBGameConsumer dbConsumer = new DBGameConsumer(dbConfig);
 //            dbConsumer.setDbConfig(dbConfig);
             addChildConsumer(dbConsumer);
         }
@@ -54,7 +54,7 @@ public class DBConsumerGroup extends ConsumerGroup<DBConsumer> {
 
 
     public void addTableInfo(Class<?> dbEntity) {
-        for (DBConsumer childDBConsumer : getChildConsumerList()) {
+        for (DBGameConsumer childDBConsumer : getChildConsumerList()) {
             childDBConsumer.addTableInfo(dbEntity);
         }
     }
@@ -80,7 +80,7 @@ public class DBConsumerGroup extends ConsumerGroup<DBConsumer> {
             throw new IllegalStateException("registerTypeHandler fail isStart");
         }
 
-        for (DBConsumer childDBConsumer : getChildConsumerList()) {
+        for (DBGameConsumer childDBConsumer : getChildConsumerList()) {
             childDBConsumer.registerTypeHandler(clazz, typeHandler);
         }
     }

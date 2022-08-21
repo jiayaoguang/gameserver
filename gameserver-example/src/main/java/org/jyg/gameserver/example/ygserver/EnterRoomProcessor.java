@@ -5,8 +5,6 @@ import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.example.ygserver.msg.*;
 
-import java.util.Random;
-
 public class EnterRoomProcessor extends ByteMsgObjProcessor<CSEnterRoomMsg> {
 
     public EnterRoomProcessor() {
@@ -17,7 +15,7 @@ public class EnterRoomProcessor extends ByteMsgObjProcessor<CSEnterRoomMsg> {
     public void process(Session session, EventData<CSEnterRoomMsg> event) {
 
 
-        RoomManager roomManager = this.getConsumer().getInstanceManager().getInstance(RoomManager.class);
+        RoomManager roomManager = this.getGameConsumer().getInstanceManager().getInstance(RoomManager.class);
 
         Player player = session.getSessionObject();
 

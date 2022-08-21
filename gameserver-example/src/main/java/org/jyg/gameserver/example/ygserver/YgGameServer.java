@@ -6,7 +6,7 @@ import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.db.ConsumerDBManager;
-import org.jyg.gameserver.db.DBConsumerGroup;
+import org.jyg.gameserver.db.DBGameConsumerGroup;
 import org.jyg.gameserver.example.ygserver.msg.*;
 
 
@@ -22,15 +22,15 @@ public class YgGameServer {
         GameServerBootstrap bootstarp = new GameServerBootstrap();
 
 
-        DBConsumerGroup dbConsumerGroup = new DBConsumerGroup();
+        DBGameConsumerGroup dbConsumerGroup = new DBGameConsumerGroup();
 
 
         bootstarp.getGameContext().getConsumerManager().addConsumer(dbConsumerGroup);
-        bootstarp.getGameContext().getDefaultConsumer().getInstanceManager().putInstance(new ConsumerDBManager(bootstarp.getDefaultConsumer(), dbConsumerGroup.getId()));
+        bootstarp.getGameContext().getDefaultGameConsumer().getInstanceManager().putInstance(new ConsumerDBManager(bootstarp.getDefaultConsumer(), dbConsumerGroup.getId()));
 
-        bootstarp.getGameContext().getDefaultConsumer().getInstanceManager().putInstance(new PlayerManager());
-        bootstarp.getGameContext().getDefaultConsumer().getInstanceManager().putInstance(FrameManager.class);
-        bootstarp.getGameContext().getDefaultConsumer().getInstanceManager().putInstance(RoomManager.class);
+        bootstarp.getGameContext().getDefaultGameConsumer().getInstanceManager().putInstance(new PlayerManager());
+        bootstarp.getGameContext().getDefaultGameConsumer().getInstanceManager().putInstance(FrameManager.class);
+        bootstarp.getGameContext().getDefaultGameConsumer().getInstanceManager().putInstance(RoomManager.class);
 //
 //        dbConsumerGroup.addTableInfo(PlayerDB.class);
 

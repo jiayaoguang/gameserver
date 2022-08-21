@@ -6,6 +6,6 @@ package org.jyg.gameserver.core.consumer;
  */
 public interface ConsumerStartHandler {
 
-    public void onThreadStart(Consumer consumer);
+    public void onThreadStart(GameConsumer gameConsumer);
 
 }

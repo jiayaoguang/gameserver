@@ -11,14 +11,14 @@ public class RouteClientSessionConnectProcessor extends ByteMsgObjProcessor<Rout
     @Override
     public void process(Session session, EventData<RouteClientSessionConnectMsg> event) {
 
-        RouteManager routeManager = this.getConsumer().getInstance(RouteManager.class);
+        RouteManager routeManager = this.getGameConsumer().getInstance(RouteManager.class);
 
         RouteSession routeClientSession = new RouteSession(getContext() , session , event.getData().getSessionId(), event.getData().getAddr());
 
         routeManager.addRouteClientSession( session , routeClientSession);
 
 
-        getConsumer().getChannelManager().afterConnect(routeClientSession);
+        getGameConsumer().getChannelManager().afterConnect(routeClientSession);
 
     }
 }

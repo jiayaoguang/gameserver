@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * created by jiayaoguang at 2017年12月18日
  */
-public abstract class Consumer {
+public abstract class GameConsumer {
 
     public static final int DEFAULT_QUEUE_SIZE = 1024 * 64;
     public static final int DEFAULT_CONSUMER_ID = 1;
@@ -88,7 +88,7 @@ public abstract class Consumer {
     private UnknownMsgHandler unknownMsgHandler;
 
 
-    public Consumer() {
+    public GameConsumer() {
         this.instanceManager = new InstanceManager(this);
         this.timerManager = new TimerManager();
         this.channelManager = new ChannelManager(this);
@@ -205,7 +205,7 @@ public abstract class Consumer {
         }
 
         httpProcessorMap.put(path, processor);
-        processor.setConsumer(this);
+        processor.setGameConsumer(this);
     }
 
     public HttpProcessor getHttpProcessor(String path) {
@@ -233,7 +233,7 @@ public abstract class Consumer {
             getGameContext().addMsgId2MsgClassMapping(msgId, ((ByteMsgObjProcessor) processor).getByteMsgObjClazz());
         }
 
-        processor.setConsumer(this);
+        processor.setGameConsumer(this);
         protoProcessorMap.put(msgId, processor);
     }
 
@@ -244,7 +244,7 @@ public abstract class Consumer {
      */
     @Deprecated
     public void setTextProcessor(TextProcessor textProcessor) {
-        textProcessor.setConsumer(this);
+        textProcessor.setGameConsumer(this);
         this.textProcessor = textProcessor;
 
     }
@@ -440,7 +440,7 @@ public abstract class Consumer {
 
         IRemoteInvoke remoteInvoke = new IRemoteInvoke() {
             @Override
-            public void invoke(Consumer consumer,Map<String,Object> paramMap) {
+            public void invoke(GameConsumer consumer, Map<String,Object> paramMap) {
 
                 try {
 
@@ -720,7 +720,7 @@ public abstract class Consumer {
 
 
     public void setDefaultProcessor(AbstractProcessor defaultProcessor ){
-        defaultProcessor.setConsumer(this);
+        defaultProcessor.setGameConsumer(this);
         this.defaultProcessor = defaultProcessor;
     }
 

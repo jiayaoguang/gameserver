@@ -1,10 +1,10 @@
 package org.jyg.gameserver.core.processor;
 
+import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.filter.MsgFilter;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.GameContext;
-import org.jyg.gameserver.core.consumer.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +20,7 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 
 //	private Context context;
 
-	private Consumer consumer;
+	private GameConsumer gameConsumer;
 
 	private final List<MsgFilter<?>> filters = new ArrayList<>();
 
@@ -44,19 +44,19 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 
 
 	public GameContext getContext() {
-		return consumer.getGameContext();
+		return gameConsumer.getGameContext();
 	}
 
 
 	public abstract void process(Session session , EventData<T> event);
 
 
-	public Consumer getConsumer() {
-		return consumer;
+	public GameConsumer getGameConsumer() {
+		return gameConsumer;
 	}
 
-	public void setConsumer(Consumer consumer) {
-		this.consumer = consumer;
+	public void setGameConsumer(GameConsumer gameConsumer) {
+		this.gameConsumer = gameConsumer;
 	}
 
 
