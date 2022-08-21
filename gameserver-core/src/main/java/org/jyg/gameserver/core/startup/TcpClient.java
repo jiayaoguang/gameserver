@@ -6,7 +6,7 @@ import org.jyg.gameserver.core.handle.initializer.MyChannelInitializer;
 import org.jyg.gameserver.core.handle.initializer.SocketClientInitializer;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -36,7 +36,7 @@ public class TcpClient extends AbstractBootstrap{
 
 	@Deprecated
 	public TcpClient()  {
-		this(new Context(new RingBufferConsumer()) , "" , 0);
+		this(new GameContext(new RingBufferConsumer()) , "" , 0);
 
 //		try {
 //			this.registerSendEventIdByProto(ProtoEnum.P_COMMON_REQUEST_PING.getEventId(), p_common.p_common_request_ping.class);
@@ -55,11 +55,11 @@ public class TcpClient extends AbstractBootstrap{
 
 
 	public TcpClient(String host, int port) {
-		this(new Context(new RingBufferConsumer()), host, port);
+		this(new GameContext(new RingBufferConsumer()), host, port);
 	}
 
-	public TcpClient(Context context ,String host, int port) {
-		super(context);
+	public TcpClient(GameContext gameContext, String host, int port) {
+		super(gameContext);
 		this.host = host;
 		this.port = port;
 	}
@@ -68,14 +68,14 @@ public class TcpClient extends AbstractBootstrap{
 
 	@Override
 	public void doStart(){
-		doStart(new SocketClientInitializer(getContext()));
+		doStart(new SocketClientInitializer(getGameContext()));
 	}
 
 
 	private void doStart(MyChannelInitializer<Channel> channelInitializer){
 		Logs.DEFAULT_LOGGER.info("客户端成功启动...");
-		bootstrap.group(getContext().getEventLoopGroupManager().getWorkGroup());
-		bootstrap.channel( getContext().isUseEpoll() ? EpollSocketChannel.class : NioSocketChannel.class);
+		bootstrap.group(getGameContext().getEventLoopGroupManager().getWorkGroup());
+		bootstrap.channel( getGameContext().isUseEpoll() ? EpollSocketChannel.class : NioSocketChannel.class);
 		bootstrap.handler(channelInitializer);
 		bootstrap.option(ChannelOption.SO_KEEPALIVE, false);
 		bootstrap.option(ChannelOption.TCP_NODELAY, true);

@@ -1,7 +1,7 @@
 package org.jyg.gameserver.core.net;
 
 import com.rabbitmq.client.*;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -21,8 +21,8 @@ public class RabbitMQConnector extends MQConnector {
     
     private final String exchangeName;
 
-    public RabbitMQConnector(Context context, int mqPushConsumerId, String queueName, String exchangeName) {
-        super(context, mqPushConsumerId);
+    public RabbitMQConnector(GameContext gameContext, int mqPushConsumerId, String queueName, String exchangeName) {
+        super(gameContext, mqPushConsumerId);
         this.queueName = queueName;
         this.exchangeName = exchangeName;
     }

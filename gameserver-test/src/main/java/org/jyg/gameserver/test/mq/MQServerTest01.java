@@ -58,15 +58,15 @@ public class MQServerTest01 {
 
 
         RabbitMQPushConsumer mqConsumer = new RabbitMQPushConsumer(QUEUE_NAME, EXCHANGE_NAME);
-        bootstrap.getContext().getConsumerManager().addConsumer(mqConsumer);
+        bootstrap.getGameContext().getConsumerManager().addConsumer(mqConsumer);
 
 
-        bootstrap.addConnector(new RabbitMQConnector(bootstrap.getContext(), 0, QUEUE_NAME, EXCHANGE_NAME));
+        bootstrap.addConnector(new RabbitMQConnector(bootstrap.getGameContext(), 0, QUEUE_NAME, EXCHANGE_NAME));
         bootstrap.start();
 
 
-        bootstrap.getContext().getConsumerManager().publicEvent(mqConsumer.getId() , EventType.DEFAULT_EVENT  , MsgChat.newBuilder().setContent("1111").setId(1).build(),0);
-        bootstrap.getContext().getConsumerManager().publicEvent(mqConsumer.getId() , EventType.DEFAULT_EVENT  , MsgChat.newBuilder().setContent("1111").setId(1).build(),0);
+        bootstrap.getGameContext().getConsumerManager().publicEvent(mqConsumer.getId() , EventType.DEFAULT_EVENT  , MsgChat.newBuilder().setContent("1111").setId(1).build(),0);
+        bootstrap.getGameContext().getConsumerManager().publicEvent(mqConsumer.getId() , EventType.DEFAULT_EVENT  , MsgChat.newBuilder().setContent("1111").setId(1).build(),0);
 
 
 

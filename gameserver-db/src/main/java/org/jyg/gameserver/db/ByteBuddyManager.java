@@ -4,26 +4,23 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.matcher.ElementMatchers;
 import org.jyg.gameserver.core.util.AllUtil;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-
-import static net.bytebuddy.matcher.ElementMatchers.named;
 
 /**
  * create by jiayaoguang at 2021/5/22
  */
 public class ByteBuddyManager {
 
-    private final Context context;
+    private final GameContext gameContext;
 
     ByteBuddy byteBuddy;
 
-    public ByteBuddyManager(Context context) {
-        this.context = context;
+    public ByteBuddyManager(GameContext gameContext) {
+        this.gameContext = gameContext;
         byteBuddy = new ByteBuddy();
-        LoggerAdvisor.context = context;
+        LoggerAdvisor.gameContext = gameContext;
     }
 
 
@@ -42,7 +39,7 @@ public class ByteBuddyManager {
 
     public static class LoggerAdvisor {
 
-        private static Context context;
+        private static GameContext gameContext;
 
         @Advice.OnMethodEnter
         public static void onMethodEnter(@Advice.Origin Method method, @Advice.AllArguments Object[] arguments) {

@@ -1,12 +1,9 @@
 package org.jyg.gameserver.core.consumer;
 
-import com.google.protobuf.Message;
 import com.google.protobuf.MessageLite;
-import org.jyg.gameserver.core.consumer.MpscQueueConsumer;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
-import org.jyg.gameserver.core.util.ExecTimeUtil;
 import org.jyg.gameserver.core.util.Logs;
 
 public abstract class MQPushConsumer extends MpscQueueConsumer {
@@ -33,9 +30,9 @@ public abstract class MQPushConsumer extends MpscQueueConsumer {
 
         Object msgObj = eventData.getData();
         if(msgObj instanceof ByteMsgObj){
-            msgId = getContext().getMsgIdByByteMsgObj((Class<? extends ByteMsgObj>) msgObj.getClass());
+            msgId = getGameContext().getMsgIdByByteMsgObj((Class<? extends ByteMsgObj>) msgObj.getClass());
         }else if(msgObj instanceof MessageLite){
-            msgId = getContext().getMsgIdByProtoClass((Class<? extends MessageLite>) msgObj.getClass());
+            msgId = getGameContext().getMsgIdByProtoClass((Class<? extends MessageLite>) msgObj.getClass());
         }else {
             Logs.DEFAULT_LOGGER.error("msgObj {} not found msgId",msgObj.getClass().getName());
             return;
@@ -49,7 +46,7 @@ public abstract class MQPushConsumer extends MpscQueueConsumer {
     public void pushMsg(int msgId , Object msgObj){
 
 
-        AbstractMsgCodec<Object> msgCodec = (AbstractMsgCodec<Object>) getContext().getMsgCodec(msgId);
+        AbstractMsgCodec<Object> msgCodec = (AbstractMsgCodec<Object>) getGameContext().getMsgCodec(msgId);
         if (msgCodec == null) {
             Logs.CONSUMER.error(" protoParser not found ,id : {} ", msgId);
             return;

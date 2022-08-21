@@ -2,7 +2,7 @@ package org.jyg.gameserver.core.session;
 
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.route.RouteReplyMsg;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 
 /**
  * create by jiayaoguang on 2022/8/7
@@ -10,16 +10,16 @@ import org.jyg.gameserver.core.util.Context;
 public class RouteSession extends Session {
 
     private final Session routeServerSession;
-    private final Context context;
+    private final GameContext gameContext;
 
     private String remoteAddr;
-    public RouteSession(Context context, Session routeServerSession, long sessionId){
-        this(context , routeServerSession , sessionId , null);
+    public RouteSession(GameContext gameContext, Session routeServerSession, long sessionId){
+        this(gameContext, routeServerSession , sessionId , null);
     }
-    public RouteSession(Context context, Session routeServerSession, long sessionId, String remoteAddr) {
+    public RouteSession(GameContext gameContext, Session routeServerSession, long sessionId, String remoteAddr) {
         super(sessionId);
         this.routeServerSession = routeServerSession;
-        this.context = context;
+        this.gameContext = gameContext;
         this.remoteAddr = remoteAddr;
     }
 
@@ -33,12 +33,12 @@ public class RouteSession extends Session {
         RouteReplyMsg routeReplyMsg = new RouteReplyMsg();
 
 
-        int msgId = context.getMsgIdByMsgObj(msgObj);
+        int msgId = gameContext.getMsgIdByMsgObj(msgObj);
 
         if(msgId <= 0){
             throw new IllegalArgumentException("unknow msg obj : " + msgObj);
         }
-        AbstractMsgCodec msgCodec = context.getMsgCodec(msgId);
+        AbstractMsgCodec msgCodec = gameContext.getMsgCodec(msgId);
         try {
             routeReplyMsg.setData(msgCodec.encode(msgObj));
         } catch (Exception e) {

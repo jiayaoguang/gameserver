@@ -3,8 +3,7 @@ package org.jyg.gameserver.core.processor;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.filter.MsgFilter;
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.util.Context;
-import org.jyg.gameserver.core.util.FTLLoader;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.consumer.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,8 +43,8 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 	}
 
 
-	public Context getContext() {
-		return consumer.getContext();
+	public GameContext getContext() {
+		return consumer.getGameContext();
 	}
 
 

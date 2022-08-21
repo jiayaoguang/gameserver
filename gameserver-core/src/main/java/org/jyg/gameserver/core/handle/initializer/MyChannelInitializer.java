@@ -1,7 +1,6 @@
 package org.jyg.gameserver.core.handle.initializer;
 
-import org.jyg.gameserver.core.util.Context;
-import org.jyg.gameserver.core.consumer.Consumer;
+import org.jyg.gameserver.core.util.GameContext;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 
@@ -10,14 +9,14 @@ import io.netty.channel.ChannelInitializer;
  */
 public abstract class MyChannelInitializer<C extends Channel> extends ChannelInitializer<C> {
 
-    protected final Context context;
+    protected final GameContext gameContext;
 
-    protected MyChannelInitializer(Context context) {
-        this.context = context;
+    protected MyChannelInitializer(GameContext gameContext) {
+        this.gameContext = gameContext;
     }
 
-    public Context getContext() {
-        return context;
+    public GameContext getGameContext() {
+        return gameContext;
     }
 
 

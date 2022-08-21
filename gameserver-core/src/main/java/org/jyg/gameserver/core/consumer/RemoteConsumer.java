@@ -1,13 +1,10 @@
 package org.jyg.gameserver.core.consumer;
 
 import com.google.protobuf.MessageLite;
-import io.netty.channel.Channel;
 import org.jyg.gameserver.core.data.EventData;
-import org.jyg.gameserver.core.data.EventExtData;
-import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.startup.TcpClient;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 
 import java.util.concurrent.TimeUnit;
 
@@ -20,9 +17,9 @@ public class RemoteConsumer extends MpscQueueConsumer {
     private final TcpClient tcpClient;
 
 
-    public RemoteConsumer(Context context, String remoteHost , int port) {
-        this.setContext(context);
-        this.tcpClient = context.createTcpClient(remoteHost , port);
+    public RemoteConsumer(GameContext gameContext, String remoteHost , int port) {
+        this.setGameContext(gameContext);
+        this.tcpClient = gameContext.createTcpClient(remoteHost , port);
     }
 
     public RemoteConsumer(TcpClient tcpClient) {
@@ -44,7 +41,7 @@ public class RemoteConsumer extends MpscQueueConsumer {
     @Override
     public void doStop() {
 
-        if(tcpClient.getContext() == getContext()){
+        if(tcpClient.getGameContext() == getGameContext()){
             tcpClient.close();
         }else {
             tcpClient.stop();

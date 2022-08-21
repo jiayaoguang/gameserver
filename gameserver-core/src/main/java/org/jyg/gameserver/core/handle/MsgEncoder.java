@@ -7,7 +7,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.util.AllUtil;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 
 /**
@@ -17,10 +17,10 @@ import org.jyg.gameserver.core.util.Logs;
 @Sharable
 public class MsgEncoder extends MessageToByteEncoder<Object> {
 
-	protected final Context context;
+	protected final GameContext gameContext;
 
-	public MsgEncoder(Context context) {
-		this.context = context;
+	public MsgEncoder(GameContext gameContext) {
+		this.gameContext = gameContext;
 	}
 
 
@@ -28,10 +28,10 @@ public class MsgEncoder extends MessageToByteEncoder<Object> {
 	protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf buf) {
 		if( msg instanceof MessageLite){
 			MessageLite messageLite = (MessageLite)msg;
-			AllUtil.writeToBuf(context , messageLite , buf);
+			AllUtil.writeToBuf(gameContext, messageLite , buf);
 		}else if( msg instanceof ByteMsgObj){
 			ByteMsgObj byteMsgObj = (ByteMsgObj)msg;
-			AllUtil.writeToBuf(context , byteMsgObj , buf);
+			AllUtil.writeToBuf(gameContext, byteMsgObj , buf);
 		}else {
 			Logs.DEFAULT_LOGGER.error("unknown msg type : {}" , msg.getClass().getCanonicalName());
 		}

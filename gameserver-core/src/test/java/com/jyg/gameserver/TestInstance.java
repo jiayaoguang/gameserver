@@ -3,7 +3,7 @@ package com.jyg.gameserver;
 import org.junit.Test;
 import org.jyg.gameserver.core.manager.InstanceManager;
 import org.jyg.gameserver.core.util.AllUtil;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 
 /**
  * create by jiayaoguang on 2021/5/1
@@ -26,7 +26,7 @@ public class TestInstance {
 
     @Test
     public void testInstance() throws Exception{
-        InstanceManager instanceManager = new InstanceManager((Context) null);
+        InstanceManager instanceManager = new InstanceManager((GameContext) null);
         instanceManager.putInstance(ComputerCPU.class);
 
         instanceManager.putInstance(Computer.class);

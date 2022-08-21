@@ -270,11 +270,11 @@ public class AllUtil {
 
     /**
      *
-     * @param context context
+     * @param gameContext context
      * @param msg msg
      * @param buf buf
      */
-    public static void writeToBuf(Context context, MessageLite msg, ByteBuf buf) {
+    public static void writeToBuf(GameContext gameContext, MessageLite msg, ByteBuf buf) {
         Class<? extends MessageLite> protoClazz = msg.getClass();
 //        Logs.DEFAULT_LOGGER.info("deal threadName : " + Thread.currentThread().getName());
         byte[] msgBytes = msg.toByteArray();
@@ -293,7 +293,7 @@ public class AllUtil {
         if (msgBytes == null) {
             throw new IllegalArgumentException("not MessageLiteOrBuilder");
         }
-        int eventId = context.getMsgIdByProtoClass(protoClazz);
+        int eventId = gameContext.getMsgIdByProtoClass(protoClazz);
         if (eventId <= 0) {
             Logs.DEFAULT_LOGGER.error("unknow eventid  protoClazz : {}" , protoClazz);
             return;
@@ -309,11 +309,11 @@ public class AllUtil {
 
     /**
      *
-     * @param context context
+     * @param gameContext context
      * @param byteMsgObj byteMsgObj
      * @param buf buf
      */
-    public static void writeToBuf(Context context, ByteMsgObj byteMsgObj, ByteBuf buf) {
+    public static void writeToBuf(GameContext gameContext, ByteMsgObj byteMsgObj, ByteBuf buf) {
         Class<? extends ByteMsgObj> byteMsgObjClazz = byteMsgObj.getClass();
 //        Logs.DEFAULT_LOGGER.info("deal threadName : " + Thread.currentThread().getName());
 
@@ -325,14 +325,14 @@ public class AllUtil {
         }
 
 
-        int eventId = context.getMsgIdByByteMsgObj(byteMsgObjClazz);
+        int eventId = gameContext.getMsgIdByByteMsgObj(byteMsgObjClazz);
         if (eventId <= 0) {
             Logs.DEFAULT_LOGGER.error("unknow eventid ,class {}" + byteMsgObjClazz.getSimpleName());
             throw new IllegalArgumentException("unknow eventid "+ byteMsgObjClazz.getSimpleName());
         }
 
 
-        AbstractMsgCodec msgCodec = context.getMsgCodec(eventId);
+        AbstractMsgCodec msgCodec = gameContext.getMsgCodec(eventId);
 
         if(msgCodec == null){
             Logs.DEFAULT_LOGGER.error("unknow msgCodec eventId : {}",eventId);

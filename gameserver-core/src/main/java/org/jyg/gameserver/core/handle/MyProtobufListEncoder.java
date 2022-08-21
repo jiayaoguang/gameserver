@@ -1,12 +1,11 @@
 package org.jyg.gameserver.core.handle;
 
-import cn.hutool.core.util.ZipUtil;
 import com.google.protobuf.MessageLite;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.util.List;
@@ -19,10 +18,10 @@ import java.util.List;
 @Sharable
 public class MyProtobufListEncoder extends MessageToByteEncoder<List<? extends MessageLite>> {
 
-	protected final Context context;
+	protected final GameContext gameContext;
 
-	public MyProtobufListEncoder(Context context) {
-		this.context = context;
+	public MyProtobufListEncoder(GameContext gameContext) {
+		this.gameContext = gameContext;
 	}
 
 
@@ -37,7 +36,7 @@ public class MyProtobufListEncoder extends MessageToByteEncoder<List<? extends M
 			if (bytes == null) {
 				throw new IllegalArgumentException("not MessageLiteOrBuilder");
 			}
-			int eventId = context.getMsgIdByProtoClass(protoClazz);
+			int eventId = gameContext.getMsgIdByProtoClass(protoClazz);
 			if(eventId <= 0) {
 				Logs.DEFAULT_LOGGER.info("unknow eventid");
 				continue;

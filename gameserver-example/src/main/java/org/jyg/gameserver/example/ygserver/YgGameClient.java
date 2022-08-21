@@ -24,18 +24,18 @@ public class YgGameClient {
 //		client.addMsgId2ProtoMapping(3, p_scene_sm_chat.getDefaultInstance());
 //		client.addMsgId2ProtoMapping(4, p_sm_scene_chat.getDefaultInstance());
 
-        client.getContext().addMsgId2JsonMsgClassMapping(108, LoginRequestMsg.class);
-        client.getContext().addMsgId2JsonMsgClassMapping(109, LoginReplyMsg.class);
-        client.getContext().addMsgId2JsonMsgClassMapping(110, ChatRequestJson.class);
-        client.getContext().addMsgId2JsonMsgClassMapping(111, ChatReplyJson.class);
+        client.getGameContext().addMsgId2JsonMsgClassMapping(108, LoginRequestMsg.class);
+        client.getGameContext().addMsgId2JsonMsgClassMapping(109, LoginReplyMsg.class);
+        client.getGameContext().addMsgId2JsonMsgClassMapping(110, ChatRequestJson.class);
+        client.getGameContext().addMsgId2JsonMsgClassMapping(111, ChatReplyJson.class);
 
-        client.getContext().addMsgId2JsonMsgClassMapping(120, SCPlayerJoinMsg.class);
+        client.getGameContext().addMsgId2JsonMsgClassMapping(120, SCPlayerJoinMsg.class);
 
         client.getDefaultConsumer().addProcessor( new ChatReplyProcessor());
 
 
 
-        client.getContext().getDefaultConsumer().addProcessor( new ByteMsgObjProcessor<LoginReplyMsg>(LoginReplyMsg.class) {
+        client.getGameContext().getDefaultConsumer().addProcessor(new ByteMsgObjProcessor<LoginReplyMsg>(LoginReplyMsg.class) {
 
             @Override
             public void process(Session session, EventData<LoginReplyMsg> event) {

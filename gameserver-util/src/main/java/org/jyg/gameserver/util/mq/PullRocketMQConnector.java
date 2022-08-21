@@ -6,6 +6,7 @@ import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.jyg.gameserver.core.net.PullMQConnector;
+import org.jyg.gameserver.core.util.GameContext;
 
 import java.util.List;
 
@@ -22,8 +23,8 @@ public class PullRocketMQConnector extends PullMQConnector {
 
 
 
-    public PullRocketMQConnector(org.jyg.gameserver.core.util.Context context , int mqPushConsumerId,String topic) {
-        super(context , mqPushConsumerId);
+    public PullRocketMQConnector(GameContext gameContext, int mqPushConsumerId, String topic) {
+        super(gameContext, mqPushConsumerId);
 
         /*
          * Instantiate with specified consumer group name.

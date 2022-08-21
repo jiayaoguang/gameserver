@@ -1,15 +1,8 @@
 package org.jyg.gameserver.core.net;
 
-import org.jyg.gameserver.core.data.EventExtData;
-import org.jyg.gameserver.core.enums.EventType;
-import org.jyg.gameserver.core.manager.ConsumerManager;
-import org.jyg.gameserver.core.msg.AbstractMsgCodec;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 
-import java.time.Duration;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class PullMQConnector extends MQConnector {
@@ -20,8 +13,8 @@ public abstract class PullMQConnector extends MQConnector {
     private static final AtomicInteger pollThreadInc = new AtomicInteger(1);
 
 
-    public PullMQConnector(Context context , int mqPushConsumerId ) {
-        super(context,mqPushConsumerId);
+    public PullMQConnector(GameContext gameContext, int mqPushConsumerId ) {
+        super(gameContext,mqPushConsumerId);
 
 
         this.pollThread = new Thread(this::run);
@@ -62,7 +55,7 @@ public abstract class PullMQConnector extends MQConnector {
         int pollEmptyCount = 0;
 
 
-        for(;context.isStart();){
+        for(; gameContext.isStart();){
 
             int pollMsgNum = pollMQMsg();
 

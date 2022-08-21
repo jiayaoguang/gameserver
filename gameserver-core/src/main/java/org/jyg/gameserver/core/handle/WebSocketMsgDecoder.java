@@ -10,7 +10,7 @@ import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.util.AllUtil;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.util.HashMap;
@@ -23,10 +23,10 @@ public class WebSocketMsgDecoder extends
 		SimpleChannelInboundHandler<WebSocketFrame> {
 
 //	public static Set<Channel> channels = new HashSet<>();
-	private final Context context;
+	private final GameContext gameContext;
 
-	public WebSocketMsgDecoder(Context context) {
-		this.context = context;
+	public WebSocketMsgDecoder(GameContext gameContext) {
+		this.gameContext = gameContext;
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class WebSocketMsgDecoder extends
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "在线");
 
-		context.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_ACTIVE, null, ctx.channel() , 0 );
+		gameContext.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_ACTIVE, null, ctx.channel() , 0 );
 		
 		super.channelActive(ctx);
 	}
@@ -71,7 +71,7 @@ public class WebSocketMsgDecoder extends
 
 			int msgId = msgbyteBuf.readInt();
 //            Logs.DEFAULT_LOGGER.debug("cnf:" + frame.refCnt());
-			AbstractMsgCodec<?> msgCodec = context.getMsgCodec(msgId);
+			AbstractMsgCodec<?> msgCodec = gameContext.getMsgCodec(msgId);
 			if (msgCodec == null) {
 				Logs.DEFAULT_LOGGER.error(" protoParser not found ,id : {} ", msgId);
 				return;
@@ -99,11 +99,11 @@ public class WebSocketMsgDecoder extends
 			switch (msgCodec.getMsgType()) {
 				case PROTO:
 					MessageLite messageLite = (MessageLite) msgObj;
-					context.getConsumerManager().publicEventToDefault( EventType.REMOTE_MSG_COME, messageLite, ctx.channel(), msgId);
+					gameContext.getConsumerManager().publicEventToDefault( EventType.REMOTE_MSG_COME, messageLite, ctx.channel(), msgId);
 					break;
 				case BYTE_OBJ:
 					ByteMsgObj byteMsgObj = (ByteMsgObj) msgObj;
-					context.getConsumerManager().publicEventToDefault(EventType.REMOTE_MSG_COME, byteMsgObj, ctx.channel(), msgId);
+					gameContext.getConsumerManager().publicEventToDefault(EventType.REMOTE_MSG_COME, byteMsgObj, ctx.channel(), msgId);
 					break;
 				default:
 					Logs.DEFAULT_LOGGER.error(" unknown msg type type : {} ", msgCodec.getMsgType());
@@ -135,7 +135,7 @@ public class WebSocketMsgDecoder extends
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "掉线");
 
-		context.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_INACTIVE, null, ctx.channel() , 0);
+		gameContext.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_INACTIVE, null, ctx.channel() , 0);
 		
 		super.channelInactive(ctx);
 	}

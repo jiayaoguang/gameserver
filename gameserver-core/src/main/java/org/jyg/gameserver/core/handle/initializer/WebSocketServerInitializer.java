@@ -3,10 +3,9 @@ package org.jyg.gameserver.core.handle.initializer;
 /**
  * created by jiayaoguang at 2017年12月6日
  */
-import io.netty.handler.codec.http.websocketx.WebSocket13FrameEncoder;
 import org.jyg.gameserver.core.handle.WebSocketMsgDecoder;
 import org.jyg.gameserver.core.handle.WebSocketMsgEncoder;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.http.HttpObjectAggregator;
@@ -17,8 +16,8 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 public class WebSocketServerInitializer extends
 		MyChannelInitializer<Channel> {
 
-	public WebSocketServerInitializer(Context context) {
-		super(context);
+	public WebSocketServerInitializer(GameContext gameContext) {
+		super(gameContext);
 	}
 
 	@Override
@@ -32,7 +31,7 @@ public class WebSocketServerInitializer extends
 		pipeline.addLast(new WebSocketServerProtocolHandler("/"));
 //		pipeline.addLast(new WebSocket13FrameEncoder(false));
 //		pipeline.addLast(new WebSocketFrameDecoder(context));
-		pipeline.addLast(new WebSocketMsgDecoder(context));
-		pipeline.addLast(new WebSocketMsgEncoder(context));
+		pipeline.addLast(new WebSocketMsgDecoder(gameContext));
+		pipeline.addLast(new WebSocketMsgEncoder(gameContext));
 	}
 }

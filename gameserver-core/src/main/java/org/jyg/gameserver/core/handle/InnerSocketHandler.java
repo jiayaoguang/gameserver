@@ -1,11 +1,10 @@
 package org.jyg.gameserver.core.handle;
 
 import org.jyg.gameserver.core.enums.EventType;
-import org.jyg.gameserver.core.consumer.Consumer;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 
 /**
@@ -14,10 +13,10 @@ import org.jyg.gameserver.core.util.Logs;
 @Deprecated
 public class InnerSocketHandler extends ChannelInboundHandlerAdapter {
 
-	private final Context context;
+	private final GameContext gameContext;
 
-	public InnerSocketHandler(Context context) {
-		this.context = context;
+	public InnerSocketHandler(GameContext gameContext) {
+		this.gameContext = gameContext;
 	}
 
 	@Override
@@ -25,7 +24,7 @@ public class InnerSocketHandler extends ChannelInboundHandlerAdapter {
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "在线");
 
-		context.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_ACTIVE, null, ctx.channel() , 0);
+		gameContext.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_ACTIVE, null, ctx.channel() , 0);
 		
 		super.channelActive(ctx);
 	}
@@ -35,7 +34,7 @@ public class InnerSocketHandler extends ChannelInboundHandlerAdapter {
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "掉线");
 
-		context.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_INACTIVE, null, ctx.channel() , 0);
+		gameContext.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_INACTIVE, null, ctx.channel() , 0);
 		
 		super.channelInactive(ctx);
 	}

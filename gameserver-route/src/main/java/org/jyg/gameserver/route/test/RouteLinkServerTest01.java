@@ -1,15 +1,7 @@
 package org.jyg.gameserver.route.test;
 
-import org.jyg.gameserver.core.constant.MsgIdConst;
 import org.jyg.gameserver.core.data.EventData;
-import org.jyg.gameserver.core.manager.RouteManager;
-import org.jyg.gameserver.core.msg.route.RouteMsg;
-import org.jyg.gameserver.core.msg.route.RouteRegisterMsg;
-import org.jyg.gameserver.core.msg.route.RouteRegisterReplyMsg;
-import org.jyg.gameserver.core.msg.route.RouteReplyMsg;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
-import org.jyg.gameserver.core.processor.RouteMsgProcessor;
-import org.jyg.gameserver.core.processor.RouteRegisterMsgProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.AllUtil;
@@ -40,7 +32,7 @@ public class RouteLinkServerTest01
 //		bootstarp.addMsgId2ProtoMapping(4, p_sm_scene_chat.getDefaultInstance());
 
 
-		bootstarp.getContext().addMsgId2MsgClassMapping(1001, ChatMsgObj.class);
+		bootstarp.getGameContext().addMsgId2MsgClassMapping(1001, ChatMsgObj.class);
 
 
 

@@ -47,7 +47,7 @@ public abstract class Consumer {
 
     protected volatile boolean isStart = false;
 
-    private Context context;
+    private GameContext gameContext;
 
     private Thread thread;
 
@@ -170,11 +170,11 @@ public abstract class Consumer {
             requestId = eventExtData.requestId;
         }
 
-        getContext().getConsumerManager().publicEvent(targetConsumerId, evenType, data, channel, eventId, new EventExtData(getId(), requestId, eventExtData.childChooseId));
+        getGameContext().getConsumerManager().publicEvent(targetConsumerId, evenType, data, channel, eventId, new EventExtData(getId(), requestId, eventExtData.childChooseId));
     }
 
     public void publicCallBackEventToTarget(int targetConsumerId, Object data,  int requestId ){
-        getContext().getConsumerManager().publicEvent(targetConsumerId, EventType.RESULT_CALL_BACK, data, null, 0, new EventExtData(0, requestId, 0));
+        getGameContext().getConsumerManager().publicEvent(targetConsumerId, EventType.RESULT_CALL_BACK, data, null, 0, new EventExtData(0, requestId, 0));
     }
 
     public abstract void publicEvent(EventType evenType, Object data, Channel channel, int eventId , EventExtData eventExtData);
@@ -182,12 +182,12 @@ public abstract class Consumer {
 
 
 
-    public Context getContext() {
-        return context;
+    public GameContext getGameContext() {
+        return gameContext;
     }
 
-    public void setContext(Context context) {
-        this.context = context;
+    public void setGameContext(GameContext gameContext) {
+        this.gameContext = gameContext;
     }
 
     public void addHttpProcessor(HttpProcessor processor) {
@@ -227,10 +227,10 @@ public abstract class Consumer {
             throw new IllegalArgumentException("dupilcated eventid");
         }
         if (processor instanceof ProtoProcessor) {
-            getContext().addMsgId2ProtoMapping(msgId, ((ProtoProcessor) processor).getProtoClass());
+            getGameContext().addMsgId2ProtoMapping(msgId, ((ProtoProcessor) processor).getProtoClass());
         }
         if (processor instanceof ByteMsgObjProcessor) {
-            getContext().addMsgId2MsgClassMapping(msgId, ((ByteMsgObjProcessor) processor).getByteMsgObjClazz());
+            getGameContext().addMsgId2MsgClassMapping(msgId, ((ByteMsgObjProcessor) processor).getByteMsgObjClazz());
         }
 
         processor.setConsumer(this);
@@ -343,7 +343,7 @@ public abstract class Consumer {
     public void addProcessor(Processor<?> processor) {
         if (processor instanceof ProtoProcessor) {
             ProtoProcessor protoProcessor = (ProtoProcessor) processor;
-            int msgId = getContext().getMsgIdByProtoClass(protoProcessor.getProtoClass());
+            int msgId = getGameContext().getMsgIdByProtoClass(protoProcessor.getProtoClass());
             if(msgId <= 0){
                 throw new IllegalArgumentException("class msgId not found : " + protoProcessor.getProtoClass().getCanonicalName());
             }
@@ -353,7 +353,7 @@ public abstract class Consumer {
         if (processor instanceof ByteMsgObjProcessor) {
             ByteMsgObjProcessor byteMsgObjProcessor = (ByteMsgObjProcessor) processor;
 
-            int msgId = getContext().getMsgIdByByteMsgObj(byteMsgObjProcessor.getByteMsgObjClazz());
+            int msgId = getGameContext().getMsgIdByByteMsgObj(byteMsgObjProcessor.getByteMsgObjClazz());
             if(msgId <= 0){
                 throw new IllegalArgumentException("class msgId not found : " + byteMsgObjProcessor.getByteMsgObjClazz());
             }
@@ -371,7 +371,7 @@ public abstract class Consumer {
     public boolean containsProcessor(Processor<?> processor) {
         if (processor instanceof ProtoProcessor) {
             ProtoProcessor protoProcessor = (ProtoProcessor) processor;
-            int msgId = getContext().getMsgIdByProtoClass(protoProcessor.getProtoClass());
+            int msgId = getGameContext().getMsgIdByProtoClass(protoProcessor.getProtoClass());
             if(msgId <= 0){
                 throw new IllegalArgumentException("class msgId not found : " + protoProcessor.getProtoClass().getCanonicalName());
             }
@@ -383,7 +383,7 @@ public abstract class Consumer {
         if (processor instanceof ByteMsgObjProcessor) {
             ByteMsgObjProcessor byteMsgObjProcessor = (ByteMsgObjProcessor) processor;
 
-            int msgId = getContext().getMsgIdByByteMsgObj(byteMsgObjProcessor.getByteMsgObjClazz());
+            int msgId = getGameContext().getMsgIdByByteMsgObj(byteMsgObjProcessor.getByteMsgObjClazz());
             if(msgId <= 0){
                 throw new IllegalArgumentException("class msgId not found : " + byteMsgObjProcessor.getByteMsgObjClazz());
             }
@@ -556,7 +556,7 @@ public abstract class Consumer {
                 break;
             }
             case MQ_MSG_COME:{
-                Session session = new MQSession(event.getFromConsumerId(), context);
+                Session session = new MQSession(event.getFromConsumerId(), gameContext);
                 this.processEventMsg(session, event);
                 break;
             }
@@ -597,7 +597,7 @@ public abstract class Consumer {
                 break;
 
             case LOCAL_MSG_COME:{
-                Session session = new LocalSession(event.getFromConsumerId(), context);
+                Session session = new LocalSession(event.getFromConsumerId(), gameContext);
                 this.processEventMsg(session, event);
                 break;
             }
@@ -698,7 +698,7 @@ public abstract class Consumer {
             Logs.DEFAULT_LOGGER.error("eventReturn requestId == 0");
             return;
         }
-        getContext().getConsumerManager().publicCallBackEvent(targetConsumerId , data , requestId ,eventId);
+        getGameContext().getConsumerManager().publicCallBackEvent(targetConsumerId , data , requestId ,eventId);
     }
 
 

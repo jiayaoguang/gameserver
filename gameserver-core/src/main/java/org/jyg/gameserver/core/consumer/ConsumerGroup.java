@@ -49,7 +49,7 @@ public class ConsumerGroup<T extends Consumer> extends Consumer {
             if(childConsumer.getId() == 0){
                 childConsumer.setId(nextId);
             }
-            childConsumer.setContext(getContext());
+            childConsumer.setGameContext(getGameContext());
             childConsumer.start();
             nextId++;
         }

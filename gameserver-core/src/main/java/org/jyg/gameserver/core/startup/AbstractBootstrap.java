@@ -6,7 +6,7 @@ import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.processor.HttpProcessor;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.consumer.Consumer;
 import org.jyg.gameserver.core.consumer.RingBufferConsumer;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ public abstract class AbstractBootstrap implements Lifecycle {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final Context context;
+    private final GameContext gameContext;
 
     protected volatile boolean isStart = false;
 
@@ -30,11 +30,11 @@ public abstract class AbstractBootstrap implements Lifecycle {
     }
 
     public AbstractBootstrap(Consumer defaultConsumer) {
-        this(new Context(defaultConsumer));
+        this(new GameContext(defaultConsumer));
     }
 
-    public AbstractBootstrap(Context context) {
-        this.context = context;
+    public AbstractBootstrap(GameContext gameContext) {
+        this.gameContext = gameContext;
 //        this.defaultConsumer.getEventConsumerFactory().setContext(context);
     }
 
@@ -53,17 +53,17 @@ public abstract class AbstractBootstrap implements Lifecycle {
     }
 
     public void addProtoProcessor(ProtoProcessor<? extends MessageLite> protoProcessor) {
-        int msgId = context.getMsgIdByProtoClass(protoProcessor.getProtoClass());
-        this.context.getDefaultConsumer().addProcessor(msgId, protoProcessor);
+        int msgId = gameContext.getMsgIdByProtoClass(protoProcessor.getProtoClass());
+        this.gameContext.getDefaultConsumer().addProcessor(msgId, protoProcessor);
     }
 
     public void addByteMsgObjProcessor(ByteMsgObjProcessor<? extends ByteMsgObj> byteMsgObjProcessor) {
 //        int msgId = byteMsgObjProcessor.getMsgId();
-        this.context.getDefaultConsumer().addProcessor(byteMsgObjProcessor);
+        this.gameContext.getDefaultConsumer().addProcessor(byteMsgObjProcessor);
     }
 
     public void addProtoProcessor(int msgId,ProtoProcessor<? extends MessageLite> protoProcessor) {
-        this.context.getDefaultConsumer().addProcessor(msgId, protoProcessor);
+        this.gameContext.getDefaultConsumer().addProcessor(msgId, protoProcessor);
     }
 
 
@@ -75,7 +75,7 @@ public abstract class AbstractBootstrap implements Lifecycle {
         if (path == null) {
             throw new IllegalArgumentException(" getProtoEventId -1 ");
         }
-        this.context.getDefaultConsumer().addHttpProcessor(processor);
+        this.gameContext.getDefaultConsumer().addHttpProcessor(processor);
     }
 
 
@@ -88,14 +88,14 @@ public abstract class AbstractBootstrap implements Lifecycle {
         if (isStart) {
             throw new IllegalArgumentException(" registerHttpProcessor fail ,server is start ");
         }
-        this.context.addMsgId2ProtoMapping(eventId, protoClazz);
+        this.gameContext.addMsgId2ProtoMapping(eventId, protoClazz);
     }
 
     public void addMsgId2ProtoMapping(int eventId, MessageLite defaultInstance)  {
         if (isStart) {
             throw new IllegalArgumentException(" registerHttpProcessor fail ,server is start ");
         }
-        this.context.addMsgId2ProtoMapping(eventId, defaultInstance);
+        this.gameContext.addMsgId2ProtoMapping(eventId, defaultInstance);
     }
 
     public Logger getLogger() {
@@ -103,11 +103,11 @@ public abstract class AbstractBootstrap implements Lifecycle {
     }
 
     public Consumer getDefaultConsumer() {
-        return context.getDefaultConsumer();
+        return gameContext.getDefaultConsumer();
     }
 
-    public Context getContext() {
-        return context;
+    public GameContext getGameContext() {
+        return gameContext;
     }
 
     public final synchronized void start(){
@@ -119,7 +119,7 @@ public abstract class AbstractBootstrap implements Lifecycle {
 
 
         isStart = true;
-        context.start();
+        gameContext.start();
 
         doStart();
 
@@ -133,7 +133,7 @@ public abstract class AbstractBootstrap implements Lifecycle {
 
     public void stop(){
 
-        context.stop();
+        gameContext.stop();
 
     }
 

@@ -2,7 +2,6 @@ package org.jyg.gameserver.core.startup;
 
 import org.jyg.gameserver.core.handle.initializer.SocketClientInitializer;
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.util.RemotingUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
@@ -43,8 +42,8 @@ public class UdpClient extends AbstractBootstrap{
 
 	public void doStart(){
 		bootstrap.group(group);
-		bootstrap.channel( getContext().isUseEpoll() ? EpollDatagramChannel.class : NioDatagramChannel.class);
-		bootstrap.handler(new SocketClientInitializer(getContext()));
+		bootstrap.channel( getGameContext().isUseEpoll() ? EpollDatagramChannel.class : NioDatagramChannel.class);
+		bootstrap.handler(new SocketClientInitializer(getGameContext()));
 		bootstrap.option(ChannelOption.SO_REUSEADDR, true);
 		bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 	}

@@ -1,13 +1,12 @@
 package org.jyg.gameserver.core.handle;
 
-import com.google.protobuf.MessageLite;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.util.AllUtil;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 
 /**
  * created by jiayaoguang at 2018年3月13日
@@ -17,16 +16,16 @@ import org.jyg.gameserver.core.util.Context;
 @Deprecated
 public class MyByteMsgObjEncoder extends MessageToByteEncoder<ByteMsgObj> {
 
-	protected final Context context;
+	protected final GameContext gameContext;
 
-	public MyByteMsgObjEncoder(Context context) {
-		this.context = context;
+	public MyByteMsgObjEncoder(GameContext gameContext) {
+		this.gameContext = gameContext;
 	}
 
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, ByteMsgObj msg, ByteBuf buf) {
-		AllUtil.writeToBuf(context , msg , buf);
+		AllUtil.writeToBuf(gameContext, msg , buf);
 //		out.add(buf);
 	}
 }

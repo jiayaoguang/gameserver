@@ -4,7 +4,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.timeout.IdleStateHandler;
 import org.jyg.gameserver.core.handle.*;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 
 import java.util.concurrent.TimeUnit;
 
@@ -15,8 +15,8 @@ import java.util.concurrent.TimeUnit;
 public class InnerSocketServerInitializer extends
 		MyChannelInitializer<Channel> {
 
-	public InnerSocketServerInitializer(Context context) {
-		super(context);
+	public InnerSocketServerInitializer(GameContext gameContext) {
+		super(gameContext);
 	}
 
 	@Override
@@ -25,18 +25,18 @@ public class InnerSocketServerInitializer extends
 //		pipeline.addLast(new ProtobufVarint32FrameDecoder());
 
 
-		if(context.getServerConfig().getReadOutTimeSec() > 0){
-			pipeline.addLast("idle",new IdleStateHandler(context.getServerConfig().getReadOutTimeSec(),0,0 , TimeUnit.SECONDS));
+		if(gameContext.getServerConfig().getReadOutTimeSec() > 0){
+			pipeline.addLast("idle",new IdleStateHandler(gameContext.getServerConfig().getReadOutTimeSec(),0,0 , TimeUnit.SECONDS));
 		}
 
-		pipeline.addLast("connect",new NettyConnectManageHandler(context));
+		pipeline.addLast("connect",new NettyConnectManageHandler(gameContext));
 
-		pipeline.addLast("MsgDecoder" , context.getNettyHandlerFactory().createMsgDecoder());
+		pipeline.addLast("MsgDecoder" , gameContext.getNettyHandlerFactory().createMsgDecoder());
 
-		if(context.getServerConfig().isNeedMergeProto()){
-			pipeline.addLast("MsgMergeEncoder" , context.getNettyHandlerFactory().createMsgMergeHandler(context));
+		if(gameContext.getServerConfig().isNeedMergeProto()){
+			pipeline.addLast("MsgMergeEncoder" , gameContext.getNettyHandlerFactory().createMsgMergeHandler(gameContext));
 		}else {
-			pipeline.addLast("MsgEncoder", context.getNettyHandlerFactory().getMsgEncoder());
+			pipeline.addLast("MsgEncoder", gameContext.getNettyHandlerFactory().getMsgEncoder());
 		}
 
 //		pipeline.addLast("byteMsgEncoder" , context.getNettyHandlerFactory().getMyByteMsgObjEncoder());

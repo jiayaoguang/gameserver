@@ -8,7 +8,7 @@ import io.netty.handler.codec.EncoderException;
 import io.netty.handler.codec.MessageToByteEncoder;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.util.AllUtil;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ public class MsgMergeHandler extends MessageToByteEncoder<Object> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("ProtoMergeHandler");
 
-    protected final Context context;
+    protected final GameContext gameContext;
 
 // private final List<MessageLite> msgList = new ArrayList<>();
 
@@ -75,8 +75,8 @@ public class MsgMergeHandler extends MessageToByteEncoder<Object> {
         }
     }
 
-    public MsgMergeHandler(Context context) {
-        this.context = context;
+    public MsgMergeHandler(GameContext gameContext) {
+        this.gameContext = gameContext;
     }
 
 
@@ -119,11 +119,11 @@ public class MsgMergeHandler extends MessageToByteEncoder<Object> {
                 if( msg instanceof MessageLite ){
                     @SuppressWarnings("unchecked")
                     MessageLite originProto = (MessageLite) msg;
-                    AllUtil.writeToBuf(context,originProto , cacheBuf);
+                    AllUtil.writeToBuf(gameContext,originProto , cacheBuf);
                 }else if( msg instanceof ByteMsgObj ){
                     @SuppressWarnings("unchecked")
                     ByteMsgObj byteMsgObj = (ByteMsgObj) msg;
-                    AllUtil.writeToBuf(context,byteMsgObj , cacheBuf);
+                    AllUtil.writeToBuf(gameContext,byteMsgObj , cacheBuf);
                 }else {
                     ctx.write(msg, promise);
                     return;

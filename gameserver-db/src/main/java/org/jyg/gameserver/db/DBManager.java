@@ -2,7 +2,7 @@ package org.jyg.gameserver.db;
 
 import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 
 /**
  * create by jiayaoguang at 2021/5/22
@@ -10,43 +10,43 @@ import org.jyg.gameserver.core.util.Context;
 @Deprecated
 public class DBManager {
 
-    private final Context context;
+    private final GameContext gameContext;
 
     protected final int dbConsumerId;
 
-    public DBManager(Context context, int dbConsumerId){
-        this.context = context;
+    public DBManager(GameContext gameContext, int dbConsumerId){
+        this.gameContext = gameContext;
         this.dbConsumerId = dbConsumerId;
     }
 
     public void insert(Object object) {
-            context.getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, object, null, BDEventConst.INSERT
+            gameContext.getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, object, null, BDEventConst.INSERT
                     , new EventExtData(0, 0, object.getClass().hashCode()));
     }
 
     public void insert(Object object, long childChooseId) {
-        context.getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, object, null, BDEventConst.INSERT
+        gameContext.getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, object, null, BDEventConst.INSERT
                 , new EventExtData(0, 0, childChooseId));
     }
 
     public void delete(Object object, long childChooseId) {
-        context.getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, object, null, BDEventConst.DELETE
+        gameContext.getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, object, null, BDEventConst.DELETE
                 , new EventExtData(0, 0, childChooseId));
 
     }
 
     public void delete(Object object){
-        context.getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, object, null, BDEventConst.DELETE
+        gameContext.getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, object, null, BDEventConst.DELETE
                 , new EventExtData(0, 0, object.getClass().hashCode()));
     }
 
     public void update(Object object, long childChooseId) {
-        context.getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, object, null, BDEventConst.UPDATE
+        gameContext.getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, object, null, BDEventConst.UPDATE
                 , new EventExtData(0, 0, childChooseId));
     }
 
     public void update(Object object) {
-        context.getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, object, null, BDEventConst.UPDATE
+        gameContext.getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, object, null, BDEventConst.UPDATE
                 , new EventExtData(0, 0, object.getClass().hashCode()));
     }
 

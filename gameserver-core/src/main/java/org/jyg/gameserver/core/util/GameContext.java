@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * create by jiayaoguang on 2020/5/3
  */
-public class Context implements Lifecycle{
+public class GameContext implements Lifecycle{
 
     public static final String DEFAULT_CONFIG_FILE_NAME = "jyg.properties";
 //    private String configFileName = DEFAULT_CONFIG_FILE_NAME;
@@ -74,11 +74,11 @@ public class Context implements Lifecycle{
 //    private final ClockManager clockManager = new ClockManager();
 
 
-    public Context(Consumer defaultConsumer) {
+    public GameContext(Consumer defaultConsumer) {
         this(defaultConsumer ,DEFAULT_CONFIG_FILE_NAME );
     }
 
-    public Context(Consumer defaultConsumer , String configFileName) {
+    public GameContext(Consumer defaultConsumer , String configFileName) {
 
         this.defaultConsumer = defaultConsumer;
         this.instanceManager = new InstanceManager(this);
@@ -94,7 +94,7 @@ public class Context implements Lifecycle{
         this.singleThreadExecutorManagerPool = new SingleThreadExecutorManagerPool(defaultConsumer);
 
         defaultConsumer.setId(ConsumerManager.DEFAULT_CONSUMER_ID);
-        defaultConsumer.setContext(this);
+        defaultConsumer.setGameContext(this);
         this.consumerManager = new ConsumerManager(this);
         this.consumerManager.addConsumer(defaultConsumer);
 

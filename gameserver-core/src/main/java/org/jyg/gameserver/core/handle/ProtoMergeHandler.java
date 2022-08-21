@@ -2,13 +2,12 @@ package org.jyg.gameserver.core.handle;
 
 import com.google.protobuf.MessageLite;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import io.netty.handler.codec.EncoderException;
 import io.netty.handler.codec.MessageToByteEncoder;
 import org.jyg.gameserver.core.util.AllUtil;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +23,7 @@ public class ProtoMergeHandler  extends MessageToByteEncoder<MessageLite> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("ProtoMergeHandler");
 
-    protected final Context context;
+    protected final GameContext gameContext;
 
 // private final List<MessageLite> msgList = new ArrayList<>();
 
@@ -76,8 +75,8 @@ public class ProtoMergeHandler  extends MessageToByteEncoder<MessageLite> {
         }
     }
 
-    public ProtoMergeHandler(Context context) {
-        this.context = context;
+    public ProtoMergeHandler(GameContext gameContext) {
+        this.gameContext = gameContext;
     }
 
 
@@ -114,7 +113,7 @@ public class ProtoMergeHandler  extends MessageToByteEncoder<MessageLite> {
 //                }
 //                msgList.add(cast);
 
-                AllUtil.writeToBuf(context,originProto , cacheBuf);
+                AllUtil.writeToBuf(gameContext,originProto , cacheBuf);
                 onceMergeMsgNum++;
                 int byteSize = cacheBuf.readableBytes();
                 if(byteSize < MAX_BUF_LENGTH ){

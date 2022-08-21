@@ -7,10 +7,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.util.AllUtil;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.util.Logs;
-import org.jyg.gameserver.core.util.UnknownMsgHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,11 +20,11 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(MsgDecoder.class);
 
-    private final Context context;
+    private final GameContext gameContext;
 
-    public MsgDecoder(Context context) {
-        super(context.getServerConfig().getMaxFrameLength(), 0, 4, 0, 4);
-        this.context = context;
+    public MsgDecoder(GameContext gameContext) {
+        super(gameContext.getServerConfig().getMaxFrameLength(), 0, 4, 0, 4);
+        this.gameContext = gameContext;
     }
 
     // @Override
@@ -70,7 +69,7 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
 
             int msgId = frame.readInt();
 //            Logs.DEFAULT_LOGGER.debug("cnf:" + frame.refCnt());
-            AbstractMsgCodec<?> msgCodec = context.getMsgCodec(msgId);
+            AbstractMsgCodec<?> msgCodec = gameContext.getMsgCodec(msgId);
             if (msgCodec == null) {
 
                 int readableBytes = frame.readableBytes();
@@ -78,7 +77,7 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
                 if(readableBytes > 0){
                     frame.getBytes(frame.readerIndex(), dstBytes);
                 }
-                context.getConsumerManager().publicEventToDefault(EventType.REMOTE_UNKNOWN_MSG_COME, dstBytes, ctx.channel(), msgId );
+                gameContext.getConsumerManager().publicEventToDefault(EventType.REMOTE_UNKNOWN_MSG_COME, dstBytes, ctx.channel(), msgId );
 
                 return null;
             }
@@ -102,7 +101,7 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
                 throw e;
             }
 
-            context.getConsumerManager().publicEventToDefault(EventType.REMOTE_MSG_COME, msgObj, ctx.channel(), msgId);
+            gameContext.getConsumerManager().publicEventToDefault(EventType.REMOTE_MSG_COME, msgObj, ctx.channel(), msgId);
 
 
         }catch (Exception e){

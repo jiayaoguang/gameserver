@@ -1,7 +1,7 @@
 package org.jyg.gameserver.core.net;
 
 import org.jyg.gameserver.core.handle.initializer.InnerSocketServerInitializer;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -24,17 +24,17 @@ public class UdpConnector extends AbstractConnector {
 
     private final int port;
 
-    private final Context context;
+    private final GameContext gameContext;
 
-    public UdpConnector(int port, Context context) {
-        super(context);
+    public UdpConnector(int port, GameContext gameContext) {
+        super(gameContext);
         if (port < 0) {
             throw new IllegalArgumentException("port number cannot be negative ");
         }
         this.port = port;
-        this.context = context;
-        this.workGroup = context.getEventLoopGroupManager().getWorkGroup();
-        this.bossGroup = context.getEventLoopGroupManager().getBossGroup();
+        this.gameContext = gameContext;
+        this.workGroup = gameContext.getEventLoopGroupManager().getWorkGroup();
+        this.bossGroup = gameContext.getEventLoopGroupManager().getBossGroup();
     }
 
     @Override
@@ -44,8 +44,8 @@ public class UdpConnector extends AbstractConnector {
 
         bootstrap.group(workGroup);
 
-        bootstrap.channel(getContext().isUseEpoll() ? EpollDatagramChannel.class : NioDatagramChannel.class);
-        bootstrap.handler(new InnerSocketServerInitializer(context));
+        bootstrap.channel(getGameContext().isUseEpoll() ? EpollDatagramChannel.class : NioDatagramChannel.class);
+        bootstrap.handler(new InnerSocketServerInitializer(gameContext));
 //        bootstrap.childHandler(initializer);
         bootstrap.option(ChannelOption.SO_BROADCAST, true);
         bootstrap.option(ChannelOption.SO_REUSEADDR, true);

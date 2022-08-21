@@ -7,7 +7,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.jyg.gameserver.core.net.PullMQConnector;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 
 import java.time.Duration;
 import java.util.List;
@@ -21,8 +21,8 @@ public class KafkaMQConnector extends PullMQConnector {
     private final Duration pollDuration = Duration.ofMillis(100);
 
 
-    public KafkaMQConnector(Context context , int mqPushConsumerId, List<String> topics) {
-        super(context , mqPushConsumerId);
+    public KafkaMQConnector(GameContext gameContext, int mqPushConsumerId, List<String> topics) {
+        super(gameContext, mqPushConsumerId);
 
         // 1. 创建用于连接Kafka的Properties配置
 

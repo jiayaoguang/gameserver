@@ -4,7 +4,7 @@ import com.google.protobuf.MessageLite;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.manager.Lifecycle;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 
 /**
  * create by jiayaoguang on 2022/8/14
@@ -12,10 +12,10 @@ import org.jyg.gameserver.core.util.Context;
 public class RemoteServerManager implements Lifecycle {
 
     private final int remoteConsumerId;
-    private final Context context;
-    public RemoteServerManager(Context context, int remoteConsumerId) {
+    private final GameContext gameContext;
+    public RemoteServerManager(GameContext gameContext, int remoteConsumerId) {
         this.remoteConsumerId = remoteConsumerId;
-        this.context = context;
+        this.gameContext = gameContext;
     }
 
 
@@ -31,11 +31,11 @@ public class RemoteServerManager implements Lifecycle {
 
 
     public void sendRemoteMsg(MessageLite message){
-        this.context.getConsumerManager().publicEvent(remoteConsumerId , EventType.UNKNOWN , message ,0);
+        this.gameContext.getConsumerManager().publicEvent(remoteConsumerId , EventType.UNKNOWN , message ,0);
     }
 
     public void sendRemoteMsg(ByteMsgObj message){
-        this.context.getConsumerManager().publicEvent(remoteConsumerId , EventType.UNKNOWN , message ,0);
+        this.gameContext.getConsumerManager().publicEvent(remoteConsumerId , EventType.UNKNOWN , message ,0);
     }
 
 

@@ -1,22 +1,16 @@
 package org.jyg.gameserver.route;
 
-import org.jyg.gameserver.core.constant.MsgIdConst;
 import org.jyg.gameserver.core.consumer.RemoteConsumer;
-import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.event.ConnectEvent;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
 import org.jyg.gameserver.core.event.DisconnectEvent;
-import org.jyg.gameserver.core.event.Event;
-import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.route.*;
-import org.jyg.gameserver.core.processor.AbstractProcessor;
 import org.jyg.gameserver.core.session.EnumSessionType;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.ConfigUtil;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.UnknownMsgHandler;
-import org.jyg.gameserver.route.msg.ChatMsgObj;
 import org.jyg.gameserver.route.processor.RouteReplyMsgProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,21 +49,21 @@ public class RouteBootstarp
             throw new IllegalArgumentException("routeConfig error");
         }
 
-        RemoteConsumer remoteConsumer = new RemoteConsumer(bootstarp.getContext(),routeConfig.getGameServerIp(),routeConfig.getGameServerPort());
+        RemoteConsumer remoteConsumer = new RemoteConsumer(bootstarp.getGameContext(),routeConfig.getGameServerIp(),routeConfig.getGameServerPort());
         int remoteConsumerId = 1009;
         remoteConsumer.setId(remoteConsumerId);
 
-        bootstarp.getContext().getConsumerManager().addConsumer(remoteConsumer);
-        bootstarp.getContext().putInstance(new RemoteServerManager(bootstarp.getContext() , remoteConsumerId));
+        bootstarp.getGameContext().getConsumerManager().addConsumer(remoteConsumer);
+        bootstarp.getGameContext().putInstance(new RemoteServerManager(bootstarp.getGameContext() , remoteConsumerId));
 
 
 
         bootstarp.addByteMsgObjProcessor(new RouteReplyMsgProcessor());
 
-        final Context context = bootstarp.getContext();
+        final GameContext gameContext = bootstarp.getGameContext();
 
 
-        bootstarp.getContext().getDefaultConsumer().setUnknownMsgHandler(new UnknownMsgHandler() {
+        bootstarp.getGameContext().getDefaultConsumer().setUnknownMsgHandler(new UnknownMsgHandler() {
 
 
             @Override
@@ -80,7 +74,7 @@ public class RouteBootstarp
                 routeMsg.setData(msgData);
                 routeMsg.setSessionId(session.getSessionId());
 
-                context.getInstance(RemoteServerManager.class).sendRemoteMsg(routeMsg);
+                gameContext.getInstance(RemoteServerManager.class).sendRemoteMsg(routeMsg);
             }
 
         });
@@ -97,7 +91,7 @@ public class RouteBootstarp
             routeClientSessionConnectMsg.setSessionId(session.getSessionId());
             routeClientSessionConnectMsg.setAddr(session.getRemoteAddr());
 
-            bootstarp.getContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionConnectMsg);
+            bootstarp.getGameContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionConnectMsg);
         }));
 
 
@@ -105,7 +99,7 @@ public class RouteBootstarp
 
             RouteClientSessionDisconnectMsg routeClientSessionDisconnectMsg = new RouteClientSessionDisconnectMsg();
             routeClientSessionDisconnectMsg.setSessionId(session.getSessionId());
-            bootstarp.getContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionDisconnectMsg);
+            bootstarp.getGameContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionDisconnectMsg);
         }));
 
 
@@ -113,9 +107,9 @@ public class RouteBootstarp
         bootstarp.getDefaultConsumer().getEventManager().addEvent(new ConsumerThreadStartEvent((con,obj)->{
 
             RouteRegisterMsg routeRegisterMsg = new RouteRegisterMsg();
-            routeRegisterMsg.setServerId(con.getContext().getServerConfig().getServerId());
+            routeRegisterMsg.setServerId(con.getGameContext().getServerConfig().getServerId());
 
-            con.getContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeRegisterMsg);
+            con.getGameContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeRegisterMsg);
         }));
 
         

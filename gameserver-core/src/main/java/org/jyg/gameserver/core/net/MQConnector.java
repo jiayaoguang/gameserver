@@ -1,15 +1,13 @@
 package org.jyg.gameserver.core.net;
 
-import org.jyg.gameserver.core.consumer.MpscQueueConsumer;
 import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.manager.ConsumerManager;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.util.Arrays;
-import java.util.List;
 
 public abstract class MQConnector extends AbstractConnector {
 
@@ -18,8 +16,8 @@ public abstract class MQConnector extends AbstractConnector {
 
 
 
-    public MQConnector(Context context , int mqPushConsumerId ) {
-        super(context);
+    public MQConnector(GameContext gameContext, int mqPushConsumerId ) {
+        super(gameContext);
         this.mqPushConsumerId = mqPushConsumerId;
 
     }
@@ -41,7 +39,7 @@ public abstract class MQConnector extends AbstractConnector {
         msgId <<=8;
         msgId |= (msg[3]&0xff);
 
-        AbstractMsgCodec<?> msgCodec = getContext().getMsgCodec(msgId);
+        AbstractMsgCodec<?> msgCodec = getGameContext().getMsgCodec(msgId);
         if (msgCodec == null) {
             Logs.CONSUMER.error(" protoParser not found ,id : {} ", msgId);
             return;
@@ -56,7 +54,7 @@ public abstract class MQConnector extends AbstractConnector {
             return;
         }
 
-        getContext().getConsumerManager().publicEvent(ConsumerManager.DEFAULT_CONSUMER_ID, EventType.MQ_MSG_COME, msgObj, null, msgId, new EventExtData(mqPushConsumerId, 0));
+        getGameContext().getConsumerManager().publicEvent(ConsumerManager.DEFAULT_CONSUMER_ID, EventType.MQ_MSG_COME, msgObj, null, msgId, new EventExtData(mqPushConsumerId, 0));
 
     }
 

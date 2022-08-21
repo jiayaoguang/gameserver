@@ -1,24 +1,23 @@
 package org.jyg.gameserver.core.net;
 
-import org.jyg.gameserver.core.consumer.Consumer;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 
 /**
  * create by jiayaoguang on 2020/5/2
  */
 public abstract class AbstractConnector implements Connector {
 
-    protected Context context;
+    protected GameContext gameContext;
 
-    protected AbstractConnector(Context context) {
-        this.context = context;
+    protected AbstractConnector(GameContext gameContext) {
+        this.gameContext = gameContext;
     }
 
 
 
 
-    public Context getContext(){
-        return context;
+    public GameContext getGameContext(){
+        return gameContext;
     }
 
 }

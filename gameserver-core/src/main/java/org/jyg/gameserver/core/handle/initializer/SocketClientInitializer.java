@@ -6,7 +6,7 @@ import org.jyg.gameserver.core.handle.*;
 /**
  * created by jiayaoguang at 2017年12月6日
  */
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 
@@ -16,8 +16,8 @@ public class SocketClientInitializer extends
 		MyChannelInitializer<Channel> {
 
 
-	public SocketClientInitializer(Context context) {
-		super(context);
+	public SocketClientInitializer(GameContext gameContext) {
+		super(gameContext);
 	}
 
 	@Override
@@ -26,12 +26,12 @@ public class SocketClientInitializer extends
 //		pipeline.addLast(new ProtobufVarint32FrameDecoder());
 
 
-		if(context.getServerConfig().getClientWriteOutTimeSec() > 0 || context.getServerConfig().getReadOutTimeSec() > 0){
-			pipeline.addLast("idle", new IdleStateHandler(context.getServerConfig().getReadOutTimeSec()
-					, context.getServerConfig().getClientWriteOutTimeSec(), 0, TimeUnit.SECONDS));
+		if(gameContext.getServerConfig().getClientWriteOutTimeSec() > 0 || gameContext.getServerConfig().getReadOutTimeSec() > 0){
+			pipeline.addLast("idle", new IdleStateHandler(gameContext.getServerConfig().getReadOutTimeSec()
+					, gameContext.getServerConfig().getClientWriteOutTimeSec(), 0, TimeUnit.SECONDS));
 		}
 
-		pipeline.addLast("connect",new NettyClientConnectManageHandler(context));
+		pipeline.addLast("connect",new NettyClientConnectManageHandler(gameContext));
 
 
 //		if(context.getServerConfig().isNeedMergeProto()){
@@ -41,8 +41,8 @@ public class SocketClientInitializer extends
 //		}
 
 //		pipeline.addLast("byteMsgEncoder" , context.getNettyHandlerFactory().getMyByteMsgObjEncoder());
-		pipeline.addLast("MsgDecoder" , context.getNettyHandlerFactory().createMsgDecoder());
-		pipeline.addLast("MsgEncoder" , context.getNettyHandlerFactory().getMsgEncoder());
+		pipeline.addLast("MsgDecoder" , gameContext.getNettyHandlerFactory().createMsgDecoder());
+		pipeline.addLast("MsgEncoder" , gameContext.getNettyHandlerFactory().getMsgEncoder());
 
 
 //		pipeline.addLast(new MyProtobufListEncoder(context));

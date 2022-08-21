@@ -5,7 +5,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.util.CallBackEvent;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 
 import java.io.IOException;
 
@@ -16,12 +16,12 @@ public class HttpCallBack implements Callback {
 
     private final int fromConsumerId;
     private final Callback callback;
-    private final Context context;
+    private final GameContext gameContext;
 
-    public HttpCallBack(int fromConsumerId, Callback callback, Context context) {
+    public HttpCallBack(int fromConsumerId, Callback callback, GameContext gameContext) {
         this.fromConsumerId = fromConsumerId;
         this.callback = callback;
-        this.context = context;
+        this.gameContext = gameContext;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class HttpCallBack implements Callback {
             }
         };
 
-        context.getConsumerManager().publicEvent(fromConsumerId, EventType.INNER_MSG,
+        gameContext.getConsumerManager().publicEvent(fromConsumerId, EventType.INNER_MSG,
                 callBackEvent, 0);
 
     }
@@ -52,7 +52,7 @@ public class HttpCallBack implements Callback {
             }
         };
 
-        context.getConsumerManager().publicEvent(fromConsumerId, EventType.INNER_MSG,
+        gameContext.getConsumerManager().publicEvent(fromConsumerId, EventType.INNER_MSG,
                 callBackEvent, 0);
 
     }

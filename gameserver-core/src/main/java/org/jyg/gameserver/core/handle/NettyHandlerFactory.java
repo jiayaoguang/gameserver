@@ -1,7 +1,6 @@
 package org.jyg.gameserver.core.handle;
 
-import org.jyg.gameserver.core.util.Context;
-import org.jyg.gameserver.core.util.UnknownMsgHandler;
+import org.jyg.gameserver.core.util.GameContext;
 
 /**
  * create by jiayaoguang on 2020/9/5
@@ -15,21 +14,21 @@ public class NettyHandlerFactory {
     private final MsgEncoder msgEncoder;
 
 
-    private final Context context;
+    private final GameContext gameContext;
 
-    public NettyHandlerFactory(Context context) {
-        this.myProtobufEncoder = new MyProtobufEncoder(context);
-        this.myByteMsgObjEncoder = new MyByteMsgObjEncoder(context);
-        this.msgEncoder = new MsgEncoder(context);
-        this.context = context;
+    public NettyHandlerFactory(GameContext gameContext) {
+        this.myProtobufEncoder = new MyProtobufEncoder(gameContext);
+        this.myByteMsgObjEncoder = new MyByteMsgObjEncoder(gameContext);
+        this.msgEncoder = new MsgEncoder(gameContext);
+        this.gameContext = gameContext;
     }
 
 
-    public ProtoMergeHandler createProtoMergeHandler(Context context) {
-        return new ProtoMergeHandler(context);
+    public ProtoMergeHandler createProtoMergeHandler(GameContext gameContext) {
+        return new ProtoMergeHandler(gameContext);
     }
-    public MsgMergeHandler createMsgMergeHandler(Context context) {
-        return new MsgMergeHandler(context);
+    public MsgMergeHandler createMsgMergeHandler(GameContext gameContext) {
+        return new MsgMergeHandler(gameContext);
     }
 
 
@@ -47,7 +46,7 @@ public class NettyHandlerFactory {
     }
 
     public MsgDecoder createMsgDecoder() {
-        return new MsgDecoder(context);
+        return new MsgDecoder(gameContext);
     }
 
 

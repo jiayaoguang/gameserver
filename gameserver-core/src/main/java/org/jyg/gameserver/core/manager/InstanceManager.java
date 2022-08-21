@@ -1,13 +1,11 @@
 package org.jyg.gameserver.core.manager;
 
 import org.jyg.gameserver.core.consumer.Consumer;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -21,22 +19,22 @@ public class InstanceManager implements Lifecycle {
     private final Map<Class<?>, Object> instanceMap;
 
     private final Consumer consumer;
-    private final Context context;
+    private final GameContext gameContext;
 
     public InstanceManager() {
         this(null , null);
     }
 
     public InstanceManager(Consumer consumer) {
-        this(consumer , consumer.getContext());
+        this(consumer , consumer.getGameContext());
     }
 
-    public InstanceManager(Context context) {
-        this(null , context);
+    public InstanceManager(GameContext gameContext) {
+        this(null , gameContext);
     }
 
-    public InstanceManager(Consumer consumer , Context context) {
-        this.context = context;
+    public InstanceManager(Consumer consumer , GameContext gameContext) {
+        this.gameContext = gameContext;
         this.instanceMap = new LinkedHashMap<>();
         this.consumer = consumer;
     }
@@ -172,8 +170,8 @@ public class InstanceManager implements Lifecycle {
     @SuppressWarnings("unchecked")
     public <T> T getInstance(Class<T> clazz) {
 
-        if(clazz == Context.class){
-            return (T)context;
+        if(clazz == GameContext.class){
+            return (T) gameContext;
         }
 
         if(Consumer.class == clazz){

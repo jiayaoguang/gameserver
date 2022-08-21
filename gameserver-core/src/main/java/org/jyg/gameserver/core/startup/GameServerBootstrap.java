@@ -4,7 +4,7 @@ import org.jyg.gameserver.core.net.*;
 import org.jyg.gameserver.core.net.Connector;
 import org.jyg.gameserver.core.net.SocketConnector;
 import org.jyg.gameserver.core.consumer.Consumer;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.util.ArrayList;
@@ -27,8 +27,8 @@ public class GameServerBootstrap extends AbstractBootstrap {
     }
 
 
-    public GameServerBootstrap(Context context) {
-        super(context);
+    public GameServerBootstrap(GameContext gameContext) {
+        super(gameContext);
     }
 
     /**
@@ -57,11 +57,11 @@ public class GameServerBootstrap extends AbstractBootstrap {
      */
     @Deprecated
     public void addTcpService(int port) {
-        addConnector(new SocketConnector(port, getContext()));
+        addConnector(new SocketConnector(port, getGameContext()));
     }
 
     public void addTcpConnector(int port) {
-        addConnector(new SocketConnector(port, getContext()));
+        addConnector(new SocketConnector(port, getGameContext()));
     }
 
     /**
@@ -71,11 +71,11 @@ public class GameServerBootstrap extends AbstractBootstrap {
      */
     @Deprecated
     public void addWebSocketService(int port) {
-        addConnector(new WebSocketConnector(port, getContext()));
+        addConnector(new WebSocketConnector(port, getGameContext()));
     }
 
     public void addWebSocketConnector(int port) {
-        addConnector(new WebSocketConnector(port, getContext()));
+        addConnector(new WebSocketConnector(port, getGameContext()));
     }
 
     /**
@@ -85,11 +85,11 @@ public class GameServerBootstrap extends AbstractBootstrap {
      */
     @Deprecated
     public void addHttpService(int port) {
-        addConnector(new HttpConnector(port, getContext()));
+        addConnector(new HttpConnector(port, getGameContext()));
     }
 
     public void addHttpConnector(int port) {
-        addConnector(new HttpConnector(port, getContext()));
+        addConnector(new HttpConnector(port, getGameContext()));
     }
 
 

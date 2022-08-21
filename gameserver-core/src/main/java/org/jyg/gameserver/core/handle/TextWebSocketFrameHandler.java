@@ -1,14 +1,13 @@
 package org.jyg.gameserver.core.handle;
 
 import org.jyg.gameserver.core.enums.EventType;
-import org.jyg.gameserver.core.consumer.Consumer;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.util.HashMap;
@@ -22,10 +21,10 @@ public class TextWebSocketFrameHandler extends
 		SimpleChannelInboundHandler<WebSocketFrame> {
 
 //	public static Set<Channel> channels = new HashSet<>();
-	private final Context context;
+	private final GameContext gameContext;
 
-	public TextWebSocketFrameHandler(Context context) {
-		this.context = context;
+	public TextWebSocketFrameHandler(GameContext gameContext) {
+		this.gameContext = gameContext;
 	}
 
 	@Override
@@ -33,7 +32,7 @@ public class TextWebSocketFrameHandler extends
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "在线");
 
-		context.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_ACTIVE, null, ctx.channel() , 0 );
+		gameContext.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_ACTIVE, null, ctx.channel() , 0 );
 		
 		super.channelActive(ctx);
 	}
@@ -53,7 +52,7 @@ public class TextWebSocketFrameHandler extends
 			String text = ((TextWebSocketFrame) frame).text();
 
 
-			context.getConsumerManager().publicEventToDefault(EventType.TEXT_MESSAGE_COME, text, ctx.channel() , 0);
+			gameContext.getConsumerManager().publicEventToDefault(EventType.TEXT_MESSAGE_COME, text, ctx.channel() , 0);
 			
 		}else if(frame instanceof BinaryWebSocketFrame) {
 			Logs.DEFAULT_LOGGER.info("this frame is BinaryWebSocketFrame");
@@ -82,7 +81,7 @@ public class TextWebSocketFrameHandler extends
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "掉线");
 
-		context.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_INACTIVE, null, ctx.channel() , 0);
+		gameContext.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_INACTIVE, null, ctx.channel() , 0);
 		
 		super.channelInactive(ctx);
 	}

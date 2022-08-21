@@ -8,13 +8,10 @@ import io.netty.channel.ChannelPromise;
 import io.netty.handler.codec.EncoderException;
 import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
-import io.netty.util.ReferenceCountUtil;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
-import org.jyg.gameserver.core.util.AllUtil;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 
 /**
@@ -22,10 +19,10 @@ import org.jyg.gameserver.core.util.Logs;
  */
 public class WebSocketMsgEncoder extends MessageToByteEncoder<Object> {
 
-    protected final Context context;
+    protected final GameContext gameContext;
 
-    public WebSocketMsgEncoder(Context context) {
-        this.context = context;
+    public WebSocketMsgEncoder(GameContext gameContext) {
+        this.gameContext = gameContext;
     }
 
 
@@ -41,14 +38,14 @@ public class WebSocketMsgEncoder extends MessageToByteEncoder<Object> {
                 Class<? extends ByteMsgObj> byteMsgObjClazz = cast.getClass();
 //        Logs.DEFAULT_LOGGER.info("deal threadName : " + Thread.currentThread().getName());
 
-                int eventId = context.getMsgIdByByteMsgObj(byteMsgObjClazz);
+                int eventId = gameContext.getMsgIdByByteMsgObj(byteMsgObjClazz);
                 if (eventId <= 0) {
                     Logs.DEFAULT_LOGGER.error("unknow eventid ,class {}" + byteMsgObjClazz.getSimpleName());
                     throw new IllegalArgumentException("unknow eventid "+ byteMsgObjClazz.getSimpleName());
                 }
 
 
-                AbstractMsgCodec msgCodec = context.getMsgCodec(eventId);
+                AbstractMsgCodec msgCodec = gameContext.getMsgCodec(eventId);
 
 
                 if(msgCodec == null){
@@ -69,14 +66,14 @@ public class WebSocketMsgEncoder extends MessageToByteEncoder<Object> {
                 Class<? extends MessageLite> protoClass = cast.getClass();
 //        Logs.DEFAULT_LOGGER.info("deal threadName : " + Thread.currentThread().getName());
 
-                int eventId = context.getMsgIdByProtoClass(protoClass);
+                int eventId = gameContext.getMsgIdByProtoClass(protoClass);
                 if (eventId <= 0) {
                     Logs.DEFAULT_LOGGER.error("unknow eventid ,class {}" + protoClass.getSimpleName());
                     throw new IllegalArgumentException("unknow eventid "+ protoClass.getSimpleName());
                 }
 
 
-                AbstractMsgCodec msgCodec = context.getMsgCodec(eventId);
+                AbstractMsgCodec msgCodec = gameContext.getMsgCodec(eventId);
 
 
                 if(msgCodec == null){

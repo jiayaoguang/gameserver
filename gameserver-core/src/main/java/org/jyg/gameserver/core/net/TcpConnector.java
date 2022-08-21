@@ -31,7 +31,7 @@ public abstract class TcpConnector extends AbstractConnector {
 	}
 
 	public TcpConnector(int port, MyChannelInitializer<Channel> initializer , boolean isHttp) {
-		super(initializer.getContext());
+		super(initializer.getGameContext());
 		if (port < 0) {
 			throw new IllegalArgumentException("port number cannot be negative ");
 		}
@@ -55,11 +55,11 @@ public abstract class TcpConnector extends AbstractConnector {
 
 		ServerBootstrap bootstrap = new ServerBootstrap();
 
-		EventLoopGroupManager eventLoopGroupManager = initializer.getContext().getEventLoopGroupManager();
+		EventLoopGroupManager eventLoopGroupManager = initializer.getGameContext().getEventLoopGroupManager();
 		bootstrap.group(eventLoopGroupManager.getBossGroup(), eventLoopGroupManager.getWorkGroup());
 
 
-		bootstrap.channel(getContext().isUseEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class);
+		bootstrap.channel(getGameContext().isUseEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class);
 //		bootstrap.handler(new LoggingHandler(LogLevel.INFO));
 		bootstrap.childHandler(initializer);
 
@@ -67,7 +67,7 @@ public abstract class TcpConnector extends AbstractConnector {
 		// tcp等待三次握手队列的长度
 		bootstrap.option(ChannelOption.SO_BACKLOG, 1024);
 
-		if(getContext().isUseEpoll()){
+		if(getGameContext().isUseEpoll()){
 			bootstrap.option(EpollChannelOption.TCP_CORK, false);
 		}
 
@@ -83,7 +83,7 @@ public abstract class TcpConnector extends AbstractConnector {
 		bootstrap.childOption(ChannelOption.SO_KEEPALIVE, false);// maybe useless
 		bootstrap.childOption(ChannelOption.TCP_NODELAY, true);
 		bootstrap.childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
-		String host = getContext().getServerConfig().getHost();
+		String host = getGameContext().getServerConfig().getHost();
 
 		ChannelFuture bindChannelFuture;
 		if(StringUtils.isEmpty(host)){

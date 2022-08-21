@@ -5,7 +5,7 @@ import org.jyg.gameserver.core.handle.TextWebSocketFrameHandler;
 /**
  * created by jiayaoguang at 2017年12月6日
  */
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
@@ -15,8 +15,8 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 public class WebSocketClientInitializer extends
 		MyChannelInitializer<SocketChannel> {
 
-	protected WebSocketClientInitializer(Context context) {
-		super(context);
+	protected WebSocketClientInitializer(GameContext gameContext) {
+		super(gameContext);
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class WebSocketClientInitializer extends
 		
 		//WebSocketClientProtocolHandler TODO
 		pipeline.addLast(new WebSocketServerProtocolHandler("/"));
-		pipeline.addLast(new TextWebSocketFrameHandler(context));
+		pipeline.addLast(new TextWebSocketFrameHandler(gameContext));
 		
 	}
 }

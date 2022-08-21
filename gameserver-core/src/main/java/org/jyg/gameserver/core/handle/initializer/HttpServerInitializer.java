@@ -6,7 +6,7 @@ import org.jyg.gameserver.core.handle.HttpStaticFileServerHandler;
 /**
  * created by jiayaoguang at 2017年12月6日
  */
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.http.HttpObjectAggregator;
@@ -17,8 +17,8 @@ public class HttpServerInitializer extends MyChannelInitializer<Channel> {
 	//是否是同步的http
 //	private boolean isSynHttp;
 
-	public HttpServerInitializer(Context context) {
-		super(context);
+	public HttpServerInitializer(GameContext gameContext) {
+		super(gameContext);
 //		isSynHttp = true;
 	}
 
@@ -42,7 +42,7 @@ public class HttpServerInitializer extends MyChannelInitializer<Channel> {
 		pipeline.addLast(new HttpObjectAggregator(64 * 1024));
 		// pipeline.addLast(new ChunkedWriteHandler());//主要用于处理大数据流,比如一个1G大小的文件
 		pipeline.addLast(new HttpStaticFileServerHandler());
-		pipeline.addLast(new HttpServerHandler(context));
+		pipeline.addLast(new HttpServerHandler(gameContext));
 
 	}
 }

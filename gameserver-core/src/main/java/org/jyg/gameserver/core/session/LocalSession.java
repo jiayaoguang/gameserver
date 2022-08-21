@@ -1,16 +1,16 @@
 package org.jyg.gameserver.core.session;
 
 import org.jyg.gameserver.core.enums.EventType;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 
 public class LocalSession extends Session {
 
-    private final Context context;
+    private final GameContext gameContext;
     private final int fromConsumerId;
 
-    public LocalSession(int fromConsumerId, Context context) {
+    public LocalSession(int fromConsumerId, GameContext gameContext) {
         super(0L);
-        this.context = context;
+        this.gameContext = gameContext;
         this.fromConsumerId = fromConsumerId;
     }
 
@@ -32,7 +32,7 @@ public class LocalSession extends Session {
 
     @Override
     protected void writeObjMessage(Object msgObj) {
-        context.getConsumerManager().publicEvent(fromConsumerId, EventType.DEFAULT_EVENT ,msgObj , 0);
+        gameContext.getConsumerManager().publicEvent(fromConsumerId, EventType.DEFAULT_EVENT ,msgObj , 0);
     }
 
     @Override

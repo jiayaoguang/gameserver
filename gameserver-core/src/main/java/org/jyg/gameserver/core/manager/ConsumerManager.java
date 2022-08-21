@@ -7,7 +7,7 @@ import org.jyg.gameserver.core.consumer.Consumer;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
-import org.jyg.gameserver.core.util.Context;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.util.ArrayList;
@@ -19,16 +19,16 @@ import java.util.List;
 public class ConsumerManager implements Lifecycle{
     public static final int DEFAULT_CONSUMER_ID = 1;
     private final Int2ObjectMap<Consumer> consumerMap = new Int2ObjectLinkedOpenHashMap<>();
-    private final Context context;
+    private final GameContext gameContext;
 
 
-    public ConsumerManager(Context context) {
-        this.context = context;
+    public ConsumerManager(GameContext gameContext) {
+        this.gameContext = gameContext;
     }
 
 
     public synchronized void addConsumer(Consumer consumer) {
-        if(context.isStart()){
+        if(gameContext.isStart()){
             throw new UnsupportedOperationException(" context.isStart , addConsumer operation fail ");
         }
 
@@ -36,7 +36,7 @@ public class ConsumerManager implements Lifecycle{
             throw new IllegalArgumentException("dumplicate context id , addConsumer operation fail ");
         }
 
-        consumer.setContext(context);
+        consumer.setGameContext(gameContext);
         consumerMap.put(consumer.getId(), consumer);
     }
 
