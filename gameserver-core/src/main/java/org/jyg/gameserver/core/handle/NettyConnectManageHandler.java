@@ -33,7 +33,16 @@ public class NettyConnectManageHandler extends ChannelDuplexHandler {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception { // (5)
         Channel incoming = ctx.channel();
-        Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "在线");
+        Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + " online");
+
+        if(!gameContext.getServerConfig().isOpenConnect()){
+            String ip = AllUtil.getChannelRemoteIp(incoming);
+            if(!gameContext.getServerConfig().getWhiteIpSet().contains(ip)){
+                incoming.close();
+                return;
+            }
+        }
+
 
         gameContext.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_ACTIVE, null, ctx.channel(), 0);
 
@@ -43,7 +52,7 @@ public class NettyConnectManageHandler extends ChannelDuplexHandler {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception { // (6)
         Channel incoming = ctx.channel();
-        Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "掉线");
+        Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + " offline");
 
         gameContext.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_INACTIVE, null, ctx.channel(), 0);
 

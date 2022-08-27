@@ -475,4 +475,31 @@ public class AllUtil {
     }
 
 
+    public static String getChannelRemoteIp(final Channel channel) {
+        if (null == channel) {
+            return "";
+        }
+        SocketAddress remote = channel.remoteAddress();
+        final String addr = remote != null ? remote.toString() : "";
+
+        if(addr.length() <= 0){
+            return "";
+        }
+
+        int index = addr.lastIndexOf("/");
+        int colonIndex = addr.lastIndexOf(":");
+
+        if (index >= 0) {
+            if (colonIndex > index) {
+                return addr.substring(index + 1, colonIndex);
+            }else {
+                return addr.substring(index + 1);
+            }
+        }
+
+        return addr;
+
+    }
+
+
 }

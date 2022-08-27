@@ -117,11 +117,9 @@ public class MsgMergeHandler extends MessageToByteEncoder<Object> {
 //                }
 //                msgList.add(cast);
                 if( msg instanceof MessageLite ){
-                    @SuppressWarnings("unchecked")
                     MessageLite originProto = (MessageLite) msg;
                     AllUtil.writeToBuf(gameContext,originProto , cacheBuf);
                 }else if( msg instanceof ByteMsgObj ){
-                    @SuppressWarnings("unchecked")
                     ByteMsgObj byteMsgObj = (ByteMsgObj) msg;
                     AllUtil.writeToBuf(gameContext,byteMsgObj , cacheBuf);
                 }else {
