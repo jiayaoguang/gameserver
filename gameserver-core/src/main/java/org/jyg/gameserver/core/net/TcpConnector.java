@@ -26,6 +26,10 @@ public abstract class TcpConnector extends AbstractConnector {
 
 	private final boolean isHttp;
 
+	private ServerBootstrap serverBootstrap;
+
+	private Channel serverChannel;
+
 	public TcpConnector(int port, MyChannelInitializer<Channel> initializer) {
 		this(port, initializer, false);
 	}
@@ -53,47 +57,47 @@ public abstract class TcpConnector extends AbstractConnector {
 			throw new IllegalArgumentException("initializer must not null");
 		}
 
-		ServerBootstrap bootstrap = new ServerBootstrap();
+		serverBootstrap = new ServerBootstrap();
 
 		EventLoopGroupManager eventLoopGroupManager = initializer.getGameContext().getEventLoopGroupManager();
-		bootstrap.group(eventLoopGroupManager.getBossGroup(), eventLoopGroupManager.getWorkGroup());
+		serverBootstrap.group(eventLoopGroupManager.getBossGroup(), eventLoopGroupManager.getWorkGroup());
 
 
-		bootstrap.channel(getGameContext().isUseEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class);
+		serverBootstrap.channel(getGameContext().isUseEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class);
 //		bootstrap.handler(new LoggingHandler(LogLevel.INFO));
-		bootstrap.childHandler(initializer);
+		serverBootstrap.childHandler(initializer);
 
-		bootstrap.option(ChannelOption.SO_REUSEADDR, true);
+		serverBootstrap.option(ChannelOption.SO_REUSEADDR, true);
 		// tcp等待三次握手队列的长度
-		bootstrap.option(ChannelOption.SO_BACKLOG, 1024);
+		serverBootstrap.option(ChannelOption.SO_BACKLOG, 1024);
 
 		if(getGameContext().isUseEpoll()){
-			bootstrap.option(EpollChannelOption.TCP_CORK, false);
+			serverBootstrap.option(EpollChannelOption.TCP_CORK, false);
 		}
 
-		bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
+		serverBootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 
 		// 指定等待时间为0，此时调用主动关闭时不会发送FIN来结束连接，而是直接将连接设置为CLOSE状态，
 		// 清除套接字中的发送和接收缓冲区，直接对对端发送RST包。
 		if(!isHttp){
-			bootstrap.childOption(ChannelOption.SO_LINGER, 0);
+			serverBootstrap.childOption(ChannelOption.SO_LINGER, 0);
 		}
-		bootstrap.childOption(ChannelOption.SO_RCVBUF, 64 * 1024);
-		bootstrap.childOption(ChannelOption.SO_SNDBUF, 64 * 1024);
-		bootstrap.childOption(ChannelOption.SO_KEEPALIVE, false);// maybe useless
-		bootstrap.childOption(ChannelOption.TCP_NODELAY, true);
-		bootstrap.childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
+		serverBootstrap.childOption(ChannelOption.SO_RCVBUF, 64 * 1024);
+		serverBootstrap.childOption(ChannelOption.SO_SNDBUF, 64 * 1024);
+		serverBootstrap.childOption(ChannelOption.SO_KEEPALIVE, false);// maybe useless
+		serverBootstrap.childOption(ChannelOption.TCP_NODELAY, true);
+		serverBootstrap.childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 		String host = getGameContext().getServerConfig().getHost();
 
 		ChannelFuture bindChannelFuture;
 		if(StringUtils.isEmpty(host)){
-			bindChannelFuture = bootstrap.bind(port);
+			bindChannelFuture = serverBootstrap.bind(port);
 		}else {
-			bindChannelFuture = bootstrap.bind(host,port);
+			bindChannelFuture = serverBootstrap.bind(host,port);
 		}
 
 		try {
-			bindChannelFuture.sync().channel();
+			serverChannel = bindChannelFuture.sync().channel();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
@@ -104,6 +108,13 @@ public abstract class TcpConnector extends AbstractConnector {
 
 	public void stop() {
 
+		if(serverChannel != null){
+			try {
+				serverChannel.close().sync();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 

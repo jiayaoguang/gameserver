@@ -106,15 +106,16 @@ public class GameServerBootstrap extends AbstractBootstrap {
         }
     }
 
-//    @Override
-//    public void stop() {
-//        getContext().getEventLoopGroupManager().stop();
-//
-//
-//        for (Connector connector : connectors) {
-//            connector.stop();
-//        }
-//    }
+    @Override
+    public void stop() {
+
+        getGameContext().stop();
+
+        for (Connector connector : connectors) {
+            connector.stop();
+        }
+
+    }
 
 
 }

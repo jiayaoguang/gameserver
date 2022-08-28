@@ -33,8 +33,8 @@ public class SqlExecutor {
         if (connection == null) {
             try {
                 connection = simpleDataSource.getConnection(false);
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } catch (SQLException e) {
+                throw new IllegalArgumentException(e);
             }
             return;
         }

@@ -16,7 +16,7 @@ import org.jyg.gameserver.example.ygserver.msg.*;
  */
 public class YgGameServer {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args)  {
 
 //        CreateTableUtil.createTable(PlayerDB.class);
         GameServerBootstrap bootstarp = new GameServerBootstrap();
@@ -122,8 +122,12 @@ public class YgGameServer {
 
         }));
 
-
-        bootstarp.start();
+        try {
+            bootstarp.start();
+        }catch (Exception e){
+            e.printStackTrace();
+            bootstarp.stop();
+        }
 
 
 

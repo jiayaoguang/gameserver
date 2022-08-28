@@ -71,9 +71,13 @@ public class InstanceManager implements Lifecycle {
     }
 
 
-    public synchronized void putInstance(Class<?> clazz) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    public synchronized void putInstance(Class<?> clazz)  {
 
-        putInstance(clazz, clazz);
+        try {
+            putInstance(clazz, clazz);
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            throw new IllegalArgumentException(e);
+        }
 
     }
 
