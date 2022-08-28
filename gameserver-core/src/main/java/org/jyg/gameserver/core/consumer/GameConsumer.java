@@ -82,8 +82,6 @@ public abstract class GameConsumer {
 
     private final EventManager eventManager;
 
-    private AbstractProcessor defaultProcessor = null;
-
 
     private UnknownMsgHandler unknownMsgHandler;
 
@@ -260,16 +258,10 @@ public abstract class GameConsumer {
 //		MessageLite msg = event.getData();
         Processor processor = protoProcessorMap.get(event.getEventId());
 
-
-        if(processor == null){
-
-            processor = defaultProcessor;
-
-            if (processor == null) {
-                String name = event.getData() == null ? "null" :event.getData().getClass().getSimpleName();
-                Logs.DEFAULT_LOGGER.info("processor not found, eventid : {} , msg : {}" , event.getEventId() , name);
-                return;
-            }
+        if (processor == null) {
+            String name = event.getData() == null ? "null" :event.getData().getClass().getSimpleName();
+            Logs.DEFAULT_LOGGER.info("processor not found, eventid : {} , msg : {}" , event.getEventId() , name);
+            return;
         }
 
         String msgName;
@@ -281,7 +273,7 @@ public abstract class GameConsumer {
 
         if(!processor.checkFilters(session , event)){
 
-            Logs.DEFAULT_LOGGER.info("refuse processor msg {}", msgName);
+            Logs.DEFAULT_LOGGER.info("refuse processor msgId {} , msgName {}", event.getEventId(),msgName);
             return;
         }
 
@@ -718,11 +710,6 @@ public abstract class GameConsumer {
     }
 
 
-
-    public void setDefaultProcessor(AbstractProcessor defaultProcessor ){
-        defaultProcessor.setGameConsumer(this);
-        this.defaultProcessor = defaultProcessor;
-    }
 
 
 
