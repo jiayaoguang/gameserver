@@ -167,7 +167,20 @@ public class Response {
 	}
 
 	public void write500Error(String errorMsg) {
-		this.channel.writeAndFlush( create500FullHttpResponse(errorMsg) );
+
+		String sb = "<html><head></head><body><div align='center'><h1>500 Internal Server Error</h1></div>" +
+				"<details class=\"menu\" > <summary>errorMsg</summary> <ul><li>" +
+				"<pre>" +
+				errorMsg +
+				"</pre>" +
+				"</li>" +
+				"</ul>\n" +
+				"</details>" +
+				"<body></html>";
+
+		this.channel.writeAndFlush(create500FullHttpResponse(sb));
+
+
 	}
 
 	
