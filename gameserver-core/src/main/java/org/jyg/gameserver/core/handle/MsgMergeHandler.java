@@ -2,6 +2,8 @@ package org.jyg.gameserver.core.handle;
 
 import com.google.protobuf.MessageLite;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import io.netty.handler.codec.EncoderException;
@@ -31,7 +33,7 @@ public class MsgMergeHandler extends MessageToByteEncoder<Object> {
 
     private ByteBuf cacheBuf = null;
 
-    private static final int MAX_BUF_LENGTH = 1024;
+    private static final int MAX_BUF_LENGTH = 1024 * 1024;
 
     private int onceMergeMsgNum = 0;
 
@@ -41,11 +43,11 @@ public class MsgMergeHandler extends MessageToByteEncoder<Object> {
     public class CheckRunnable implements Runnable{
 
         private boolean isFlush = false;
-        ChannelHandlerContext channelHandlerContext;
+        Channel channel;
 
 
-        public CheckRunnable(ChannelHandlerContext channelHandlerContext) {
-            this.channelHandlerContext = channelHandlerContext;
+        public CheckRunnable(Channel channel) {
+            this.channel = channel;
         }
 
         @Override
@@ -63,8 +65,11 @@ public class MsgMergeHandler extends MessageToByteEncoder<Object> {
             }
 
             try {
-                channelHandlerContext.write(cacheBuf);
-                Logs.DEFAULT_LOGGER.info(" ontime flush " + Thread.currentThread().getName() + " mergeMsgNum :" + onceMergeMsgNum);
+                Logs.DEFAULT_LOGGER.info(" ontime flush " + Thread.currentThread().getName() + " mergeMsgNum :" + onceMergeMsgNum + " , size : " + cacheBuf.readableBytes());
+                ChannelFuture channelFuture = channel.write(cacheBuf);
+
+                boolean isSuccess = channelFuture.isSuccess();
+                AllUtil.println(" send ============== isSuccess : " + isSuccess + "  " + channel.isActive());
             } catch (Exception e) {
                 e.printStackTrace();
             }finally {
@@ -106,8 +111,8 @@ public class MsgMergeHandler extends MessageToByteEncoder<Object> {
                 if(cacheBuf == null){
                     cacheBuf = ctx.alloc().heapBuffer();
 //                    this.nextFlushTime = now + 8;
-                    CheckRunnable checkRunnable = new CheckRunnable(ctx);
-                    ctx.executor().schedule(checkRunnable, 10, TimeUnit.MILLISECONDS);
+                    CheckRunnable checkRunnable = new CheckRunnable(ctx.channel());
+                    ctx.executor().schedule(checkRunnable, 4, TimeUnit.MILLISECONDS);
                     this.lastCheckRunnable = checkRunnable;
                 }
 
@@ -132,7 +137,7 @@ public class MsgMergeHandler extends MessageToByteEncoder<Object> {
                 if(byteSize < MAX_BUF_LENGTH ){
                     return;
                 }
-                LOGGER.info(" ========= " + cacheBuf.refCnt() + " byteSize : " + byteSize);
+//                LOGGER.info(" ========= " + cacheBuf.refCnt() + " byteSize : " + byteSize);
                 this.lastCheckRunnable.isFlush = true;
 
 //                buf = allocateBuffer(ctx, cast, true);

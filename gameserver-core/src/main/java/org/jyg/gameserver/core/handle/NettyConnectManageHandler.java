@@ -39,6 +39,7 @@ public class NettyConnectManageHandler extends ChannelDuplexHandler {
             String ip = AllUtil.getChannelRemoteIp(incoming);
             if(!gameContext.getServerConfig().getWhiteIpSet().contains(ip)){
                 incoming.close();
+                Logs.DEFAULT_LOGGER.warn("connect forbidden, ip {} not in openConnect list " , ip);
                 return;
             }
         }

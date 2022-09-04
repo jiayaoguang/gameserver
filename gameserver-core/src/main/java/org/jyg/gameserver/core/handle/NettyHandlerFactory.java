@@ -24,9 +24,6 @@ public class NettyHandlerFactory {
     }
 
 
-    public ProtoMergeHandler createProtoMergeHandler(GameContext gameContext) {
-        return new ProtoMergeHandler(gameContext);
-    }
     public MsgMergeHandler createMsgMergeHandler(GameContext gameContext) {
         return new MsgMergeHandler(gameContext);
     }
