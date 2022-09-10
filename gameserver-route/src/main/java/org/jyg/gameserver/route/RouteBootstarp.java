@@ -11,6 +11,10 @@ import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.ConfigUtil;
 import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.UnknownMsgHandler;
+import org.jyg.gameserver.route.msg.ChatMsgObj;
+import org.jyg.gameserver.route.msg.ChatReplyMsgObj;
+import org.jyg.gameserver.route.processor.RouteMsgToGameMsgHandler;
+import org.jyg.gameserver.route.processor.RouteMsgToGameMsgProcessor;
 import org.jyg.gameserver.route.processor.RouteReplyMsgProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +45,7 @@ public class RouteBootstarp
 
         bootstarp.addHttpConnector(8082);
 
-        bootstarp.addTcpConnector(8088);
+        bootstarp.addTcpConnector(8081);
 
 
         RouteConfig routeConfig = ConfigUtil.properties2Object("jyg",RouteConfig.class );
@@ -63,21 +67,9 @@ public class RouteBootstarp
         final GameContext gameContext = bootstarp.getGameContext();
 
 
-        bootstarp.getGameContext().getDefaultGameConsumer().setUnknownMsgHandler(new UnknownMsgHandler() {
+        bootstarp.getGameContext().getDefaultGameConsumer().setUnknownMsgHandler(new RouteMsgToGameMsgHandler(gameContext));
+        bootstarp.getGameContext().getDefaultGameConsumer().setUnknownProcessor(new RouteMsgToGameMsgProcessor());
 
-
-            @Override
-            public void process(Session session , int msgId, byte[] msgData) {
-
-                RouteMsg routeMsg = new RouteMsg();
-                routeMsg.setMsgId(msgId);
-                routeMsg.setData(msgData);
-                routeMsg.setSessionId(session.getSessionId());
-
-                gameContext.getInstance(RemoteServerManager.class).sendRemoteMsg(routeMsg);
-            }
-
-        });
 
 
 

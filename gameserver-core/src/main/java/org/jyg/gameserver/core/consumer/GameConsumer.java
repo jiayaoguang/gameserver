@@ -86,6 +86,9 @@ public abstract class GameConsumer {
     private UnknownMsgHandler unknownMsgHandler;
 
 
+    private AbstractProcessor<Object> unknownProcessor;
+
+
     public GameConsumer() {
         this.instanceManager = new InstanceManager(this);
         this.timerManager = new TimerManager();
@@ -260,8 +263,12 @@ public abstract class GameConsumer {
 
         if (processor == null) {
             String name = event.getData() == null ? "null" :event.getData().getClass().getSimpleName();
-            Logs.DEFAULT_LOGGER.info("processor not found, eventid : {} , msg : {}" , event.getEventId() , name);
-            return;
+
+            processor = this.unknownProcessor;
+            if(processor == null){
+                Logs.DEFAULT_LOGGER.info("processor not found, eventid : {} , msg : {}" , event.getEventId() , name);
+                return;
+            }
         }
 
         String msgName;
@@ -728,5 +735,11 @@ public abstract class GameConsumer {
 
     public void setUnknownMsgHandler(UnknownMsgHandler unknownMsgHandler) {
         this.unknownMsgHandler = unknownMsgHandler;
+    }
+
+
+    public void setUnknownProcessor(AbstractProcessor<Object> unknownProcessor) {
+        this.unknownProcessor = unknownProcessor;
+        this.unknownProcessor.setGameConsumer(this);
     }
 }
