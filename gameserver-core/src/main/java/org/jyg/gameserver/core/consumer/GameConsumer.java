@@ -225,7 +225,7 @@ public abstract class GameConsumer {
      */
     public void addProcessor(int msgId, AbstractProcessor processor) {
         if (protoProcessorMap.containsKey(msgId)) {
-            throw new IllegalArgumentException("dupilcated eventid");
+            throw new IllegalArgumentException("dupilcated eventid : " + msgId);
         }
         if (processor instanceof ProtoProcessor) {
             getGameContext().addMsgId2ProtoMapping(msgId, ((ProtoProcessor) processor).getProtoClass());

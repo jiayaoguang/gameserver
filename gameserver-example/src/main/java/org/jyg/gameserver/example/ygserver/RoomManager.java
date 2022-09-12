@@ -5,7 +5,11 @@ import org.jyg.gameserver.core.manager.Lifecycle;
 import org.jyg.gameserver.example.ygserver.msg.SCRoomEndMsg;
 import org.jyg.gameserver.example.ygserver.msg.Vector2Msg;
 import org.jyg.gameserver.example.ygserver.msg.WallMsg;
+import org.jyg.gameserver.example.ygserver.msg.data.MotionMsg;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -13,7 +17,12 @@ public class RoomManager implements Lifecycle {
 
     private final GameConsumer gameConsumer;
 
-    private Room room = new Room();
+    private Room room = new Room(0);
+
+
+//    private Map<Long, Room> waitBattleRoomMap = new LinkedHashMap<>(1024, 0.5f);
+//    private Map<Long, Room> inBattleRoomMap = new LinkedHashMap<>(1024, 0.5f);
+
 
 
     public RoomManager(GameConsumer gameConsumer) {
@@ -100,4 +109,7 @@ public class RoomManager implements Lifecycle {
     public void stop() {
 
     }
+
+
+
 }

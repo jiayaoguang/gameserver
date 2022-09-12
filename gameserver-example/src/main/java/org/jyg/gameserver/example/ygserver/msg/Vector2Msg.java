@@ -8,6 +8,13 @@ public class Vector2Msg {
 
     private float y;
 
+    public Vector2Msg() {
+    }
+
+    public Vector2Msg(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
 
     public float getX() {
         return x;

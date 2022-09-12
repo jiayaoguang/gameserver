@@ -36,30 +36,33 @@ public class YgGameServer {
 
 
 
-//        bootstarp.getContext().addMsgId2JsonMsgCLassMapping(8, ChatMsgObj.class);
-        bootstarp.getGameContext().addMsgId2JsonMsgClassMapping(108, LoginRequestMsg.class);
-        bootstarp.getGameContext().addMsgId2JsonMsgClassMapping(109, LoginReplyMsg.class);
+//        bootstarp.getContext().addMsgId2MsgClassMapping(8, ChatMsgObj.class);
+        bootstarp.getGameContext().addMsgId2MsgClassMapping(108, LoginRequestMsg.class);
+        bootstarp.getGameContext().addMsgId2MsgClassMapping(109, LoginReplyMsg.class);
 
-        bootstarp.getGameContext().addMsgId2JsonMsgClassMapping(110, ChatRequestJson.class);
-        bootstarp.getGameContext().addMsgId2JsonMsgClassMapping(111, ChatReplyJson.class);
+        bootstarp.getGameContext().addMsgId2MsgClassMapping(110, ChatRequestJson.class);
+        bootstarp.getGameContext().addMsgId2MsgClassMapping(111, ChatReplyJson.class);
 
-        bootstarp.getGameContext().addMsgId2JsonMsgClassMapping(120, SCPlayerJoinMsg.class);
+        bootstarp.getGameContext().addMsgId2MsgClassMapping(120, SCPlayerJoinMsg.class);
 
-        bootstarp.getGameContext().addMsgId2JsonMsgClassMapping(121, ClientFrameMsg.class);
-        bootstarp.getGameContext().addMsgId2JsonMsgClassMapping(122, ServerFrameMsg.class);
-
-
-        bootstarp.getGameContext().addMsgId2JsonMsgClassMapping(123, CSEnterRoomMsg.class);
-        bootstarp.getGameContext().addMsgId2JsonMsgClassMapping(124, SCEnterRoomMsg.class);
+        bootstarp.getGameContext().addMsgId2MsgClassMapping(121, ClientFrameMsg.class);
+        bootstarp.getGameContext().addMsgId2MsgClassMapping(122, ServerFrameMsg.class);
 
 
-        bootstarp.getGameContext().addMsgId2JsonMsgClassMapping(125, CSHitMsg.class);
-        bootstarp.getGameContext().addMsgId2JsonMsgClassMapping(126, SCHitMsg.class);
+        bootstarp.getGameContext().addMsgId2MsgClassMapping(123, CSEnterRoomMsg.class);
+        bootstarp.getGameContext().addMsgId2MsgClassMapping(124, SCEnterRoomMsg.class);
 
 
-        bootstarp.getGameContext().addMsgId2JsonMsgClassMapping(127, SCRoomEndMsg.class );
+        bootstarp.getGameContext().addMsgId2MsgClassMapping(125, CSHitMsg.class);
+        bootstarp.getGameContext().addMsgId2MsgClassMapping(126, SCHitMsg.class);
 
+
+        bootstarp.getGameContext().addMsgId2MsgClassMapping(127, SCRoomEndMsg.class );
         bootstarp.getGameContext().addByteMsgCodec(new EmptyMsgCodec(new SCRoomEndMsg()));
+
+        bootstarp.getGameContext().addMsgId2MsgClassMapping(128, CSCreateMotionMsg.class );
+        bootstarp.getGameContext().addMsgId2MsgClassMapping(129, SCCreateMotionMsg.class );
+
 
 
 
@@ -69,6 +72,8 @@ public class YgGameServer {
         bootstarp.getDefaultConsumer().addProcessor( new CreateTableProcessor());
         bootstarp.getDefaultConsumer().addProcessor( new ClientFrameProcessor());
         bootstarp.getDefaultConsumer().addProcessor( new EnterRoomProcessor());
+        bootstarp.getDefaultConsumer().addProcessor( new CreateMotionProcessor());
+
 
 
         bootstarp.getDefaultConsumer().addProcessor( new CSHitProcessor());

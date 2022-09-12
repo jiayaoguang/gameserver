@@ -2,7 +2,10 @@ package org.jyg.gameserver.example.ygserver;
 
 import org.jyg.gameserver.example.ygserver.msg.Vector2Msg;
 
-public class RoomPlayer {
+import java.util.HashMap;
+import java.util.Map;
+
+public class RoomPlayer extends BattleObject{
 
 //    private int id;
 
@@ -11,12 +14,15 @@ public class RoomPlayer {
 
     private int score;
 
-    private int hp = 100;
 
-    private Vector2Msg posi;
+    private Map<Long,Motion> motionMap = new HashMap<>();
 
-    private Vector2Msg dir;
 
+    public RoomPlayer() {
+
+        this.setHp(100);
+
+    }
 
     public Player getPlayer() {
         return player;
@@ -34,28 +40,11 @@ public class RoomPlayer {
         this.score = score;
     }
 
-    public int getHp() {
-        return hp;
+    public Map<Long, Motion> getMotionMap() {
+        return motionMap;
     }
 
-    public void setHp(int hp) {
-        this.hp = hp;
-    }
-
-
-    public Vector2Msg getPosi() {
-        return posi;
-    }
-
-    public void setPosi(Vector2Msg posi) {
-        this.posi = posi;
-    }
-
-    public Vector2Msg getDir() {
-        return dir;
-    }
-
-    public void setDir(Vector2Msg dir) {
-        this.dir = dir;
+    public void setMotionMap(Map<Long, Motion> motionMap) {
+        this.motionMap = motionMap;
     }
 }

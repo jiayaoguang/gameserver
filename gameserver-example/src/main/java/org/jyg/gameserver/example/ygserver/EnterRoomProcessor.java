@@ -50,6 +50,11 @@ public class EnterRoomProcessor extends ByteMsgObjProcessor<CSEnterRoomMsg> {
             if(player.getPlayerDB().getId() != other.getPlayer().getPlayerDB().getId()){
                 other.getPlayer().getSession().writeMessage(playerJoinMsg);
             }
+
+            for(Motion motion : roomPlayer.getMotionMap().values()){
+                enterRoomMsg.getMotionMsgs().add( roomManager.getRoom().createMotionMsg(roomPlayer , motion));
+            }
+
         }
 
 
