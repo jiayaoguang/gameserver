@@ -22,6 +22,9 @@ public class Room {
     private long roomObjUidInc;
 
 
+    private Map<Long,Motion> sysMotionMap = new HashMap<>();
+    private Map<Long,Long> motionId2PlayerIdMap = new HashMap<>();
+
     private int state;
 
     public Room(long roomId) {
@@ -80,18 +83,47 @@ public class Room {
 
         motion.setScale(new Vector2Msg(RandomUtil.randomInt( 5,30) , RandomUtil.randomInt( 5,30)));
 
+        motionId2PlayerIdMap.put(motion.getId() , roomPlayer.getPlayer().getPlayerDB().getId());
         roomPlayer.getMotionMap().put(motion.getId() , motion);
 
         return motion;
     }
 
+
+    public Motion createSysMotion( Vector2Msg posi, int type){
+
+        Motion motion = new Motion();
+        motion.setId(allocUid());
+        motion.setType(type);
+        motion.setPosi(posi);
+        motion.setHp(100);
+        motion.setMaxHp(100);
+
+
+        int radiu = RandomUtil.randomInt( 5,30);
+
+        motion.setScale(new Vector2Msg(radiu , radiu));
+
+        sysMotionMap.put(motion.getId() , motion);
+
+        return motion;
+    }
+
+
     public MotionMsg createMotionMsg(RoomPlayer roomPlayer , Motion motion){
+
+        return createMotionMsg(roomPlayer.getPlayer().getPlayerDB().getId() , motion);
+    }
+
+
+    public MotionMsg createMotionMsg(long playerId , Motion motion){
         MotionMsg motionMsg = new MotionMsg();
         motionMsg.setPosi(motion.getPosi());
         motionMsg.setScale(motion.getScale());
         motionMsg.setHp(motion.getHp());
         motionMsg.setMaxHp(motion.getMaxHp());
-        motionMsg.setOwnPlayerId(roomPlayer.getPlayer().getPlayerDB().getId());
+        motionMsg.setOwnPlayerId(playerId);
+
         return motionMsg;
     }
 
@@ -102,4 +134,12 @@ public class Room {
         return roomObjUidInc;
     }
 
+
+    public Map<Long, Motion> getSysMotionMap() {
+        return sysMotionMap;
+    }
+
+    public void setSysMotionMap(Map<Long, Motion> sysMotionMap) {
+        this.sysMotionMap = sysMotionMap;
+    }
 }

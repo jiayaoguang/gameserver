@@ -69,19 +69,19 @@ public class LoginProcessor extends ByteMsgObjProcessor<LoginRequestMsg> {
                     loginReplyMsg.setName(currentPlayerDB.getName());
                     loginReplyMsg.setErrorCode(errorCode);
 
-                    Random random = new Random();
-                    for(int num = 0 ;num < 300;num++){
-                        WallMsg wallMsg = new WallMsg();
-                        Vector2Msg vector2Msg = new Vector2Msg();
-                        vector2Msg.setX(random.nextInt(600) - 300);
-                        vector2Msg.setY(random.nextInt(600) - 300);
-//                                wallMsg.setX(random.nextInt(600) - 300);
-//                                wallMsg.setY(random.nextInt(600) - 300);
-                        wallMsg.setHeight(random.nextInt(100));
-                        wallMsg.setWidth(random.nextInt(100));
-                        wallMsg.setPosi(vector2Msg);
-                        loginReplyMsg.wallMsgs.add(wallMsg);
-                    }
+//                    Random random = new Random();
+//                    for(int num = 0 ;num < 300;num++){
+//                        WallMsg wallMsg = new WallMsg();
+//                        Vector2Msg vector2Msg = new Vector2Msg();
+//                        vector2Msg.setX(random.nextInt(600) - 300);
+//                        vector2Msg.setY(random.nextInt(600) - 300);
+////                                wallMsg.setX(random.nextInt(600) - 300);
+////                                wallMsg.setY(random.nextInt(600) - 300);
+//                        wallMsg.setHeight(random.nextInt(100));
+//                        wallMsg.setWidth(random.nextInt(100));
+//                        wallMsg.setPosi(vector2Msg);
+//                        loginReplyMsg.wallMsgs.add(wallMsg);
+//                    }
 
                     session.setSessionObject(currentPlayerDB);
                     session.writeMessage(loginReplyMsg);

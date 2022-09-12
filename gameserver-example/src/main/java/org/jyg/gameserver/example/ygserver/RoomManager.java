@@ -1,5 +1,6 @@
 package org.jyg.gameserver.example.ygserver;
 
+import cn.hutool.core.util.RandomUtil;
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.manager.Lifecycle;
 import org.jyg.gameserver.example.ygserver.msg.SCRoomEndMsg;
@@ -74,20 +75,27 @@ public class RoomManager implements Lifecycle {
         room.getWallMsgList().clear();
         this.room.setEndTime(System.currentTimeMillis() +  TimeUnit.MINUTES.toMillis(3));
 
-        Random random = new Random();
-        for(int num = 0 ;num < 100;num++){
-            WallMsg wallMsg = new WallMsg();
-            Vector2Msg vector2Msg = new Vector2Msg();
-            vector2Msg.setX(random.nextInt(600) - 300);
-            vector2Msg.setY(random.nextInt(600) - 300);
-//                                wallMsg.setX(random.nextInt(600) - 300);
-//                                wallMsg.setY(random.nextInt(600) - 300);
-            wallMsg.setHeight(random.nextInt(100));
-            wallMsg.setWidth(random.nextInt(100));
-            wallMsg.setPosi(vector2Msg);
+//        Random random = new Random();
+//        for(int num = 0 ;num < 20;num++){
+//            WallMsg wallMsg = new WallMsg();
+//            Vector2Msg vector2Msg = new Vector2Msg();
+//            vector2Msg.setX(random.nextInt(600) - 300);
+//            vector2Msg.setY(random.nextInt(600) - 300);
+////                                wallMsg.setX(random.nextInt(600) - 300);
+////                                wallMsg.setY(random.nextInt(600) - 300);
+//            wallMsg.setHeight(random.nextInt(100));
+//            wallMsg.setWidth(random.nextInt(100));
+//            wallMsg.setPosi(vector2Msg);
+//
+//            room.getWallMsgList().add(wallMsg);
+//        }
 
-            room.getWallMsgList().add(wallMsg);
+        for(int num = 0 ;num < 2;num++){
+            int x = RandomUtil.randomInt(-100,100);
+            int y = RandomUtil.randomInt(-100,100);
+            Motion sysMotion = getRoom().createSysMotion(new Vector2Msg(x,y) , 0);
         }
+
     }
 
 

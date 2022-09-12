@@ -52,10 +52,15 @@ public class EnterRoomProcessor extends ByteMsgObjProcessor<CSEnterRoomMsg> {
             }
 
             for(Motion motion : roomPlayer.getMotionMap().values()){
-                enterRoomMsg.getMotionMsgs().add( roomManager.getRoom().createMotionMsg(roomPlayer , motion));
+                enterRoomMsg.getMotionMsgs().add( roomManager.getRoom().createMotionMsg(other , motion));
             }
 
         }
+
+        for(Motion motion : roomManager.getRoom().getSysMotionMap().values()){
+            enterRoomMsg.getMotionMsgs().add( roomManager.getRoom().createMotionMsg(0 , motion));
+        }
+
 
 
         session.writeMessage(enterRoomMsg);
