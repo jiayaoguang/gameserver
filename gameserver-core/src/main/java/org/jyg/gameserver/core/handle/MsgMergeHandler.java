@@ -66,10 +66,10 @@ public class MsgMergeHandler extends MessageToByteEncoder<Object> {
 
             try {
                 Logs.DEFAULT_LOGGER.info(" ontime flush " + Thread.currentThread().getName() + " mergeMsgNum :" + onceMergeMsgNum + " , size : " + cacheBuf.readableBytes());
-                ChannelFuture channelFuture = channel.write(cacheBuf);
+                channel.writeAndFlush(cacheBuf);
 
-                boolean isSuccess = channelFuture.isSuccess();
-                AllUtil.println(" send ============== isSuccess : " + isSuccess + "  " + channel.isActive());
+//                boolean isSuccess = channelFuture.isSuccess();
+//                AllUtil.println(" send ============== isSuccess : " + isSuccess + "  " + channel.isActive());
             } catch (Exception e) {
                 e.printStackTrace();
             }finally {
@@ -97,7 +97,7 @@ public class MsgMergeHandler extends MessageToByteEncoder<Object> {
         try {
 
             if(!(msg instanceof MessageLite) && !(msg instanceof ByteMsgObj)){
-                ctx.write(msg, promise);
+                ctx.writeAndFlush(msg, promise);
                 return;
             }
 
@@ -128,7 +128,7 @@ public class MsgMergeHandler extends MessageToByteEncoder<Object> {
                     ByteMsgObj byteMsgObj = (ByteMsgObj) msg;
                     AllUtil.writeToBuf(gameContext,byteMsgObj , cacheBuf);
                 }else {
-                    ctx.write(msg, promise);
+                    ctx.writeAndFlush(msg, promise);
                     return;
                 }
 
@@ -147,11 +147,11 @@ public class MsgMergeHandler extends MessageToByteEncoder<Object> {
 //                    ReferenceCountUtil.release(cast);
 //                }
 //                buf = cacheBuf;
-                ctx.write(cacheBuf, promise);
+                ctx.writeAndFlush(cacheBuf, promise);
                 onceMergeMsgNum = 0;
                 cacheBuf = null;
             } else {
-                ctx.write(msg, promise);
+                ctx.writeAndFlush(msg, promise);
             }
         } catch (EncoderException e) {
             throw e;
