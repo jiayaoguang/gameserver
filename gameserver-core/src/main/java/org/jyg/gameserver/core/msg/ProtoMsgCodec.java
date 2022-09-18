@@ -1,4 +1,4 @@
-package org.jyg.gameserver.core.util;
+package org.jyg.gameserver.core.msg;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.MessageLite;
