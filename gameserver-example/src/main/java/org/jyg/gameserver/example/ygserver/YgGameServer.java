@@ -85,49 +85,49 @@ public class YgGameServer {
 //        bootstarp.addHttpConnector(80);
         bootstarp.addHttpConnector(8888);
 
-        bootstarp.getDefaultConsumer().getEventManager().addEvent(new ConsumerThreadStartEvent((consumer, b)->{
-
-            consumer.getTimerManager().addTimer(-1,20 , ()->{
-//                consumer.getChannelManager().broadcast(new CreateEnemyMsg());
-//                Logs.DEFAULT_LOGGER.info(" send CreateEnemyMsg ...................... ");
-
-//                PlayerManager playerManager = consumer.getInstance(PlayerManager.class);
-                FrameManager frameManager = consumer.getInstance(FrameManager.class);
-
-                ServerFrameMsg serverFrameMsg = new ServerFrameMsg();
-
-                serverFrameMsg.getPlayerFrameMsgs().addAll(frameManager.getPlayerFrameMsgMap().values());
-
-//                PlayerFrameMsg robotFrameMsg = new PlayerFrameMsg();
-//                robotFrameMsg.setPlayerId(100);
-//                Vector2Msg vector2Msg = new Vector2Msg();
-//                vector2Msg.setX(0);
-//                vector2Msg.setY(0);
-//                robotFrameMsg.setPosi(vector2Msg);
+//        bootstarp.getDefaultConsumer().getEventManager().addEvent(new ConsumerThreadStartEvent((consumer, b)->{
 //
-//                serverFrameMsg.getPlayerFrameMsgs().add(robotFrameMsg);
-
-                for(RoomPlayer player:  consumer.getInstanceManager().getInstance(RoomManager.class).getRoom().getRoomPlayerMap().values() ){
-
-
-                    Session session = player.getPlayer().getSession();
-
-                    if(session == null || !session.isOpen()){
-                        continue;
-                    }
-                    session.writeMessage(serverFrameMsg);
-                }
-
-//                for(Map.Entry<Long, PlayerFrameMsg> entry : frameManager.getPlayerFrameMsgMap().entrySet() ){
-//                    long sessionId = entry.getKey() ;
+//            consumer.getTimerManager().addTimer(-1,20 , ()->{
+////                consumer.getChannelManager().broadcast(new CreateEnemyMsg());
+////                Logs.DEFAULT_LOGGER.info(" send CreateEnemyMsg ...................... ");
+//
+////                PlayerManager playerManager = consumer.getInstance(PlayerManager.class);
+//                FrameManager frameManager = consumer.getInstance(FrameManager.class);
+//
+//                ServerFrameMsg serverFrameMsg = new ServerFrameMsg();
+//
+//                serverFrameMsg.getPlayerFrameMsgs().addAll(frameManager.getPlayerFrameMsgMap().values());
+//
+////                PlayerFrameMsg robotFrameMsg = new PlayerFrameMsg();
+////                robotFrameMsg.setPlayerId(100);
+////                Vector2Msg vector2Msg = new Vector2Msg();
+////                vector2Msg.setX(0);
+////                vector2Msg.setY(0);
+////                robotFrameMsg.setPosi(vector2Msg);
+////
+////                serverFrameMsg.getPlayerFrameMsgs().add(robotFrameMsg);
+//
+//                for(RoomPlayer player:  consumer.getInstanceManager().getInstance(RoomManager.class).getRoom().getRoomPlayerMap().values() ){
 //
 //
+//                    Session session = player.getPlayer().getSession();
+//
+//                    if(session == null || !session.isOpen()){
+//                        continue;
+//                    }
+//                    session.writeMessage(serverFrameMsg);
 //                }
-
-
-            });
-
-        }));
+//
+////                for(Map.Entry<Long, PlayerFrameMsg> entry : frameManager.getPlayerFrameMsgMap().entrySet() ){
+////                    long sessionId = entry.getKey() ;
+////
+////
+////                }
+//
+//
+//            });
+//
+//        }));
 
         try {
             bootstarp.start();

@@ -7,6 +7,7 @@ import org.jyg.gameserver.example.ygserver.msg.WallMsg;
 import org.jyg.gameserver.example.ygserver.msg.data.MotionMsg;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Room {
 
@@ -29,6 +30,8 @@ public class Room {
 
     public Room(long roomId) {
         this.roomId = roomId;
+        this.endTime = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(4);
+        this.roomObjUidInc = System.currentTimeMillis();
     }
 
 
@@ -126,6 +129,7 @@ public class Room {
 
     public MotionMsg createMotionMsg(long playerId , Motion motion){
         MotionMsg motionMsg = new MotionMsg();
+        motionMsg.setUid(motion.getId());
         motionMsg.setPosi(motion.getPosi());
         motionMsg.setScale(motion.getScale());
         motionMsg.setHp(motion.getHp());

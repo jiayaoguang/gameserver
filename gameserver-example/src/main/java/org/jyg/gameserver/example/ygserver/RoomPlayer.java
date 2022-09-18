@@ -17,6 +17,8 @@ public class RoomPlayer extends BattleObject{
 
     private Map<Long,Motion> motionMap = new HashMap<>();
 
+    private Room room;
+
 
     public RoomPlayer() {
 
@@ -46,5 +48,13 @@ public class RoomPlayer extends BattleObject{
 
     public void setMotionMap(Map<Long, Motion> motionMap) {
         this.motionMap = motionMap;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
     }
 }

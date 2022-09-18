@@ -38,7 +38,11 @@ public class ClientFrameProcessor extends ByteMsgObjProcessor<ClientFrameMsg> {
 
         frameManager.getPlayerFrameMsgMap().put( session.getSessionId() , playerFrameMsg);
 
-        RoomPlayer roomPlayer = getGameConsumer().getInstance(RoomManager.class).getRoom().getRoomPlayerMap().get(player.getPlayerDB().getId());
+        Room room = getGameConsumer().getInstance(RoomManager.class).getRoom(player.getPlayerDB().getId());
+        if(room == null){
+            return;
+        }
+        RoomPlayer roomPlayer = room.getRoomPlayerMap().get(player.getPlayerDB().getId());
         if(roomPlayer != null){
             roomPlayer.setPosi(event.getData().getPosi());
         }

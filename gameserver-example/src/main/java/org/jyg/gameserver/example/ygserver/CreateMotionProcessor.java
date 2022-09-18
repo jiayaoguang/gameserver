@@ -22,13 +22,19 @@ public class CreateMotionProcessor extends ByteMsgObjProcessor<CSCreateMotionMsg
         Player player = session.getSessionObject();
 
 
-        RoomManager roomManager = getGameConsumer().getInstance(RoomManager.class);
-        RoomPlayer roomPlayer = roomManager.getRoom().getRoomPlayerMap().get(player.getPlayerDB().getId());
 
-        Motion motion = roomManager.getRoom().createMotion(roomPlayer  ,msg.getPosi(), msg.getType() );
+
+
+        RoomManager roomManager = getGameConsumer().getInstance(RoomManager.class);
+
+        Room room = roomManager.getRoom(player.getPlayerDB().getId());
+
+        RoomPlayer roomPlayer = room.getRoomPlayerMap().get(player.getPlayerDB().getId());
+
+        Motion motion = room.createMotion(roomPlayer  ,msg.getPosi(), msg.getType() );
 
         SCCreateMotionMsg sendMsg = new SCCreateMotionMsg();
-        sendMsg.setMotionMsg(roomManager.getRoom().createMotionMsg(roomPlayer , motion));
+        sendMsg.setMotionMsg(room.createMotionMsg(roomPlayer , motion));
 
         session.writeMessage(sendMsg);
 

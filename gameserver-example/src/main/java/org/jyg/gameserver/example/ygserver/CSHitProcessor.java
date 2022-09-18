@@ -18,7 +18,9 @@ public class CSHitProcessor extends ByteMsgObjProcessor<CSHitMsg> {
 
         Player player = session.getSessionObject();
 
-        RoomPlayer roomPlayer = getGameConsumer().getInstanceManager().getInstance(RoomManager.class).getRoom().getRoomPlayerMap().get(player.getPlayerDB().getId());
+        Room room = getGameConsumer().getInstanceManager().getInstance(RoomManager.class).getRoom(player.getPlayerDB().getId());
+
+        RoomPlayer roomPlayer = room.getRoomPlayerMap().get(player.getPlayerDB().getId());
         if(roomPlayer == null){
             return;
         }
@@ -26,7 +28,7 @@ public class CSHitProcessor extends ByteMsgObjProcessor<CSHitMsg> {
         roomPlayer.setHp(roomPlayer.getHp() + 1);
 
 
-        RoomPlayer hitRoomPlayer = getGameConsumer().getInstanceManager().getInstance(RoomManager.class).getRoom().getRoomPlayerMap().get(event.getData().getHitTargetId());
+        RoomPlayer hitRoomPlayer = room.getRoomPlayerMap().get(event.getData().getHitTargetId());
         SCHitMsg scHitMsg = new SCHitMsg();
         if(hitRoomPlayer != null){
             hitRoomPlayer.setHp(hitRoomPlayer.getHp() - 2);
@@ -41,7 +43,7 @@ public class CSHitProcessor extends ByteMsgObjProcessor<CSHitMsg> {
         scHitMsg.setAttackPlayerHp(roomPlayer.getHp());
 
 
-        getGameConsumer().getInstanceManager().getInstance(RoomManager.class).getRoom().broadcast(scHitMsg);
+        room.broadcast(scHitMsg);
 
     }
 }

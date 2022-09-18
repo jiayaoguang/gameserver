@@ -19,14 +19,59 @@ public class EnterRoomProcessor extends ByteMsgObjProcessor<CSEnterRoomMsg> {
 
         Player player = session.getSessionObject();
 
-        RoomPlayer roomPlayer = roomManager.enterRoom(player);
+
+        Room room = roomManager.getRoom(player.getPlayerDB().getId());
 
 
+        if(room != null){
+            RoomPlayer roomPlayer = room.getRoomPlayerMap().get(player.getPlayerDB().getId());
+            roomPlayer.setPlayer(player);
+            sendRoomInfoMsg(roomManager, roomPlayer);
+            return;
+        }
+
+
+
+
+
+        if(roomManager.getWaitBattlePlayer() == null){
+            roomManager.setWaitBattlePlayer(player);
+            player.sendTip("正在匹配");
+            return;
+        }
+
+
+        if(roomManager.getWaitBattlePlayer().getSession().getSessionId() == player.getSession().getSessionId()){
+            player.sendTip("正在匹配 请勿重复请求");
+            return;
+
+        }
+
+        Player player2 = roomManager.getWaitBattlePlayer();
+        room = roomManager.enterRoom(  player , player2);
+
+
+
+        RoomPlayer roomPlayer1 = room.getRoomPlayerMap().get(player.getPlayerDB().getId());
+        sendRoomInfoMsg(roomManager, roomPlayer1);
+        RoomPlayer roomPlayer2 = room.getRoomPlayerMap().get(player2.getPlayerDB().getId());
+
+        sendRoomInfoMsg(roomManager, roomPlayer2);
+
+
+    }
+
+    private void sendRoomInfoMsg(RoomManager roomManager,  RoomPlayer roomPlayer) {
+        Player player = roomPlayer.getPlayer();
+        Session session = roomPlayer.getPlayer().getSession();
 
         SCEnterRoomMsg enterRoomMsg = new SCEnterRoomMsg();
         enterRoomMsg.setScore(roomPlayer.getScore());
 
-        enterRoomMsg.wallMsgs.addAll(roomManager.getRoom().getWallMsgList());
+
+        Room room = roomPlayer.getRoom();
+
+        enterRoomMsg.wallMsgs.addAll(room.getWallMsgList());
 
 
         SCPlayerJoinMsg playerJoinMsg = new SCPlayerJoinMsg();
@@ -38,7 +83,9 @@ public class EnterRoomProcessor extends ByteMsgObjProcessor<CSEnterRoomMsg> {
         myPlayerInfoMsg.setHp(roomPlayer.getHp());
         playerJoinMsg.setPlayerInfoMsg(myPlayerInfoMsg);
 
-        for(RoomPlayer other : roomManager.getRoom().getRoomPlayerMap().values()){
+
+
+        for (RoomPlayer other : room.getRoomPlayerMap().values()) {
             PlayerInfoMsg playerInfoMsg = new PlayerInfoMsg();
             playerInfoMsg.setPlayerId(other.getPlayer().getPlayerDB().getId());
             playerInfoMsg.setPosi(other.getPosi());
@@ -47,27 +94,21 @@ public class EnterRoomProcessor extends ByteMsgObjProcessor<CSEnterRoomMsg> {
 
             enterRoomMsg.getPlayerInfoMsgs().add(playerInfoMsg);
 
-            if(player.getPlayerDB().getId() != other.getPlayer().getPlayerDB().getId()){
+            if (player.getPlayerDB().getId() != other.getPlayer().getPlayerDB().getId()) {
                 other.getPlayer().getSession().writeMessage(playerJoinMsg);
             }
 
-            for(Motion motion : roomPlayer.getMotionMap().values()){
-                enterRoomMsg.getMotionMsgs().add( roomManager.getRoom().createMotionMsg(other , motion));
+            for (Motion motion : other.getMotionMap().values()) {
+                enterRoomMsg.getMotionMsgs().add(room.createMotionMsg(other, motion));
             }
 
         }
 
-        for(Motion motion : roomManager.getRoom().getSysMotionMap().values()){
-            enterRoomMsg.getMotionMsgs().add( roomManager.getRoom().createMotionMsg(0 , motion));
+        for (Motion motion : room.getSysMotionMap().values()) {
+            enterRoomMsg.getMotionMsgs().add(room.createMotionMsg(0, motion));
         }
 
 
-
         session.writeMessage(enterRoomMsg);
-
-
-
-
-
     }
 }
