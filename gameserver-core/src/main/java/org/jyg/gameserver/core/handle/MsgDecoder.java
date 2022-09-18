@@ -97,7 +97,7 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
             try{
                 msgObj = msgCodec.decode(dstBytes);
             }catch (Exception e){
-                LOGGER.error(" msg decode make exception, msg type : {}  , exception {}", msgCodec.getMsgType(), e.getCause());
+                LOGGER.error(" msg decode make exception, msgCodec type : {}  , exception {}", msgCodec.getClass().getSimpleName(), e.getCause());
                 throw e;
             }
 

@@ -92,23 +92,26 @@ public class WebSocketMsgDecoder extends
 			try{
 				msgObj = msgCodec.decode(dstBytes);
 			}catch (Exception e){
-				Logs.DEFAULT_LOGGER.error(" msg decode make exception, msg type : {}  , exception {}", msgCodec.getMsgType(), e.getCause());
+				Logs.DEFAULT_LOGGER.error(" msg decode make exception, msgCodec type : {}  , exception {}", msgCodec.getClass().getSimpleName(), e.getCause());
 				throw e;
 			}
 
-			switch (msgCodec.getMsgType()) {
-				case PROTO:
-					MessageLite messageLite = (MessageLite) msgObj;
-					gameContext.getConsumerManager().publicEventToDefault( EventType.REMOTE_MSG_COME, messageLite, ctx.channel(), msgId);
-					break;
-				case BYTE_OBJ:
-					ByteMsgObj byteMsgObj = (ByteMsgObj) msgObj;
-					gameContext.getConsumerManager().publicEventToDefault(EventType.REMOTE_MSG_COME, byteMsgObj, ctx.channel(), msgId);
-					break;
-				default:
-					Logs.DEFAULT_LOGGER.error(" unknown msg type type : {} ", msgCodec.getMsgType());
-					break;
-			}
+
+			gameContext.getConsumerManager().publicEventToDefault(EventType.REMOTE_MSG_COME, msgObj, ctx.channel(), msgId);
+
+//			switch (msgCodec.getMsgType()) {
+//				case PROTO:
+//					MessageLite messageLite = (MessageLite) msgObj;
+//					gameContext.getConsumerManager().publicEventToDefault( EventType.REMOTE_MSG_COME, messageLite, ctx.channel(), msgId);
+//					break;
+//				case BYTE_OBJ:
+//					ByteMsgObj byteMsgObj = (ByteMsgObj) msgObj;
+//					gameContext.getConsumerManager().publicEventToDefault(EventType.REMOTE_MSG_COME, byteMsgObj, ctx.channel(), msgId);
+//					break;
+//				default:
+//					Logs.DEFAULT_LOGGER.error(" unknown msg type type : {} ", msgCodec.getMsgType());
+//					break;
+//			}
 
 
 		}catch (Exception e){
