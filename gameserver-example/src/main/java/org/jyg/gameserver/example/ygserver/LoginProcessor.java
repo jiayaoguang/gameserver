@@ -86,6 +86,12 @@ public class LoginProcessor extends ByteMsgObjProcessor<LoginRequestMsg> {
                     session.setSessionObject(currentPlayerDB);
                     session.writeMessage(loginReplyMsg);
 
+
+                    SCTipMsg tipMsg = new SCTipMsg();
+                    tipMsg.setContent("login success");
+
+                    session.writeMessage(tipMsg);
+
                     PlayerManager playerManager = getGameConsumer().getInstance(PlayerManager.class);
                     Player player = new Player();
                     player.setPlayerDB(currentPlayerDB);

@@ -108,6 +108,14 @@ public class RoomManager implements Lifecycle {
             room.getRoomPlayerMap().put(player.getPlayerDB().getId(),roomPlayer);
         }
         roomPlayer.setPlayer(player);
+        Vector2Msg posi;
+        if(room.getRoomPlayerMap().size() == 1){
+            posi = new Vector2Msg( 0 , 100);
+        }else {
+            posi = new Vector2Msg( 0 , -100);
+        }
+
+        Motion sysMotion = getRoom().createMotion(roomPlayer , posi , 1);
 
         return roomPlayer;
     }

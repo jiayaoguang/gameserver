@@ -1,6 +1,7 @@
 package org.jyg.gameserver.example.ygserver;
 
 import org.jyg.gameserver.core.session.Session;
+import org.jyg.gameserver.example.ygserver.msg.SCTipMsg;
 
 /**
  * create by jiayaoguang at 2021/9/4
@@ -37,4 +38,13 @@ public class Player {
     public void setSession(Session session) {
         this.session = session;
     }
+
+
+    public void sendTip(String content){
+        SCTipMsg tipMsg = new SCTipMsg();
+        tipMsg.setContent(content);
+
+        session.writeMessage(tipMsg);
+    }
+
 }

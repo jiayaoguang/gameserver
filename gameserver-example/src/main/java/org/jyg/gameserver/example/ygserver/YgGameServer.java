@@ -63,6 +63,8 @@ public class YgGameServer {
         bootstarp.getGameContext().addMsgId2MsgClassMapping(128, CSCreateMotionMsg.class );
         bootstarp.getGameContext().addMsgId2MsgClassMapping(129, SCCreateMotionMsg.class );
 
+        bootstarp.getGameContext().addMsgId2MsgClassMapping(130, SCTipMsg.class );
+
 
 
 

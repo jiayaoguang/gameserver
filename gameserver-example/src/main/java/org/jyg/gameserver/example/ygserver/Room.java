@@ -81,7 +81,15 @@ public class Room {
         motion.setHp(100);
         motion.setMaxHp(100);
 
-        motion.setScale(new Vector2Msg(RandomUtil.randomInt( 5,30) , RandomUtil.randomInt( 5,30)));
+        Vector2Msg scale;
+        if(type == 1){
+            scale = new Vector2Msg(30,20);
+        }else {
+            int radiu = RandomUtil.randomInt( 5,30);
+            scale = new Vector2Msg(radiu,radiu);
+        }
+
+        motion.setScale(scale);
 
         motionId2PlayerIdMap.put(motion.getId() , roomPlayer.getPlayer().getPlayerDB().getId());
         roomPlayer.getMotionMap().put(motion.getId() , motion);
@@ -123,7 +131,7 @@ public class Room {
         motionMsg.setHp(motion.getHp());
         motionMsg.setMaxHp(motion.getMaxHp());
         motionMsg.setOwnPlayerId(playerId);
-
+        motionMsg.setMotionType(motion.getType());
         return motionMsg;
     }
 

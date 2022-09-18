@@ -11,7 +11,7 @@ public class MotionMsg implements ByteMsgObj {
 
     private long ownPlayerId;
 
-    private int type;
+    private int motionType;
 
     private Vector2Msg posi;
 
@@ -28,12 +28,12 @@ public class MotionMsg implements ByteMsgObj {
     private Vector2Msg bulletPosi;
 
 
-    public int getType() {
-        return type;
+    public int getMotionType() {
+        return motionType;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setMotionType(int motionType) {
+        this.motionType = motionType;
     }
 
 
