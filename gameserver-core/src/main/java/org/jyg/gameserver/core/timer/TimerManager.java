@@ -76,7 +76,7 @@ public class TimerManager implements Lifecycle {
     public void updateTimer() {
 
         int onceExecuteNum = 0;
-        final long now = System.currentTimeMillis();
+        final long thisLoopStartTime = System.currentTimeMillis();
 
         for (Timer timer; ; ) {
             timer = timerQueue.peek();
@@ -85,7 +85,7 @@ public class TimerManager implements Lifecycle {
             }
 
 
-            if (timer.getTriggerTime() > now) {
+            if (timer.getTriggerTime() > thisLoopStartTime) {
                 return;
             }
 
@@ -94,7 +94,7 @@ public class TimerManager implements Lifecycle {
             if (timer.isEnd() || timer.isCancel()) {
                 continue;
             }
-
+            final long timerStartExecTime = System.currentTimeMillis();
 
             try {
                 timer.onTime();
@@ -110,7 +110,7 @@ public class TimerManager implements Lifecycle {
             if (timer.getExecNum() != -1) {
                 timer.reduceExecNum(1);
             }
-            long costTime = System.currentTimeMillis() - now;
+            long costTime = System.currentTimeMillis() - timerStartExecTime;
 
             if(costTime > 10){
                 Logs.DEFAULT_LOGGER.info(" timer exec cost more time  {} mills  {} queue size {} "  , costTime , timer.toString() , timerQueue.size());
