@@ -16,7 +16,7 @@ public class PingServer {
         bootstarp.registerSocketEvent(101, new PingProcessor());
         bootstarp.registerSendEventIdByProto(102, p_test.p_scene_sm_response_pong.class);
         //开端口服务
-        bootstarp.addTcpService(8080);
+        bootstarp.addTcpConnector(8080);
         bootstarp.start();
     }
 
