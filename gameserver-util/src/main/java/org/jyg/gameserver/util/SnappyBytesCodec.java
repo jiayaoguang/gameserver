@@ -1,28 +1,33 @@
 package org.jyg.gameserver.util;
 
-import org.jyg.gameserver.core.compress.BytesCodec;
+import org.jyg.gameserver.core.msg.AbstractByteMsgCodec;
+import org.jyg.gameserver.core.msg.ByteMsgObj;
+import org.jyg.gameserver.core.msg.encrypt.MsgEncryptor;
 
 import java.io.IOException;
 
-public class SnappyBytesCodec implements BytesCodec {
+public class SnappyBytesCodec<T extends ByteMsgObj> extends AbstractByteMsgCodec<T> {
+
+
+    private final AbstractByteMsgCodec<T> codec;
+    private final SnappyMsgEncryptor snappyMsgEncryptor;
+
+    public SnappyBytesCodec(AbstractByteMsgCodec<T> codec) {
+        super(codec.getByteMsgClass());
+        this.codec = codec;
+        this.snappyMsgEncryptor = new SnappyMsgEncryptor();
+    }
+
 
     @Override
-    public byte[] decode(byte[] originBytes) {
-        try {
-            return org.xerial.snappy.Snappy.compress(originBytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
-        }
+    public byte[] encode(T jsonMsg) throws Exception {
+
+
+        return snappyMsgEncryptor.encrypt(codec.encode(jsonMsg));
     }
 
     @Override
-    public byte[] encode(byte[] originBytes) {
-        try {
-            return org.xerial.snappy.Snappy.uncompress(originBytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
-        }
+    public T decode(byte[] bytes) throws Exception {
+        return codec.decode(snappyMsgEncryptor.decrypt(bytes));
     }
 }
