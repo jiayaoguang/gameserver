@@ -16,6 +16,8 @@ public class SCHitMsg implements ByteMsgObj {
 
     private int attackPlayerHp = 0;
 
+    private int targetState = 0;
+
     public int getScore() {
         return score;
     }
@@ -64,5 +66,14 @@ public class SCHitMsg implements ByteMsgObj {
 
     public void setAttackPlayerHp(int attackPlayerHp) {
         this.attackPlayerHp = attackPlayerHp;
+    }
+
+
+    public int getTargetState() {
+        return targetState;
+    }
+
+    public void setTargetState(int targetState) {
+        this.targetState = targetState;
     }
 }

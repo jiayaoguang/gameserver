@@ -19,6 +19,14 @@ public class RoomPlayer extends BattleObject{
 
     private Room room;
 
+    /**
+     * 0 : 正常
+     * 1 : 死亡
+     */
+    private int state = 0;
+
+    private int deadCount = 0;
+
 
     public RoomPlayer() {
 
@@ -56,5 +64,23 @@ public class RoomPlayer extends BattleObject{
 
     public void setRoom(Room room) {
         this.room = room;
+    }
+
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+
+    public int getDeadCount() {
+        return deadCount;
+    }
+
+    public void setDeadCount(int deadCount) {
+        this.deadCount = deadCount;
     }
 }

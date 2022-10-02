@@ -13,6 +13,8 @@ public class PlayerInfoMsg {
 
     private Vector2Msg dir;
 
+    private int state = 0;
+
 
     public long getPlayerId() {
         return playerId;
@@ -55,4 +57,11 @@ public class PlayerInfoMsg {
     }
 
 
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
 }

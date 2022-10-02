@@ -18,7 +18,6 @@ public class RoomManager implements Lifecycle {
     private final GameConsumer gameConsumer;
 
 
-    private Player waitBattlePlayer;
 
     private final Map<Long,RoomPlayer> battleRoomPlayerMap = new LinkedHashMap<>(1024, 0.5f);
 
@@ -321,6 +320,7 @@ public class RoomManager implements Lifecycle {
             playerInfoMsg.setPosi(other.getPosi());
             playerInfoMsg.setName(other.getPlayer().getPlayerDB().getName());
             playerInfoMsg.setHp(other.getHp());
+            playerInfoMsg.setState(other.getState());
 
             enterRoomMsg.getPlayerInfoMsgs().add(playerInfoMsg);
 
@@ -388,6 +388,19 @@ public class RoomManager implements Lifecycle {
             }
         }
 
+    }
+
+
+
+    public void revive(RoomPlayer roomPlayer){
+        Vector2Msg vector2Msg = new Vector2Msg(RandomUtil.randomInt(-100,100) , RandomUtil.randomInt(-100,100));
+        roomPlayer.setPosi(vector2Msg);
+        roomPlayer.setState(0);
+        PlayerFrameMsg playerFrameMsg = roomPlayer.getRoom().getPlayerFrameMsgMap().get(roomPlayer.getPlayer().getPlayerDB().getId());
+        if(playerFrameMsg != null){
+            playerFrameMsg.setPosi(vector2Msg);
+            playerFrameMsg.setState(0);
+        }
     }
 
 
