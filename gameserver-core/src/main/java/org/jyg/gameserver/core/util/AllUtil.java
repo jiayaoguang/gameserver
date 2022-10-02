@@ -155,6 +155,14 @@ public class AllUtil {
         System.out.println(sb.toString());
     }
 
+    public static void println(List<?> list){
+        StringBuilder sb = new StringBuilder();
+        for(Object o:list){
+            sb.append(o).append(',');
+        }
+        System.out.println(sb.toString());
+    }
+
 
     /**
      * {@link ConfigUtil#properties2Object(String, Object)}.

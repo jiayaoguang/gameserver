@@ -16,6 +16,8 @@ public class PlayerDB extends BaseDBEntity {
     @DBTableFieldIgnore
     private String content;
 
+    private long lastMatchTime;
+
 
 
     public long getId() {
@@ -49,5 +51,14 @@ public class PlayerDB extends BaseDBEntity {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+
+    public long getLastMatchTime() {
+        return lastMatchTime;
+    }
+
+    public void setLastMatchTime(long lastMatchTime) {
+        this.lastMatchTime = lastMatchTime;
     }
 }

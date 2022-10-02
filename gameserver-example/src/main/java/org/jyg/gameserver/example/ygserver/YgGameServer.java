@@ -29,7 +29,7 @@ public class YgGameServer {
         bootstarp.getGameContext().getDefaultGameConsumer().getInstanceManager().putInstance(new ConsumerDBManager(bootstarp.getDefaultConsumer(), dbConsumerGroup.getId()));
 
         bootstarp.getGameContext().getDefaultGameConsumer().getInstanceManager().putInstance(new PlayerManager());
-        bootstarp.getGameContext().getDefaultGameConsumer().getInstanceManager().putInstance(FrameManager.class);
+//        bootstarp.getGameContext().getDefaultGameConsumer().getInstanceManager().putInstance(FrameManager.class);
         bootstarp.getGameContext().getDefaultGameConsumer().getInstanceManager().putInstance(RoomManager.class);
 //
 //        dbConsumerGroup.addTableInfo(PlayerDB.class);

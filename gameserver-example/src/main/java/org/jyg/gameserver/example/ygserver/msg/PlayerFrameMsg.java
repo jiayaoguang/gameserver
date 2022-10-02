@@ -17,6 +17,10 @@ public class PlayerFrameMsg {
     private boolean bulletActive;
 
     private String name;
+    /**
+     * 0:正常 1:死亡
+     */
+    private int state;
 
 
     public long getPlayerId() {
@@ -74,5 +78,14 @@ public class PlayerFrameMsg {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 /**
  * create by jiayaoguang on 2021/9/11
  */
+@Deprecated
 public class FrameManager {
 
     private Map<Long , PlayerFrameMsg> playerFrameMsgMap = new LruMap<>(100);

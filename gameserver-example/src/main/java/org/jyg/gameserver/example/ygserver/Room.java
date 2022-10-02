@@ -2,6 +2,8 @@ package org.jyg.gameserver.example.ygserver;
 
 import cn.hutool.core.util.RandomUtil;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
+import org.jyg.gameserver.core.util.LruMap;
+import org.jyg.gameserver.example.ygserver.msg.PlayerFrameMsg;
 import org.jyg.gameserver.example.ygserver.msg.Vector2Msg;
 import org.jyg.gameserver.example.ygserver.msg.WallMsg;
 import org.jyg.gameserver.example.ygserver.msg.data.MotionMsg;
@@ -13,6 +15,10 @@ public class Room {
 
     private long roomId;
 
+
+    private long createTime = 0;
+
+    private long startBattleTime = 0;
 
     private long endTime = 0;
 
@@ -26,11 +32,20 @@ public class Room {
     private Map<Long,Motion> sysMotionMap = new HashMap<>();
     private Map<Long,Long> motionId2PlayerIdMap = new HashMap<>();
 
-    private int state;
+    private RoomState state;
+
+
+    private Map<Long , PlayerFrameMsg> playerFrameMsgMap = new LruMap<>(100);
+
 
     public Room(long roomId) {
         this.roomId = roomId;
-        this.endTime = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(4);
+        this.state = RoomState.WAIT_BATTLE;
+        this.createTime = System.currentTimeMillis();
+
+        this.startBattleTime = createTime+ TimeUnit.SECONDS.toMillis(8);
+
+        this.endTime = startBattleTime + TimeUnit.MINUTES.toMillis(4);
         this.roomObjUidInc = System.currentTimeMillis();
     }
 
@@ -154,4 +169,34 @@ public class Room {
     public void setSysMotionMap(Map<Long, Motion> sysMotionMap) {
         this.sysMotionMap = sysMotionMap;
     }
+
+
+    public Map<Long, PlayerFrameMsg> getPlayerFrameMsgMap() {
+        return playerFrameMsgMap;
+    }
+
+    public void setPlayerFrameMsgMap(Map<Long, PlayerFrameMsg> playerFrameMsgMap) {
+        this.playerFrameMsgMap = playerFrameMsgMap;
+    }
+
+
+    public RoomState getState() {
+        return state;
+    }
+
+    public void setState(RoomState state) {
+        this.state = state;
+    }
+
+    public boolean isWaitBattle(){
+        if(state == RoomState.WAIT_BATTLE){
+            return true;
+        }
+
+        return false;
+    }
+
+
+
+
 }

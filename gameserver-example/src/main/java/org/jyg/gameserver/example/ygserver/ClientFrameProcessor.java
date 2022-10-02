@@ -25,7 +25,7 @@ public class ClientFrameProcessor extends ByteMsgObjProcessor<ClientFrameMsg> {
             return;
         }
 
-        FrameManager frameManager = getGameConsumer().getInstance(FrameManager.class);
+//        FrameManager frameManager = getGameConsumer().getInstance(FrameManager.class);
 
 //         session = getConsumer().getChannelManager().getSession(event.getChannel());
 
@@ -36,7 +36,7 @@ public class ClientFrameProcessor extends ByteMsgObjProcessor<ClientFrameMsg> {
         playerFrameMsg.setBulletPosi(event.getData().getBulletPosi());
         playerFrameMsg.setName(player.getPlayerDB().getName());
 
-        frameManager.getPlayerFrameMsgMap().put( session.getSessionId() , playerFrameMsg);
+//        frameManager.getPlayerFrameMsgMap().put( session.getSessionId() , playerFrameMsg);
 
         Room room = getGameConsumer().getInstance(RoomManager.class).getRoom(player.getPlayerDB().getId());
         if(room == null){
@@ -45,6 +45,10 @@ public class ClientFrameProcessor extends ByteMsgObjProcessor<ClientFrameMsg> {
         RoomPlayer roomPlayer = room.getRoomPlayerMap().get(player.getPlayerDB().getId());
         if(roomPlayer != null){
             roomPlayer.setPosi(event.getData().getPosi());
+            if(roomPlayer.getRoom() != null){
+                roomPlayer.getRoom().getPlayerFrameMsgMap().put( session.getSessionId() , playerFrameMsg);
+            }
+
         }
 
 
