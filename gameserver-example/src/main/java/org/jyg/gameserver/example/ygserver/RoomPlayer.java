@@ -28,6 +28,10 @@ public class RoomPlayer extends BattleObject{
     private int deadCount = 0;
 
 
+
+//    private float playerSize = 10;
+
+
     public RoomPlayer() {
 
         this.setHp(100);
@@ -83,4 +87,6 @@ public class RoomPlayer extends BattleObject{
     public void setDeadCount(int deadCount) {
         this.deadCount = deadCount;
     }
+
+
 }

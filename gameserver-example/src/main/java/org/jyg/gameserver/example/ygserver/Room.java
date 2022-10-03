@@ -29,10 +29,9 @@ public class Room {
     private long roomObjUidInc;
 
 
-    private Map<Long,Motion> sysMotionMap = new HashMap<>();
-    private Map<Long,Long> motionId2PlayerIdMap = new HashMap<>();
+    private Map<Long,Motion> sysMotionMap = new LinkedHashMap<>();
 
-    private RoomState state;
+//    private RoomState state;
 
 
     private Map<Long , PlayerFrameMsg> playerFrameMsgMap = new LruMap<>(100);
@@ -40,7 +39,7 @@ public class Room {
 
     public Room(long roomId) {
         this.roomId = roomId;
-        this.state = RoomState.WAIT_BATTLE;
+//        this.state = RoomState.WAIT_BATTLE;
         this.createTime = System.currentTimeMillis();
 
         this.startBattleTime = createTime+ TimeUnit.SECONDS.toMillis(8);
@@ -109,7 +108,6 @@ public class Room {
 
         motion.setScale(scale);
 
-        motionId2PlayerIdMap.put(motion.getId() , roomPlayer.getPlayer().getPlayerDB().getId());
         roomPlayer.getMotionMap().put(motion.getId() , motion);
 
         return motion;
@@ -177,23 +175,6 @@ public class Room {
 
     public void setPlayerFrameMsgMap(Map<Long, PlayerFrameMsg> playerFrameMsgMap) {
         this.playerFrameMsgMap = playerFrameMsgMap;
-    }
-
-
-    public RoomState getState() {
-        return state;
-    }
-
-    public void setState(RoomState state) {
-        this.state = state;
-    }
-
-    public boolean isWaitBattle(){
-        if(state == RoomState.WAIT_BATTLE){
-            return true;
-        }
-
-        return false;
     }
 
 

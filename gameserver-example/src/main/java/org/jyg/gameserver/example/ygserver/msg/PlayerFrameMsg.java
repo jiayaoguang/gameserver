@@ -11,7 +11,7 @@ public class PlayerFrameMsg {
 
     private Vector2Msg posi;
 
-    private Vector2Msg dir;
+    private float dir;
 
     private Vector2Msg bulletPosi;
     private boolean bulletActive;
@@ -47,11 +47,11 @@ public class PlayerFrameMsg {
         this.posi = posi;
     }
 
-    public Vector2Msg getDir() {
+    public float getDir() {
         return dir;
     }
 
-    public void setDir(Vector2Msg dir) {
+    public void setDir(float dir) {
         this.dir = dir;
     }
 

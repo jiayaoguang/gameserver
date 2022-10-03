@@ -11,7 +11,7 @@ public class PlayerInfoMsg {
 
     private Vector2Msg posi;
 
-    private Vector2Msg dir;
+    private float dir;
 
     private int state = 0;
 
@@ -48,11 +48,11 @@ public class PlayerInfoMsg {
         this.posi = posi;
     }
 
-    public Vector2Msg getDir() {
+    public float getDir() {
         return dir;
     }
 
-    public void setDir(Vector2Msg dir) {
+    public void setDir(float dir) {
         this.dir = dir;
     }
 

@@ -124,7 +124,7 @@ public class RoomManager implements Lifecycle {
         }
 
         for (Room room : this.battleRoomMap.values()){
-            if(room.isWaitBattle() && room.getRoomPlayerMap().size() < ROOM_MAX_PAYER_NUM){
+            if( room.getRoomPlayerMap().size() < ROOM_MAX_PAYER_NUM){
                 findRoom = room;
             }
         }
@@ -308,6 +308,7 @@ public class RoomManager implements Lifecycle {
         PlayerInfoMsg myPlayerInfoMsg = new PlayerInfoMsg();
         myPlayerInfoMsg.setPlayerId(roomPlayer.getPlayer().getPlayerDB().getId());
         myPlayerInfoMsg.setPosi(roomPlayer.getPosi());
+        myPlayerInfoMsg.setDir(roomPlayer.getDir());
         myPlayerInfoMsg.setName(roomPlayer.getPlayer().getPlayerDB().getName());
         myPlayerInfoMsg.setHp(roomPlayer.getHp());
         playerJoinMsg.setPlayerInfoMsg(myPlayerInfoMsg);
@@ -318,6 +319,7 @@ public class RoomManager implements Lifecycle {
             PlayerInfoMsg playerInfoMsg = new PlayerInfoMsg();
             playerInfoMsg.setPlayerId(other.getPlayer().getPlayerDB().getId());
             playerInfoMsg.setPosi(other.getPosi());
+            playerInfoMsg.setDir(other.getDir());
             playerInfoMsg.setName(other.getPlayer().getPlayerDB().getName());
             playerInfoMsg.setHp(other.getHp());
             playerInfoMsg.setState(other.getState());
@@ -395,12 +397,22 @@ public class RoomManager implements Lifecycle {
     public void revive(RoomPlayer roomPlayer){
         Vector2Msg vector2Msg = new Vector2Msg(RandomUtil.randomInt(-100,100) , RandomUtil.randomInt(-100,100));
         roomPlayer.setPosi(vector2Msg);
+
+//        roomPlayer.setDir(new Vector2Msg());
         roomPlayer.setState(0);
         PlayerFrameMsg playerFrameMsg = roomPlayer.getRoom().getPlayerFrameMsgMap().get(roomPlayer.getPlayer().getPlayerDB().getId());
         if(playerFrameMsg != null){
             playerFrameMsg.setPosi(vector2Msg);
             playerFrameMsg.setState(0);
         }
+    }
+
+
+    public int getPlayerSize(RoomManager roomManager){
+
+
+        return 0;
+
     }
 
 

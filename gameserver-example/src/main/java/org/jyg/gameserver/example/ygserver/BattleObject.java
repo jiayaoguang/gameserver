@@ -10,11 +10,11 @@ public class BattleObject {
     public long id;
 
 
-    private int type;
+
 
     private Vector2Msg posi;
 
-    private Vector2Msg dir;
+    private float dir;
 
     private int maxHp;
 
@@ -23,13 +23,6 @@ public class BattleObject {
     private Vector2Msg scale;
 
 
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
 
     public Vector2Msg getPosi() {
         return posi;
@@ -55,11 +48,11 @@ public class BattleObject {
         this.hp = hp;
     }
 
-    public Vector2Msg getDir() {
+    public float getDir() {
         return dir;
     }
 
-    public void setDir(Vector2Msg dir) {
+    public void setDir(float dir) {
         this.dir = dir;
     }
 

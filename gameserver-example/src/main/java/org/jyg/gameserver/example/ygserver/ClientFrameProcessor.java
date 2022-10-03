@@ -32,6 +32,7 @@ public class ClientFrameProcessor extends ByteMsgObjProcessor<ClientFrameMsg> {
         PlayerFrameMsg playerFrameMsg = new PlayerFrameMsg();
         playerFrameMsg.setPlayerId(player.getPlayerDB().getId());
         playerFrameMsg.setPosi(event.getData().getPosi());
+        playerFrameMsg.setDir(event.getData().getDir());
         playerFrameMsg.setBulletActive(event.getData().bulletActive);
         playerFrameMsg.setBulletPosi(event.getData().getBulletPosi());
         playerFrameMsg.setName(player.getPlayerDB().getName());
@@ -45,6 +46,7 @@ public class ClientFrameProcessor extends ByteMsgObjProcessor<ClientFrameMsg> {
         RoomPlayer roomPlayer = room.getRoomPlayerMap().get(player.getPlayerDB().getId());
         if(roomPlayer != null && roomPlayer.getState() == 0){
             roomPlayer.setPosi(event.getData().getPosi());
+            roomPlayer.setDir(playerFrameMsg.getDir());
             if(roomPlayer.getRoom() != null){
                 roomPlayer.getRoom().getPlayerFrameMsgMap().put( player.getPlayerDB().getId() , playerFrameMsg);
             }

@@ -11,7 +11,7 @@ public class ClientFrameMsg implements ByteMsgObj {
     private long frameTime;
     private Vector2Msg posi;
 
-    private Vector2Msg dir;
+    private float dir;
 
     public Vector2Msg bulletPosi;
     public boolean bulletActive;
@@ -32,11 +32,11 @@ public class ClientFrameMsg implements ByteMsgObj {
         this.posi = posi;
     }
 
-    public Vector2Msg getDir() {
+    public float getDir() {
         return dir;
     }
 
-    public void setDir(Vector2Msg dir) {
+    public void setDir(float dir) {
         this.dir = dir;
     }
 
