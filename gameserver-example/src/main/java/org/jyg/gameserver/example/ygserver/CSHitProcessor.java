@@ -26,8 +26,8 @@ public class CSHitProcessor extends ByteMsgObjProcessor<CSHitMsg> {
         if(roomPlayer == null){
             return;
         }
-        roomPlayer.setScore(roomPlayer.getScore() + 1);
-        roomPlayer.setHp(roomPlayer.getHp() + 1);
+        roomPlayer.setScore(roomPlayer.getScore() + 10);
+//        roomPlayer.setHp(roomPlayer.getHp() + 1);
 
 
         String killMsg = roomPlayer.getPlayer().getPlayerDB().getName() + " Kill > ";

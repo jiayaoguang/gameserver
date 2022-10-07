@@ -15,6 +15,8 @@ import java.util.concurrent.TimeUnit;
 public class RoomManager implements Lifecycle {
     private static final int ROOM_MAX_PAYER_NUM = 10;
 
+    private static final int ROOM_MAX_SCORE_MOTION_NUM = 30;
+
     private final GameConsumer gameConsumer;
 
 
@@ -63,6 +65,8 @@ public class RoomManager implements Lifecycle {
         gameConsumer.getTimerManager().addUnlimitedTimer(TimeUnit.SECONDS.toMillis(1), this::update);
         gameConsumer.getTimerManager().addUnlimitedTimer(TimeUnit.MILLISECONDS.toMillis(20), this::updateRoomFrame);
         gameConsumer.getTimerManager().addUnlimitedTimer(TimeUnit.SECONDS.toMillis(3), this::updateWaitPlayers);
+
+        gameConsumer.getTimerManager().addUnlimitedTimer(TimeUnit.SECONDS.toMillis(3), this::updateRoomMotion);
 
 //        gameConsumer.getEventManager().addEvent(new DisconnectEvent((session , data)->{
 //            if(waitBattlePlayer != null && session.getSessionId() == waitBattlePlayer.getSession().getSessionId()){
@@ -413,6 +417,45 @@ public class RoomManager implements Lifecycle {
 
         return 0;
 
+    }
+
+
+    public void updateRoomMotion(){
+//        long now = System.currentTimeMillis();
+        for(Room room : battleRoomMap.values()){
+
+
+            if(room.getSysMotionMap().size() < ROOM_MAX_SCORE_MOTION_NUM){
+                Motion motion = room.createScoreMotion();
+                SCCreateMotionMsg sendMsg = new SCCreateMotionMsg();
+                sendMsg.setMotionMsg(room.createMotionMsg(0,motion));
+                room.broadcast(sendMsg );
+            }
+        }
+    }
+
+
+    @Deprecated
+    public void checkEatRoomMotion(){
+        long now = System.currentTimeMillis();
+
+        for(Room room : battleRoomMap.values()){
+
+            for(RoomPlayer roomPlayer : room.getRoomPlayerMap().values() ){
+
+                for(Motion motion : room.getSysMotionMap().values() ){
+                    if(motion.getType() != 3){
+                        continue;
+                    }
+
+
+
+
+                }
+
+            }
+
+        }
     }
 
 

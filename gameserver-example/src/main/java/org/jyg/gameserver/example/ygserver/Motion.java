@@ -7,6 +7,8 @@ public class Motion extends BattleObject{
 
     private int type;
 
+    private long createTime;
+
 
     public int getType() {
         return type;
@@ -16,4 +18,12 @@ public class Motion extends BattleObject{
         this.type = type;
     }
 
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
 }

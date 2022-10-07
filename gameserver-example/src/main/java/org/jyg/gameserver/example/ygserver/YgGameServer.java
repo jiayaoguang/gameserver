@@ -1,9 +1,7 @@
 package org.jyg.gameserver.example.ygserver;
 
-import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
 import org.jyg.gameserver.core.msg.EmptyMsgCodec;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
-import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.db.ConsumerDBManager;
 import org.jyg.gameserver.db.DBGameConsumerGroup;
@@ -64,8 +62,10 @@ public class YgGameServer {
         bootstarp.getGameContext().addMsgId2MsgClassMapping(129, SCCreateMotionMsg.class );
 
         bootstarp.getGameContext().addMsgId2MsgClassMapping(130, SCTipMsg.class );
+        bootstarp.getGameContext().addMsgId2MsgClassMapping(131, SCMotionDeadMsg.class );
 
-
+        bootstarp.getGameContext().addMsgId2MsgClassMapping(132, CSEatScoreMotionMsg.class );
+        bootstarp.getGameContext().addMsgId2MsgClassMapping(133, SCUpdatePlayerScoreMsg.class );
 
 
         ByteMsgObjProcessor<LoginRequestMsg> loginProcessor = new LoginProcessor();
@@ -75,6 +75,9 @@ public class YgGameServer {
         bootstarp.getDefaultConsumer().addProcessor( new ClientFrameProcessor());
         bootstarp.getDefaultConsumer().addProcessor( new EnterRoomProcessor());
         bootstarp.getDefaultConsumer().addProcessor( new CreateMotionProcessor());
+
+        bootstarp.getDefaultConsumer().addProcessor( new CSEatScoreMotionProcessor());
+
 
 
 

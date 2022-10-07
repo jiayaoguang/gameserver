@@ -3,6 +3,7 @@ package org.jyg.gameserver.example.ygserver;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
+import org.jyg.gameserver.db.ConsumerDBManager;
 import org.jyg.gameserver.example.ygserver.msg.*;
 
 public class EnterRoomProcessor extends ByteMsgObjProcessor<CSEnterRoomMsg> {
@@ -37,6 +38,9 @@ public class EnterRoomProcessor extends ByteMsgObjProcessor<CSEnterRoomMsg> {
         }
 
         player.getPlayerDB().setLastMatchTime(System.currentTimeMillis());
+
+        ConsumerDBManager consumerDBManager = getGameConsumer().getInstanceManager().getInstance(ConsumerDBManager.class);
+        consumerDBManager.update(player.getPlayerDB());
 
         room = roomManager.tryEnterRom(player);
         if(room != null){

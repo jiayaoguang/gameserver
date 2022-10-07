@@ -34,7 +34,13 @@ public class Room {
 //    private RoomState state;
 
 
+    private Map<Long,Motion> sysScoreMotionMap = new LinkedHashMap<>();
+
+
     private Map<Long , PlayerFrameMsg> playerFrameMsgMap = new LruMap<>(100);
+
+
+    private long lastCreateScoreMotionTime;
 
 
     public Room(long roomId) {
@@ -114,24 +120,24 @@ public class Room {
     }
 
 
-    public Motion createSysMotion( Vector2Msg posi, int type){
-
-        Motion motion = new Motion();
-        motion.setId(allocUid());
-        motion.setType(type);
-        motion.setPosi(posi);
-        motion.setHp(100);
-        motion.setMaxHp(100);
-
-
-        int radiu = RandomUtil.randomInt( 5,30);
-
-        motion.setScale(new Vector2Msg(radiu , radiu));
-
-        sysMotionMap.put(motion.getId() , motion);
-
-        return motion;
-    }
+//    public Motion createSysMotion( Vector2Msg posi, int type){
+//
+//        Motion motion = new Motion();
+//        motion.setId(allocUid());
+//        motion.setType(type);
+//        motion.setPosi(posi);
+//        motion.setHp(100);
+//        motion.setMaxHp(100);
+//
+//
+//        int radiu = RandomUtil.randomInt( 5,30);
+//
+//        motion.setScale(new Vector2Msg(radiu , radiu));
+//
+//        sysMotionMap.put(motion.getId() , motion);
+//
+//        return motion;
+//    }
 
 
     public MotionMsg createMotionMsg(RoomPlayer roomPlayer , Motion motion){
@@ -178,6 +184,36 @@ public class Room {
     }
 
 
+    public long getLastCreateScoreMotionTime() {
+        return lastCreateScoreMotionTime;
+    }
+
+    public void setLastCreateScoreMotionTime(long lastCreateScoreMotionTime) {
+        this.lastCreateScoreMotionTime = lastCreateScoreMotionTime;
+    }
+
+
+    public Motion createScoreMotion(){
+
+
+        Vector2Msg posi = new Vector2Msg(RandomUtil.randomInt( -100,100) , RandomUtil.randomInt( -100,100));
+
+        Motion motion = new Motion();
+        motion.setId(allocUid());
+        motion.setType(3);
+        motion.setPosi(posi);
+        motion.setHp(0);
+        motion.setMaxHp(0);
+
+        int radiu = RandomUtil.randomInt( 3,6);
+        Vector2Msg scale = new Vector2Msg(radiu,radiu);
+
+        motion.setScale(scale);
+        this.lastCreateScoreMotionTime = System.currentTimeMillis();
+        sysMotionMap.put(motion.getId() , motion);
+
+        return motion;
+    }
 
 
 }
