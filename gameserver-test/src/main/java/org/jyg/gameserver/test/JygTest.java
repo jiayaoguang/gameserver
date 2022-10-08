@@ -191,15 +191,6 @@ public class JygTest {
 //        AllUtil.println(zbs3.length);
     }
 
-    @Test
-    public void testConfig() throws Exception{
-
-        ServerConfig serverConfig = new ServerConfig();
-
-        AllUtil.properties2Object("jyg.properties" , serverConfig);
-
-        AllUtil.println(serverConfig.isUseGzip());
-    }
 
     @Test
     public void gzipTest() throws Exception{
