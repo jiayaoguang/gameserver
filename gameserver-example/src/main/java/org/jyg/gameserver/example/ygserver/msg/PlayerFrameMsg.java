@@ -88,4 +88,6 @@ public class PlayerFrameMsg {
     public void setState(int state) {
         this.state = state;
     }
+
+
 }

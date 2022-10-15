@@ -17,6 +17,8 @@ public class RoomManager implements Lifecycle {
 
     private static final int ROOM_MAX_SCORE_MOTION_NUM = 30;
 
+    public static final float ROOM_PLAYER_MIN_SIZE = 10.0f;
+    public static final float ROOM_PLAYER_MAX_SIZE = 30.0f;
     private final GameConsumer gameConsumer;
 
 
@@ -201,6 +203,7 @@ public class RoomManager implements Lifecycle {
             roomPlayer.setPlayer(player);
             roomPlayer.setPosi(new Vector2Msg());
             roomPlayer.setRoom(room);
+            roomPlayer.setPlayerSize(ROOM_PLAYER_MIN_SIZE);
             room.getRoomPlayerMap().put(player.getPlayerDB().getId(),roomPlayer);
             this.battleRoomPlayerMap.put(player.getPlayerDB().getId(),roomPlayer);
         }
@@ -315,6 +318,7 @@ public class RoomManager implements Lifecycle {
         myPlayerInfoMsg.setDir(roomPlayer.getDir());
         myPlayerInfoMsg.setName(roomPlayer.getPlayer().getPlayerDB().getName());
         myPlayerInfoMsg.setHp(roomPlayer.getHp());
+        myPlayerInfoMsg.setPlayerSize(roomPlayer.getPlayerSize());
         playerJoinMsg.setPlayerInfoMsg(myPlayerInfoMsg);
 
 
@@ -327,6 +331,7 @@ public class RoomManager implements Lifecycle {
             playerInfoMsg.setName(other.getPlayer().getPlayerDB().getName());
             playerInfoMsg.setHp(other.getHp());
             playerInfoMsg.setState(other.getState());
+            playerInfoMsg.setPlayerSize(other.getPlayerSize());
 
             enterRoomMsg.getPlayerInfoMsgs().add(playerInfoMsg);
 
@@ -409,6 +414,15 @@ public class RoomManager implements Lifecycle {
             playerFrameMsg.setPosi(vector2Msg);
             playerFrameMsg.setState(0);
         }
+        roomPlayer.setPlayerSize(ROOM_PLAYER_MIN_SIZE);
+
+        SCUpdatePlayerScoreMsg sendScoreMsg = new SCUpdatePlayerScoreMsg();
+        sendScoreMsg.setPlayerId(roomPlayer.getPlayer().getPlayerDB().getId());
+        sendScoreMsg.setScore(roomPlayer.getScore());
+        sendScoreMsg.setPlayerSize(roomPlayer.getPlayerSize());
+//        session.writeMessage(sendScoreMsg);
+        roomPlayer.getRoom().broadcast(sendScoreMsg);
+
     }
 
 

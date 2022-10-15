@@ -29,7 +29,7 @@ public class RoomPlayer extends BattleObject{
 
 
 
-//    private float playerSize = 10;
+    private float playerSize = 10;
 
 
     public RoomPlayer() {
@@ -89,4 +89,11 @@ public class RoomPlayer extends BattleObject{
     }
 
 
+    public float getPlayerSize() {
+        return playerSize;
+    }
+
+    public void setPlayerSize(float playerSize) {
+        this.playerSize = playerSize;
+    }
 }

@@ -7,6 +7,9 @@ import org.jyg.gameserver.core.timer.ITimerHandler;
 import org.jyg.gameserver.example.ygserver.msg.CSHitMsg;
 import org.jyg.gameserver.example.ygserver.msg.PlayerFrameMsg;
 import org.jyg.gameserver.example.ygserver.msg.SCHitMsg;
+import org.jyg.gameserver.example.ygserver.msg.SCUpdatePlayerScoreMsg;
+
+import java.util.Map;
 
 public class CSHitProcessor extends ByteMsgObjProcessor<CSHitMsg> {
 
@@ -30,6 +33,7 @@ public class CSHitProcessor extends ByteMsgObjProcessor<CSHitMsg> {
 //        roomPlayer.setHp(roomPlayer.getHp() + 1);
 
 
+
         String killMsg = roomPlayer.getPlayer().getPlayerDB().getName() + " Kill > ";
 
         RoomPlayer hitRoomPlayer = room.getRoomPlayerMap().get(event.getData().getHitTargetId());
@@ -38,6 +42,8 @@ public class CSHitProcessor extends ByteMsgObjProcessor<CSHitMsg> {
             hitRoomPlayer.setDeadCount(hitRoomPlayer.getDeadCount()+1);
             hitRoomPlayer.setState(1);
             hitRoomPlayer.setHp(0);
+
+            roomPlayer.setPlayerSize(roomPlayer.getPlayerSize() + Math.min(Math.max((hitRoomPlayer.getPlayerSize() - RoomManager.ROOM_PLAYER_MIN_SIZE) / 2, 2) , RoomManager.ROOM_PLAYER_MAX_SIZE));
 
             PlayerFrameMsg playerFrameMsg = roomPlayer.getRoom().getPlayerFrameMsgMap().get(hitRoomPlayer.getPlayer().getPlayerDB().getId());
             if(playerFrameMsg != null){
@@ -83,6 +89,13 @@ public class CSHitProcessor extends ByteMsgObjProcessor<CSHitMsg> {
                 }
             } );
         }
+
+        SCUpdatePlayerScoreMsg sendScoreMsg = new SCUpdatePlayerScoreMsg();
+        sendScoreMsg.setPlayerId(player.getPlayerDB().getId());
+        sendScoreMsg.setScore(roomPlayer.getScore());
+        sendScoreMsg.setPlayerSize(roomPlayer.getPlayerSize());
+//        session.writeMessage(sendScoreMsg);
+        room.broadcast(sendScoreMsg);
 
 
     }

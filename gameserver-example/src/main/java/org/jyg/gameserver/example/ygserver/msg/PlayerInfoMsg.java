@@ -15,6 +15,8 @@ public class PlayerInfoMsg {
 
     private int state = 0;
 
+    private float playerSize = 0;
+
 
     public long getPlayerId() {
         return playerId;
@@ -63,5 +65,14 @@ public class PlayerInfoMsg {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+
+    public float getPlayerSize() {
+        return playerSize;
+    }
+
+    public void setPlayerSize(float playerSize) {
+        this.playerSize = playerSize;
     }
 }

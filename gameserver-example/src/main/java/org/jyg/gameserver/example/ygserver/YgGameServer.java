@@ -85,7 +85,7 @@ public class YgGameServer {
 
         bootstarp.addTcpConnector(8088);
 
-//        bootstarp.addHttpConnector(80);
+        bootstarp.addHttpConnector(80);
         bootstarp.addHttpConnector(8888);
 
 //        bootstarp.getDefaultConsumer().getEventManager().addEvent(new ConsumerThreadStartEvent((consumer, b)->{

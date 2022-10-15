@@ -2,6 +2,7 @@ package org.jyg.gameserver.example.ygserver;
 
 import org.jyg.gameserver.core.consumer.ResultHandler;
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.DisconnectEvent;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.session.SessionState;
@@ -99,6 +100,10 @@ public class LoginProcessor extends ByteMsgObjProcessor<LoginRequestMsg> {
                     player.setSession(session);
                     session.setSessionObject(player);
                     playerManager.getLoginPlayerMap().put(session.getSessionId(), player);
+
+
+                    getGameConsumer().getEventManager().addEvent(new DisconnectEvent((s ,o)->{ playerManager.getLoginPlayerMap().remove(s.getSessionId()); }));
+
 
                 }finally {
 
