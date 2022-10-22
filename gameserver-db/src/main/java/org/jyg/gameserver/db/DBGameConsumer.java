@@ -187,6 +187,8 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
     }
 
 
+
+
     private void logSql(PrepareSQLAndParams prepareSQLAndParams){
 //        if(dbConfig.getPrintSqlLevel() == 0){
 //            return;
@@ -202,8 +204,8 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
             sb.append(prepareSQLAndParams.prepareSQL);
 
             for(Object param : prepareSQLAndParams.paramValues ){
-                TypeHandler ypeHandler =  typeHandlerRegistry.getTypeHandler(param.getClass());
-                String strValue = ypeHandler.typeToString(param);
+                TypeHandler typeHandler =  typeHandlerRegistry.getTypeHandler(param.getClass());
+                String strValue = typeHandler.typeToString(param);
                 sb.append(',').append(strValue);
             }
 

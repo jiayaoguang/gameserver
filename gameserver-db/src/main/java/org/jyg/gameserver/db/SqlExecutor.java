@@ -112,7 +112,7 @@ public class SqlExecutor {
                         connection.commit();
                     }
 
-                    return null;
+                    return modifyNum;
             }
 
         }

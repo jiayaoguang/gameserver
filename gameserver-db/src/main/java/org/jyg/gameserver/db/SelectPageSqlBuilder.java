@@ -15,7 +15,17 @@ public class SelectPageSqlBuilder extends CachedSQLBuilder {
         StringBuilder sb = new StringBuilder();
 
         sb.append(sqlKeyWord.select()).append(' ');
-        sb.append('*').append(' ');
+
+        int appendFieldNum = 0;
+        for(TableFieldInfo tableFieldInfo : tableInfo.getFieldInfoLinkedMap().values()){
+            appendFieldNum++;
+            sb.append(tableFieldInfo.getTableFieldName());
+            if(appendFieldNum != tableInfo.getFieldInfoLinkedMap().size()){
+                sb.append(',');
+            }
+        }
+        sb.append(' ');
+
         sb.append(sqlKeyWord.from()).append(' ');
         sb.append('`').append(tableInfo.getTableName()).append('`');
 
