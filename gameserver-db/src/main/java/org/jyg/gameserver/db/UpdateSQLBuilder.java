@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * create by jiayaoguang at 2021/5/14
  */
-public class UpdateSQLMaker extends CachedSQLMaker {
+public class UpdateSQLBuilder extends CachedSQLBuilder {
 
     @Override
     protected String createPrepareSql(SqlKeyWord sqlKeyWord, Object dbEntity, TableInfo tableInfo, Map<String, Object> params) throws Exception {

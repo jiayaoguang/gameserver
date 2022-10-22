@@ -1,6 +1,5 @@
 package org.jyg.gameserver.db;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.Map;
 /**
  * create by jiayaoguang at 2021/5/16
  */
-public class SelectByFieldSQLMaker implements SQLMaker {
+public class SelectByFieldSQLBuilder implements SQLBuilder {
 
     private final Map<String,String> prepareSqlCache = new HashMap<>();
 

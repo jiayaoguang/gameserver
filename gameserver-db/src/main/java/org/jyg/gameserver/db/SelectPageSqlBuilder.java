@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * create by jiayaoguang at 2021/7/3
  */
-public class SelectPageSqlMaker extends CachedSQLMaker {
+public class SelectPageSqlBuilder extends CachedSQLBuilder {
 
 
     @Override

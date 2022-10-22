@@ -1,7 +1,5 @@
 package org.jyg.gameserver.db;
 
-import org.jyg.gameserver.core.util.Logs;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +7,7 @@ import java.util.Map;
 /**
  * create by jiayaoguang at 2021/5/14
  */
-public class InsertSQLMaker extends CachedSQLMaker {
+public class InsertSQLBuilder extends CachedSQLBuilder {
 
 
     //    @Override

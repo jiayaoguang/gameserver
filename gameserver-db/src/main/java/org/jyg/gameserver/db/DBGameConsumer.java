@@ -17,7 +17,7 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
 
     private final SqlKeyWord sqlKeyWord;
 
-    private final Map<Integer, SQLMaker> sqlTextMap = new HashMap<>(MAP_DEFAULT_SIZE, MAP_DEFAULT_LOADFACTOR);
+    private final Map<Integer, SQLBuilder> sqlTextMap = new HashMap<>(MAP_DEFAULT_SIZE, MAP_DEFAULT_LOADFACTOR);
 
     private final Map<Class<?>, TableInfo> tableInfoMap = new HashMap<>(MAP_DEFAULT_SIZE, MAP_DEFAULT_LOADFACTOR);
 
@@ -48,12 +48,12 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
     }
 
     private void init() {
-        addSQLMaker(BDEventConst.INSERT, new InsertSQLMaker());
-        addSQLMaker(BDEventConst.DELETE, new DeleteSQLMaker());
-        addSQLMaker(BDEventConst.UPDATE, new UpdateSQLMaker());
-        addSQLMaker(BDEventConst.SELECT, new SelectSQLMaker());
+        addSQLMaker(BDEventConst.INSERT, new InsertSQLBuilder());
+        addSQLMaker(BDEventConst.DELETE, new DeleteSQLBuilder());
+        addSQLMaker(BDEventConst.UPDATE, new UpdateSQLBuilder());
+        addSQLMaker(BDEventConst.SELECT, new SelectSQLBuilder());
 
-        addSQLMaker(BDEventConst.SELECT_BY_FIELD, new SelectByFieldSQLMaker());
+        addSQLMaker(BDEventConst.SELECT_BY_FIELD, new SelectByFieldSQLBuilder());
 
 
 //        registerTypeHandler(new StringTypeHandler());
@@ -79,11 +79,11 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
     }
 
 
-    public void addSQLMaker(int eventId, SQLMaker SQLMaker) {
+    public void addSQLMaker(int eventId, SQLBuilder SQLBuilder) {
         if (sqlTextMap.containsKey(eventId)) {
             throw new IllegalArgumentException(" addDBProcessor fail contains eventId " + eventId);
         }
-        sqlTextMap.put(eventId, SQLMaker);
+        sqlTextMap.put(eventId, SQLBuilder);
     }
 
     public TableInfo addTableInfo(Class<?> dbEntityClass) {
@@ -116,9 +116,9 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
 
         Object dbEntity = eventData.getData();
 
-        SQLMaker sqlMaker = sqlTextMap.get(eventId);
+        SQLBuilder sqlBuilder = sqlTextMap.get(eventId);
 
-        if (sqlMaker == null) {
+        if (sqlBuilder == null) {
             Logs.DEFAULT_LOGGER.error(" unknow db event type {} ", eventId);
             return;
         }
@@ -145,7 +145,7 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
 
         PrepareSQLAndParams prepareSQLAndParams = null;
         try {
-            prepareSQLAndParams = sqlMaker.createSqlInfo(sqlKeyWord, dbEntity, tableInfo, params);
+            prepareSQLAndParams = sqlBuilder.createSqlInfo(sqlKeyWord, dbEntity, tableInfo, params);
         } catch (Exception e) {
             e.printStackTrace();
             if (needReturn) {

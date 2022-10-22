@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * create by jiayaoguang at 2021/5/22
  */
-public abstract class CachedSQLMaker implements SQLMaker {
+public abstract class CachedSQLBuilder implements SQLBuilder {
 
     private final Map<String , String> prepareSqlMap = new HashMap<>();
 

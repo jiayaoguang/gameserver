@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * create by jiayaoguang at 2021/5/14
  */
-public interface SQLMaker {
+public interface SQLBuilder {
     PrepareSQLAndParams createSqlInfo(SqlKeyWord sqlKeyWord, Object dbEntity, TableInfo tableInfo , Map<String,Object> params) throws Exception;
 
     SqlExecuteType getExecuteType();
