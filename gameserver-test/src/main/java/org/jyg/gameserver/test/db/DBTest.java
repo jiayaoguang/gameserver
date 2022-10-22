@@ -1,10 +1,15 @@
 package org.jyg.gameserver.test.db;
 
+import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
+import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.ConfigUtil;
 import org.jyg.gameserver.db.ConsumerDBManager;
 import org.jyg.gameserver.db.DBConfig;
 import org.jyg.gameserver.db.DBGameConsumer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * create by jiayaoguang on 2021/5/15
@@ -29,13 +34,40 @@ public class DBTest {
         gameServerBootstrap.getGameContext().getDefaultGameConsumer().getInstanceManager()
                 .putInstance(new ConsumerDBManager(gameServerBootstrap.getGameContext().getDefaultGameConsumer() , 100));
 
+
+
+
+
+
+        gameServerBootstrap.getGameContext().getDefaultGameConsumer().getEventManager().addEvent(new ConsumerThreadStartEvent((con, d)->{
+
+
+            int id = 29;
+
+            Maik maik = new Maik();
+            maik.setId(id);
+            maik.setContent("hello_world_29");
+            con.getInstanceManager().getInstance(ConsumerDBManager.class).insert(maik);
+
+            List<Object> params = new ArrayList<>();
+            params.add(id);
+
+
+            con.getInstanceManager().getInstance(ConsumerDBManager.class)
+                    .execQuerySql(Maik.class ,"select * from maik where id = ?;", params , (eventId , data)->{
+
+                        List<Maik> maiks = (List<Maik>)data;
+                        for( Maik maik1 : maiks ){
+                            AllUtil.println("query result : " + maik1.getContent());
+                        }
+
+                    });
+        }));
+
+
+
         gameServerBootstrap.start();
 
-        Maik maik = new Maik();
-        maik.setId(25);
-        maik.setContent("hello");
-
-        gameServerBootstrap.getGameContext().getDefaultGameConsumer().getInstanceManager().getInstance(ConsumerDBManager.class).insert(maik);
     }
 
 

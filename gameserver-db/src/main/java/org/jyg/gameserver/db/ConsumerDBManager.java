@@ -5,8 +5,10 @@ import org.jyg.gameserver.core.consumer.ResultHandler;
 import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.manager.Lifecycle;
+import org.jyg.gameserver.db.data.ExecSqlInfo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -83,6 +85,23 @@ public class ConsumerDBManager implements Lifecycle {
 
     public void selectBy(BaseDBEntity dbEntity,String fieldName, ResultHandler onSelectResult) {
         selectBy(dbEntity,fieldName, onSelectResult,  dbEntity.getClass().hashCode());
+    }
+
+
+    public void execQuerySql(Class<?> dbEntityClazz, String prepareSql , List<Object> paramValues, long childChooseId, ResultHandler onQueryResult) {
+        execSql(dbEntityClazz, prepareSql, paramValues,SqlExecuteType.QUERY_MANY, childChooseId,onQueryResult);
+    }
+
+    public void execQuerySql(Class<?> dbEntityClazz, String prepareSql , List<Object> paramValues, ResultHandler onQueryResult) {
+        execQuerySql(dbEntityClazz, prepareSql, paramValues, dbEntityClazz.hashCode(),onQueryResult);
+    }
+
+
+    public void execSql(Class<?> dbEntityClazz, String prepareSql , List<Object> paramValues , SqlExecuteType executeType, long childChooseId, ResultHandler onQueryResult) {
+        int requestId = gameConsumer.registerCallBackMethod(onQueryResult);
+        ExecSqlInfo execSqlInfo = new ExecSqlInfo(prepareSql ,paramValues , dbEntityClazz , executeType);
+        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, execSqlInfo, null, BDEventConst.SELECT
+                , new EventExtData(gameConsumer.getId(), requestId, childChooseId));
     }
 
 

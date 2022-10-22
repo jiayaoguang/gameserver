@@ -3,11 +3,13 @@ package org.jyg.gameserver.db;
 import org.jyg.gameserver.core.consumer.MpscQueueGameConsumer;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.util.Logs;
+import org.jyg.gameserver.db.data.ExecSqlInfo;
 import org.jyg.gameserver.db.type.TypeHandler;
 import org.jyg.gameserver.db.type.TypeHandlerRegistry;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -114,20 +116,23 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
     @Override
     protected void processDefaultEvent(int eventId, EventData eventData) {
 
-        Object dbEntity = eventData.getData();
-
-        SQLBuilder sqlBuilder = sqlTextMap.get(eventId);
-
-        if (sqlBuilder == null) {
-            Logs.DEFAULT_LOGGER.error(" unknow db event type {} ", eventId);
+        if(eventData.getData() == null){
+            Logs.DB.error("DB eventData.getData() == null");
             return;
         }
 
+        Class<?> dbEntityClazz = eventData.getData().getClass();
 
-        TableInfo tableInfo = dbTableManager.getTableInfo(dbEntity.getClass());
+
+        if(eventData.getData() instanceof ExecSqlInfo){
+            ExecSqlInfo execSqlInfo = (ExecSqlInfo) eventData.getData();
+            dbEntityClazz = execSqlInfo.getDbEntityClazz();
+        }
+
+        TableInfo tableInfo = dbTableManager.getTableInfo(dbEntityClazz);
         if (tableInfo == null) {
-            Logs.DEFAULT_LOGGER.info(" unknow tableInfo event type {} dbEntity class {} addTableInfo ", eventId, dbEntity.getClass().getCanonicalName());
-            tableInfo = addTableInfo(dbEntity.getClass());
+            Logs.DEFAULT_LOGGER.info(" unknow tableInfo event type {} dbEntity class {} addTableInfo ", eventId, dbEntityClazz.getCanonicalName());
+            tableInfo = addTableInfo(dbEntityClazz);
 //            return;
         }
 
@@ -143,15 +148,32 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
             params = eventData.getEventExtData().params;
         }
 
+
+
+
         PrepareSQLAndParams prepareSQLAndParams = null;
-        try {
-            prepareSQLAndParams = sqlBuilder.createSqlInfo(sqlKeyWord, dbEntity, tableInfo, params);
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (needReturn) {
-                eventReturn(eventData.getEventExtData().fromConsumerId, 100, eventData.getEventExtData().requestId);
+
+        if(eventData.getData() instanceof ExecSqlInfo){
+            ExecSqlInfo execSqlInfo = (ExecSqlInfo) eventData.getData();
+            prepareSQLAndParams = new PrepareSQLAndParams(execSqlInfo.getPrepareSql() , execSqlInfo.getParams() , execSqlInfo.getSqlExecuteType());
+        }else {
+
+            SQLBuilder sqlBuilder = sqlTextMap.get(eventId);
+            if (sqlBuilder == null) {
+                Logs.DEFAULT_LOGGER.error(" unknow db event type {} ", eventId);
+                return;
+            }
+            try {
+                prepareSQLAndParams = sqlBuilder.createSqlInfo(sqlKeyWord, eventData.getData(), tableInfo, params);
+            } catch (Exception e) {
+                e.printStackTrace();
+                if (needReturn) {
+                    eventReturn(eventData.getEventExtData().fromConsumerId, 100, eventData.getEventExtData().requestId);
+                }
+                return;
             }
         }
+
 
         if (prepareSQLAndParams == null) {
             return;
@@ -161,13 +183,13 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
         Object returnData = null;
 
         try {
-            returnData = sqlExecutor.executeSql(prepareSQLAndParams, eventData.getData().getClass(), tableInfo);
+            returnData = sqlExecutor.executeSql(prepareSQLAndParams, dbEntityClazz, tableInfo);
 
-            logSql(prepareSQLAndParams);
+            logSql(prepareSQLAndParams.prepareSQL , prepareSQLAndParams.paramValues);
 
-        } catch (SQLException | IllegalAccessException | InstantiationException throwables) {
+        } catch (SQLException | IllegalAccessException | InstantiationException exception) {
             Logs.DB.info("exec sql : {} make exception" , prepareSQLAndParams.prepareSQL);
-            throwables.printStackTrace();
+            exception.printStackTrace();
             if (needReturn) {
                 //eventId 1 : 报错
                 eventReturn(eventData.getEventExtData().fromConsumerId, null, eventData.getEventExtData().requestId, DBErrorCode.EXCEPTION);
@@ -189,21 +211,21 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
 
 
 
-    private void logSql(PrepareSQLAndParams prepareSQLAndParams){
+    private void logSql(String prepareSQL , List<Object> paramValues){
 //        if(dbConfig.getPrintSqlLevel() == 0){
 //            return;
 //        }
 
         if(dbConfig.getPrintSqlLevel() == 1){
-            Logs.DB.info("exec sql : {}" , prepareSQLAndParams.prepareSQL);
+            Logs.DB.info("exec sql : {}" , prepareSQL);
             return;
         }
         if(dbConfig.getPrintSqlLevel() == 2){
 
-            StringBuilder sb = new StringBuilder(50);
-            sb.append(prepareSQLAndParams.prepareSQL);
+            StringBuilder sb = new StringBuilder(prepareSQL.length() + paramValues.size() * 10);
+            sb.append(prepareSQL);
 
-            for(Object param : prepareSQLAndParams.paramValues ){
+            for(Object param : paramValues ){
                 TypeHandler typeHandler =  typeHandlerRegistry.getTypeHandler(param.getClass());
                 String strValue = typeHandler.typeToString(param);
                 sb.append(',').append(strValue);
