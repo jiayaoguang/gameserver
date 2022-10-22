@@ -100,11 +100,13 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
 
     @Override
     public void beforeStart() {
+        super.beforeStart();
         sqlExecutor.tryConnectIfClose();
     }
 
     @Override
     public void doStop() {
+        super.doStop();
         sqlExecutor.closeQuiet();
     }
 

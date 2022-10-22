@@ -47,6 +47,7 @@ public class GameContext implements Lifecycle{
 //    private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
     //TODO I think ...
+    @Deprecated
     private final SingleThreadExecutorManagerPool singleThreadExecutorManagerPool;
 
     private Object2IntMap<Class<? extends MessageLite>> protoClazz2MsgIdMap = new Object2IntOpenHashMap<>(1024,0.5f);
@@ -81,7 +82,7 @@ public class GameContext implements Lifecycle{
     public GameContext(GameConsumer defaultGameConsumer, String configFileName) {
 
         this.defaultGameConsumer = defaultGameConsumer;
-        this.instanceManager = new InstanceManager(this);
+
         ConfigUtil.properties2Object(configFileName, serverConfig);
 
 //        loadServerConfig(configFileName);
@@ -89,18 +90,24 @@ public class GameContext implements Lifecycle{
         this.useEpoll = (RemotingUtil.isLinuxPlatform() && Epoll.isAvailable() && serverConfig.isPreferEpoll());
 
 
-        this.eventLoopGroupManager = new EventLoopGroupManager(useEpoll , serverConfig.getNettyIOThreadNum());
-//        this.executorManager = new ExecutorManager(10, defaultConsumer);
-        this.singleThreadExecutorManagerPool = new SingleThreadExecutorManagerPool(defaultGameConsumer);
 
         defaultGameConsumer.setId(ConsumerManager.DEFAULT_CONSUMER_ID);
         defaultGameConsumer.setGameContext(this);
+
+
+        this.eventLoopGroupManager = new EventLoopGroupManager(useEpoll , serverConfig.getNettyIOThreadNum());
+//        this.executorManager = new ExecutorManager(10, defaultConsumer);
+        this.singleThreadExecutorManagerPool = new SingleThreadExecutorManagerPool(defaultGameConsumer);
         this.consumerManager = new ConsumerManager(this);
         this.consumerManager.addConsumer(defaultGameConsumer);
 
         this.nettyHandlerFactory = new NettyHandlerFactory(this);
 
         this.remoteInvokeManager = new RemoteInvokeManager();
+
+
+
+        this.instanceManager = new InstanceManager(this);
 
         initCommonProcessor();
 
@@ -317,11 +324,14 @@ public class GameContext implements Lifecycle{
 
     public synchronized void stop() {
 
+
+        getConsumerManager().stop();
+        getEventLoopGroupManager().stop();
+
+
         this.instanceManager.stop();
 
-        for(GameConsumer gameConsumer : getConsumerManager().getConsumers()){
-            gameConsumer.stop();
-        }
+
     }
 
     public synchronized void loadServerConfig(String configFileName){

@@ -6,6 +6,7 @@ import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.util.Logs;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 
 /**
@@ -36,6 +37,8 @@ public abstract class AbstractQueueGameConsumer extends GameConsumer {
 
     @Override
     public void doStop() {
+
+
         isStop = true;
 
         for (int i = 0; consumerThread.isAlive(); i++) {
@@ -43,13 +46,10 @@ public abstract class AbstractQueueGameConsumer extends GameConsumer {
                 Logs.DEFAULT_LOGGER.error( "consumer {} consumerThread stop fail " , getId());
                 break;
             }
-            try {
-                Thread.sleep(10L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
+            LockSupport.parkNanos(10_1000_1000L);
         }
-        Logs.DEFAULT_LOGGER.info("stop success....");
+        Logs.DEFAULT_LOGGER.info("stop gameConsumer {} id {} success....", this.getClass().getSimpleName() ,getId() );
     }
 
 //    @Override

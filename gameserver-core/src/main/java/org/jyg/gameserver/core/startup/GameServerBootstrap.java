@@ -107,9 +107,7 @@ public class GameServerBootstrap extends AbstractBootstrap {
     }
 
     @Override
-    public void stop() {
-
-        getGameContext().stop();
+    public void doStop() {
 
         for (Connector connector : connectors) {
             connector.stop();

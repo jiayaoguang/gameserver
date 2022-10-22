@@ -129,11 +129,16 @@ public abstract class AbstractBootstrap implements Lifecycle {
 
 
 
-    public abstract void doStart();
+    protected abstract void doStart();
 
-    public void stop(){
+    public final synchronized void stop(){
 
         gameContext.stop();
+        doStop();
+    }
+
+
+    protected void doStop() {
 
     }
 

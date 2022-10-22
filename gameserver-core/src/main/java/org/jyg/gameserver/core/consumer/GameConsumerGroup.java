@@ -39,6 +39,7 @@ public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
     @Override
     public void doStart() {
 
+
         if(CollectionUtil.isEmpty(childConsumerList)){
             throw new IllegalArgumentException("isEmpty(childConsumerList)");
         }
@@ -48,10 +49,11 @@ public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
         for (GameConsumer childGameConsumer : childConsumerList) {
             if(childGameConsumer.getId() == 0){
                 childGameConsumer.setId(nextId);
+                nextId++;
             }
             childGameConsumer.setGameContext(getGameContext());
             childGameConsumer.start();
-            nextId++;
+
         }
 
     }

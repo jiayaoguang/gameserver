@@ -101,6 +101,12 @@ public class ConsumerManager implements Lifecycle{
 
     @Override
     public void stop() {
-
+        for(GameConsumer gameConsumer : getConsumers()){
+            try{
+                gameConsumer.stop();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 }
