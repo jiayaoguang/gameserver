@@ -52,8 +52,11 @@ public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
                 nextId++;
             }
             childGameConsumer.setGameContext(getGameContext());
-            childGameConsumer.start();
 
+        }
+
+        for (GameConsumer childGameConsumer : childConsumerList) {
+            childGameConsumer.start();
         }
 
     }

@@ -100,7 +100,7 @@ public class ConsumerDBManager implements Lifecycle {
     public void execSql(Class<?> dbEntityClazz, String prepareSql , List<Object> paramValues , SqlExecuteType executeType, long childChooseId, ResultHandler onQueryResult) {
         int requestId = gameConsumer.registerCallBackMethod(onQueryResult);
         ExecSqlInfo execSqlInfo = new ExecSqlInfo(prepareSql ,paramValues , dbEntityClazz , executeType);
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, execSqlInfo, null, BDEventConst.SELECT
+        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, execSqlInfo, null, 0
                 , new EventExtData(gameConsumer.getId(), requestId, childChooseId));
     }
 
