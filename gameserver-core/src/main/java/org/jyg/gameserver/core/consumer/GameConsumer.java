@@ -10,6 +10,7 @@ import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
+import org.jyg.gameserver.core.event.GameEventListener;
 import org.jyg.gameserver.core.event.EventManager;
 import org.jyg.gameserver.core.filter.OnlyLocalHttpMsgFilter;
 import org.jyg.gameserver.core.manager.*;
@@ -124,7 +125,7 @@ public abstract class GameConsumer {
         }
         thread = Thread.currentThread();
 
-        getEventManager().triggerEvent(ConsumerThreadStartEvent.class ,this);
+        getEventManager().publishEvent(new ConsumerThreadStartEvent( this ));
     }
 
     public synchronized final void start(){
@@ -702,8 +703,8 @@ public abstract class GameConsumer {
 
 
     @Deprecated
-    public void setConsumerStartHandler(ConsumerStartHandler consumerStartHandler) {
-        getEventManager().addEvent(new ConsumerThreadStartEvent((a,b)->{ consumerStartHandler.onThreadStart(this); }));
+    public void setConsumerStartHandler(GameEventListener<ConsumerThreadStartEvent> eventListener) {
+        getEventManager().addEventListener(eventListener);
     }
 
 

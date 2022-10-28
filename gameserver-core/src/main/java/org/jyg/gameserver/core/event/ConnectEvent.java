@@ -2,10 +2,11 @@ package org.jyg.gameserver.core.event;
 
 import org.jyg.gameserver.core.session.Session;
 
-public class ConnectEvent extends SessionEvent<Object>{
+public class ConnectEvent extends SessionEvent{
 
-    public ConnectEvent(Event<Session, Object> event) {
-        super(event);
+    public ConnectEvent(Session session) {
+        super(session);
     }
+
 
 }

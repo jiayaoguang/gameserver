@@ -60,7 +60,7 @@ public class ChannelManager implements Lifecycle {
     }
 
     public <T> void afterConnect(Session session) {
-        gameConsumer.getEventManager().triggerEvent(ConnectEvent.class,session);
+        gameConsumer.getEventManager().publishEvent(new ConnectEvent(session));
     }
 
     public final <T> void doUnlink(Channel channel) {
@@ -72,7 +72,7 @@ public class ChannelManager implements Lifecycle {
     }
 
     public <T> void afterDisconnect(Session session) {
-        gameConsumer.getEventManager().triggerEvent(DisconnectEvent.class,session);
+        gameConsumer.getEventManager().publishEvent(new DisconnectEvent(session));
     }
 
 

@@ -2,18 +2,15 @@ package org.jyg.gameserver.core.event;
 
 import org.jyg.gameserver.core.consumer.GameConsumer;
 
-public class ConsumerThreadStartEvent implements Event<GameConsumer,Object>{
+public class ConsumerThreadStartEvent implements Event{
 
-    private final Event<GameConsumer, Object> event;
+    private final GameConsumer gameConsumer;
 
-    public ConsumerThreadStartEvent(Event<GameConsumer, Object> event) {
-        this.event = event;
+    public ConsumerThreadStartEvent( GameConsumer gameConsumer) {
+        this.gameConsumer = gameConsumer;
     }
 
-    @Override
-    public void onEvent(GameConsumer param1, Object param2) {
-
-        event.onEvent(param1,param2);
-
+    public GameConsumer getGameConsumer() {
+        return gameConsumer;
     }
 }

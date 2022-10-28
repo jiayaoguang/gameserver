@@ -1,6 +1,9 @@
 package org.jyg.gameserver.test.db;
 
+import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.consumer.ResultHandler;
+import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
+import org.jyg.gameserver.core.event.GameEventListener;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.db.ConsumerDBManager;
@@ -28,53 +31,61 @@ public class DBConsumerGroupTest {
         gameServerBootstrap.getGameContext().getDefaultGameConsumer().getInstanceManager()
                 .putInstance(new ConsumerDBManager(gameServerBootstrap.getGameContext().getDefaultGameConsumer() , dbConsumerGroup.getDbConfig().getDbConsumerGroupId()));
 
-        gameServerBootstrap.getGameContext().getDefaultGameConsumer().setConsumerStartHandler((consumer)->{
+        gameServerBootstrap.getGameContext().getDefaultGameConsumer().setConsumerStartHandler(new GameEventListener<ConsumerThreadStartEvent>() {
+            @Override
+            public void onEvent(ConsumerThreadStartEvent consumerThreadStartEvent) {
 
 
-            consumer.getTimerManager().addUnlimitedTimer(1000L,1000L,()->{
-               AllUtil.println(" hello ----------  ");
-            });
+                GameConsumer consumer = consumerThreadStartEvent.getGameConsumer();
+
+                consumer.getTimerManager().addUnlimitedTimer(1000L,1000L,()->{
+                    AllUtil.println(" hello ----------  ");
+                });
 
 
-            Maik maik = new Maik();
-            maik.setId(23);
-            maik.setContent("jjjjj");
+                Maik maik = new Maik();
+                maik.setId(23);
+                maik.setContent("jjjjj");
 
-            consumer.getInstanceManager().getInstance(ConsumerDBManager.class).delete(maik);
+                consumer.getInstanceManager().getInstance(ConsumerDBManager.class).delete(maik);
 
-            maik.setContent("hello");
+                maik.setContent("hello");
 
-            consumer.getInstanceManager().getInstance(ConsumerDBManager.class).insert(maik);
+                consumer.getInstanceManager().getInstance(ConsumerDBManager.class).insert(maik);
 
-            consumer.getInstanceManager().getInstance(ConsumerDBManager.class).select(maik, new ResultHandler() {
-                @Override
-                public void call(int eventId, Object data) {
-                    AllUtil.println(Thread.currentThread().getName() + " : "+ ((Maik)data).getContent());
-                }
-
-//                @Override
-//                public void onTimeout() {
-//                    AllUtil.println("timeout");
-//                }
-            });
-
-            Maik selectByMaikDb = new Maik();
-            selectByMaikDb.setContent("asd");
-            consumer.getInstanceManager().getInstance(ConsumerDBManager.class).selectBy(selectByMaikDb,"content", new ResultHandler<List<Maik>>() {
-                @Override
-                public void call(int eventId, List<Maik> data) {
-
-                    for(Maik maik1 : data){
-                        AllUtil.println(Thread.currentThread().getName() + " : "+ (maik1).getContent() + " _ " + maik1.getId());
+                consumer.getInstanceManager().getInstance(ConsumerDBManager.class).select(maik, new ResultHandler() {
+                    @Override
+                    public void call(int eventId, Object data) {
+                        AllUtil.println(Thread.currentThread().getName() + " : "+ ((Maik)data).getContent());
                     }
 
-                }
+//                @Override
+//                public void onTimeout() {
+//                    AllUtil.println("timeout");
+//                }
+                });
+
+                Maik selectByMaikDb = new Maik();
+                selectByMaikDb.setContent("asd");
+                consumer.getInstanceManager().getInstance(ConsumerDBManager.class).selectBy(selectByMaikDb,"content", new ResultHandler<List<Maik>>() {
+                    @Override
+                    public void call(int eventId, List<Maik> data) {
+
+                        for(Maik maik1 : data){
+                            AllUtil.println(Thread.currentThread().getName() + " : "+ (maik1).getContent() + " _ " + maik1.getId());
+                        }
+
+                    }
 
 //                @Override
 //                public void onTimeout() {
 //                    AllUtil.println("timeout");
 //                }
-            } );
+                } );
+
+            }
+
+
 
         });
 

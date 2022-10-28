@@ -1,6 +1,8 @@
 package org.jyg.gameserver.test.db;
 
+import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
+import org.jyg.gameserver.core.event.GameEventListener;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.ConfigUtil;
@@ -39,14 +41,28 @@ public class DBTest {
 
 
 
-        gameServerBootstrap.getGameContext().getDefaultGameConsumer().getEventManager().addEvent(new ConsumerThreadStartEvent((con, d)->{
+        gameServerBootstrap.getGameContext().getDefaultGameConsumer().getEventManager().addEventListener(new DBTestConsumerThreadStartEventListener() );
 
 
-            int id = 29;
+
+        gameServerBootstrap.start();
+
+    }
+
+
+
+    public static class DBTestConsumerThreadStartEventListener implements GameEventListener<ConsumerThreadStartEvent> {
+        @Override
+        public void onEvent(ConsumerThreadStartEvent event) {
+
+
+            GameConsumer con = event.getGameConsumer();
+
+            int id = 31;
 
             Maik maik = new Maik();
             maik.setId(id);
-            maik.setContent("hello_world_29");
+            maik.setContent("hello_world_31");
             con.getInstanceManager().getInstance(ConsumerDBManager.class).insert(maik);
 
             List<Object> params = new ArrayList<>();
@@ -62,12 +78,7 @@ public class DBTest {
                         }
 
                     });
-        }));
-
-
-
-        gameServerBootstrap.start();
-
+        }
     }
 
 

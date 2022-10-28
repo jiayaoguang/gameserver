@@ -2,6 +2,8 @@ package org.jyg.gameserver.core.event;
 
 import org.jyg.gameserver.core.manager.Lifecycle;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.Map;
 
 public class EventManager implements Lifecycle {
 
-    private Map<Class<? extends Event> , List<Event<?,?>>> eventListMap = new HashMap<>(128 , 0.5f);
+    private Map<Class<? extends Event> , List<GameEventListener<? extends Event>>> eventListMap = new HashMap<>(128 , 0.5f);
 
 
     @Override
@@ -22,25 +24,22 @@ public class EventManager implements Lifecycle {
 
     }
 
-    public void triggerEvent(Class<? extends Event> eventType){
-        triggerEvent(eventType,null,null);
-    }
 
-    public void triggerEvent(Class<? extends Event> eventType , Object param1){
-        triggerEvent(eventType,param1,null);
-    }
 
-    public void triggerEvent(Class<? extends Event> eventType , Object param1 , Object param2){
 
-        List<Event<?,?>> eventList = eventListMap.get(eventType);
-        if(eventList == null || eventList.isEmpty()){
+
+
+    public void publishEvent(Event event){
+
+        List<GameEventListener<? extends Event>> eventListeners = eventListMap.get(event.getClass());
+        if(eventListeners == null || eventListeners.isEmpty()){
             return;
         }
 
-        if(eventList.size() == 1){
+        if(eventListeners.size() == 1){
             try {
-                Event event = eventList.get(0);
-                event.onEvent(param1 , param2);
+                GameEventListener eventListener = eventListeners.get(0);
+                eventListener.onEvent(event);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -48,9 +47,9 @@ public class EventManager implements Lifecycle {
         }
 
 
-        for(Event event : eventList){
+        for(GameEventListener eventListener : eventListeners){
             try {
-                event.onEvent(param1 , param2);
+                eventListener.onEvent(event);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -62,29 +61,44 @@ public class EventManager implements Lifecycle {
 
 
 
-    public void addEvent(Event event){
-        List<Event<?,?>> eventList = eventListMap.get(event.getClass());
-        if(eventList == null){
-            eventList = new ArrayList<>();
-            Class<? extends Event> eventClass = event.getClass();
-            eventListMap.put(eventClass , eventList);
+    public void addEventListener(GameEventListener<? extends Event> eventListener){
+
+        Type superClass = eventListener.getClass().getGenericInterfaces()[0];
+        if (superClass instanceof Class<?>) { // sanity check, should never happen
+            throw new IllegalArgumentException("Internal error: TypeReference constructed without actual type information");
         }
-        eventList.add(event);
+
+        Type _type = ((ParameterizedType) superClass).getActualTypeArguments()[0];
+
+        Class<? extends Event> eventClazz = (Class<? extends Event>) _type;
+
+        addEventListener(eventClazz , eventListener);
     }
 
 
-    public void addHeadEvent(Event event){
+    public void addEventListener(Class<? extends Event> eventClazz , GameEventListener<? extends Event> eventListener){
 
-        List<Event<?,?>> newEventList = new ArrayList<>();
-        newEventList.add(event);
-        Class<Event> eventClass = (Class<Event>) event.getClass();
+        List<GameEventListener<? extends Event>> eventListenerList = eventListMap.get(eventClazz);
+        if(eventListenerList == null){
+            eventListenerList = new ArrayList<>();
+            Class<? extends Event> eventClass = eventClazz;
+            eventListMap.put(eventClass , eventListenerList);
+        }
+        eventListenerList.add(eventListener);
+    }
 
-        List<Event<?,?>> eventList = eventListMap.get(eventClass);
+
+    public void addHeadEventListener(Class<? extends Event> eventClazz , GameEventListener<? extends Event> eventListener){
+
+        List<GameEventListener<? extends Event>> newEventList = new ArrayList<>();
+        newEventList.add(eventListener);
+
+        List<GameEventListener<? extends Event>> eventList = eventListMap.get(eventClazz);
         if(eventList != null){
             newEventList.addAll(eventList);
         }
 
-        eventListMap.put(eventClass , newEventList);
+        eventListMap.put(eventClazz , newEventList);
     }
 
 }

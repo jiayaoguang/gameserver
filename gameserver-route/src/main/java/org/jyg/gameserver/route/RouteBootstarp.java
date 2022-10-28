@@ -1,18 +1,14 @@
 package org.jyg.gameserver.route;
 
+import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.consumer.RemoteGameConsumer;
-import org.jyg.gameserver.core.event.ConnectEvent;
-import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
-import org.jyg.gameserver.core.event.DisconnectEvent;
+import org.jyg.gameserver.core.event.*;
 import org.jyg.gameserver.core.msg.route.*;
 import org.jyg.gameserver.core.session.EnumSessionType;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.ConfigUtil;
 import org.jyg.gameserver.core.util.GameContext;
-import org.jyg.gameserver.core.util.UnknownMsgHandler;
-import org.jyg.gameserver.route.msg.ChatMsgObj;
-import org.jyg.gameserver.route.msg.ChatReplyMsgObj;
 import org.jyg.gameserver.route.processor.RouteMsgToGameMsgHandler;
 import org.jyg.gameserver.route.processor.RouteMsgToGameMsgProcessor;
 import org.jyg.gameserver.route.processor.RouteReplyMsgProcessor;
@@ -73,8 +69,9 @@ public class RouteBootstarp
 
 
 
-        bootstarp.getDefaultConsumer().getEventManager().addEvent(new ConnectEvent((session,obj)->{
+        bootstarp.getDefaultConsumer().getEventManager().addEventListener((GameEventListener<ConnectEvent>) event -> {
 
+            Session session = event.getSession();
             if(session.getSessionType() != EnumSessionType.NORMAL_CLIENT.type){
                 return;
             }
@@ -84,25 +81,32 @@ public class RouteBootstarp
             routeClientSessionConnectMsg.setAddr(session.getRemoteAddr());
 
             bootstarp.getGameContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionConnectMsg);
-        }));
+        });
 
 
-        bootstarp.getDefaultConsumer().getEventManager().addEvent(new DisconnectEvent((session, obj)->{
+        bootstarp.getDefaultConsumer().getEventManager().addEventListener(new GameEventListener<DisconnectEvent>() {
+            @Override
+            public void onEvent(DisconnectEvent event) {
+                RouteClientSessionDisconnectMsg routeClientSessionDisconnectMsg = new RouteClientSessionDisconnectMsg();
+                routeClientSessionDisconnectMsg.setSessionId(event.getSession().getSessionId());
+                bootstarp.getGameContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionDisconnectMsg);
+            }
+        });
 
-            RouteClientSessionDisconnectMsg routeClientSessionDisconnectMsg = new RouteClientSessionDisconnectMsg();
-            routeClientSessionDisconnectMsg.setSessionId(session.getSessionId());
-            bootstarp.getGameContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionDisconnectMsg);
-        }));
 
 
+        bootstarp.getDefaultConsumer().getEventManager().addEventListener(new GameEventListener<ConsumerThreadStartEvent>() {
+            @Override
+            public void onEvent(ConsumerThreadStartEvent event) {
 
-        bootstarp.getDefaultConsumer().getEventManager().addEvent(new ConsumerThreadStartEvent((con,obj)->{
+                GameConsumer con = event.getGameConsumer();
 
-            RouteRegisterMsg routeRegisterMsg = new RouteRegisterMsg();
-            routeRegisterMsg.setServerId(con.getGameContext().getServerConfig().getServerId());
+                RouteRegisterMsg routeRegisterMsg = new RouteRegisterMsg();
+                routeRegisterMsg.setServerId(con.getGameContext().getServerConfig().getServerId());
 
-            con.getGameContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeRegisterMsg);
-        }));
+                con.getGameContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeRegisterMsg);
+            }
+        });
 
         
 //        bootstarp.registerSocketEvent(ProtoEnum.P_SM_AUTH_RESPONSE_RECEIVE_TOKEN.getEventId(),
