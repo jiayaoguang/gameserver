@@ -19,8 +19,9 @@
 
 	<licenses>
 		<license>
-			<name>Mulan Permissive Software License，Version 1</name>
-			<url>http://license.coscl.org.cn/MulanPSL</url>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+			<distribution>repo</distribution>
 		</license>
 	</licenses>
 
