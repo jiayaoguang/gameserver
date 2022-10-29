@@ -80,20 +80,7 @@ public class SqlExecutor {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(prepareSQLAndParams.prepareSQL);) {
 
-            if (!CollectionUtil.isEmpty(prepareSQLAndParams.paramValues)) {
-                for (int i = 0; i < prepareSQLAndParams.paramValues.size(); i++) {
-                    int parameterIndex = i + 1;
-                    Object value = prepareSQLAndParams.paramValues.get(i);
-
-
-                    TypeHandler typeHandler = typeHandlerRegistry.getTypeHandler(value.getClass());
-                    if (typeHandler != null) {
-                        typeHandler.setParameter(preparedStatement, parameterIndex, value);
-                    } else {
-                        preparedStatement.setObject(parameterIndex, value);
-                    }
-                }
-            }
+            fillPreparedStatement(preparedStatement , prepareSQLAndParams.paramValues);
 
             switch (prepareSQLAndParams.sqlExecuteType) {
                 case QUERY_ONE: {
@@ -172,21 +159,7 @@ public class SqlExecutor {
         tryConnectIfClose();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(prepareSql);) {
-            if (!CollectionUtil.isEmpty(params)) {
-                for (int i = 0; i < params.size(); i++) {
-                    int parameterIndex = i + 1;
-                    Object value = params.get(i);
-
-
-                    TypeHandler typeHandler = typeHandlerRegistry.getTypeHandler(value.getClass());
-                    if (typeHandler != null) {
-                        typeHandler.setParameter(preparedStatement, parameterIndex, value);
-                    } else {
-                        preparedStatement.setObject(parameterIndex, value);
-                    }
-                }
-            }
-
+            fillPreparedStatement(preparedStatement , params);
 
             switch (executeType) {
 
@@ -269,6 +242,27 @@ public class SqlExecutor {
                 } catch (SQLException exception) {
                     exception.printStackTrace();
                 }
+            }
+        }
+
+    }
+
+
+    @SuppressWarnings({"unchecked" , "rawtypes"})
+    private void fillPreparedStatement(PreparedStatement preparedStatement,List<Object> params) throws SQLException {
+        if (CollectionUtil.isEmpty(params)) {
+            return;
+        }
+        for (int i = 0; i < params.size(); i++) {
+            int parameterIndex = i + 1;
+            Object value = params.get(i);
+
+
+            TypeHandler typeHandler = typeHandlerRegistry.getTypeHandler(value.getClass());
+            if (typeHandler != null) {
+                typeHandler.setParameter(preparedStatement, parameterIndex, value);
+            } else {
+                preparedStatement.setObject(parameterIndex, value);
             }
         }
 
