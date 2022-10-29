@@ -39,7 +39,9 @@ public class ResultHandlerTimeOutTimer extends Timer implements ResultHandler<Ob
 
         isCall = true;
         try{
-            resultHandler.call(eventId , data);
+            if(resultHandler != null){
+                resultHandler.call(eventId , data);
+            }
         }finally {
             resultHandlerManager.removeCallBackOutTimeTimer(requestId);
             this.cancel();
@@ -50,7 +52,9 @@ public class ResultHandlerTimeOutTimer extends Timer implements ResultHandler<Ob
     @Override
     public void onTimeout() {
         try{
-            resultHandler.onTimeout();
+            if(resultHandler != null){
+                resultHandler.onTimeout();
+            }
         }finally {
             resultHandlerManager.removeCallBackOutTimeTimer(requestId);
         }

@@ -2,7 +2,7 @@ package org.jyg.gameserver.core.startup;
 
 import com.google.protobuf.MessageLite;
 import org.jyg.gameserver.core.consumer.GameConsumer;
-import org.jyg.gameserver.core.consumer.RingBufferGameConsumer;
+import org.jyg.gameserver.core.consumer.MpscQueueGameConsumer;
 import org.jyg.gameserver.core.manager.Lifecycle;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
@@ -26,7 +26,7 @@ public abstract class AbstractBootstrap implements Lifecycle {
     protected volatile boolean isStart = false;
 
     public AbstractBootstrap() {
-        this(new RingBufferGameConsumer());
+        this(new MpscQueueGameConsumer());
     }
 
     public AbstractBootstrap(GameConsumer defaultGameConsumer) {

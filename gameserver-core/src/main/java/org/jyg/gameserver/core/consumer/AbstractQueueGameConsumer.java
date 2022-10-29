@@ -110,4 +110,7 @@ public abstract class AbstractQueueGameConsumer extends GameConsumer {
     }
 
 
+    public boolean isStop() {
+        return isStop;
+    }
 }
