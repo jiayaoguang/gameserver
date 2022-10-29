@@ -8,12 +8,11 @@ import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.db.type.TypeHandler;
 import org.jyg.gameserver.db.type.TypeHandlerRegistry;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SqlExecutor {
 
@@ -32,7 +31,8 @@ public class SqlExecutor {
     public void tryConnectIfClose() {
         if (connection == null) {
             try {
-                connection = simpleDataSource.getConnection(false);
+                connection = simpleDataSource.getConnection();
+                connection.setAutoCommit(true);
             } catch (SQLException e) {
                 throw new IllegalArgumentException(e);
             }
@@ -53,11 +53,14 @@ public class SqlExecutor {
         if (isClose) {
             closeQuiet();
             try {
-                connection = simpleDataSource.getConnection(false);
+                connection = simpleDataSource.getConnection();
+                connection.setAutoCommit(true);
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
         }
+
+
     }
 
     public void closeQuiet() {
@@ -104,8 +107,7 @@ public class SqlExecutor {
                     List<Object> returnList = executeQuery(dbEntityClass, tableInfo, preparedStatement);
                     return returnList;
                 }
-                case MODIFY:
-                default:
+                case MODIFY:{
                     int modifyNum = preparedStatement.executeUpdate();
 
                     if (!connection.getAutoCommit()) {
@@ -113,6 +115,19 @@ public class SqlExecutor {
                     }
 
                     return modifyNum;
+                }
+                case EXECUTE:{
+                    boolean result = preparedStatement.execute();
+
+                    if (!connection.getAutoCommit()) {
+                        connection.commit();
+                    }
+
+                    return result;
+                }
+                default:
+                    throw new IllegalArgumentException("unknown sqlExecuteType : " + prepareSQLAndParams.sqlExecuteType);
+
             }
 
         }
@@ -146,6 +161,117 @@ public class SqlExecutor {
             }
         }
         return returnList;
+    }
+    public Object executeSql(PrepareSQLAndParams prepareSQLAndParams) throws SQLException {
+        return executeSql( prepareSQLAndParams.prepareSQL,prepareSQLAndParams.paramValues,prepareSQLAndParams.sqlExecuteType );
+    }
+
+
+    public Object executeSql(String prepareSql,List<Object> params,SqlExecuteType executeType) throws SQLException {
+
+        tryConnectIfClose();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(prepareSql);) {
+            if (!CollectionUtil.isEmpty(params)) {
+                for (int i = 0; i < params.size(); i++) {
+                    int parameterIndex = i + 1;
+                    Object value = params.get(i);
+
+
+                    TypeHandler typeHandler = typeHandlerRegistry.getTypeHandler(value.getClass());
+                    if (typeHandler != null) {
+                        typeHandler.setParameter(preparedStatement, parameterIndex, value);
+                    } else {
+                        preparedStatement.setObject(parameterIndex, value);
+                    }
+                }
+            }
+
+
+            switch (executeType) {
+
+                case QUERY_ONE:
+                case QUERY_MANY: {
+                    List<Map<String, Object>> returnList = new ArrayList<>();
+                    try (ResultSet resultSet = preparedStatement.executeQuery();) {
+
+                        while (!resultSet.isClosed() && resultSet.next()) {
+
+                            Map<String, Object> columnValueMap = new HashMap<>();
+
+                            for (int i = 0; i < resultSet.getMetaData().getColumnCount(); i++) {
+
+                                int columnIndex = i + 1;
+
+                                String columnName = resultSet.getMetaData().getColumnName(columnIndex);
+                                Object value = resultSet.getObject(columnIndex);
+
+                                columnValueMap.put(columnName, value);
+
+                            }
+
+                            returnList.add(columnValueMap);
+                        }
+                    }
+                    if (executeType == SqlExecuteType.QUERY_ONE) {
+                        if (returnList.isEmpty()) {
+                            return null;
+                        } else {
+                            return returnList.get(0);
+                        }
+                    }
+
+                    return returnList;
+                }
+
+                case MODIFY:{
+                    int modifyNum = preparedStatement.executeUpdate();
+
+                    if (!connection.getAutoCommit()) {
+                        connection.commit();
+                    }
+
+                    return modifyNum;
+                }
+                case EXECUTE: {
+                    boolean result = preparedStatement.execute();
+
+                    if (!connection.getAutoCommit()) {
+                        connection.commit();
+                    }
+
+                    return result;
+                }
+                default:
+                    throw new IllegalArgumentException("unknown sqlExecuteType : " + executeType);
+            }
+
+
+        }
+
+    }
+
+
+
+    private void querySqlIdle(){
+        tryConnectIfClose();
+
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+            statement.execute("SELECT 1;");
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }finally {
+            if(statement != null){
+                try {
+                    statement.close();
+                } catch (SQLException exception) {
+                    exception.printStackTrace();
+                }
+            }
+        }
+
     }
 
 

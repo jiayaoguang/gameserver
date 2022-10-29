@@ -12,4 +12,7 @@ public enum SqlExecuteType {
     QUERY_MANY,
 
 
+    EXECUTE,
+
+
 }

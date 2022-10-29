@@ -50,12 +50,12 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
     }
 
     private void init() {
-        addSQLMaker(BDEventConst.INSERT, new InsertSQLBuilder());
-        addSQLMaker(BDEventConst.DELETE, new DeleteSQLBuilder());
-        addSQLMaker(BDEventConst.UPDATE, new UpdateSQLBuilder());
-        addSQLMaker(BDEventConst.SELECT, new SelectSQLBuilder());
+        addSQLBuilder(BDEventConst.INSERT, new InsertSQLBuilder());
+        addSQLBuilder(BDEventConst.DELETE, new DeleteSQLBuilder());
+        addSQLBuilder(BDEventConst.UPDATE, new UpdateSQLBuilder());
+        addSQLBuilder(BDEventConst.SELECT, new SelectSQLBuilder());
 
-        addSQLMaker(BDEventConst.SELECT_BY_FIELD, new SelectByFieldSQLBuilder());
+        addSQLBuilder(BDEventConst.SELECT_BY_FIELD, new SelectByFieldSQLBuilder());
 
 
 //        registerTypeHandler(new StringTypeHandler());
@@ -81,7 +81,7 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
     }
 
 
-    public void addSQLMaker(int eventId, SQLBuilder SQLBuilder) {
+    public void addSQLBuilder(int eventId, SQLBuilder SQLBuilder) {
         if (sqlTextMap.containsKey(eventId)) {
             throw new IllegalArgumentException(" addDBProcessor fail contains eventId " + eventId);
         }
@@ -129,12 +129,16 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
             dbEntityClazz = execSqlInfo.getDbEntityClazz();
         }
 
-        TableInfo tableInfo = dbTableManager.getTableInfo(dbEntityClazz);
-        if (tableInfo == null) {
-            Logs.DEFAULT_LOGGER.info(" unknow tableInfo event type {} dbEntity class {} addTableInfo ", eventId, dbEntityClazz.getCanonicalName());
-            tableInfo = addTableInfo(dbEntityClazz);
+        TableInfo tableInfo = null;
+        if(dbEntityClazz != null){
+            tableInfo = dbTableManager.getTableInfo(dbEntityClazz);
+            if (tableInfo == null) {
+                Logs.DEFAULT_LOGGER.info(" unknow tableInfo event type {} dbEntity class {} addTableInfo ", eventId, dbEntityClazz.getCanonicalName());
+                tableInfo = addTableInfo(dbEntityClazz);
 //            return;
+            }
         }
+
 
         boolean needReturn;
         if (eventData.getEventExtData() != null && eventData.getEventExtData().requestId != 0) {
@@ -183,7 +187,12 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
         Object returnData = null;
 
         try {
-            returnData = sqlExecutor.executeSql(prepareSQLAndParams, dbEntityClazz, tableInfo);
+            if(tableInfo != null){
+                returnData = sqlExecutor.executeSql(prepareSQLAndParams, dbEntityClazz, tableInfo);
+            }else {
+                returnData = sqlExecutor.executeSql(prepareSQLAndParams);
+            }
+
 
             logSql(prepareSQLAndParams.prepareSQL , prepareSQLAndParams.paramValues);
 

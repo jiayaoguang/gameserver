@@ -97,6 +97,10 @@ public class ConsumerDBManager implements Lifecycle {
     }
 
 
+    public void execSql(String prepareSql , List<Object> paramValues, SqlExecuteType executeType, long childChooseId, ResultHandler onQueryResult) {
+        execSql(null, prepareSql, paramValues,executeType, childChooseId,onQueryResult);
+    }
+
     public void execSql(Class<?> dbEntityClazz, String prepareSql , List<Object> paramValues , SqlExecuteType executeType, long childChooseId, ResultHandler onQueryResult) {
         int requestId = gameConsumer.registerCallBackMethod(onQueryResult);
         ExecSqlInfo execSqlInfo = new ExecSqlInfo(prepareSql ,paramValues , dbEntityClazz , executeType);
