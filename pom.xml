@@ -159,8 +159,8 @@
 		<module>gameserver-core</module>
 		<module>gameserver-db</module>
 		<module>gameserver-auth</module>
-		<module>gameserver-center</module>
-		<module>gameserver-scene</module>
+<!--		<module>gameserver-center</module>-->
+<!--		<module>gameserver-scene</module>-->
 		<module>gameserver-proto</module>
 		<module>gameserver-util</module>
 		<module>gameserver-test</module>
