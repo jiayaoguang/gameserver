@@ -4,6 +4,7 @@ import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.enums.EventType;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.LockSupport;
 
 /**
@@ -11,11 +12,11 @@ import java.util.concurrent.locks.LockSupport;
  */
 public class ConsumerFuture {
 
-    private final int requestId;
+    private final long requestId;
 
     private final AbstractQueueGameConsumer gameConsumer;
 
-    public ConsumerFuture(int requestId, AbstractQueueGameConsumer gameConsumer) {
+    public ConsumerFuture(long requestId, AbstractQueueGameConsumer gameConsumer) {
         this.requestId = requestId;
         this.gameConsumer = gameConsumer;
     }
@@ -41,7 +42,7 @@ public class ConsumerFuture {
 
 
             if( timeoutNanoTime <=  System.nanoTime()){
-                break;
+                throw new RuntimeException("waitFOrResult timeout");
             }
 
             EventData<Object> object = gameConsumer.pollEvent();

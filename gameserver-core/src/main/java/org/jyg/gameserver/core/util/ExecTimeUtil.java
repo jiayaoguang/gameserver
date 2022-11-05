@@ -18,4 +18,31 @@ public class ExecTimeUtil {
         System.out.println(operatorName + " exec cost : " + (System.nanoTime() - startTime)/(1000L*1000L));
     }
 
+    public static void asynExec(String operatorName , Runnable runnable){
+        ExecTimeThread execTimeThread = new ExecTimeThread(operatorName , runnable);
+        execTimeThread.start();
+    }
+
+
+    public static class ExecTimeThread extends Thread{
+
+
+        private final String operatorName;
+        private final Runnable runnable;
+
+        public ExecTimeThread(String operatorName, Runnable runnable) {
+            this.operatorName = operatorName;
+            this.runnable = runnable;
+        }
+
+
+        @Override
+        public void run(){
+            long startTime = System.nanoTime();
+            runnable.run();
+            System.out.println(operatorName + " exec cost : " + (System.nanoTime() - startTime)/(1000L*1000L));
+        }
+
+    }
+
 }

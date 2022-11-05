@@ -7,7 +7,7 @@ import org.jyg.gameserver.core.timer.Timer;
  * create by jiayaoguang at 2021/5/22
  */
 public class ResultHandlerTimeOutTimer extends Timer implements ResultHandler<Object> {
-    private int requestId;
+    private long requestId;
 
     private final ResultHandler resultHandler;
 
@@ -15,7 +15,7 @@ public class ResultHandlerTimeOutTimer extends Timer implements ResultHandler<Ob
 
     private final ResultHandlerManager resultHandlerManager;
 
-    public ResultHandlerTimeOutTimer(long delayTimeMills, ResultHandler resultHandler, ResultHandlerManager resultHandlerManager, int requestId) {
+    public ResultHandlerTimeOutTimer(long delayTimeMills, ResultHandler resultHandler, ResultHandlerManager resultHandlerManager, long requestId) {
         super(1, delayTimeMills, delayTimeMills);
         this.resultHandler = resultHandler;
         this.resultHandlerManager = resultHandlerManager;
@@ -60,11 +60,11 @@ public class ResultHandlerTimeOutTimer extends Timer implements ResultHandler<Ob
         }
     }
 
-    public void setRequestId(int requestId) {
+    public void setRequestId(long requestId) {
         this.requestId = requestId;
     }
 
-    public int getRequestId() {
+    public long getRequestId() {
         return requestId;
     }
     //    public void call(){

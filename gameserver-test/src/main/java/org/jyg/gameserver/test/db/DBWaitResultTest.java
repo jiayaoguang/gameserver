@@ -71,7 +71,7 @@ public class DBWaitResultTest {
             params.add(id);
 
 
-           int requestId =  con.getInstanceManager().getInstance(ConsumerDBManager.class)
+           long requestId =  con.getInstanceManager().getInstance(ConsumerDBManager.class)
                     .execQuerySql(Maik.class ,"select * from maik where id = ?;", params , (eventId , data)->{
 
                         List<Maik> maiks = (List<Maik>)data;

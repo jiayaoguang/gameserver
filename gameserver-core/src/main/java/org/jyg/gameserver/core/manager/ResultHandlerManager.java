@@ -11,11 +11,11 @@ import java.util.Map;
 public class ResultHandlerManager {
 
 
-    private final Map<Integer , ResultHandlerTimeOutTimer> waitCallBackTimerMap = new HashMap<>();
+    private final Map<Long , ResultHandlerTimeOutTimer> waitCallBackTimerMap = new HashMap<>();
 
 
     public void putCallBackOutTimeTimer(ResultHandlerTimeOutTimer callBackTimeOutTimer){
-        int requestId = callBackTimeOutTimer.getRequestId();
+        long requestId = callBackTimeOutTimer.getRequestId();
         if(waitCallBackTimerMap.containsKey(requestId)){
             throw new IllegalArgumentException("containsKey(requestId)");
         }
@@ -23,11 +23,11 @@ public class ResultHandlerManager {
 
     }
 
-    public ResultHandlerTimeOutTimer removeCallBackOutTimeTimer(int requestId){
+    public ResultHandlerTimeOutTimer removeCallBackOutTimeTimer(long requestId){
         return waitCallBackTimerMap.remove(requestId);
     }
 
-    public void onCallBack(int requestId , int eventId , Object data ){
+    public void onCallBack(long requestId , int eventId , Object data ){
         ResultHandlerTimeOutTimer callBackTimeOutTimer = removeCallBackOutTimeTimer(requestId);
         if(callBackTimeOutTimer == null){
             return;

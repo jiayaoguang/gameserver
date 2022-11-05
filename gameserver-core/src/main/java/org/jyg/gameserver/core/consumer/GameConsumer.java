@@ -68,8 +68,11 @@ public abstract class GameConsumer {
 
 //    private final List<Consumer> childConsumerList = new ArrayList<>();
 
-    private int requestId = 1;
+    @Deprecated
+    private long requestId = 1;
 
+
+    private IdGenerator requestIdGenerator = new IncIdGenerator();
 
 //    private final Map<Integer , ResultHandler> waitCallBackMap = new HashMap<>();
 
@@ -165,7 +168,7 @@ public abstract class GameConsumer {
     }
 
     public void publicEventToTarget(int targetConsumerId,EventType evenType, Object data, Channel channel, int eventId , EventExtData eventExtData , ResultHandler resultHandler){
-        int requestId = 0;
+        long requestId;
         if(resultHandler != null){
             requestId = registerCallBackMethod(resultHandler);
         }else {
@@ -175,7 +178,7 @@ public abstract class GameConsumer {
         getGameContext().getConsumerManager().publicEvent(targetConsumerId, evenType, data, channel, eventId, new EventExtData(getId(), requestId, eventExtData.childChooseId));
     }
 
-    public void publicCallBackEventToTarget(int targetConsumerId, Object data,  int requestId ){
+    public void publicCallBackEvent(int targetConsumerId, Object data,  long requestId ){
         getGameContext().getConsumerManager().publicEvent(targetConsumerId, EventType.RESULT_CALL_BACK, data, null, 0, new EventExtData(0, requestId, 0));
     }
 
@@ -321,15 +324,14 @@ public abstract class GameConsumer {
         HttpProcessor httpProcessor = getHttpProcessor(event.getData().noParamUri());
 
         if(!httpProcessor.checkFilters(null , event)){
-            String msgName = httpProcessor.getPath();
             Logs.DEFAULT_LOGGER.info("refuse httpProcessor path {}", httpProcessor.getPath());
             return;
         }
 
 
         httpProcessor.process(null, event);
-        //六十秒后关闭
-        timerManager.addTimer(new DelayCloseTimer(event.getChannel(), 60 * 1000L));
+        //20 秒后关闭
+        timerManager.addTimer(new DelayCloseTimer(event.getChannel(), 20 * 1000L));
     }
 
 
@@ -538,11 +540,8 @@ public abstract class GameConsumer {
                 break;
 
             case HTTP_MESSAGE_COME:
-                ((Request) event.getData()).setRequestid(getAndIncRequestId());
+                ((Request) event.getData()).setRequestid(allocateRequestId());
                 this.processHttpEvent(event);
-				event.getChannel().close();
-                // 5秒后关闭
-//				dispatcher.getTimerManager().addTimer(new DelayCloseTimer(event.getChannel(), 60 * 1000L));
                 break;
 //            case ON_MESSAGE_COME:
 //				dispatcher.webSocketProcess(event);
@@ -628,15 +627,12 @@ public abstract class GameConsumer {
     }
 
 
-    private int getAndIncRequestId() {
-        if (requestId == Integer.MAX_VALUE) {
-            requestId = 1;
-        }
-        return requestId++;
+    private long allocateRequestId() {
+        return requestIdGenerator.nextId();
     }
 
-    public int registerCallBackMethod(ResultHandler call) {
-        int requestId = getAndIncRequestId();
+    public long registerCallBackMethod(ResultHandler call) {
+        long requestId = allocateRequestId();
 //        new CallBackOutTimeTimer(TimeUnit.SECONDS.toMillis(5) , call);
 
 
@@ -682,7 +678,7 @@ public abstract class GameConsumer {
      * @param data data
      * @param requestId 异步请求id
      */
-    public void eventReturn(int targetConsumerId, Object data, int requestId) {
+    public void eventReturn(int targetConsumerId, Object data, long requestId) {
         eventReturn(targetConsumerId , data , requestId , 0);
     }
 
@@ -693,7 +689,7 @@ public abstract class GameConsumer {
      * @param requestId 异步请求id
      * @param eventId 事件类型 0 表示一切正常  其他表示有错误
      */
-    public void eventReturn(int targetConsumerId, Object data,  int requestId , int eventId){
+    public void eventReturn(int targetConsumerId, Object data,  long requestId , int eventId){
         if(requestId == 0){
             Logs.DEFAULT_LOGGER.error("eventReturn requestId == 0");
             return;

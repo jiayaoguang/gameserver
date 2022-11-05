@@ -8,7 +8,7 @@ import java.util.Map;
 public class EventExtData {
 
     public final int fromConsumerId;
-    public final int requestId;
+    public final long requestId;
     public final long childChooseId;
 
     public final Map<String, Object> params;
@@ -18,15 +18,15 @@ public class EventExtData {
     }
 
 
-    public EventExtData(int fromConsumerId, int requestId, long childChooseId) {
+    public EventExtData(int fromConsumerId, long requestId, long childChooseId) {
         this(fromConsumerId, requestId, childChooseId, null);
     }
 
-    public EventExtData(int fromConsumerId, int requestId, Map<String, Object> params) {
+    public EventExtData(int fromConsumerId, long requestId, Map<String, Object> params) {
         this(fromConsumerId, requestId, 0, params);
     }
 
-    public EventExtData(int fromConsumerId, int requestId, long childChooseId, Map<String, Object> params) {
+    public EventExtData(int fromConsumerId, long requestId, long childChooseId, Map<String, Object> params) {
         this.fromConsumerId = fromConsumerId;
         this.requestId = requestId;
         this.childChooseId = childChooseId;

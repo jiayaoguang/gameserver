@@ -9,7 +9,7 @@ import io.netty.channel.Channel;
  */
 public class EventData<T>{
 
-	public static final EventExtData EMPTY_EVENT_EXT_DATA = new EventExtData(0,0 , null);
+	public static final EventExtData EMPTY_EVENT_EXT_DATA = new EventExtData(0,0L );
 
 	private Channel channel;
 	
