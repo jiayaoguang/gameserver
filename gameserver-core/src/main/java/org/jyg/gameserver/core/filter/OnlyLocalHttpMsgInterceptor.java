@@ -8,7 +8,7 @@ import org.jyg.gameserver.core.util.AllUtil;
 /**
  * create by jiayaoguang on 2021/8/8
  */
-public class OnlyLocalHttpMsgFilter implements MsgFilter<Request> {
+public class OnlyLocalHttpMsgInterceptor implements MsgInterceptor<Request> {
 
     public final boolean filter(Session session, EventData<Request> eventData) {
         return filter(eventData);

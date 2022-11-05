@@ -12,7 +12,7 @@ import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
 import org.jyg.gameserver.core.event.GameEventListener;
 import org.jyg.gameserver.core.event.EventManager;
-import org.jyg.gameserver.core.filter.OnlyLocalHttpMsgFilter;
+import org.jyg.gameserver.core.filter.OnlyLocalHttpMsgInterceptor;
 import org.jyg.gameserver.core.manager.*;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.processor.*;
@@ -722,10 +722,10 @@ public abstract class GameConsumer {
             throw new RuntimeException("already start");
         }
 
-        OnlyLocalHttpMsgFilter onlyLocalHttpMsgFilter = new OnlyLocalHttpMsgFilter();
+        OnlyLocalHttpMsgInterceptor onlyLocalHttpMsgFilter = new OnlyLocalHttpMsgInterceptor();
 
         for(HttpProcessor httpProcessor : httpProcessorMap.values()){
-            httpProcessor.addMsgFilter(onlyLocalHttpMsgFilter);
+            httpProcessor.addMsgInterceptor(onlyLocalHttpMsgFilter);
         }
     }
 

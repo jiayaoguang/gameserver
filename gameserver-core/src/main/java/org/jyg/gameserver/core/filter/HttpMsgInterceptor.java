@@ -7,7 +7,7 @@ import org.jyg.gameserver.core.session.Session;
 /**
  * create by jiayaoguang on 2021/8/8
  */
-public abstract class HttpMsgFilter implements MsgFilter<Request> {
+public abstract class HttpMsgInterceptor implements MsgInterceptor<Request> {
 
     public final boolean filter(Session session , EventData<Request> eventData){
         return filter(eventData);
