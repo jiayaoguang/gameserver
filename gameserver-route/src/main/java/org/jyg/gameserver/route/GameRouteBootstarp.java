@@ -17,8 +17,6 @@ import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.route.processor.RouteMsgToGameMsgHandler;
 import org.jyg.gameserver.route.processor.RouteMsgToGameMsgProcessor;
 import org.jyg.gameserver.route.processor.RouteReplyMsgProcessor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -31,18 +29,42 @@ public class GameRouteBootstarp extends GameServerBootstrap {
     public static final int REMOTE_CONSUMER_ID = 1009;
 
 
+    private RouteConfig routeConfig;
+
+
 
     public GameRouteBootstarp() {
         super();
+        tryInitRouteConfig();
     }
 
     public GameRouteBootstarp(GameConsumer defaultGameConsumer) {
         super(defaultGameConsumer);
+        tryInitRouteConfig();
     }
 
 
     public GameRouteBootstarp(GameContext gameContext) {
         super(gameContext);
+        tryInitRouteConfig();
+    }
+
+
+    private void tryInitRouteConfig(){
+
+        RouteConfig routeConfig = ConfigUtil.properties2Object("jyg", RouteConfig.class);
+        if (routeConfig == null) {
+            throw new IllegalArgumentException("routeConfig error");
+        }
+        setRouteConfig(routeConfig);
+    }
+
+
+    private void setRouteConfig(RouteConfig routeConfig) {
+        if(getGameContext().isStart()){
+            throw new IllegalStateException("server is start set RouteConfig fail");
+        }
+        this.routeConfig = routeConfig;
     }
 
     @Override
@@ -64,12 +86,9 @@ public class GameRouteBootstarp extends GameServerBootstrap {
 //        this.addTcpConnector(8081);
 
 
-        RouteConfig routeConfig = ConfigUtil.properties2Object("jyg", RouteConfig.class);
-        if (routeConfig == null) {
-            throw new IllegalArgumentException("routeConfig error");
-        }
 
-        RemoteGameConsumer remoteConsumer = new RemoteGameConsumer(bootstarp.getGameContext(), routeConfig.getGameServerIp(), routeConfig.getGameServerPort());
+
+        RemoteGameConsumer remoteConsumer = new RemoteGameConsumer(bootstarp.getGameContext(), routeConfig.getRemoteGameServerIp(), routeConfig.getRemoteGameServerPort());
         int remoteConsumerId = REMOTE_CONSUMER_ID;
         remoteConsumer.setId(remoteConsumerId);
 
@@ -137,6 +156,11 @@ public class GameRouteBootstarp extends GameServerBootstrap {
 
     public RemoteServerManager getRemoteServerManager(){
         return getGameContext().getInstance(RemoteServerManager.class);
+    }
+
+
+    public RouteConfig getRouteConfig() {
+        return routeConfig;
     }
 
 }

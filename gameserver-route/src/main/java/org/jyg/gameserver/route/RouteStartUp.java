@@ -18,7 +18,7 @@ public class RouteStartUp
     {
 
 
-    	GameServerBootstrap bootstarp = new GameRouteBootstarp();
+        GameRouteBootstarp bootstarp = new GameRouteBootstarp();
 //	    RedisCacheClient redisCacheClient = injector.getInstance(RedisCacheClient.class);
 //	    redisCacheClient.init();
 
@@ -28,9 +28,12 @@ public class RouteStartUp
 //        bootstarp.addProtoProcessor(1000, injector.getInstance(LoginProtoProcessor.class));
 
 
-        bootstarp.addHttpConnector(8082);
+        RouteConfig routeConfig = bootstarp.getRouteConfig();
+        if(routeConfig.getRouteHttpPort() > 0){
+            bootstarp.addHttpConnector(routeConfig.getRouteHttpPort());
+        }
 
-        bootstarp.addTcpConnector(8081);
+        bootstarp.addTcpConnector(routeConfig.getRouteTcpPort());
 
 
 
