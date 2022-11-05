@@ -51,8 +51,9 @@ public class ConsumerFuture {
 
                 if (pollNullNum > 1000) {
                     gameConsumer.update();
+                    pollNullNum = 0;
                     LockSupport.parkNanos(1000 * 1000L);
-                } else if (pollNullNum > 200) {
+                } else if (pollNullNum > 800) {
                     Thread.yield();
                 }
 

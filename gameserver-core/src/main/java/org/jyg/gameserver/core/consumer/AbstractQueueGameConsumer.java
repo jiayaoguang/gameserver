@@ -4,6 +4,7 @@ import io.netty.channel.Channel;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.util.ExecTimeUtil;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.util.concurrent.TimeUnit;
@@ -90,8 +91,9 @@ public abstract class AbstractQueueGameConsumer extends GameConsumer {
 
                 if (pollNullNum > 1000) {
                     update();
+                    pollNullNum = 0;
                     LockSupport.parkNanos(1000 * 1000L);
-                } else if (pollNullNum > 200) {
+                } else if (pollNullNum > 800) {
                     Thread.yield();
                 }
 
