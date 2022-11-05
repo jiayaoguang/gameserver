@@ -5,7 +5,7 @@ import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.AllUtil;
-import org.jyg.gameserver.route.msg.ChatMsgObj;
+import org.jyg.gameserver.route.test.msg.ChatMsgObj;
 
 
 /**

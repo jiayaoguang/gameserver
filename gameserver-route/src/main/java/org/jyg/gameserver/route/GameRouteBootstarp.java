@@ -2,8 +2,13 @@ package org.jyg.gameserver.route;
 
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.consumer.RemoteGameConsumer;
-import org.jyg.gameserver.core.event.*;
-import org.jyg.gameserver.core.msg.route.*;
+import org.jyg.gameserver.core.event.ConnectEvent;
+import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
+import org.jyg.gameserver.core.event.DisconnectEvent;
+import org.jyg.gameserver.core.event.GameEventListener;
+import org.jyg.gameserver.core.msg.route.RouteClientSessionConnectMsg;
+import org.jyg.gameserver.core.msg.route.RouteClientSessionDisconnectMsg;
+import org.jyg.gameserver.core.msg.route.RouteRegisterMsg;
 import org.jyg.gameserver.core.session.EnumSessionType;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
@@ -18,44 +23,58 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Hello world!
- *
  */
-public class RouteBootstarp
-{
+public class GameRouteBootstarp extends GameServerBootstrap {
 
-	private static final Logger logger = LoggerFactory.getLogger(RouteBootstarp.class);
 
-    public static void main ( String[] args ) throws Exception 
-    {
-    	
 
-    	GameServerBootstrap bootstarp = new GameServerBootstrap();
+    public static final int REMOTE_CONSUMER_ID = 1009;
+
+
+
+    public GameRouteBootstarp() {
+        super();
+    }
+
+    public GameRouteBootstarp(GameConsumer defaultGameConsumer) {
+        super(defaultGameConsumer);
+    }
+
+
+    public GameRouteBootstarp(GameContext gameContext) {
+        super(gameContext);
+    }
+
+    @Override
+    public void beforeStart() {
+
+
+        GameServerBootstrap bootstarp = this;
 //	    RedisCacheClient redisCacheClient = injector.getInstance(RedisCacheClient.class);
 //	    redisCacheClient.init();
 
 //        bootstarp.registerHttpEvent("/index000", injector.getInstance(TokenSendHttpProcessor.class));
-        
+
 
 //        bootstarp.addProtoProcessor(1000, injector.getInstance(LoginProtoProcessor.class));
 
 
-        bootstarp.addHttpConnector(8082);
+//        this.addHttpConnector(8082);
+//
+//        this.addTcpConnector(8081);
 
-        bootstarp.addTcpConnector(8081);
 
-
-        RouteConfig routeConfig = ConfigUtil.properties2Object("jyg",RouteConfig.class );
-        if(routeConfig == null){
+        RouteConfig routeConfig = ConfigUtil.properties2Object("jyg", RouteConfig.class);
+        if (routeConfig == null) {
             throw new IllegalArgumentException("routeConfig error");
         }
 
-        RemoteGameConsumer remoteConsumer = new RemoteGameConsumer(bootstarp.getGameContext(),routeConfig.getGameServerIp(),routeConfig.getGameServerPort());
-        int remoteConsumerId = 1009;
+        RemoteGameConsumer remoteConsumer = new RemoteGameConsumer(bootstarp.getGameContext(), routeConfig.getGameServerIp(), routeConfig.getGameServerPort());
+        int remoteConsumerId = REMOTE_CONSUMER_ID;
         remoteConsumer.setId(remoteConsumerId);
 
         bootstarp.getGameContext().getConsumerManager().addConsumer(remoteConsumer);
-        bootstarp.getGameContext().putInstance(new RemoteServerManager(bootstarp.getGameContext() , remoteConsumerId));
-
+        bootstarp.getGameContext().putInstance(new RemoteServerManager(bootstarp.getGameContext(), remoteConsumerId));
 
 
         bootstarp.addByteMsgObjProcessor(new RouteReplyMsgProcessor());
@@ -69,19 +88,22 @@ public class RouteBootstarp
 
 
 
-        bootstarp.getDefaultConsumer().getEventManager().addEventListener((GameEventListener<ConnectEvent>) event -> {
+        bootstarp.getDefaultConsumer().getEventManager().addEventListener(new GameEventListener<ConnectEvent>() {
+            @Override
+            public void onEvent(ConnectEvent event) {
+                Session session = event.getSession();
+                if (session.getSessionType() != EnumSessionType.NORMAL_CLIENT.type) {
+                    return;
+                }
 
-            Session session = event.getSession();
-            if(session.getSessionType() != EnumSessionType.NORMAL_CLIENT.type){
-                return;
+                RouteClientSessionConnectMsg routeClientSessionConnectMsg = new RouteClientSessionConnectMsg();
+                routeClientSessionConnectMsg.setSessionId(session.getSessionId());
+                routeClientSessionConnectMsg.setAddr(session.getRemoteAddr());
+
+                bootstarp.getGameContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionConnectMsg);
             }
-
-            RouteClientSessionConnectMsg routeClientSessionConnectMsg = new RouteClientSessionConnectMsg();
-            routeClientSessionConnectMsg.setSessionId(session.getSessionId());
-            routeClientSessionConnectMsg.setAddr(session.getRemoteAddr());
-
-            bootstarp.getGameContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionConnectMsg);
         });
+
 
 
         bootstarp.getDefaultConsumer().getEventManager().addEventListener(new GameEventListener<DisconnectEvent>() {
@@ -92,7 +114,6 @@ public class RouteBootstarp
                 bootstarp.getGameContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionDisconnectMsg);
             }
         });
-
 
 
         bootstarp.getDefaultConsumer().getEventManager().addEventListener(new GameEventListener<ConsumerThreadStartEvent>() {
@@ -108,11 +129,14 @@ public class RouteBootstarp
             }
         });
 
-        
+
 //        bootstarp.registerSocketEvent(ProtoEnum.P_SM_AUTH_RESPONSE_RECEIVE_TOKEN.getEventId(),
 //        		new TokenReceiveSuccessProtoProcessor());
-        
-        bootstarp.start();
-        logger.info(" start success ");
     }
+
+
+    public RemoteServerManager getRemoteServerManager(){
+        return getGameContext().getInstance(RemoteServerManager.class);
+    }
+
 }

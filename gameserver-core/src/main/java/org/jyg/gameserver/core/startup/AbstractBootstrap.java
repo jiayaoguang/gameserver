@@ -117,6 +117,8 @@ public abstract class AbstractBootstrap implements Lifecycle {
             return;
         }
 
+        beforeStart();
+
 
         isStart = true;
         gameContext.start();
@@ -125,7 +127,9 @@ public abstract class AbstractBootstrap implements Lifecycle {
 
     }
 
+    protected void beforeStart(){
 
+    }
 
 
 

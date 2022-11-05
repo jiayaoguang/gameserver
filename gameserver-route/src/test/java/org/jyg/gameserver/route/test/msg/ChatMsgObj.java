@@ -1,4 +1,4 @@
-package org.jyg.gameserver.route.msg;
+package org.jyg.gameserver.route.test.msg;
 
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 

@@ -4,8 +4,8 @@ import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.TcpClient;
-import org.jyg.gameserver.route.msg.ChatMsgObj;
-import org.jyg.gameserver.route.msg.ChatReplyMsgObj;
+import org.jyg.gameserver.route.test.msg.ChatMsgObj;
+import org.jyg.gameserver.route.test.msg.ChatReplyMsgObj;
 
 /**
  * Hello world!
