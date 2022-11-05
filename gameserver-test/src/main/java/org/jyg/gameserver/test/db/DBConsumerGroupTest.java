@@ -24,7 +24,7 @@ public class DBConsumerGroupTest {
 
         DBGameConsumerGroup dbConsumerGroup = new DBGameConsumerGroup();
 //        consumerGroup.setId(100);
-        dbConsumerGroup.addTableInfo(Maik.class);
+        dbConsumerGroup.tryAddTableInfo(Maik.class);
 
         gameServerBootstrap.getGameContext().getConsumerManager().addConsumer(dbConsumerGroup);
 

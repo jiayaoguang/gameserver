@@ -4,11 +4,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.ConfigUtil;
 import org.jyg.gameserver.db.*;
+import org.jyg.gameserver.db.type.TypeHandlerRegistry;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * create by jiayaoguang at 2021/5/29
@@ -19,17 +17,18 @@ public class CreateTableUtil {
     private CreateTableUtil() {
     }
 
-    public static void createTable(Class<?> dbClass) throws Exception {
+    
+    public static void createTable(Class<? extends BaseDBEntity> dbClass) throws SQLException {
         createTable( ConfigUtil.properties2Object("jyg", DBConfig.class) , dbClass);
     }
 
-    public static void createTable(DBConfig dbConfig ,Class<?> dbClass) throws Exception {
+    public static void createTable(DBConfig dbConfig ,Class<? extends BaseDBEntity> dbClass) throws SQLException {
 
 //        DBConfig dbConfig = ConfigUtil.properties2Object("jyg", DBConfig.class);
 
-        DBTableManager dbTableManager = new DBTableManager(null);
+        DBTableManager dbTableManager = new DBTableManager(new TypeHandlerRegistry());
 
-        TableInfo tableInfo = dbTableManager.addTableInfo(dbClass);
+        TableInfo tableInfo = dbTableManager.tryAddTableInfo(dbClass);
 
         StringBuilder sqlSB = new StringBuilder("CREATE TABLE " + tableInfo.getTableName());
         sqlSB.append("(");
@@ -53,7 +52,7 @@ public class CreateTableUtil {
         if (tableInfo.getDbTableAnno() != null && StringUtils.isNotEmpty(tableInfo.getDbTableAnno().comment())) {
             sqlSB.append(" COMMENT = '").append(tableInfo.getDbTableAnno().comment()).append("'");
         }
-        sqlSB.append(" ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+        sqlSB.append(" ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;");
 
 
         for (TableFieldInfo tableFieldInfo : tableInfo.getFieldInfoLinkedMap().values()) {
@@ -71,13 +70,18 @@ public class CreateTableUtil {
 
         AllUtil.println(sql);
 
-        Connection connection = getConn(dbConfig);
+        try(Connection connection = getConn(dbConfig);
+            Statement statement = connection.createStatement();
+            ){
 
-        Statement statement = connection.createStatement();
 
-        statement.execute(sql);
-        statement.close();
-        connection.close();
+
+            statement.execute(sql);
+
+        }
+
+
+
 
     }
 
@@ -107,6 +111,44 @@ public class CreateTableUtil {
 
 
     }
+    
+    
+
+    public static boolean isTableExist(Class<? extends BaseDBEntity> dbClass) throws Exception {
+        return isTableExist( ConfigUtil.properties2Object("jyg", DBConfig.class) , dbClass);
+    }
+
+
+    public static boolean isTableExist(DBConfig dbConfig ,Class<? extends BaseDBEntity> dbClass ) throws SQLException {
+        String sql = "SHOW TABLES LIKE ?";
+
+
+        DBTableManager dbTableManager = new DBTableManager(new TypeHandlerRegistry());
+        
+
+        TableInfo tableInfo = dbTableManager.tryAddTableInfo(dbClass);
+        AllUtil.println("table : " +tableInfo.getTableName());
+
+        try(Connection connection = getConn(dbConfig);
+            PreparedStatement ps = connection.prepareStatement(sql);
+        ){
+
+            ps.setString(1, tableInfo.getTableName());
+            ResultSet resultSet = ps.executeQuery();
+            if(resultSet.next()){
+                return true;
+            }else {
+
+                return false;
+            }
+
+        }
+
+
+    }
+
+
+
 
 
     private static Connection getConn(DBConfig dbConfig) throws SQLException {
@@ -115,5 +157,38 @@ public class CreateTableUtil {
         return connection;
 
     }
+
+    
+    
+    public static void createOrAlterTable(Class<? extends BaseDBEntity> dbClass) throws SQLException {
+        createOrAlterTable(ConfigUtil.properties2Object("jyg", DBConfig.class) , dbClass);
+    }
+
+
+    public static void createOrAlterTable(DBConfig dbConfig, Class<? extends BaseDBEntity> dbClass) throws SQLException {
+
+        DBTableManager dbTableManager = new DBTableManager(new TypeHandlerRegistry());
+
+
+        TableInfo tableInfo = dbTableManager.tryAddTableInfo(dbClass);
+        
+
+        if(!isTableExist(dbConfig , dbClass)){
+            createTable(dbConfig , dbClass);
+            return;
+        }
+        // alter table
+
+
+        throw new SQLException(" wait implements ,  alter table not support now ");
+
+    }
+
+
+
+
+
+
+
 
 }

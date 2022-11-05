@@ -226,6 +226,7 @@ public class SqlExecutor {
 
 
 
+    @Deprecated
     private void querySqlIdle(){
         tryConnectIfClose();
 

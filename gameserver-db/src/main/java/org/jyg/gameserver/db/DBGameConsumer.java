@@ -21,8 +21,6 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
 
     private final Map<Integer, SQLBuilder> sqlTextMap = new HashMap<>(MAP_DEFAULT_SIZE, MAP_DEFAULT_LOADFACTOR);
 
-    private final Map<Class<?>, TableInfo> tableInfoMap = new HashMap<>(MAP_DEFAULT_SIZE, MAP_DEFAULT_LOADFACTOR);
-
     private final DBConfig dbConfig;
 
     private final SimpleDataSource dataSource;
@@ -88,8 +86,8 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
         sqlTextMap.put(eventId, SQLBuilder);
     }
 
-    public TableInfo addTableInfo(Class<?> dbEntityClass) {
-        return dbTableManager.addTableInfo(dbEntityClass);
+    public TableInfo tryAddTableInfo(Class<?> dbEntityClass) {
+        return dbTableManager.tryAddTableInfo(dbEntityClass);
     }
 
     public TableInfo getTableInfo(Class<?> dbEntityClass) {
@@ -134,7 +132,7 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
             tableInfo = dbTableManager.getTableInfo(dbEntityClazz);
             if (tableInfo == null) {
                 Logs.DEFAULT_LOGGER.info(" unknow tableInfo event type {} dbEntity class {} addTableInfo ", eventId, dbEntityClazz.getCanonicalName());
-                tableInfo = addTableInfo(dbEntityClazz);
+                tableInfo = tryAddTableInfo(dbEntityClazz);
 //            return;
             }
         }
@@ -258,4 +256,7 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
     public DBTableManager getDbTableManager() {
         return dbTableManager;
     }
+
+
+
 }

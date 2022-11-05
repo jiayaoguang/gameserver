@@ -30,7 +30,7 @@ public class DBTest {
         }
         DBGameConsumer consumer = new DBGameConsumer(dbConfig);
         consumer.setId(100);
-        consumer.addTableInfo(Maik.class);
+        consumer.tryAddTableInfo(Maik.class);
 
         gameServerBootstrap.getGameContext().getConsumerManager().addConsumer(consumer);
         gameServerBootstrap.getGameContext().getDefaultGameConsumer().getInstanceManager()

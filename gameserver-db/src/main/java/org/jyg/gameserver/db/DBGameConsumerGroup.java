@@ -53,9 +53,9 @@ public class DBGameConsumerGroup extends GameConsumerGroup<DBGameConsumer> {
 
 
 
-    public void addTableInfo(Class<?> dbEntity) {
+    public void tryAddTableInfo(Class<?> dbEntity) {
         for (DBGameConsumer childDBConsumer : getChildConsumerList()) {
-            childDBConsumer.addTableInfo(dbEntity);
+            childDBConsumer.tryAddTableInfo(dbEntity);
         }
     }
 

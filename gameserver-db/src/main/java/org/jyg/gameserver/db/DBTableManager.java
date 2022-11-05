@@ -28,7 +28,19 @@ public class DBTableManager {
         this.typeHandlerRegistry = typeHandlerRegistry;
     }
 
-    public TableInfo addTableInfo(Class<?> dbEntityClass) {
+
+    public TableInfo tryAddTableInfo(Class<?> dbEntityClass) {
+
+        TableInfo tableInfo = getTableInfo(dbEntityClass);
+        if(tableInfo != null){
+            return tableInfo;
+        }
+
+        return addTableInfo(dbEntityClass);
+
+    }
+
+    private TableInfo addTableInfo(Class<?> dbEntityClass) {
         if (tableInfoMap.containsKey(dbEntityClass)) {
             throw new IllegalArgumentException(" addTableInfo fail contains dbEntityClass " + dbEntityClass.getCanonicalName());
         }
