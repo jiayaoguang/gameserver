@@ -1,6 +1,6 @@
 package org.jyg.gameserver.core.net;
 
-import io.netty.channel.ChannelFuture;
+import io.netty.channel.*;
 import io.netty.channel.epoll.EpollChannelOption;
 import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.handle.initializer.MyChannelInitializer;
@@ -8,9 +8,6 @@ import org.jyg.gameserver.core.manager.EventLoopGroupManager;
 import org.jyg.gameserver.core.util.Logs;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
 import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
@@ -87,6 +84,11 @@ public abstract class TcpConnector extends AbstractConnector {
 		serverBootstrap.childOption(ChannelOption.SO_KEEPALIVE, false);// maybe useless
 		serverBootstrap.childOption(ChannelOption.TCP_NODELAY, true);
 		serverBootstrap.childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
+
+		WriteBufferWaterMark writeBufferWaterMark = new WriteBufferWaterMark(128 * 1024, 256 * 1024);
+		serverBootstrap.childOption(ChannelOption.WRITE_BUFFER_WATER_MARK, writeBufferWaterMark);
+
+
 		String host = getGameContext().getServerConfig().getHost();
 
 		ChannelFuture bindChannelFuture;
