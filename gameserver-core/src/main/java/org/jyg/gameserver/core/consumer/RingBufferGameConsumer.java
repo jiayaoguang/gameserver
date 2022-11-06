@@ -20,6 +20,7 @@ import java.util.concurrent.ThreadFactory;
 /**
  * create by jiayaoguang on 2020/5/1
  */
+@Deprecated
 public class RingBufferGameConsumer extends GameConsumer {
 
     private static Disruptor<EventData<Object>> disruptor;
@@ -86,6 +87,12 @@ public class RingBufferGameConsumer extends GameConsumer {
         } finally {
             this.ringBuffer.publish(sequence);
         }
+    }
+
+
+    @Override
+    public void doEvent(EventData event){
+        super.doEvent(new EventData(event.getChannel(), event.getEventType(), event.getData(), event.getEventExtData(), event.getEventId()));
     }
 
 

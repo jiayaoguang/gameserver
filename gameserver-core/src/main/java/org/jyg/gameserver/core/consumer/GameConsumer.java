@@ -488,7 +488,7 @@ public abstract class GameConsumer {
         // System.out.println(event.getChannel());
         try {
             long startNano = System.nanoTime();
-            doEvent(new EventData(event.getChannel(), event.getEventType(), event.getData(), event.getEventExtData(), event.getEventId()));
+            doEvent(event);
             long costMill = (System.nanoTime() - startNano)/1000000L;
             if(costMill > 10){
                 Logs.DEFAULT_LOGGER.error("{} event  cost more time {} data : {}",getClass().getSimpleName(), costMill, (event.getData() == null? "null" : event.getData().getClass().getSimpleName()));
@@ -513,7 +513,7 @@ public abstract class GameConsumer {
     }
 
 
-    private void doEvent(EventData event) {
+    protected void doEvent(EventData event) {
         switch (event.getEventType()) {
 
 //			case CLIENT_SOCKET_CONNECT_ACTIVE:
