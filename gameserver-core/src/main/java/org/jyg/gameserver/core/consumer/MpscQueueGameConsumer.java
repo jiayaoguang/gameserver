@@ -10,22 +10,12 @@ import java.util.Queue;
  */
 public class MpscQueueGameConsumer extends AbstractQueueGameConsumer {
 
-    private final Queue<EventData<Object>> queue;
-
     public MpscQueueGameConsumer() {
-        queue = new MpscUnboundedArrayQueue<>(1024*64);
+        this(DEFAULT_QUEUE_SIZE);
     }
 
-
-    @Override
-    protected EventData<Object> pollEvent(){
-        return queue.poll();
+    public MpscQueueGameConsumer(int size) {
+        super(new MpscUnboundedArrayQueue<>(size));
     }
-
-    @Override
-    protected void publicEvent(EventData<Object> eventData) {
-        queue.offer(eventData);
-    }
-
 
 }

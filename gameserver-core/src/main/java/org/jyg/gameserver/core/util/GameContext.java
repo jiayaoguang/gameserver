@@ -81,9 +81,9 @@ public class GameContext implements Lifecycle{
 
     public GameContext(GameConsumer defaultGameConsumer, String configFileName) {
 
-        this.defaultGameConsumer = defaultGameConsumer;
-
         ConfigUtil.properties2Object(configFileName, serverConfig);
+
+        this.defaultGameConsumer = defaultGameConsumer;
 
 //        loadServerConfig(configFileName);
 
@@ -91,7 +91,6 @@ public class GameContext implements Lifecycle{
 
 
 
-        defaultGameConsumer.setId(ConsumerManager.DEFAULT_CONSUMER_ID);
         defaultGameConsumer.setGameContext(this);
 
 
@@ -415,6 +414,11 @@ public class GameContext implements Lifecycle{
 
     public long nextUid(){
         return uidManager.nextUid();
+    }
+
+
+    public int getDefaultConsumerId(){
+        return defaultGameConsumer.getId();
     }
 
 

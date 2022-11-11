@@ -9,10 +9,9 @@ import java.util.concurrent.*;
  */
 public class BlockingQueueGameConsumer extends AbstractQueueGameConsumer {
 
-    private final BlockingQueue<EventData<Object>> queue;
 
     public BlockingQueueGameConsumer() {
-        this(new LinkedBlockingQueue<>());
+        this(new LinkedBlockingQueue<>(DEFAULT_QUEUE_SIZE));
     }
 
     public BlockingQueueGameConsumer(int size) {
@@ -20,17 +19,7 @@ public class BlockingQueueGameConsumer extends AbstractQueueGameConsumer {
     }
 
     public BlockingQueueGameConsumer(BlockingQueue<EventData<Object>> queue) {
-        this.queue = queue;
-    }
-
-    @Override
-    protected EventData<Object> pollEvent(){
-        return queue.poll();
-    }
-
-    @Override
-    protected void publicEvent(EventData<Object> eventData) {
-        queue.offer(eventData);
+        super(queue);
     }
 
 }

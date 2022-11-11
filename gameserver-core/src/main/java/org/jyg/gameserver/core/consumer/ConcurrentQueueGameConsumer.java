@@ -9,22 +9,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class ConcurrentQueueGameConsumer extends AbstractQueueGameConsumer {
 
-    private final ConcurrentLinkedQueue<EventData<Object>> queue;
-
     public ConcurrentQueueGameConsumer() {
-        queue = new ConcurrentLinkedQueue<>();
+        super(new ConcurrentLinkedQueue<>());
     }
-
-
-    @Override
-    protected EventData<Object> pollEvent(){
-        return queue.poll();
-    }
-
-    @Override
-    protected void publicEvent(EventData<Object> eventData) {
-        queue.offer(eventData);
-    }
-
 
 }

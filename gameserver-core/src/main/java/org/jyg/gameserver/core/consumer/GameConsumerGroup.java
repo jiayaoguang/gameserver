@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.consumer;
 
 import cn.hutool.core.collection.CollectionUtil;
 import io.netty.channel.Channel;
+import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
 
@@ -77,19 +78,19 @@ public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
         }
     }
 
-    @Override
-    public void publicEvent(EventType evenType, Object data, Channel channel, int eventId, EventExtData eventExtData) {
 
+
+    @Override
+    public void publicEvent(EventData<Object> eventData) {
+        EventExtData eventExtData = eventData.getEventExtData();
         if (eventExtData == null) {
             throw new RuntimeException("eventExtData == null");
         }
 
         int childConsumerIndex = (int) (eventExtData.childChooseId % childConsumerList.size());
         GameConsumer childGameConsumer = childConsumerList.get(childConsumerIndex);
-        childGameConsumer.publicEvent(evenType, data, channel, eventId, eventExtData);
-
+        childGameConsumer.publicEvent(eventData);
     }
-
 
 
     public void initProcessors(ProcessorsInitializer processorsInitializer) {

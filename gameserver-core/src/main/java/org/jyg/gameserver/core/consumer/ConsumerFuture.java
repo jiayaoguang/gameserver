@@ -4,7 +4,6 @@ import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.enums.EventType;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.LockSupport;
 
 /**
@@ -26,12 +25,12 @@ public class ConsumerFuture {
     }
 
 
-    public Object waitFOrResult(){
-        return waitFOrResult(20*1000L);
+    public Object waitForResult(){
+        return waitForResult(20*1000L);
     }
 
 
-    public Object waitFOrResult(long maxWaitMills){
+    public Object waitForResult(long maxWaitMills){
 
 
         long timeoutNanoTime = System.nanoTime() + TimeUnit.MINUTES.toNanos(maxWaitMills);

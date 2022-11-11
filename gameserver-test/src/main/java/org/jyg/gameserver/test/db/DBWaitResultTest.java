@@ -83,7 +83,7 @@ public class DBWaitResultTest {
 
             ConsumerFuture consumerFuture = new ConsumerFuture(requestId ,(AbstractQueueGameConsumer)con  );
 
-            Object result = consumerFuture.waitFOrResult(10 * 1000L);
+            Object result = consumerFuture.waitForResult(10 * 1000L);
             AllUtil.println("result _ waitFOrResult");
             if(result instanceof  List){
                 List list = (List) result;
