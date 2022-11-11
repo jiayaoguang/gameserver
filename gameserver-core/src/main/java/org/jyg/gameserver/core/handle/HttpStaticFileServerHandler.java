@@ -27,7 +27,6 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
 
-import javax.activation.MimetypesFileTypeMap;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -115,7 +114,7 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 			sendError(ctx, BAD_REQUEST);
 			return;
 		}
-		
+
 //		String s = request.headers().get(HttpHeaderNames.CONTENT_TYPE);
 //
 //		System.out.println("CONTENT_TYPE: " + s + "," + request.headers());
@@ -145,7 +144,7 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 		String httpRootDir = System.getProperty("http.root.dir","/html");
 
 		final String uri = httpRootDir + request.uri();
-		
+
 		final String path = sanitizeUri(uri);
 		if (path == null) {
 			sendError(ctx, FORBIDDEN);
@@ -153,7 +152,7 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 		}
 
 		Logs.DEFAULT_LOGGER.info(uri);
-		
+
 		File file = new File( path);
 		if (file.isHidden() || !file.exists()) {
 			sendError(ctx, NOT_FOUND);
@@ -418,7 +417,6 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 	 *            file to extract content type
 	 */
 	private static void setContentTypeHeader(HttpResponse response, File file) {
-		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
 		String fileName = file.getName();
 		int pointIndex = fileName.lastIndexOf('.');
 		if(pointIndex > 0 && pointIndex < fileName.length()){
@@ -443,10 +441,13 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 				case "pdf":
 					response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/pdf");
 					return;
+				default:
+					response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/octet-stream");
+					return;
 			}
 		}
-		
 
-		response.headers().set(HttpHeaderNames.CONTENT_TYPE, mimeTypesMap.getContentType(file.getPath()));
+
+
 	}
 }
