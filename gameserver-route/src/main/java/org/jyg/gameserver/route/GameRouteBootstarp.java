@@ -101,8 +101,8 @@ public class GameRouteBootstarp extends GameServerBootstrap {
         final GameContext gameContext = bootstarp.getGameContext();
 
 
-        bootstarp.getGameContext().getDefaultGameConsumer().setUnknownMsgHandler(new RouteMsgToGameMsgHandler(gameContext));
-        bootstarp.getGameContext().getDefaultGameConsumer().setUnknownProcessor(new RouteMsgToGameMsgProcessor());
+        bootstarp.getGameContext().getMainGameConsumer().setUnknownMsgHandler(new RouteMsgToGameMsgHandler(gameContext));
+        bootstarp.getGameContext().getMainGameConsumer().setUnknownProcessor(new RouteMsgToGameMsgProcessor());
 
 
 

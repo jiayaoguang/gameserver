@@ -16,7 +16,7 @@ public class DrawWsServer {
 
         GameServerBootstrap gameServerBootstrap = new GameServerBootstrap();
 
-        gameServerBootstrap.getGameContext().getDefaultGameConsumer().addProcessor(new ByteMsgObjProcessor<DrawMsg>(DrawMsg.class) {
+        gameServerBootstrap.getGameContext().getMainGameConsumer().addProcessor(new ByteMsgObjProcessor<DrawMsg>(DrawMsg.class) {
             @Override
             public void process(Session session, EventData<DrawMsg> data) {
                 for (Session otherSession : getGameConsumer().getChannelManager().getSessions()) {

@@ -28,10 +28,10 @@ public class DBConsumerGroupTest {
 
         gameServerBootstrap.getGameContext().getConsumerManager().addConsumer(dbConsumerGroup);
 
-        gameServerBootstrap.getGameContext().getDefaultGameConsumer().getInstanceManager()
-                .putInstance(new ConsumerDBManager(gameServerBootstrap.getGameContext().getDefaultGameConsumer() , dbConsumerGroup.getDbConfig().getDbConsumerGroupId()));
+        gameServerBootstrap.getGameContext().getMainGameConsumer().getInstanceManager()
+                .putInstance(new ConsumerDBManager(gameServerBootstrap.getGameContext().getMainGameConsumer() , dbConsumerGroup.getDbConfig().getDbConsumerGroupId()));
 
-        gameServerBootstrap.getGameContext().getDefaultGameConsumer().setConsumerStartHandler(new GameEventListener<ConsumerThreadStartEvent>() {
+        gameServerBootstrap.getGameContext().getMainGameConsumer().setConsumerStartHandler(new GameEventListener<ConsumerThreadStartEvent>() {
             @Override
             public void onEvent(ConsumerThreadStartEvent consumerThreadStartEvent) {
 

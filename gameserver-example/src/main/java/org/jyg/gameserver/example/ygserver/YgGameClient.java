@@ -35,7 +35,7 @@ public class YgGameClient {
 
 
 
-        client.getGameContext().getDefaultGameConsumer().addProcessor(new ByteMsgObjProcessor<LoginReplyMsg>(LoginReplyMsg.class) {
+        client.getGameContext().getMainGameConsumer().addProcessor(new ByteMsgObjProcessor<LoginReplyMsg>(LoginReplyMsg.class) {
 
             @Override
             public void process(Session session, EventData<LoginReplyMsg> event) {

@@ -35,15 +35,15 @@ public class DBWaitResultTest {
         consumer.tryAddTableInfo(Maik.class);
 
         gameServerBootstrap.getGameContext().getConsumerManager().addConsumer(consumer);
-        gameServerBootstrap.getGameContext().getDefaultGameConsumer().getInstanceManager()
-                .putInstance(new ConsumerDBManager(gameServerBootstrap.getGameContext().getDefaultGameConsumer() , 100));
+        gameServerBootstrap.getGameContext().getMainGameConsumer().getInstanceManager()
+                .putInstance(new ConsumerDBManager(gameServerBootstrap.getGameContext().getMainGameConsumer() , 100));
 
 
 
 
 
 
-        gameServerBootstrap.getGameContext().getDefaultGameConsumer().getEventManager().addEventListener(new DBTestConsumerThreadStartEventListener() );
+        gameServerBootstrap.getGameContext().getMainGameConsumer().getEventManager().addEventListener(new DBTestConsumerThreadStartEventListener() );
 
 
 

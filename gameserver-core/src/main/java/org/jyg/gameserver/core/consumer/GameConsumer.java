@@ -36,8 +36,7 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class GameConsumer {
 
-    public static final int DEFAULT_QUEUE_SIZE = 1024 * 64;
-    public static final int DEFAULT_CONSUMER_ID = 1;
+    public static final int DEFAULT_QUEUE_SIZE = 1024 * 256;
 
     public static final int MAP_DEFAULT_SIZE = 64;
     public static final float MAP_DEFAULT_LOADFACTOR = 0.5f;
@@ -420,9 +419,9 @@ public abstract class GameConsumer {
 
     public ChannelManager getChannelManager() {
 
-        if(!isDefaultConsumer()){
-            return null;
-        }
+//        if(!isMainConsumer()){
+//            return null;
+//        }
 
         return channelManager;
     }
@@ -537,14 +536,14 @@ public abstract class GameConsumer {
 
             case SOCKET_CONNECT_ACTIVE:
 //				dispatcher.as_on_inner_server_active(event);
-                if (isDefaultConsumer()) {
+                if (isMainConsumer()) {
                     channelManager.doLink(event.getChannel());
                 }else {
                     Logs.DEFAULT_LOGGER.error("event SOCKET_CONNECT_ACTIVE only in DefaultConsumer");
                 }
                 break;
             case SOCKET_CONNECT_INACTIVE:
-                if (isDefaultConsumer()) {
+                if (isMainConsumer()) {
                     channelManager.doUnlink(event.getChannel());
                 }else {
                     Logs.DEFAULT_LOGGER.error("event SOCKET_CONNECT_INACTIVE only in DefaultConsumer");
@@ -560,7 +559,7 @@ public abstract class GameConsumer {
 //				break;
             case REMOTE_MSG_COME:{
                 Session session = null;
-                if (isDefaultConsumer()) {
+                if (isMainConsumer()) {
                     session = channelManager.getSession(event.getChannel());
                 }
                 this.processEventMsg(session, event);
@@ -574,7 +573,7 @@ public abstract class GameConsumer {
 
             case TEXT_MESSAGE_COME: {
                 Session session = null;
-                if (isDefaultConsumer()) {
+                if (isMainConsumer()) {
                     session = channelManager.getSession(event.getChannel());
                 }
                 this.processTextEvent(session, event);
@@ -593,14 +592,14 @@ public abstract class GameConsumer {
                 break;
 
             case CLIENT_SOCKET_CONNECT_ACTIVE:
-                if (isDefaultConsumer()) {
+                if (isMainConsumer()) {
                     channelManager.doTcpClientLink(event.getChannel());
                 }else {
                     Logs.DEFAULT_LOGGER.error("event CLIENT_SOCKET_CONNECT_ACTIVE only in DefaultConsumer");
                 }
                 break;
             case CLIENT_SOCKET_CONNECT_INACTIVE:
-                if (isDefaultConsumer()) {
+                if (isMainConsumer()) {
                     channelManager.doTcpClientUnlink(event.getChannel());
                 }else {
                     Logs.DEFAULT_LOGGER.error("event SOCKET_CONNECT_INACTIVE only in DefaultConsumer");
@@ -615,7 +614,7 @@ public abstract class GameConsumer {
             case REMOTE_UNKNOWN_MSG_COME:{
                 if(unknownMsgHandler != null){
                     Session session = null;
-                    if (isDefaultConsumer()) {
+                    if (isMainConsumer()) {
                         session = channelManager.getSession(event.getChannel());
                     }
                     unknownMsgHandler.process(session, event.getEventId(), (byte[]) event.getData());
@@ -679,8 +678,8 @@ public abstract class GameConsumer {
     }
 
 
-    public boolean isDefaultConsumer() {
-        return getId() == DEFAULT_CONSUMER_ID;
+    public boolean isMainConsumer() {
+        return getId() == gameContext.getMainConsumerId();
     }
 
 

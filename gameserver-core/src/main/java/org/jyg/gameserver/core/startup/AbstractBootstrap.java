@@ -54,16 +54,16 @@ public abstract class AbstractBootstrap implements Lifecycle {
 
     public void addProtoProcessor(ProtoProcessor<? extends MessageLite> protoProcessor) {
         int msgId = gameContext.getMsgIdByProtoClass(protoProcessor.getProtoClass());
-        this.gameContext.getDefaultGameConsumer().addProcessor(msgId, protoProcessor);
+        this.gameContext.getMainGameConsumer().addProcessor(msgId, protoProcessor);
     }
 
     public void addByteMsgObjProcessor(ByteMsgObjProcessor<? extends ByteMsgObj> byteMsgObjProcessor) {
 //        int msgId = byteMsgObjProcessor.getMsgId();
-        this.gameContext.getDefaultGameConsumer().addProcessor(byteMsgObjProcessor);
+        this.gameContext.getMainGameConsumer().addProcessor(byteMsgObjProcessor);
     }
 
     public void addProtoProcessor(int msgId,ProtoProcessor<? extends MessageLite> protoProcessor) {
-        this.gameContext.getDefaultGameConsumer().addProcessor(msgId, protoProcessor);
+        this.gameContext.getMainGameConsumer().addProcessor(msgId, protoProcessor);
     }
 
 
@@ -75,7 +75,7 @@ public abstract class AbstractBootstrap implements Lifecycle {
         if (path == null) {
             throw new IllegalArgumentException(" getProtoEventId -1 ");
         }
-        this.gameContext.getDefaultGameConsumer().addHttpProcessor(processor);
+        this.gameContext.getMainGameConsumer().addHttpProcessor(processor);
     }
 
 
@@ -103,7 +103,7 @@ public abstract class AbstractBootstrap implements Lifecycle {
     }
 
     public GameConsumer getDefaultConsumer() {
-        return gameContext.getDefaultGameConsumer();
+        return gameContext.getMainGameConsumer();
     }
 
     public GameContext getGameContext() {

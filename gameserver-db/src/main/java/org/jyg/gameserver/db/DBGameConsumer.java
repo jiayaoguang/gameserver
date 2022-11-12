@@ -244,7 +244,7 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
     }
 
     @Override
-    public boolean isDefaultConsumer() {
+    public boolean isMainConsumer() {
         return false;
     }
 

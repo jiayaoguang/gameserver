@@ -2,7 +2,6 @@ package org.jyg.gameserver.core.net;
 
 import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
-import org.jyg.gameserver.core.manager.ConsumerManager;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
@@ -54,7 +53,7 @@ public abstract class MQConnector extends AbstractConnector {
             return;
         }
 
-        getGameContext().getConsumerManager().publicEvent(gameContext.getDefaultConsumerId(), EventType.MQ_MSG_COME, msgObj, null, msgId, new EventExtData(mqPushConsumerId, 0));
+        getGameContext().getConsumerManager().publicEvent(gameContext.getMainConsumerId(), EventType.MQ_MSG_COME, msgObj, null, msgId, new EventExtData(mqPushConsumerId, 0));
 
     }
 
