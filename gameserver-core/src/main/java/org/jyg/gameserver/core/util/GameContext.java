@@ -112,6 +112,7 @@ public class GameContext implements Lifecycle{
 
         this.instanceManager = new InstanceManager(this);
 
+
         initCommonProcessor();
 
     }
@@ -196,7 +197,8 @@ public class GameContext implements Lifecycle{
 
 
         if(!msgObjClazz2MsgIdMap.containsKey(byteMsgCodec.getByteMsgClass())){
-            throw new IllegalArgumentException(" addByteMsgCodec fail, !msgObjClazz2MsgIdMap.containsKey(byteMsgCodec.getByteMsgClass())" + byteMsgCodec.getByteMsgClass());
+//            throw new IllegalArgumentException(" addByteMsgCodec fail, !msgObjClazz2MsgIdMap.containsKey(byteMsgCodec.getByteMsgClass())" + byteMsgCodec.getByteMsgClass());
+            Logs.DEFAULT_LOGGER.info("already contains {} , msgCodec , replace it",byteMsgCodec.getByteMsgClass().getSimpleName());
         }
 
         int msgId = msgObjClazz2MsgIdMap.getInt(byteMsgCodec.getByteMsgClass());
@@ -239,6 +241,10 @@ public class GameContext implements Lifecycle{
         addMsgId2MsgClassMapping(MsgIdConst.ROUTE_CLIENT_SESSION_DISCONNECT_MSG_ID , RouteClientSessionDisconnectMsg.class);
         addByteMsgCodec(new ProtostuffMsgCodec(RouteClientSessionDisconnectMsg.class));
 
+
+        addMsgId2MsgClassMapping(MsgIdConst.CONSUMER_EVENT_DATA , ConsumerEventDataMsg.class);
+        addByteMsgCodec(new ProtostuffMsgCodec(ConsumerEventDataMsg.class));
+        getMainGameConsumer().addProcessor(new ConsumerEventDataMsgProcessor());
 
 
 

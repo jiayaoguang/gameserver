@@ -33,7 +33,7 @@ public class ConsumerManager implements Lifecycle{
         }
 
         if(consumerMap.containsKey(gameConsumer.getId())){
-            throw new IllegalArgumentException("dumplicate context id , addConsumer operation fail ");
+            throw new IllegalArgumentException("duplicate context id , addConsumer operation fail ");
         }
 
         gameConsumer.setGameContext(gameContext);
@@ -50,6 +50,17 @@ public class ConsumerManager implements Lifecycle{
 
     public List<GameConsumer> getConsumers(){
         return new ArrayList<>(this.consumerMap.values());
+    }
+
+
+    public void publicEvent(int targetConsumerId, EventData<?> eventData ){
+        GameConsumer gameConsumer = getConsumer(targetConsumerId);
+        if(gameConsumer == null){
+            Logs.DEFAULT_LOGGER.error("targetConsumer {} not found" , targetConsumerId);
+            return;
+        }
+        gameConsumer.publicEvent(eventData);
+
     }
 
 
@@ -90,6 +101,9 @@ public class ConsumerManager implements Lifecycle{
 
     @Override
     public void start() {
+
+
+
         for(GameConsumer gameConsumer : getConsumers()){
             gameConsumer.start();
         }

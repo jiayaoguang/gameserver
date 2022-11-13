@@ -44,7 +44,7 @@ public class ConsumerFuture {
                 throw new RuntimeException("waitFOrResult timeout");
             }
 
-            EventData<Object> object = gameConsumer.pollEvent();
+            EventData<?> object = gameConsumer.pollEvent();
             if(object == null) {
                 pollNullNum++;
 

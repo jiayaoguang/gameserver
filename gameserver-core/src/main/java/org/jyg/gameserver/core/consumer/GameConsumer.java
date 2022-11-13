@@ -130,6 +130,9 @@ public abstract class GameConsumer {
         getEventManager().publishEvent(new ConsumerThreadStartEvent( this ));
     }
 
+
+
+
     public synchronized final void start(){
         beforeStart();
         this.isStart = true;
@@ -195,7 +198,7 @@ public abstract class GameConsumer {
     }
 
 
-    public abstract void publicEvent(EventData<Object> eventData);
+    public abstract void publicEvent(EventData<?> eventData);
 
 
     public GameContext getGameContext() {

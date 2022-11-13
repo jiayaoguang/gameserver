@@ -79,10 +79,11 @@ public class TcpClient extends AbstractBootstrap{
 		bootstrap.handler(channelInitializer);
 		bootstrap.option(ChannelOption.SO_KEEPALIVE, false);
 		bootstrap.option(ChannelOption.TCP_NODELAY, true);
-		bootstrap.option(ChannelOption.SO_RCVBUF, 8*1024);
-		bootstrap.option(ChannelOption.SO_SNDBUF, 8*1024);
-		bootstrap.option(ChannelOption.SO_LINGER, 0);
+		bootstrap.option(ChannelOption.SO_RCVBUF, 64*1024);
+		bootstrap.option(ChannelOption.SO_SNDBUF, 64*1024);
+//		bootstrap.option(ChannelOption.SO_LINGER, 0);
 		bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
+
 
 		if(port > 0){
 			connect();
@@ -131,25 +132,25 @@ public class TcpClient extends AbstractBootstrap{
 
 
 	public void write(MessageLite msg) {
-		checkConnect();
+//		checkConnect();
 		channel.writeAndFlush(msg);
 //		System.out.println("客户端发送数据>>>>");
 	}
 
 	public void write( ByteMsgObj byteMsgObj) {
-		checkConnect();
+//		checkConnect();
 		channel.writeAndFlush( byteMsgObj);
 //		System.out.println("客户端发送数据>>>>");
 	}
 
 	public void write( MessageLite.Builder msgBuilder) throws IOException {
-		checkConnect();
+//		checkConnect();
 		write(msgBuilder.build());
 //		System.out.println("客户端发送数据>>>>");
 	}
 
 	public void write(Object data) {
-		checkConnect();
+//		checkConnect();
 		channel.writeAndFlush(data);
 //		System.out.println("客户端发送数据>>>>");
 	}

@@ -73,20 +73,20 @@ public abstract class SingleThreadGameConsumer extends GameConsumer {
 //    }
 
 
-    protected abstract EventData<Object> pollEvent();
+    protected abstract EventData<?> pollEvent();
 
     @Override
-    public abstract void publicEvent(EventData<Object> eventData);
+    public abstract void publicEvent(EventData<?> eventData);
 
 
-    private void run() {
+    protected void run() {
 
         onThreadStart();
 
         int pollNullNum = 0;
         for (;!isStop;){
 
-            EventData<Object> object = pollEvent();
+            EventData<?> object = pollEvent();
             if(object == null) {
                 pollNullNum++;
 

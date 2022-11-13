@@ -35,4 +35,7 @@ public class MsgIdConst {
     public static final int ROUTE_CLIENT_SESSION_DISCONNECT_MSG_ID = 305;
 
 
+    public static final int CONSUMER_EVENT_DATA = 306;
+
+
 }

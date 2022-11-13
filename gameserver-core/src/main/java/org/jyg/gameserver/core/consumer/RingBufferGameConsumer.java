@@ -90,7 +90,7 @@ public class RingBufferGameConsumer extends GameConsumer {
     }
 
     @Override
-    public void publicEvent(EventData<Object> eventData) {
+    public void publicEvent(EventData<?> eventData) {
         this.publicEvent(eventData.getEventType(), eventData.getData(), eventData.getChannel(), eventData.getEventId(), eventData.getEventExtData());
     }
 

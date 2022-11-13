@@ -18,7 +18,7 @@ public class BlockingQueueGameConsumer extends AbstractQueueGameConsumer {
         this(new LinkedBlockingQueue<>(size));
     }
 
-    public BlockingQueueGameConsumer(BlockingQueue<EventData<Object>> queue) {
+    public BlockingQueueGameConsumer(BlockingQueue<EventData<?>> queue) {
         super(queue);
     }
 

@@ -37,6 +37,7 @@ public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
         this.childConsumerList.addAll(childConsumerList);
     }
 
+
     @Override
     public void doStart() {
 
@@ -81,7 +82,7 @@ public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
 
 
     @Override
-    public void publicEvent(EventData<Object> eventData) {
+    public void publicEvent(EventData<?> eventData) {
         EventExtData eventExtData = eventData.getEventExtData();
         if (eventExtData == null) {
             throw new RuntimeException("eventExtData == null");
