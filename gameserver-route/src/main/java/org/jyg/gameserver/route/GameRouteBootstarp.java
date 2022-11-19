@@ -70,6 +70,8 @@ public class GameRouteBootstarp extends GameServerBootstrap {
     @Override
     public void beforeStart() {
 
+        super.beforeStart();
+
 
         GameServerBootstrap bootstarp = this;
 //	    RedisCacheClient redisCacheClient = injector.getInstance(RedisCacheClient.class);

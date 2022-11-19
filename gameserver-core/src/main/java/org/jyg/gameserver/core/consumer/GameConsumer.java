@@ -135,12 +135,15 @@ public abstract class GameConsumer {
 
     public synchronized final void start(){
         beforeStart();
+        if(isStart){
+            throw new IllegalStateException("already start");
+        }
         this.isStart = true;
         this.instanceManager.start();
         doStart();
     }
 
-    public void beforeStart() {
+    protected void beforeStart() {
 
     }
 

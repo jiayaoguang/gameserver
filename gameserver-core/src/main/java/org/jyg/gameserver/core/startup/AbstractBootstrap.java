@@ -110,15 +110,18 @@ public abstract class AbstractBootstrap implements Lifecycle {
         return gameContext;
     }
 
+
+
+
     public final synchronized void start(){
+
+        beforeStart();
+
         if (isStart) {
 //            throw new IllegalStateException("server is already start");
             logger.error("server is already start ");
             return;
         }
-
-        beforeStart();
-
 
         isStart = true;
         gameContext.start();
