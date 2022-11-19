@@ -41,7 +41,7 @@ public class ConsumerFuture {
 
 
             if( timeoutNanoTime <=  System.nanoTime()){
-                throw new RuntimeException("waitFOrResult timeout");
+                throw new RuntimeException("waitForResult timeout");
             }
 
             EventData<?> object = gameConsumer.pollEvent();

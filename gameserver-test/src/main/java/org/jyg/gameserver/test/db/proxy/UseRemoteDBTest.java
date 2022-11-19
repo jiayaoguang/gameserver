@@ -70,12 +70,12 @@ public class UseRemoteDBTest {
             ConsumerFuture consumerFuture = new ConsumerFuture(requestId ,(AbstractQueueGameConsumer)con  );
 
             Object result = consumerFuture.waitForResult(10 * 1000L);
-            AllUtil.println("result _ waitFOrResult");
+            AllUtil.println("result _ waitForResult");
             if(result instanceof List){
                 List list = (List) result;
                 if(list.size() >0 &&list.get(0) instanceof Maik){
                     Maik maik1 = (Maik)list.get(0);
-                    AllUtil.println("waitFOrResult : " + maik1.getContent());
+                    AllUtil.println("waitForResult : " + maik1.getContent());
                 }
             }
 

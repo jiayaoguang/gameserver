@@ -5,6 +5,7 @@ import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.msg.ConsumerEventDataMsg;
+import org.jyg.gameserver.core.msg.ConsumerEventDataReturnMsg;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.Logs;
 
@@ -47,7 +48,7 @@ public class ConsumerEventDataMsgProcessor extends ByteMsgObjProcessor<ConsumerE
                 @Override
                 public void call(int eventId, Object data) {
 
-                    ConsumerEventDataMsg returnEventDataMsg = new ConsumerEventDataMsg();
+                    ConsumerEventDataReturnMsg returnEventDataMsg = new ConsumerEventDataReturnMsg();
 
                     returnEventDataMsg.setToConsumerId(eventDataMsg.getFromConsumerId());
                     returnEventDataMsg.setFromConsumerId(eventDataMsg.getToConsumerId());

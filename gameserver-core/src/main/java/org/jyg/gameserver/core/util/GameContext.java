@@ -244,7 +244,13 @@ public class GameContext implements Lifecycle{
 
         addMsgId2MsgClassMapping(MsgIdConst.CONSUMER_EVENT_DATA , ConsumerEventDataMsg.class);
         addByteMsgCodec(new ProtostuffMsgCodec(ConsumerEventDataMsg.class));
+
+        addMsgId2MsgClassMapping(MsgIdConst.CONSUMER_EVENT_DATA_RETURN , ConsumerEventDataReturnMsg.class);
+        addByteMsgCodec(new ProtostuffMsgCodec(ConsumerEventDataReturnMsg.class));
+
+
         getMainGameConsumer().addProcessor(new ConsumerEventDataMsgProcessor());
+        getMainGameConsumer().addProcessor(new ConsumerEventDataReturnMsgProcessor());
 
 
 

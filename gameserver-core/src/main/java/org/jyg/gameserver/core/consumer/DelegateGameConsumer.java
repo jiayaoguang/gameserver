@@ -6,6 +6,7 @@ import org.jyg.gameserver.core.data.RemoteConsumerInfo;
 import org.jyg.gameserver.core.msg.ConsumerEventDataMsg;
 import org.jyg.gameserver.core.msg.ProtostuffMsgCodec;
 import org.jyg.gameserver.core.processor.ConsumerEventDataMsgProcessor;
+import org.jyg.gameserver.core.processor.ConsumerEventDataReturnMsgProcessor;
 import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
@@ -25,14 +26,12 @@ public class DelegateGameConsumer extends GameConsumer{
 
     private final Queue<EventData<?>> eventDataQueue = new MpscUnboundedArrayQueue<>(DEFAULT_QUEUE_SIZE);
 
-//    private Map< Class, ProtostuffMsgCodec> protostuffMsgCodec = new ProtostuffMsgCodec();
-
     public DelegateGameConsumer(GameContext gameContext , RemoteConsumerInfo remoteConsumerInfo) {
         this.setGameContext(gameContext);
         this.remoteConsumerInfo = remoteConsumerInfo;
         this.setId(remoteConsumerInfo.getConsumerId());
         this.tcpClient = gameContext.createTcpClient(remoteConsumerInfo.getIp(),remoteConsumerInfo.getPort());
-        this.addProcessor(new ConsumerEventDataMsgProcessor());
+
 
     }
 
@@ -67,6 +66,7 @@ public class DelegateGameConsumer extends GameConsumer{
 
         if(eventData.getFromConsumerId() == getId()){
             onReciveEvent(eventData);
+            Logs.DEFAULT_LOGGER.info("eventData.getFromConsumerId() == getId()");
             return true;
         }
 

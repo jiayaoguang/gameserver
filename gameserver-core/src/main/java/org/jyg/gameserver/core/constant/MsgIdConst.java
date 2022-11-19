@@ -36,6 +36,7 @@ public class MsgIdConst {
 
 
     public static final int CONSUMER_EVENT_DATA = 306;
+    public static final int CONSUMER_EVENT_DATA_RETURN = 307;
 
 
 }

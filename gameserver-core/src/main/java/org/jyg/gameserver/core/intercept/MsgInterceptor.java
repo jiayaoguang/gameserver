@@ -1,4 +1,4 @@
-package org.jyg.gameserver.core.filter;
+package org.jyg.gameserver.core.intercept;
 
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.session.Session;
@@ -8,7 +8,7 @@ import org.jyg.gameserver.core.session.Session;
  */
 public interface MsgInterceptor<T>{
 
-    public boolean filter(Session session , EventData<T> eventData);
+    public boolean intercept(Session session , EventData<T> eventData);
 
 }
 

@@ -2,7 +2,7 @@ package org.jyg.gameserver.core.processor;
 
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.data.EventData;
-import org.jyg.gameserver.core.filter.MsgInterceptor;
+import org.jyg.gameserver.core.intercept.MsgInterceptor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.GameContext;
 import org.slf4j.Logger;
@@ -22,24 +22,24 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 
 	private GameConsumer gameConsumer;
 
-	private final List<MsgInterceptor<?>> filters = new ArrayList<>();
+	private final List<MsgInterceptor<?>> interceptors = new ArrayList<>();
 
 	@Override
 	public void addMsgInterceptor(MsgInterceptor msgInterceptor){
-		filters.add(msgInterceptor);
+		interceptors.add(msgInterceptor);
 	}
 
-	public boolean checkFilters(Session session , EventData eventData){
-		if(filters.size() == 0){
+	public boolean checkIntercepts(Session session , EventData eventData){
+		if(interceptors.size() == 0){
 			return true;
 		}
-		for(MsgInterceptor<?> msgInterceptor : filters ){
-			if(!msgInterceptor.filter(session , eventData)){
+		for(MsgInterceptor<?> msgInterceptor : interceptors){
+			if(!msgInterceptor.intercept(session , eventData)){
 				return false;
 			}
 		}
 
-		return false;
+		return true;
 	}
 
 

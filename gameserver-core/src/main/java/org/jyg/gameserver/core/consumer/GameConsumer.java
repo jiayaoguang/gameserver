@@ -12,7 +12,7 @@ import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
 import org.jyg.gameserver.core.event.GameEventListener;
 import org.jyg.gameserver.core.event.EventManager;
-import org.jyg.gameserver.core.filter.OnlyLocalHttpMsgInterceptor;
+import org.jyg.gameserver.core.intercept.OnlyLocalHttpMsgInterceptor;
 import org.jyg.gameserver.core.manager.*;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.processor.*;
@@ -296,7 +296,7 @@ public abstract class GameConsumer {
             msgName = "unknown";
         }
 
-        if(!processor.checkFilters(session , event)){
+        if(!processor.checkIntercepts(session , event)){
 
             Logs.DEFAULT_LOGGER.info("refuse processor msgId {} , msgName {}", event.getEventId(),msgName);
             return;
@@ -337,7 +337,7 @@ public abstract class GameConsumer {
 
         HttpProcessor httpProcessor = getHttpProcessor(event.getData().noParamUri());
 
-        if(!httpProcessor.checkFilters(null , event)){
+        if(!httpProcessor.checkIntercepts(null , event)){
             Logs.DEFAULT_LOGGER.info("refuse httpProcessor path {}", httpProcessor.getPath());
             return;
         }

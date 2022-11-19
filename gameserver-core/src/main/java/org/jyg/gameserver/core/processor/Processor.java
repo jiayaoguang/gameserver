@@ -1,7 +1,7 @@
 package org.jyg.gameserver.core.processor;
 
 import org.jyg.gameserver.core.data.EventData;
-import org.jyg.gameserver.core.filter.MsgInterceptor;
+import org.jyg.gameserver.core.intercept.MsgInterceptor;
 import org.jyg.gameserver.core.session.Session;
 
 /**
@@ -12,7 +12,7 @@ public interface Processor<T> extends Cloneable {
 
 	public void addMsgInterceptor(MsgInterceptor msgInterceptor);
 
-	public boolean checkFilters(Session session , EventData eventData);
+	public boolean checkIntercepts(Session session , EventData eventData);
 	
 }
 
