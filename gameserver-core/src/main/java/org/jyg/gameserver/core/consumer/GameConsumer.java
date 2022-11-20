@@ -172,7 +172,7 @@ public abstract class GameConsumer {
         publicEvent(evenType, data, channel, eventId , EventData.EMPTY_EVENT_EXT_DATA);
     }
 
-    public void publicEventToTarget(int targetConsumerId,EventType evenType, Object data, Channel channel, int eventId , EventExtData eventExtData , ResultHandler resultHandler){
+    public void publicEventToMain(int targetConsumerId,EventType evenType, Object data, Channel channel, int eventId , EventExtData eventExtData , ResultHandler resultHandler){
         long requestId;
         if(resultHandler != null){
             requestId = registerCallBackMethod(resultHandler);
@@ -184,7 +184,7 @@ public abstract class GameConsumer {
     }
 
     public void publicCallBackEvent(int targetConsumerId, Object data,  long requestId ){
-        getGameContext().getConsumerManager().publicEvent(targetConsumerId, EventType.RESULT_CALL_BACK, data, null, 0, new EventExtData(0, requestId, 0));
+        getGameContext().getConsumerManager().publicEvent(targetConsumerId, EventType.RESULT_CALL_BACK, data, null, 0, new EventExtData(0, requestId));
     }
 
 

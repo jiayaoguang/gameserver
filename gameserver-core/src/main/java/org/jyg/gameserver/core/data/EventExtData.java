@@ -9,24 +9,26 @@ public class EventExtData {
 
     public final int fromConsumerId;
     public final long requestId;
-    public final long childChooseId;
+    public final String childChooseId;
 
     public final Map<String, Object> params;
 
-    public EventExtData(int fromConsumerId, long childChooseId) {
-        this(fromConsumerId, 0, childChooseId, null);
+
+    public EventExtData(int fromConsumerId, long requestId) {
+        this(fromConsumerId, requestId, "", null);
     }
 
 
-    public EventExtData(int fromConsumerId, long requestId, long childChooseId) {
+    public EventExtData(int fromConsumerId, long requestId, Map<String, Object> params) {
+        this(fromConsumerId, requestId, "", params);
+    }
+
+
+    public EventExtData(int fromConsumerId, long requestId,String childChooseId) {
         this(fromConsumerId, requestId, childChooseId, null);
     }
 
-    public EventExtData(int fromConsumerId, long requestId, Map<String, Object> params) {
-        this(fromConsumerId, requestId, 0, params);
-    }
-
-    public EventExtData(int fromConsumerId, long requestId, long childChooseId, Map<String, Object> params) {
+    public EventExtData(int fromConsumerId, long requestId, String childChooseId, Map<String, Object> params) {
         this.fromConsumerId = fromConsumerId;
         this.requestId = requestId;
         this.childChooseId = childChooseId;

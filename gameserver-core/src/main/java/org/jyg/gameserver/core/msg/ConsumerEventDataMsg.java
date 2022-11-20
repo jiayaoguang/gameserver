@@ -18,7 +18,7 @@ public class ConsumerEventDataMsg implements ByteMsgObj{
     private int fromConsumerId;
     private long requestId;
 
-    private long childChooseId;
+    private String childChooseId;
 
 
     private Object data;
@@ -59,11 +59,11 @@ public class ConsumerEventDataMsg implements ByteMsgObj{
         this.requestId = requestId;
     }
 
-    public long getChildChooseId() {
+    public String getChildChooseId() {
         return childChooseId;
     }
 
-    public void setChildChooseId(long childChooseId) {
+    public void setChildChooseId(String childChooseId) {
         this.childChooseId = childChooseId;
     }
 

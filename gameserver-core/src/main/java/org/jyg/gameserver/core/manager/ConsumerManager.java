@@ -95,7 +95,7 @@ public class ConsumerManager implements Lifecycle{
             Logs.DEFAULT_LOGGER.error("publicCallBackEvent requestId == 0");
             return;
         }
-        this.publicEvent(targetConsumerId , EventType.RESULT_CALL_BACK, data ,null ,eventId , new EventExtData( 0 , requestId ,0));
+        this.publicEvent(targetConsumerId , EventType.RESULT_CALL_BACK, data ,null ,eventId , new EventExtData( 0 , requestId));
     }
 
 

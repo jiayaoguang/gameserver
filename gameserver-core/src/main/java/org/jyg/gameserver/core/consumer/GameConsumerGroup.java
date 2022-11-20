@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.consumer;
 
 import cn.hutool.core.collection.CollectionUtil;
 import io.netty.channel.Channel;
+import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.enums.EventType;
@@ -88,7 +89,22 @@ public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
             throw new RuntimeException("eventExtData == null");
         }
 
-        int childConsumerIndex = (int) (eventExtData.childChooseId % childConsumerList.size());
+
+        int childConsumerIndex = 0;
+
+        String childChooseKey = eventExtData.childChooseId;
+        if(StringUtils.isEmpty(childChooseKey)){
+            if( eventData.getData() != null){
+                childChooseKey = eventData.getData().getClass().getSimpleName();
+                childConsumerIndex = ((childChooseKey.hashCode()) % childConsumerList.size());
+            }else {
+                throw new IllegalArgumentException();
+            }
+
+        }
+
+
+
         GameConsumer childGameConsumer = childConsumerList.get(childConsumerIndex);
         childGameConsumer.publicEvent(eventData);
     }

@@ -34,15 +34,15 @@ public class ConsumerDBManager implements Lifecycle {
 
     public void insert(BaseDBEntity dbEntity) {
         gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, dbEntity, null, BDEventConst.INSERT
-                , new EventExtData(0, 0L, dbEntity.getClass().hashCode()));
+                , new EventExtData(0, 0L, dbEntity.getClass().getSimpleName()));
     }
 
-    public void insert(BaseDBEntity dbEntity, long childChooseId) {
+    public void insert(BaseDBEntity dbEntity, String childChooseId) {
         gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, dbEntity, null, BDEventConst.INSERT
                 , new EventExtData(0, 0L, childChooseId));
     }
 
-    public void delete(BaseDBEntity dbEntity, long childChooseId) {
+    public void delete(BaseDBEntity dbEntity, String childChooseId) {
         gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, dbEntity, null, BDEventConst.DELETE
                 , new EventExtData(0, 0L, childChooseId));
 
@@ -50,21 +50,21 @@ public class ConsumerDBManager implements Lifecycle {
 
     public void delete(BaseDBEntity dbEntity){
         gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, dbEntity, null, BDEventConst.DELETE
-                , new EventExtData(0, 0L, dbEntity.getClass().hashCode()));
+                , new EventExtData(0, 0L, dbEntity.getClass().getSimpleName()));
     }
 
-    public void update(BaseDBEntity dbEntity, long childChooseId) {
+    public void update(BaseDBEntity dbEntity, String childChooseId) {
         gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, dbEntity, null, BDEventConst.UPDATE
                 , new EventExtData(0, 0L, childChooseId));
     }
 
     public void update(BaseDBEntity dbEntity) {
         gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, dbEntity, null, BDEventConst.UPDATE
-                , new EventExtData(0, 0L, dbEntity.getClass().hashCode()));
+                , new EventExtData(0, 0L, dbEntity.getClass().getSimpleName()));
     }
 
 
-    public long select(BaseDBEntity dbEntity, ResultHandler onSelectResult, long childChooseId) {
+    public long select(BaseDBEntity dbEntity, ResultHandler onSelectResult, String childChooseId) {
         long requestId = gameConsumer.registerCallBackMethod(onSelectResult);
         gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, dbEntity, null, BDEventConst.SELECT
                 , new EventExtData(gameConsumer.getId(), requestId, childChooseId));
@@ -72,11 +72,11 @@ public class ConsumerDBManager implements Lifecycle {
     }
 
     public long select(BaseDBEntity dbEntity, ResultHandler onSelectResult) {
-        return select(dbEntity , onSelectResult , dbEntity.getClass().hashCode());
+        return select(dbEntity , onSelectResult , dbEntity.getClass().getSimpleName());
     }
 
 
-    public long selectBy(BaseDBEntity dbEntity,String fieldName, ResultHandler onSelectResult, long childChooseId) {
+    public long selectBy(BaseDBEntity dbEntity,String fieldName, ResultHandler onSelectResult, String childChooseId) {
         long requestId = gameConsumer.registerCallBackMethod(onSelectResult);
         Map<String , Object> params = new HashMap<>();
         params.put("field" , fieldName);
@@ -86,24 +86,24 @@ public class ConsumerDBManager implements Lifecycle {
     }
 
     public long selectBy(BaseDBEntity dbEntity,String fieldName, ResultHandler onSelectResult) {
-        return selectBy(dbEntity,fieldName, onSelectResult,  dbEntity.getClass().hashCode());
+        return selectBy(dbEntity,fieldName, onSelectResult,  dbEntity.getClass().getSimpleName());
     }
 
 
-    public long execQuerySql(Class<?> dbEntityClazz, String prepareSql , List<Object> paramValues, long childChooseId, ResultHandler onQueryResult) {
+    public long execQuerySql(Class<?> dbEntityClazz, String prepareSql , List<Object> paramValues, String childChooseId, ResultHandler onQueryResult) {
         return execSql(dbEntityClazz, prepareSql, paramValues,SqlExecuteType.QUERY_MANY, childChooseId,onQueryResult);
     }
 
     public long execQuerySql(Class<?> dbEntityClazz, String prepareSql , List<Object> paramValues, ResultHandler onQueryResult) {
-        return execQuerySql(dbEntityClazz, prepareSql, paramValues, dbEntityClazz.hashCode(),onQueryResult);
+        return execQuerySql(dbEntityClazz, prepareSql, paramValues, dbEntityClazz.getSimpleName(),onQueryResult);
     }
 
 
-    public long execSql(String prepareSql , List<Object> paramValues, SqlExecuteType executeType, long childChooseId, ResultHandler onQueryResult) {
+    public long execSql(String prepareSql , List<Object> paramValues, SqlExecuteType executeType, String childChooseId, ResultHandler onQueryResult) {
        return execSql(null, prepareSql, paramValues,executeType, childChooseId,onQueryResult);
     }
 
-    public long execSql(Class<?> dbEntityClazz, String prepareSql , List<Object> paramValues , SqlExecuteType executeType, long childChooseId, ResultHandler onQueryResult) {
+    public long execSql(Class<?> dbEntityClazz, String prepareSql , List<Object> paramValues , SqlExecuteType executeType, String childChooseId, ResultHandler onQueryResult) {
         long requestId = gameConsumer.registerCallBackMethod(onQueryResult);
         ExecSqlInfo execSqlInfo = new ExecSqlInfo(prepareSql ,paramValues , dbEntityClazz , executeType);
         gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, execSqlInfo, null, 0

@@ -35,7 +35,7 @@ public class ConsumerEventDataReturnMsgProcessor extends ByteMsgObjProcessor<Con
 
         long  localRequestId = eventDataMsg.getRequestId();
 
-        fromRemoteEventReturnData.setEventExtData(new EventExtData(getGameConsumer().getId(), localRequestId, eventDataMsg.getRequestId(), eventDataMsg.getParams()));
+        fromRemoteEventReturnData.setEventExtData(new EventExtData(getGameConsumer().getId(), localRequestId, eventDataMsg.getChildChooseId(), eventDataMsg.getParams()));
 
         getContext().getConsumerManager().publicEvent( eventDataMsg.getToConsumerId() ,fromRemoteEventReturnData  );
 

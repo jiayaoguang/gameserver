@@ -53,7 +53,7 @@ public abstract class MQConnector extends AbstractConnector {
             return;
         }
 
-        getGameContext().getConsumerManager().publicEvent(gameContext.getMainConsumerId(), EventType.MQ_MSG_COME, msgObj, null, msgId, new EventExtData(mqPushConsumerId, 0));
+        getGameContext().getConsumerManager().publicEvent(gameContext.getMainConsumerId(), EventType.MQ_MSG_COME, msgObj, null, msgId, new EventExtData(mqPushConsumerId, 0L));
 
     }
 
