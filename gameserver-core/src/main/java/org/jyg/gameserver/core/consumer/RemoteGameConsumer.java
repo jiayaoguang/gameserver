@@ -10,7 +10,9 @@ import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 
@@ -24,10 +26,18 @@ public class RemoteGameConsumer extends MpscQueueGameConsumer {
 
     private final List<DelegateGameConsumer> delegateGameConsumers = new ArrayList<>();
 
+    private final Map<String,TcpClient> tcpClientMap = new LinkedHashMap<>(1024,0.75f);
 
     public RemoteGameConsumer(GameContext gameContext, String remoteHost , int port) {
         this.setGameContext(gameContext);
-        this.tcpClient = gameContext.createTcpClient(remoteHost , port);
+
+        String addr = remoteHost + ":"+ port;
+        TcpClient tcpClient = tcpClientMap.get(addr);
+        if(tcpClient == null){
+            tcpClient = gameContext.createTcpClient(remoteHost,port);
+            tcpClientMap.put(addr,tcpClient);
+        }
+        this.tcpClient = tcpClient;
     }
 
     public RemoteGameConsumer(GameContext gameContext) {
@@ -51,18 +61,11 @@ public class RemoteGameConsumer extends MpscQueueGameConsumer {
         }
 
 
-        //定时检测重连 TODO think do it in other thread ?
         this.timerManager.addUnlimitedTimer( TimeUnit.SECONDS.toMillis(5) , ()->{
-            if(tcpClient != null){
-                //定时发送ping TODO
+            for(TcpClient tcpClient : tcpClientMap.values()){
                 tcpClient.checkConnect();
             }
-            if(delegateGameConsumers.size() > 0){
-                for(DelegateGameConsumer delegateGameConsumer : delegateGameConsumers){
-                    //定时发送ping TODO
-                    delegateGameConsumer.getTcpClient().checkConnect();
-                }
-            }
+
         });
 
     }
@@ -73,11 +76,16 @@ public class RemoteGameConsumer extends MpscQueueGameConsumer {
         if(tcpClient == null){
             return;
         }
-        if(tcpClient.getGameContext() == getGameContext()){
+
+        for(TcpClient tcpClient : tcpClientMap.values()){
             tcpClient.close();
-        }else {
-            tcpClient.stop();
         }
+
+//        if(tcpClient.getGameContext() == getGameContext()){
+//            tcpClient.close();
+//        }else {
+//            tcpClient.stop();
+//        }
 
     }
 
@@ -157,7 +165,16 @@ public class RemoteGameConsumer extends MpscQueueGameConsumer {
             throw new IllegalArgumentException("gameContext == null");
         }
 
-        DelegateGameConsumer delegateGameConsumer = new DelegateGameConsumer(getGameContext() , remoteConsumerInfo);
+
+        String addr = remoteConsumerInfo.getIp() + ":"+remoteConsumerInfo.getPort();
+        TcpClient tcpClient = tcpClientMap.get(addr);
+        if(tcpClient == null){
+            tcpClient = gameContext.createTcpClient(remoteConsumerInfo.getIp(),remoteConsumerInfo.getPort());
+            tcpClientMap.put(addr,tcpClient);
+        }
+
+
+        DelegateGameConsumer delegateGameConsumer = new DelegateGameConsumer(getGameContext(),tcpClient , remoteConsumerInfo);
         delegateGameConsumers.add(delegateGameConsumer);
         gameContext.getConsumerManager().addConsumer(delegateGameConsumer);
 

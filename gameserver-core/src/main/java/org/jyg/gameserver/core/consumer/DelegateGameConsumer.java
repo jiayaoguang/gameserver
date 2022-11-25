@@ -27,13 +27,19 @@ public class DelegateGameConsumer extends GameConsumer{
     private final Queue<EventData<?>> eventDataQueue = new MpscUnboundedArrayQueue<>(DEFAULT_QUEUE_SIZE);
 
     public DelegateGameConsumer(GameContext gameContext , RemoteConsumerInfo remoteConsumerInfo) {
+        this(gameContext ,gameContext.createTcpClient(remoteConsumerInfo.getIp(),remoteConsumerInfo.getPort()) , remoteConsumerInfo );
+    }
+
+
+    public DelegateGameConsumer(GameContext gameContext ,TcpClient tcpClient, RemoteConsumerInfo remoteConsumerInfo) {
         this.setGameContext(gameContext);
         this.remoteConsumerInfo = remoteConsumerInfo;
         this.setId(remoteConsumerInfo.getConsumerId());
-        this.tcpClient = gameContext.createTcpClient(remoteConsumerInfo.getIp(),remoteConsumerInfo.getPort());
+        this.tcpClient = tcpClient;
 
 
     }
+
 
 
     @Override
