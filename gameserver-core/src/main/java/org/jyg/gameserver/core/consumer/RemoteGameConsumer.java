@@ -4,7 +4,6 @@ import com.google.protobuf.MessageLite;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.RemoteConsumerInfo;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
-import org.jyg.gameserver.core.processor.ConsumerEventDataMsgProcessor;
 import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
@@ -19,17 +18,17 @@ import java.util.concurrent.locks.LockSupport;
 /**
  * create by jiayaoguang on 2020/5/24
  */
-public class RemoteGameConsumer extends MpscQueueGameConsumer {
+public class RemoteGameConsumer extends ShareThreadGameConsumers {
 
 
     private final TcpClient tcpClient;
 
-    private final List<DelegateGameConsumer> delegateGameConsumers = new ArrayList<>();
+    private final List<RemoteDelegateGameConsumer> remoteDelegateGameConsumers = new ArrayList<>();
 
     private final Map<String,TcpClient> tcpClientMap = new LinkedHashMap<>(1024,0.75f);
 
     public RemoteGameConsumer(GameContext gameContext, String remoteHost , int port) {
-        this.setGameContext(gameContext);
+        super(gameContext);
 
         String addr = remoteHost + ":"+ port;
         TcpClient tcpClient = tcpClientMap.get(addr);
@@ -41,29 +40,39 @@ public class RemoteGameConsumer extends MpscQueueGameConsumer {
     }
 
     public RemoteGameConsumer(GameContext gameContext) {
-        this.setGameContext(gameContext);
+        super(gameContext);
         this.tcpClient = null;
     }
 
-    public RemoteGameConsumer(TcpClient tcpClient) {
-        this.tcpClient = tcpClient;
-
-        setGameContext(tcpClient.getGameContext());
-    }
+//    public RemoteGameConsumer(TcpClient tcpClient) {
+//        super(tcpClient.getGameContext());
+//        this.tcpClient = tcpClient;
+//
+//    }
 
 
     @Override
     public void doStart() {
         super.doStart();
 
-        if(tcpClient != null){
-            tcpClient.start();
+        for(TcpClient tcpClient : tcpClientMap.values()){
+
+            try{
+                tcpClient.checkConnect();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
 
         this.timerManager.addUnlimitedTimer( TimeUnit.SECONDS.toMillis(5) , ()->{
             for(TcpClient tcpClient : tcpClientMap.values()){
-                tcpClient.checkConnect();
+                try{
+                    tcpClient.checkConnect();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
 
         });
@@ -73,9 +82,8 @@ public class RemoteGameConsumer extends MpscQueueGameConsumer {
 
     @Override
     public void doStop() {
-        if(tcpClient == null){
-            return;
-        }
+        super.doStop();
+
 
         for(TcpClient tcpClient : tcpClientMap.values()){
             tcpClient.close();
@@ -174,53 +182,8 @@ public class RemoteGameConsumer extends MpscQueueGameConsumer {
         }
 
 
-        DelegateGameConsumer delegateGameConsumer = new DelegateGameConsumer(getGameContext(),tcpClient , remoteConsumerInfo);
-        delegateGameConsumers.add(delegateGameConsumer);
-        gameContext.getConsumerManager().addConsumer(delegateGameConsumer);
-
-    }
-
-
-
-    @Override
-    protected void run() {
-
-        onThreadStart();
-
-        int pollNullNum = 0;
-        for (;!isStop();){
-
-            EventData<?> object = pollEvent();
-            pollNullNum++;
-
-            if(object != null){
-                try {
-                    onReciveEvent(object);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                pollNullNum = 0;
-            }
-
-            if(delegateGameConsumers.size() > 0){
-                for(DelegateGameConsumer delegateGameConsumer : delegateGameConsumers ){
-                    if(delegateGameConsumer.tryPollEventAndDeal()){
-                        pollNullNum = 0;
-                    }
-                }
-            }
-
-            if (pollNullNum > 1000) {
-                update();
-                pollNullNum = 0;
-                LockSupport.parkNanos(1000 * 1000L);
-            } else if (pollNullNum > 800) {
-                Thread.yield();
-            }
-
-
-        }
-        Logs.DEFAULT_LOGGER.info(" stop.... ");
+        RemoteDelegateGameConsumer remoteDelegateGameConsumer = new RemoteDelegateGameConsumer(getGameContext(),tcpClient , remoteConsumerInfo);
+        addRemoteConsumerInfo(remoteDelegateGameConsumer);
     }
 
 
