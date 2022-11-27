@@ -1,6 +1,8 @@
 package org.jyg.gameserver.core.event;
 
+import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.manager.Lifecycle;
+import org.jyg.gameserver.core.util.GameContext;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -16,7 +18,7 @@ public class EventManager implements Lifecycle {
 
     @Override
     public void start() {
-
+        addEventListener(new ExecutableEventListener());
     }
 
     @Override
@@ -57,7 +59,9 @@ public class EventManager implements Lifecycle {
 
     }
 
-
+    public void publishEventToConsumer(GameContext gameContext, int targetConsumerId , Event event){
+        gameContext.getConsumerManager().publicEvent(targetConsumerId , EventType.PUBLISH_EVENT, event , 0 );
+    }
 
 
 

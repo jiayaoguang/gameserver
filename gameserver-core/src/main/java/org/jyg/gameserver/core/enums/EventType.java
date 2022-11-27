@@ -55,6 +55,9 @@ public enum EventType {
 	REMOTE_UNKNOWN_MSG_COME(15),
 
 
+	PUBLISH_EVENT(16),
+
+
 	;
 
 	public final int type;

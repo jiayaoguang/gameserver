@@ -10,6 +10,7 @@ import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
+import org.jyg.gameserver.core.event.Event;
 import org.jyg.gameserver.core.event.GameEventListener;
 import org.jyg.gameserver.core.event.EventManager;
 import org.jyg.gameserver.core.intercept.OnlyLocalHttpMsgInterceptor;
@@ -629,6 +630,14 @@ public abstract class GameConsumer {
                 }
                 break;
             }
+            case PUBLISH_EVENT:
+                Object data = event.getData();
+                if(data instanceof Event){
+                    getEventManager().publishEvent((((Event)data)));
+                }else {
+                    Logs.CONSUMER.error("publish event fail , data type : {} not event ",data.getClass().getName());
+                }
+                break;
 
             default:
                 throw new IllegalArgumentException("unknown channelEventType <" + event.getEventType() + ">");
