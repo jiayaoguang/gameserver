@@ -7,17 +7,17 @@ public enum EventType {
 
 	UNKNOWN(0),
 
-	ACTIVE(1),
-	INACTIVE(2),
 
 	/**
 	 * 连接激活
 	 */
+	@Deprecated
 	SOCKET_CONNECT_ACTIVE(3),
 
 	/**
 	 * 连接断开
 	 */
+	@Deprecated
 	SOCKET_CONNECT_INACTIVE(4),
 	
 	CLIENT_SOCKET_CONNECT_ACTIVE(5),
@@ -26,6 +26,7 @@ public enum EventType {
 	
 //	ON_MESSAGE_COME,
 
+	@Deprecated
 	HTTP_MESSAGE_COME(7),
 
     REMOTE_MSG_COME(8),

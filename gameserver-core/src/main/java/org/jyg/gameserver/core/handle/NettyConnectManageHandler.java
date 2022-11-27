@@ -7,6 +7,8 @@ import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import org.jyg.gameserver.core.constant.MsgIdConst;
 import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.ChannelConnectEvent;
+import org.jyg.gameserver.core.event.ChannelDisconnectEvent;
 import org.jyg.gameserver.core.msg.PingByteMsg;
 import org.jyg.gameserver.core.msg.ReadIdleMsgObj;
 import org.jyg.gameserver.core.util.AllUtil;
@@ -45,7 +47,7 @@ public class NettyConnectManageHandler extends ChannelDuplexHandler {
         }
 
 
-        gameContext.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_ACTIVE, null, ctx.channel(), 0);
+        gameContext.getConsumerManager().publicEventToDefault(EventType.PUBLISH_EVENT,  new ChannelConnectEvent(ctx.channel()), ctx.channel(), 0);
 
         super.channelActive(ctx);
     }
@@ -55,7 +57,7 @@ public class NettyConnectManageHandler extends ChannelDuplexHandler {
         Channel incoming = ctx.channel();
         Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + " offline");
 
-        gameContext.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_INACTIVE, null, ctx.channel(), 0);
+        gameContext.getConsumerManager().publicEventToDefault(EventType.PUBLISH_EVENT, new ChannelDisconnectEvent(ctx.channel()), ctx.channel(), 0);
 
         super.channelInactive(ctx);
     }

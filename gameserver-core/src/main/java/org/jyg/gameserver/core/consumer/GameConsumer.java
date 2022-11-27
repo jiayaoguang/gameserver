@@ -20,6 +20,7 @@ import org.jyg.gameserver.core.processor.*;
 import org.jyg.gameserver.core.session.LocalSession;
 import org.jyg.gameserver.core.session.MQSession;
 import org.jyg.gameserver.core.session.Session;
+import org.jyg.gameserver.core.session.TcpChannelSession;
 import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.timer.DelayCloseTimer;
 import org.jyg.gameserver.core.timer.TimerManager;
@@ -99,7 +100,7 @@ public abstract class GameConsumer {
         this.channelManager = new ChannelManager(this);
         this.classLoadManager = new ClassLoadManager("loadClasses");
         this.resultHandlerManager = new ResultHandlerManager();
-        this.eventManager = new EventManager();
+        this.eventManager = new EventManager(this);
 
 
         instanceManager.putInstance(this.timerManager);

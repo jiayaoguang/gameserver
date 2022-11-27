@@ -1,6 +1,8 @@
 package org.jyg.gameserver.core.handle;
 
+import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.HttpRequestEvent;
 import org.jyg.gameserver.core.net.Request;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -58,7 +60,15 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpRequest> 
 
 		Request request = this.createRequest((HttpRequest) msg);
 
-		gameContext.getConsumerManager().publicEventToDefault(EventType.HTTP_MESSAGE_COME, request, ctx.channel(), 0);
+		EventData<Request> eventData = new EventData<>();
+		eventData.setData(request);
+		eventData.setEventType(EventType.PUBLISH_EVENT);
+		eventData.setChannel(ctx.channel());
+
+		HttpRequestEvent httpRequestEvent = new HttpRequestEvent(request , ctx.channel() , eventData);
+
+
+		gameContext.getConsumerManager().publicEventToDefault(EventType.PUBLISH_EVENT, httpRequestEvent, ctx.channel(), 0);
 
 		// HttpRequest request = (HttpRequest) msg;
 

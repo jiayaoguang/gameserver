@@ -7,6 +7,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
+import org.jyg.gameserver.core.event.ChannelConnectEvent;
+import org.jyg.gameserver.core.event.ChannelDisconnectEvent;
 import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 
@@ -32,7 +34,7 @@ public class TextWebSocketFrameHandler extends
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "在线");
 
-		gameContext.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_ACTIVE, null, ctx.channel() , 0 );
+		gameContext.getConsumerManager().publicEventToDefault(EventType.PUBLISH_EVENT, new ChannelConnectEvent(ctx.channel()), ctx.channel() , 0 );
 		
 		super.channelActive(ctx);
 	}
@@ -81,7 +83,7 @@ public class TextWebSocketFrameHandler extends
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "掉线");
 
-		gameContext.getConsumerManager().publicEventToDefault(EventType.SOCKET_CONNECT_INACTIVE, null, ctx.channel() , 0);
+		gameContext.getConsumerManager().publicEventToDefault(EventType.PUBLISH_EVENT, new ChannelDisconnectEvent(ctx.channel()), ctx.channel() , 0);
 		
 		super.channelInactive(ctx);
 	}

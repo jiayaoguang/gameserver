@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.event;
 
+import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.manager.Lifecycle;
 import org.jyg.gameserver.core.util.GameContext;
@@ -13,12 +14,23 @@ import java.util.Map;
 
 public class EventManager implements Lifecycle {
 
+    private final GameConsumer gameConsumer;
+
     private Map<Class<? extends Event> , List<GameEventListener<? extends Event>>> eventListMap = new HashMap<>(128 , 0.5f);
 
+
+    public EventManager(GameConsumer gameConsumer) {
+        this.gameConsumer = gameConsumer;
+    }
 
     @Override
     public void start() {
         addEventListener(new ExecutableEventListener());
+        addEventListener(new ChannelConnectEventListener(gameConsumer.getChannelManager()));
+        addEventListener(new ChannelDisconnectEventListener(gameConsumer.getChannelManager()));
+        addEventListener(new ChannelMsgEventListener(gameConsumer));
+        addEventListener(new HttpRequestEventListener(gameConsumer));
+
     }
 
     @Override
