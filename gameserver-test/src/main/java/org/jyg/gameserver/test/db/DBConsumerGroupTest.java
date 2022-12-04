@@ -38,8 +38,8 @@ public class DBConsumerGroupTest {
 
                 GameConsumer consumer = consumerThreadStartEvent.getGameConsumer();
 
-                consumer.getTimerManager().addUnlimitedTimer(1000L,1000L,()->{
-                    AllUtil.println(" hello ----------  ");
+                consumer.getTimerManager().addUnlimitedTimer(1000L,()->{
+                    AllUtil.println(" hello ----------  " + System.currentTimeMillis());
                 });
 
 

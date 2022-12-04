@@ -1,7 +1,6 @@
 package org.jyg.gameserver.core.timer;
 
 import io.netty.channel.Channel;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,11 +14,11 @@ public abstract class Timer implements Comparable<Timer>{
 	// 执行次数
 	private int execNum = 0;
 	// 开始时间
-	private final long startTime;
+//	private final long startTime;
 	// 第一次执行的延迟时间
 //	private final long firstDelayTimeMills;
 	//执行的间隔时间
-	private long delayTimeMills;
+	private long intervalTimeMills;
 
 
 	private Channel channel;
@@ -35,13 +34,19 @@ public abstract class Timer implements Comparable<Timer>{
 	private boolean ignoreExecTime = false;
 
 
-	public Timer(int execNum, long firstDelayTimeMills, long delayTimeMills) {
+	public Timer(int execNum, long intervalTimeMills) {
+		this(execNum , System.currentTimeMillis() + intervalTimeMills , intervalTimeMills);
+	}
+
+
+	public Timer(int execNum, long firstExecTime, long intervalTimeMills) {
 		this.execNum = execNum;
-		this.delayTimeMills = delayTimeMills;
+		this.intervalTimeMills = intervalTimeMills;
 //		this.firstDelayTimeMills = firstDelayTimeMills;
 
-		this.startTime = System.currentTimeMillis();
-		triggerTime = startTime + firstDelayTimeMills;
+//		this.startTime = startTime;
+
+		this.triggerTime = firstExecTime;
 	}
 
 
@@ -49,8 +54,8 @@ public abstract class Timer implements Comparable<Timer>{
 		return triggerTime;
 	}
 
-	public long getDelayTimeMills() {
-		return delayTimeMills;
+	public long getIntervalTimeMills() {
+		return intervalTimeMills;
 	}
 
 	public int getExecNum() {
@@ -66,7 +71,7 @@ public abstract class Timer implements Comparable<Timer>{
 	}
 
 	private void updateNextTriggerTime() {
-		this.triggerTime = System.currentTimeMillis() + this.delayTimeMills;
+		this.triggerTime = System.currentTimeMillis() + this.intervalTimeMills;
 	}
 
 	void setTriggerTime(long triggerTime) {

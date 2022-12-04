@@ -15,7 +15,7 @@ public class DelayCloseTimer extends Timer{
 	}
 	
 	public DelayCloseTimer(Channel channel,long delayTimeMills){
-		super(1 , delayTimeMills, delayTimeMills);
+		super(1 , delayTimeMills);
 		this.channel = channel;
 	}
 	

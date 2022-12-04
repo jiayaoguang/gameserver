@@ -16,7 +16,7 @@ public class ResultHandlerTimeOutTimer extends Timer implements ResultHandler<Ob
     private final ResultHandlerManager resultHandlerManager;
 
     public ResultHandlerTimeOutTimer(long delayTimeMills, ResultHandler resultHandler, ResultHandlerManager resultHandlerManager, long requestId) {
-        super(1, delayTimeMills, delayTimeMills);
+        super(1, delayTimeMills);
         this.resultHandler = resultHandler;
         this.resultHandlerManager = resultHandlerManager;
         this.requestId = requestId;

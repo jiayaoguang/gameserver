@@ -8,7 +8,7 @@ import io.netty.channel.Channel;
 public class IdleTimer extends Timer{
 
 	public IdleTimer( Channel channel) {
-		super(Integer.MAX_VALUE, 5*1000L, 5*1000L);
+		super(Integer.MAX_VALUE, 5*1000L);
 	}
 
 	@Override

@@ -6,8 +6,6 @@ package org.jyg.gameserver.core.timer;
 import org.jyg.gameserver.core.manager.Lifecycle;
 import org.jyg.gameserver.core.util.Logs;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.PriorityQueue;
 
 public class TimerManager implements Lifecycle {
@@ -20,38 +18,39 @@ public class TimerManager implements Lifecycle {
         return timer;
     }
 
-    public Timer addTimer(int execNum, long firstDelayTime, long delayTime, ITimerHandler timerHandler) {
-        Timer timer = new DefaultTimer(execNum, firstDelayTime, delayTime, timerHandler);
+    public Timer addTimer(int execNum, long firstExecTime, long intervalTime, ITimerHandler timerHandler) {
+        Timer timer = new DefaultTimer(execNum, firstExecTime, intervalTime, timerHandler);
         return addTimer(timer);
     }
 
     public Timer addTimer(int execNum, long delayTime, ITimerHandler timerHandler) {
-        Timer timer = new DefaultTimer(execNum, delayTime, delayTime, timerHandler);
+        Timer timer = new DefaultTimer(execNum, delayTime, timerHandler);
         return addTimer(timer);
     }
 
     /**
      * 添加不限制次数的定时器
-     * @param delayTime 延迟时间
+     * @param firstExecTime 第一次开始执行时间
      * @param intervalTime 执行时间间隔
      * @param timerHandler 执行方法
      * @return Timer
      */
-    public Timer addUnlimitedTimer(long delayTime,long intervalTime, ITimerHandler timerHandler) {
-        Timer timer = new DefaultTimer(-1, delayTime, intervalTime, timerHandler);
+    public Timer addUnlimitedTimer(long firstExecTime,long intervalTime, ITimerHandler timerHandler) {
+        Timer timer = new DefaultTimer(-1, firstExecTime, intervalTime, timerHandler);
 
         return addTimer(timer);
     }
 
+
     /**
      * 添加不限制次数的定时器
-     * @param delayTime 延迟时间
+     * @param firstExecTime 第一次开始执行时间
      * @param intervalTime 执行时间间隔
      * @param timerHandler 执行方法
      * @return Timer
      */
-    public Timer addUnlimitedTimer(long delayTime,long intervalTime,boolean ignoreExecTime, ITimerHandler timerHandler) {
-        Timer timer = new DefaultTimer(-1, delayTime, intervalTime, timerHandler);
+    public Timer addUnlimitedTimer(long firstExecTime,long intervalTime,boolean ignoreExecTime, ITimerHandler timerHandler) {
+        Timer timer = new DefaultTimer(-1, firstExecTime, intervalTime, timerHandler);
         timer.setIgnoreExecTime(ignoreExecTime);
         return addTimer(timer);
     }
@@ -64,8 +63,14 @@ public class TimerManager implements Lifecycle {
      * @return Timer
      */
     public Timer addUnlimitedTimer(long intervalTime, ITimerHandler timerHandler) {
-        Timer timer = new DefaultTimer(-1, intervalTime, intervalTime, timerHandler);
+        Timer timer = new DefaultTimer(-1,  intervalTime, timerHandler);
 
+        return addTimer(timer);
+    }
+
+    public Timer addUnlimitedTimer(long intervalTime,boolean ignoreExecTime, ITimerHandler timerHandler) {
+        Timer timer = new DefaultTimer(-1,  intervalTime, timerHandler);
+        timer.setIgnoreExecTime(ignoreExecTime);
         return addTimer(timer);
     }
 
@@ -103,9 +108,9 @@ public class TimerManager implements Lifecycle {
             }
 
             if(timer.isIgnoreExecTime()){
-                timer.setTriggerTime(System.currentTimeMillis() + timer.getDelayTimeMills());
+                timer.setTriggerTime(System.currentTimeMillis() + timer.getIntervalTimeMills());
             }else {
-                timer.setTriggerTime(timer.getTriggerTime() + timer.getDelayTimeMills());
+                timer.setTriggerTime(timer.getTriggerTime() + timer.getIntervalTimeMills());
             }
             if (timer.getExecNum() != -1) {
                 timer.reduceExecNum(1);

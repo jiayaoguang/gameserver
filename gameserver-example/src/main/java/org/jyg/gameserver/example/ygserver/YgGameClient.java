@@ -39,7 +39,7 @@ public class YgGameClient {
 
             @Override
             public void process(Session session, EventData<LoginReplyMsg> event) {
-                getGameConsumer().getTimerManager().addUnlimitedTimer(5 * 1000L, 5 * 1000L, () -> {
+                getGameConsumer().getTimerManager().addUnlimitedTimer( 5 * 1000L, () -> {
                     ChatRequestJson chatRequestJson = new ChatRequestJson();
                     chatRequestJson.setContent("hello world");
                     session.writeMessage(chatRequestJson);

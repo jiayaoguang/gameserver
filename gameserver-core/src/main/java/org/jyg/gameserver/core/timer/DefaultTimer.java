@@ -10,15 +10,15 @@ public class DefaultTimer extends Timer {
 
 
 	public DefaultTimer(long execDelayTimeMills , ITimerHandler timerHandler) {
-		this(1, execDelayTimeMills, execDelayTimeMills,timerHandler);
+		this(1, execDelayTimeMills,timerHandler);
 	}
 
 	public DefaultTimer(int execNum ,long execIntervalTimeMills , ITimerHandler timerHandler) {
-		this(execNum, execIntervalTimeMills, execIntervalTimeMills,timerHandler);
+		this(execNum, System.currentTimeMillis() + execIntervalTimeMills, execIntervalTimeMills,timerHandler);
 	}
 
-	public DefaultTimer(int execNum, long firstExecDelayTimeMills, long execIntervalTimeMills , ITimerHandler timerHandler) {
-		super(execNum, firstExecDelayTimeMills, execIntervalTimeMills);
+	public DefaultTimer(int execNum, long firstExecTimeMills, long execIntervalTimeMills , ITimerHandler timerHandler) {
+		super(execNum, firstExecTimeMills, execIntervalTimeMills);
 		this.timerHandler = timerHandler;
 	}
 
