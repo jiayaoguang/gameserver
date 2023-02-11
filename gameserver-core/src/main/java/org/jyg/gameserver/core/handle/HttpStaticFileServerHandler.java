@@ -422,6 +422,10 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 		if(pointIndex > 0 && pointIndex < fileName.length()){
 			String fileSuffix = fileName.substring(pointIndex + 1);
 			switch (fileSuffix) {
+				case "html":
+				case "htm":
+					response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/html");
+					return;
 				case "jpg":
 				case "jpeg":
 					response.headers().set(HttpHeaderNames.CONTENT_TYPE, "image/jpeg");
