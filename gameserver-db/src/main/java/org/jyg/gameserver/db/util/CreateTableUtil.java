@@ -3,6 +3,7 @@ package org.jyg.gameserver.db.util;
 import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.ConfigUtil;
+import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.db.*;
 import org.jyg.gameserver.db.type.TypeHandlerRegistry;
 
@@ -26,6 +27,24 @@ public class CreateTableUtil {
 
 //        DBConfig dbConfig = ConfigUtil.properties2Object("jyg", DBConfig.class);
 
+        String sql = getCreateTableSql(dbClass);
+
+        try(Connection connection = getConn(dbConfig);
+            Statement statement = connection.createStatement();
+            ){
+
+
+
+            statement.execute(sql);
+
+        }
+
+
+
+
+    }
+
+    public static String getCreateTableSql(Class<? extends BaseDBEntity> dbClass) {
         DBTableManager dbTableManager = new DBTableManager(new TypeHandlerRegistry());
 
         TableInfo tableInfo = dbTableManager.tryAddTableInfo(dbClass);
@@ -52,7 +71,14 @@ public class CreateTableUtil {
         if (tableInfo.getDbTableAnno() != null && StringUtils.isNotEmpty(tableInfo.getDbTableAnno().comment())) {
             sqlSB.append(" COMMENT = '").append(tableInfo.getDbTableAnno().comment()).append("'");
         }
-        sqlSB.append(" ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;");
+        String collate = "utf8mb4_general_ci";
+        if(tableInfo.getDbTableAnno() != null && StringUtils.isNotEmpty(tableInfo.getDbTableAnno().collate())){
+            collate = tableInfo.getDbTableAnno().collate();
+        }
+
+        sqlSB.append(" ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=")
+                .append(collate)
+                .append(";");
 
 
         for (TableFieldInfo tableFieldInfo : tableInfo.getFieldInfoLinkedMap().values()) {
@@ -68,21 +94,8 @@ public class CreateTableUtil {
 
         String sql = sqlSB.toString();
 
-        AllUtil.println(sql);
-
-        try(Connection connection = getConn(dbConfig);
-            Statement statement = connection.createStatement();
-            ){
-
-
-
-            statement.execute(sql);
-
-        }
-
-
-
-
+        Logs.DB.info("create table sql : {}",sql);
+        return sql;
     }
 
 

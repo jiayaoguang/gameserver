@@ -64,7 +64,7 @@ public class TableFieldInfo {
         return fiedGetMethod;
     }
 
-    public void setFiedGetMethod(Method fiedGetMethod) {
+    public void setFieldGetMethod(Method fiedGetMethod) {
         this.fiedGetMethod = fiedGetMethod;
     }
 

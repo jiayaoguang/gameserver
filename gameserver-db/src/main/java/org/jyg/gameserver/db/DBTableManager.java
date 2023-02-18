@@ -67,10 +67,10 @@ public class DBTableManager {
         DBTable dbTableAnno = dbEntityClass.getAnnotation(DBTable.class);
         if (dbTableAnno != null) {
             tableInfo.setDbTableAnno(dbTableAnno);
-            tableInfo.setTableName(dbTableAnno.tableName());
+            tableInfo.setTableName(dbTableAnno.tableName().toLowerCase());
             tableInfo.setPrimaryKey(dbTableAnno.primaryKey());
         } else {
-            tableInfo.setTableName(dbEntityClass.getSimpleName());
+            tableInfo.setTableName(dbEntityClass.getSimpleName().toLowerCase());
             tableInfo.setPrimaryKey("id");
         }
 
@@ -126,9 +126,9 @@ public class DBTableManager {
             tableFieldInfo.setDbTableFieldAnno(dbTableFieldAnno);
             String fieldName;
             if(StringUtils.isNotEmpty(dbTableFieldAnno.fieldName())){
-                fieldName = dbTableFieldAnno.fieldName();
+                fieldName = dbTableFieldAnno.fieldName().toLowerCase();
             }else {
-                fieldName = dbEntityField.getName();
+                fieldName = dbEntityField.getName().toLowerCase();
             }
             tableFieldInfo.setTableFieldName(fieldName);
             if (dbTableFieldAnno.fieldType() == TableFieldType.AUTO) {
@@ -143,7 +143,7 @@ public class DBTableManager {
                 tableFieldInfo.setLength(dbTableFieldAnno.fieldType().getDefaultLength());
             }
         } else {
-            tableFieldInfo.setTableFieldName(dbEntityField.getName());
+            tableFieldInfo.setTableFieldName(dbEntityField.getName().toLowerCase());
 
             TableFieldType tableFieldType = getTableFieldType(dbEntityField.getType());
             tableFieldInfo.setFieldType(tableFieldType);
@@ -156,7 +156,7 @@ public class DBTableManager {
 
         try {
             Method fiedGetMethod = dbEntityClass.getMethod(fieldGetMethodName);
-            tableFieldInfo.setFiedGetMethod(fiedGetMethod);
+            tableFieldInfo.setFieldGetMethod(fiedGetMethod);
         } catch (Exception e) {
             //ignore
         }
