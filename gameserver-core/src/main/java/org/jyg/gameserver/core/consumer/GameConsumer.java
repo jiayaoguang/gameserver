@@ -542,37 +542,37 @@ public abstract class GameConsumer {
 //				dispatcher.as_on_client_inactive(event);
 //				break;
 
-            case SOCKET_CONNECT_ACTIVE:
-//				dispatcher.as_on_inner_server_active(event);
-                if (isMainConsumer()) {
-                    channelManager.doLink(event.getChannel());
-                }else {
-                    Logs.DEFAULT_LOGGER.error("event SOCKET_CONNECT_ACTIVE only in DefaultConsumer");
-                }
-                break;
-            case SOCKET_CONNECT_INACTIVE:
-                if (isMainConsumer()) {
-                    channelManager.doUnlink(event.getChannel());
-                }else {
-                    Logs.DEFAULT_LOGGER.error("event SOCKET_CONNECT_INACTIVE only in DefaultConsumer");
-                }
-                break;
+//            case SOCKET_CONNECT_ACTIVE:
+////				dispatcher.as_on_inner_server_active(event);
+//                if (isMainConsumer()) {
+//                    channelManager.doLink(event.getChannel());
+//                }else {
+//                    Logs.DEFAULT_LOGGER.error("event SOCKET_CONNECT_ACTIVE only in DefaultConsumer");
+//                }
+//                break;
+//            case SOCKET_CONNECT_INACTIVE:
+//                if (isMainConsumer()) {
+//                    channelManager.doUnlink(event.getChannel());
+//                }else {
+//                    Logs.DEFAULT_LOGGER.error("event SOCKET_CONNECT_INACTIVE only in DefaultConsumer");
+//                }
+//                break;
 
-            case HTTP_MESSAGE_COME:
-                ((Request) event.getData()).setRequestid(allocateRequestId());
-                this.processHttpEvent(event);
-                break;
+//            case HTTP_MESSAGE_COME:
+//                ((Request) event.getData()).setRequestid(allocateRequestId());
+//                this.processHttpEvent(event);
+//                break;
 //            case ON_MESSAGE_COME:
 //				dispatcher.webSocketProcess(event);
 //				break;
-            case REMOTE_MSG_COME:{
-                Session session = null;
-                if (isMainConsumer()) {
-                    session = channelManager.getSession(event.getChannel());
-                }
-                this.processEventMsg(session, event);
-                break;
-            }
+//            case REMOTE_MSG_COME:{
+//                Session session = null;
+//                if (isMainConsumer()) {
+//                    session = channelManager.getSession(event.getChannel());
+//                }
+//                this.processEventMsg(session, event);
+//                break;
+//            }
             case MQ_MSG_COME:{
                 Session session = new MQSession(event.getFromConsumerId(), gameContext);
                 this.processEventMsg(session, event);

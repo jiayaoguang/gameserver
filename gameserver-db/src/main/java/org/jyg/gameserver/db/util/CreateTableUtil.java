@@ -37,6 +37,8 @@ public class CreateTableUtil {
 
             statement.execute(sql);
 
+            Logs.DB.info("create table sql : {}",sql);
+
         }
 
 
@@ -94,7 +96,6 @@ public class CreateTableUtil {
 
         String sql = sqlSB.toString();
 
-        Logs.DB.info("create table sql : {}",sql);
         return sql;
     }
 

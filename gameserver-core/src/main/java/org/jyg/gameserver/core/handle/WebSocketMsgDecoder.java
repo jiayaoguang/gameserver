@@ -6,9 +6,11 @@ import io.netty.channel.*;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
+import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.event.ChannelConnectEvent;
 import org.jyg.gameserver.core.event.ChannelDisconnectEvent;
+import org.jyg.gameserver.core.event.ChannelMsgEvent;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.util.AllUtil;
@@ -99,7 +101,14 @@ public class WebSocketMsgDecoder extends
 			}
 
 
-			gameContext.getConsumerManager().publicEventToDefault(EventType.REMOTE_MSG_COME, msgObj, ctx.channel(), msgId);
+			EventData eventData = new EventData();
+			eventData.setChannel(ctx.channel());
+			eventData.setData(msgObj);
+			eventData.setEventId(msgId);
+
+			ChannelMsgEvent channelMsgEvent = new ChannelMsgEvent(ctx.channel(),eventData);
+
+			gameContext.getConsumerManager().publicEventToDefault(EventType.PUBLISH_EVENT, channelMsgEvent , msgId);
 
 //			switch (msgCodec.getMsgType()) {
 //				case PROTO:
