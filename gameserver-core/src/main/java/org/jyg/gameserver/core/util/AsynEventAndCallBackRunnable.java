@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.util;
 
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.ExecutableEvent;
 
 /**
  * create by jiayaoguang on 2020/4/25
@@ -28,7 +29,7 @@ public class AsynEventAndCallBackRunnable implements Runnable{
             e.printStackTrace();
             callBackEvent.setSuccess(false);
         }
-        gameConsumer.publicEvent(EventType.INNER_MSG, callBackEvent, null , 0);
+        gameConsumer.publicEvent(EventType.PUBLISH_EVENT, new ExecutableEvent(callBackEvent::execte), null , 0);
 
     }
 

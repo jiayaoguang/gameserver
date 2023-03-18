@@ -588,9 +588,6 @@ public abstract class GameConsumer {
                 break;
             }
 
-            case INNER_MSG:
-                doInnerMsg(event.getData());
-                break;
 
             case DEFAULT_EVENT:
                 processDefaultEvent(event.getEventId() ,event);
@@ -645,13 +642,6 @@ public abstract class GameConsumer {
         }
     }
 
-    private void doInnerMsg(Object msg) {
-        if (!(msg instanceof CallBackEvent)) {
-            return;
-        }
-        CallBackEvent callBackEvent = (CallBackEvent) msg;
-        callBackEvent.execte();
-    }
 
 
     private long allocateRequestId() {

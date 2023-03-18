@@ -38,7 +38,6 @@ public enum EventType {
 	TEXT_MESSAGE_COME(10),
 
 
-	INNER_MSG(11),
 
 
 	DEFAULT_EVENT(12),

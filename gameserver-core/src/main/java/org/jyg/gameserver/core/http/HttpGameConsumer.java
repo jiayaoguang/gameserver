@@ -6,6 +6,7 @@ import okhttp3.Response;
 import org.jyg.gameserver.core.consumer.MpscQueueGameConsumer;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.ExecutableEvent;
 import org.jyg.gameserver.core.startup.HttpClient;
 import org.jyg.gameserver.core.util.CallBackEvent;
 
@@ -50,7 +51,7 @@ public class HttpGameConsumer extends MpscQueueGameConsumer {
                     public void onFailure(Call call, IOException e) {
                         callBackEvent.setSuccess(false);
                         callBackEvent.setData(e);
-                        HttpGameConsumer.this.publicEvent(EventType.INNER_MSG, callBackEvent, null , eventId);
+                        HttpGameConsumer.this.publicEvent(EventType.PUBLISH_EVENT, new ExecutableEvent(callBackEvent::execte), null , eventId);
                     }
 
                     @Override
@@ -58,7 +59,7 @@ public class HttpGameConsumer extends MpscQueueGameConsumer {
                         callBackEvent.setSuccess(true);
                         callBackEvent.setData(response);
 
-                        HttpGameConsumer.this.publicEvent(EventType.INNER_MSG, callBackEvent, null , eventId);
+                        HttpGameConsumer.this.publicEvent(EventType.PUBLISH_EVENT, new ExecutableEvent(callBackEvent::execte), null , eventId);
                     }
                 });
             } else {
@@ -67,7 +68,7 @@ public class HttpGameConsumer extends MpscQueueGameConsumer {
                     public void onFailure(Call call, IOException e) {
                         callBackEvent.setSuccess(false);
                         callBackEvent.setData(e);
-                        HttpGameConsumer.this.publicEvent(EventType.INNER_MSG, callBackEvent, null , eventId);
+                        HttpGameConsumer.this.publicEvent(EventType.PUBLISH_EVENT, new ExecutableEvent(callBackEvent::execte), null , eventId);
                     }
 
                     @Override
@@ -75,7 +76,7 @@ public class HttpGameConsumer extends MpscQueueGameConsumer {
                         callBackEvent.setSuccess(true);
                         callBackEvent.setData(response);
 
-                        HttpGameConsumer.this.publicEvent(EventType.INNER_MSG, callBackEvent, null , eventId);
+                        HttpGameConsumer.this.publicEvent(EventType.PUBLISH_EVENT, new ExecutableEvent(callBackEvent::execte), null , eventId);
                     }
                 });
             }
