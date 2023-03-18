@@ -398,7 +398,7 @@ public class GameContext implements Lifecycle{
         instanceManager.putInstance(obj.getClass(),obj);
     }
 
-    public void putInstance(Class<?> clazz ) {
+    public void putInstance(Class<?> clazz ) throws IllegalAccessException, InvocationTargetException, InstantiationException {
         instanceManager.putInstance(clazz);
     }
 

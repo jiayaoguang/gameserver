@@ -5,9 +5,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.enums.EventType;
-import org.jyg.gameserver.core.event.ChannelMsgEvent;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
@@ -103,14 +101,7 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
                 throw e;
             }
 
-            EventData eventData = new EventData();
-            eventData.setChannel(ctx.channel());
-            eventData.setData(msgObj);
-            eventData.setEventId(msgId);
-
-            ChannelMsgEvent channelMsgEvent = new ChannelMsgEvent(ctx.channel(),eventData);
-
-            gameContext.getConsumerManager().publicEventToDefault(EventType.PUBLISH_EVENT, channelMsgEvent , msgId);
+            gameContext.getConsumerManager().publicEventToDefault(EventType.REMOTE_MSG_COME, msgObj, ctx.channel(), msgId);
 
 
         }catch (Exception e){

@@ -6,11 +6,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import org.jyg.gameserver.core.constant.MsgIdConst;
-import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.event.ChannelConnectEvent;
 import org.jyg.gameserver.core.event.ChannelDisconnectEvent;
-import org.jyg.gameserver.core.event.ChannelMsgEvent;
 import org.jyg.gameserver.core.msg.PingByteMsg;
 import org.jyg.gameserver.core.msg.ReadIdleMsgObj;
 import org.jyg.gameserver.core.util.AllUtil;
@@ -73,15 +71,7 @@ public class NettyConnectManageHandler extends ChannelDuplexHandler {
                 final String remoteAddress = AllUtil.getChannelRemoteAddr(ctx.channel());
                 Logs.DEFAULT_LOGGER.warn("NETTY CLIENT PIPELINE: IDLE outtime [{}]", remoteAddress);
             } else if (event.state().equals(IdleState.READER_IDLE)) {
-
-                EventData eventData = new EventData();
-                eventData.setChannel(ctx.channel());
-                eventData.setData(READ_IDLE_OBJ);
-                eventData.setEventId(MsgIdConst.READ_OUTTIME);
-
-                ChannelMsgEvent channelMsgEvent = new ChannelMsgEvent(ctx.channel(),eventData);
-
-                gameContext.getConsumerManager().publicEventToDefault(EventType.PUBLISH_EVENT, channelMsgEvent, MsgIdConst.READ_OUTTIME);
+                gameContext.getConsumerManager().publicEventToDefault(EventType.REMOTE_MSG_COME, READ_IDLE_OBJ, ctx.channel(), MsgIdConst.READ_OUTTIME);
             } else if (event.state().equals(IdleState.WRITER_IDLE)) {
 //                context.getConsumerManager().publicEventToDefault(EventType.BYTE_OBJ_MSG_COME, READ_IDLE_OBJ, ctx.channel(), MsgIdConst.WRITE_OUTTIME);
 

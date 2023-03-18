@@ -53,10 +53,6 @@ public class TcpClient extends AbstractBootstrap{
 
 	}
 
-	public TcpClient( int port) {
-		this(new GameContext(new MpscQueueGameConsumer()), "127.0.0.1", port);
-	}
-
 
 	public TcpClient(String host, int port) {
 		this(new GameContext(new MpscQueueGameConsumer()), host, port);

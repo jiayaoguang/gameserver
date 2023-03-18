@@ -31,8 +31,6 @@ public class EventManager implements Lifecycle {
         addEventListener(new ChannelMsgEventListener(gameConsumer));
         addEventListener(new HttpRequestEventListener(gameConsumer));
 
-        addEventListener(new InnerMsgEventListener(gameConsumer));
-
     }
 
     @Override
