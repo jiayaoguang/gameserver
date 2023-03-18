@@ -94,7 +94,6 @@ public class CreateTableUtil {
 
         String sql = sqlSB.toString();
 
-        Logs.DB.info("create table sql : {}",sql);
         return sql;
     }
 
