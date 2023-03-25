@@ -3,7 +3,6 @@ package org.jyg.gameserver.test.tcp.ping;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.TcpClient;
-import io.netty.channel.Channel;
 import org.jyg.gameserver.test.proto.p_test;
 import org.jyg.gameserver.test.proto.p_test.p_scene_sm_response_pong;
 
@@ -11,11 +10,10 @@ import org.jyg.gameserver.test.proto.p_test.p_scene_sm_response_pong;
  * Hello world!
  *
  */
-public class PingCLient {
+public class PingClient {
 	public static void main(String[] args) throws Exception {
 
-		ProtoProcessor<p_scene_sm_response_pong> pongProcessor = new ProtoProcessor<p_scene_sm_response_pong>(
-				p_scene_sm_response_pong.getDefaultInstance()) {
+		ProtoProcessor<p_scene_sm_response_pong> pongProcessor = new ProtoProcessor<p_scene_sm_response_pong>( ) {
 
 			@Override
 			public void process(Session session, p_scene_sm_response_pong msg) {

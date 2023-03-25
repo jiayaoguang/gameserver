@@ -23,7 +23,7 @@ public class PingServer {
     public static class PingProcessor extends ProtoProcessor<p_sm_scene_request_ping> {
 
         public PingProcessor() {
-            super(p_sm_scene_request_ping.getDefaultInstance());
+
         }
 
         @Override

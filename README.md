@@ -39,10 +39,6 @@ Maven
     
         public static class PingProcessor extends ProtoProcessor<p_sm_scene_request_ping> {
     
-            public PingProcessor() {
-                super(p_sm_scene_request_ping.getDefaultInstance());
-            }
-    
             @Override
             public void process(Session session, p_sm_scene_request_ping msg) {
                 System.out.println("ok , i see ping");
