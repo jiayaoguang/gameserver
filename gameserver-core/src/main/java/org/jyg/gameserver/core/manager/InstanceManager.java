@@ -18,8 +18,6 @@ public class InstanceManager implements Lifecycle {
 
     private final Map<Class<?>, Object> instanceMap;
 
-    private final GameConsumer gameConsumer;
-    private final GameContext gameContext;
 
     public InstanceManager() {
         this(null , null);
@@ -34,9 +32,19 @@ public class InstanceManager implements Lifecycle {
     }
 
     public InstanceManager(GameConsumer gameConsumer, GameContext gameContext) {
-        this.gameContext = gameContext;
         this.instanceMap = new LinkedHashMap<>();
-        this.gameConsumer = gameConsumer;
+
+        if(gameConsumer != null){
+            putInstance(gameConsumer);
+            if(gameConsumer.getGameContext() != null){
+                putInstance(gameConsumer.getGameContext());
+            }
+        }
+
+        if(gameContext != null && getInstance(GameContext.class) == null){
+            putInstance(gameContext);
+        }
+
     }
 
 
@@ -86,20 +94,20 @@ public class InstanceManager implements Lifecycle {
 
 
         if(isStart){
-            Logs.DEFAULT_LOGGER.error(String.format(" server is start putInstance %s fail" , clazz.getCanonicalName()));
+            Logs.DEFAULT_LOGGER.error(" server is start put class {} Instance fail" , clazz.getCanonicalName());
             throw new IllegalArgumentException("server is start putInstance fail : " + clazz.getCanonicalName());
         }
 
 
         if(getInstance(supperClazz) != null){
-            Logs.DEFAULT_LOGGER.error(String.format(" already havs this instance putInstance %s fail" , clazz.getCanonicalName()));
+            Logs.DEFAULT_LOGGER.error(" already havs this instance putInstance {} fail" , clazz.getCanonicalName());
             throw new IllegalArgumentException("already havs this instance putInstance fail : " + clazz.getCanonicalName());
         }
 
         Constructor<?>[] constructors = clazz.getConstructors();
 
         if (constructors.length != 1) {
-            throw new InstantiationException(" constru tors.length != 1 : " + constructors.length + " type : " + clazz.getCanonicalName());
+            throw new InstantiationException(" constructors.length != 1 : " + constructors.length + " type : " + clazz.getCanonicalName());
         }
 
         Constructor<?> constructor = constructors[0];
@@ -149,13 +157,13 @@ public class InstanceManager implements Lifecycle {
 
 
         if(isStart){
-            Logs.DEFAULT_LOGGER.error(String.format(" server is start putInstance %s fail" , clazz.getCanonicalName()));
+            Logs.DEFAULT_LOGGER.error(" server is start putInstance {} fail" , clazz.getCanonicalName());
             throw new IllegalArgumentException("server is start putInstance fail : " + clazz.getCanonicalName());
         }
 
 
         if(getInstance(clazz) != null){
-            Logs.DEFAULT_LOGGER.error(String.format(" already havs this instance putInstance %s fail" , clazz.getCanonicalName()));
+            Logs.DEFAULT_LOGGER.error(" already havs this instance putInstance {} fail" , clazz.getCanonicalName());
             throw new IllegalArgumentException("already havs this instance putInstance fail : " + clazz.getCanonicalName());
         }
 
@@ -165,23 +173,17 @@ public class InstanceManager implements Lifecycle {
     }
 
 
-    private synchronized void removeInstance(Class<?> clazz) throws IllegalAccessException, InvocationTargetException, InstantiationException {
-
+    private synchronized void removeInstance(Class<?> clazz) {
+        if(isStart){
+            Logs.DEFAULT_LOGGER.error(" server is start putInstance {} fail" , clazz.getCanonicalName());
+            throw new IllegalArgumentException("server is start removeInstance fail : " + clazz.getCanonicalName());
+        }
         instanceMap.remove(clazz);
 
     }
 
     @SuppressWarnings("unchecked")
     public <T> T getInstance(Class<T> clazz) {
-
-        if(clazz == GameContext.class){
-            return (T) gameContext;
-        }
-
-        if(GameConsumer.class == clazz){
-            return (T) gameConsumer;
-        }
-
 
         return (T) instanceMap.get(clazz);
     }
