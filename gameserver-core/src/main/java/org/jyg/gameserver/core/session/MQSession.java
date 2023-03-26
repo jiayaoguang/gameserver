@@ -16,7 +16,7 @@ public class MQSession extends Session {
 
     @Override
     public void start() {
-
+        // do nothing
     }
 
     @Override

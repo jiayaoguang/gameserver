@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * create by jiayaoguang on 2020/5/3
  */
-public class GameContext implements Lifecycle{
+public class GameContext{
 
     public static final String DEFAULT_CONFIG_FILE_NAME = "jyg.properties";
 //    private String configFileName = DEFAULT_CONFIG_FILE_NAME;

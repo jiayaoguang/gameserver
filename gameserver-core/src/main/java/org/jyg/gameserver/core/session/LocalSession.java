@@ -16,7 +16,7 @@ public class LocalSession extends Session {
 
     @Override
     public void start() {
-
+        // do nothing
     }
 
     @Override

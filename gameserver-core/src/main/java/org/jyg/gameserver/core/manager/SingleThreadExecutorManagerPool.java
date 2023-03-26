@@ -29,9 +29,6 @@ public class SingleThreadExecutorManagerPool {
 		this.defaultGameConsumer = defaultGameConsumer;
 	}
 
-	public SingleThreadExecutorManager getSingleThreadExecutorManager(Session session){
-		return getSingleThreadExecutorManager(session.getSessionId());
-	}
 
 	public SingleThreadExecutorManager getSingleThreadExecutorManager(long playerUid){
 		int executorIndex = (int)(playerUid % singleThreadExecutorManagerList.size());

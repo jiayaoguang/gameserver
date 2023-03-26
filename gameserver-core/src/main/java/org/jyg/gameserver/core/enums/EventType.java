@@ -34,10 +34,6 @@ public enum EventType {
 	MQ_MSG_COME(9),
 
 
-	@Deprecated
-	TEXT_MESSAGE_COME(10),
-
-
 
 
 	DEFAULT_EVENT(12),

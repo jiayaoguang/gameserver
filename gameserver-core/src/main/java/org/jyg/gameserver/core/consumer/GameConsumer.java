@@ -20,7 +20,6 @@ import org.jyg.gameserver.core.processor.*;
 import org.jyg.gameserver.core.session.LocalSession;
 import org.jyg.gameserver.core.session.MQSession;
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.session.TcpChannelSession;
 import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.timer.DelayCloseTimer;
 import org.jyg.gameserver.core.timer.TimerManager;
@@ -58,10 +57,9 @@ public abstract class GameConsumer {
 
     private final ChannelManager channelManager;
 
-    private Map<String, HttpProcessor> httpProcessorMap = new HashMap<>(MAP_DEFAULT_SIZE,MAP_DEFAULT_LOADFACTOR);
-    private Int2ObjectMap<Processor> protoProcessorMap = new Int2ObjectOpenHashMap<>(MAP_DEFAULT_SIZE,MAP_DEFAULT_LOADFACTOR);
+    private final Map<String, HttpProcessor> httpProcessorMap = new HashMap<>(MAP_DEFAULT_SIZE,MAP_DEFAULT_LOADFACTOR);
+    private final Int2ObjectMap<Processor> protoProcessorMap = new Int2ObjectOpenHashMap<>(MAP_DEFAULT_SIZE,MAP_DEFAULT_LOADFACTOR);
 
-    private TextProcessor textProcessor;
 
 
 
@@ -136,9 +134,7 @@ public abstract class GameConsumer {
     }
 
 
-
-
-    public synchronized final void start(){
+    public final synchronized void start(){
         beforeStart();
         if(isStart){
             throw new IllegalStateException("already start");
@@ -160,7 +156,7 @@ public abstract class GameConsumer {
 //        this.instanceManager.start();
 //    }
 
-    public synchronized final void stop(){
+    public final synchronized void stop(){
         if(!isStart){
             return;
         }
@@ -269,17 +265,6 @@ public abstract class GameConsumer {
         protoProcessorMap.put(msgId, processor);
     }
 
-    /**
-     * 注册普通socket事件
-     *
-     * @param textProcessor textProcessor
-     */
-    @Deprecated
-    public void setTextProcessor(TextProcessor textProcessor) {
-        textProcessor.setGameConsumer(this);
-        this.textProcessor = textProcessor;
-
-    }
 
 
     /**
@@ -328,23 +313,6 @@ public abstract class GameConsumer {
     }
 
 
-    /**
-     * 处理普通socket事件
-     *
-     * @param session session
-     * @param event   event
-     */
-    @Deprecated
-    public void processTextEvent(Session session, EventData<String> event) {
-//		MessageLite msg = event.getData();
-
-        if (textProcessor == null) {
-            Logs.DEFAULT_LOGGER.info("textProcessor == null :" + event.getEventId());
-            return;
-        }
-
-        textProcessor.process(session, event);
-    }
 
     public void processHttpEvent(EventData<Request> event) {
 
@@ -587,15 +555,6 @@ public abstract class GameConsumer {
                 break;
             }
 
-            case TEXT_MESSAGE_COME: {
-                Session session = null;
-                if (isMainConsumer()) {
-                    session = channelManager.getSession(event.getChannel());
-                }
-                this.processTextEvent(session, event);
-                break;
-            }
-
 
             case DEFAULT_EVENT:
                 processDefaultEvent(event.getEventId() ,event);
@@ -744,7 +703,7 @@ public abstract class GameConsumer {
 
     public void setAllHttpLocalPermission(){
         if(isStart){
-            throw new RuntimeException("already start");
+            throw new UnsupportedOperationException("already start");
         }
 
         OnlyLocalHttpMsgInterceptor onlyLocalHttpMsgFilter = new OnlyLocalHttpMsgInterceptor();
