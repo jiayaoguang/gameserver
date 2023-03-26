@@ -35,14 +35,10 @@ public class EventLoopGroupManager implements Lifecycle{
         return workGroup;
     }
 
-    public void stopAllEventLoop() {
-        this.bossGroup.shutdownGracefully();
-        this.workGroup.shutdownGracefully();
-    }
 
     @Override
     public void start() {
-
+        //do nothing
     }
 
     @Override

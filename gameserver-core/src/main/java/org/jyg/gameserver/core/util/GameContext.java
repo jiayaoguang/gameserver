@@ -110,7 +110,10 @@ public class GameContext implements Lifecycle{
 
 
 
-        this.instanceManager = new InstanceManager(this);
+        this.instanceManager = new InstanceManager();
+        this.instanceManager.putInstance(this);
+        this.instanceManager.putInstance(this.eventLoopGroupManager);
+        this.instanceManager.putInstance(this.consumerManager);
 
 
         initCommonProcessor();
@@ -319,6 +322,7 @@ public class GameContext implements Lifecycle{
             AllUtil.println(" already start .... ");
             return;
         }
+
         this.isStart = true;
         this.startTime = System.currentTimeMillis();
 
@@ -329,8 +333,6 @@ public class GameContext implements Lifecycle{
 
         this.instanceManager.start();
 
-        this.getConsumerManager().start();
-
 
 
 
@@ -338,11 +340,10 @@ public class GameContext implements Lifecycle{
     }
 
     public synchronized void stop() {
-
-
-        getConsumerManager().stop();
-        getEventLoopGroupManager().stop();
-
+        if(!isStart){
+            return;
+        }
+        isStart = false;
 
         this.instanceManager.stop();
 

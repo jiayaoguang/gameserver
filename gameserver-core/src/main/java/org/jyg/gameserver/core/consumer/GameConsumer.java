@@ -95,7 +95,10 @@ public abstract class GameConsumer {
 
 
     public GameConsumer() {
-        this.instanceManager = new InstanceManager(this);
+        this.instanceManager = new InstanceManager();
+
+        instanceManager.putInstance(this);
+
         this.timerManager = new TimerManager();
         this.channelManager = new ChannelManager(this);
         this.classLoadManager = new ClassLoadManager("loadClasses");
@@ -158,8 +161,13 @@ public abstract class GameConsumer {
 //    }
 
     public synchronized final void stop(){
+        if(!isStart){
+            return;
+        }
+        isStart = false;
+
         instanceManager.stop();
-        channelManager.stop();
+
         doStop();
     }
 

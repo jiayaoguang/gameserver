@@ -26,7 +26,7 @@ public class TestInstance {
 
     @Test
     public void testInstance() throws Exception{
-        InstanceManager instanceManager = new InstanceManager((GameContext) null);
+        InstanceManager instanceManager = new InstanceManager();
         instanceManager.putInstance(ComputerCPU.class);
 
         instanceManager.putInstance(Computer.class);

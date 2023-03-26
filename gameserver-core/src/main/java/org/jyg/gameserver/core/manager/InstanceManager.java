@@ -20,31 +20,7 @@ public class InstanceManager implements Lifecycle {
 
 
     public InstanceManager() {
-        this(null , null);
-    }
-
-    public InstanceManager(GameConsumer gameConsumer) {
-        this(gameConsumer, gameConsumer.getGameContext());
-    }
-
-    public InstanceManager(GameContext gameContext) {
-        this(null , gameContext);
-    }
-
-    public InstanceManager(GameConsumer gameConsumer, GameContext gameContext) {
         this.instanceMap = new LinkedHashMap<>();
-
-        if(gameConsumer != null){
-            putInstance(gameConsumer);
-            if(gameConsumer.getGameContext() != null){
-                putInstance(gameConsumer.getGameContext());
-            }
-        }
-
-        if(gameContext != null && getInstance(GameContext.class) == null){
-            putInstance(gameContext);
-        }
-
     }
 
 
@@ -58,6 +34,14 @@ public class InstanceManager implements Lifecycle {
 
 
         for(Object obj : instanceMap.values() ){
+
+            if(obj instanceof GameContext){
+                continue;
+            }
+            if(obj instanceof GameConsumer){
+                continue;
+            }
+
             if(obj instanceof Lifecycle){
                 Lifecycle lifecycle = (Lifecycle)obj;
                 lifecycle.start();
@@ -70,6 +54,14 @@ public class InstanceManager implements Lifecycle {
     @Override
     public void stop(){
         for(Object obj : instanceMap.values() ){
+
+            if(obj instanceof GameContext){
+                continue;
+            }
+            if(obj instanceof GameConsumer){
+                continue;
+            }
+
             if(obj instanceof Lifecycle){
                 Lifecycle lifecycle = (Lifecycle)obj;
                 lifecycle.stop();

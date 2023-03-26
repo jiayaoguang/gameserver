@@ -9,6 +9,7 @@ import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.processor.HttpProcessor;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.util.GameContext;
+import org.jyg.gameserver.core.util.Logs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -147,6 +148,14 @@ public abstract class AbstractBootstrap implements Lifecycle {
 
     protected void doStop() {
 
+    }
+
+
+    public void addStopHook(){
+        Runtime.getRuntime().addShutdownHook(new Thread(()->{
+            Logs.DEFAULT_LOGGER.info("exec stop shutdownHook");
+            stop();
+        }));
     }
 
 }
