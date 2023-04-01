@@ -1,6 +1,8 @@
 package org.jyg.gameserver.core.intercept;
 
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.HttpRequestEvent;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.session.Session;
 
@@ -9,11 +11,15 @@ import org.jyg.gameserver.core.session.Session;
  */
 public abstract class HttpMsgInterceptor implements MsgInterceptor<Request> {
 
-    public final boolean intercept(Session session , EventData<Request> eventData){
-        return filter(eventData);
+    @Override
+    public final boolean intercept(Session session , MsgEvent<Request> msgEvent){
+        if(msgEvent instanceof HttpRequestEvent){
+            return filter((HttpRequestEvent) msgEvent);
+        }
+        return false;
     }
 
 
-    public abstract boolean filter(EventData<Request> eventData);
+    public abstract boolean filter(HttpRequestEvent httpRequestEvent);
 
 }
