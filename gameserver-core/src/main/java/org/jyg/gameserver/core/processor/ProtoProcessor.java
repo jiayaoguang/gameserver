@@ -3,6 +3,7 @@ package org.jyg.gameserver.core.processor;
 import com.google.protobuf.MessageLite;
 import com.google.protobuf.Parser;
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.session.Session;
 
@@ -88,8 +89,8 @@ public abstract class ProtoProcessor<T extends MessageLite> extends AbstractProc
 
 
 	@Override
-	public void process(Session session, EventData<T> event) {
-		process(session,event.getData());
+	public void process(Session session, MsgEvent<T> event) {
+		process(session,event.getMsgData());
 	}
 //	public void process(LogicEvent<T> event) {
 ////		System.out.println("eventid : "+event.getEventId());

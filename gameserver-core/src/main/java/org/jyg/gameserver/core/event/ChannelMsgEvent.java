@@ -6,7 +6,8 @@ import org.jyg.gameserver.core.data.EventData;
 /**
  * create by jiayaoguang on 2022/11/27
  */
-public class ChannelMsgEvent implements Event {
+@Deprecated
+public class ChannelMsgEvent extends Event {
 
     private final Channel channel;
 

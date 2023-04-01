@@ -1,6 +1,6 @@
 package org.jyg.gameserver.core.msg;
 
-import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.Event;
 
 import java.util.Map;
 
@@ -11,28 +11,15 @@ public class ConsumerEventDataMsg implements ByteMsgObj{
 
     private int toConsumerId;;
 
-    private EventType eventType;
 
     private int eventId;
 
-    private int fromConsumerId;
-    private long requestId;
 
     private String childChooseId;
 
 
-    private Object data;
+    private Event event;
 
-
-    private Map<String, Object> params;
-
-    public EventType getEventType() {
-        return eventType;
-    }
-
-    public void setEventType(EventType eventType) {
-        this.eventType = eventType;
-    }
 
 
     public int getEventId() {
@@ -43,21 +30,6 @@ public class ConsumerEventDataMsg implements ByteMsgObj{
         this.eventId = eventId;
     }
 
-    public int getFromConsumerId() {
-        return fromConsumerId;
-    }
-
-    public void setFromConsumerId(int fromConsumerId) {
-        this.fromConsumerId = fromConsumerId;
-    }
-
-    public long getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(long requestId) {
-        this.requestId = requestId;
-    }
 
     public String getChildChooseId() {
         return childChooseId;
@@ -68,22 +40,6 @@ public class ConsumerEventDataMsg implements ByteMsgObj{
     }
 
 
-    public Object getData() {
-        return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
-    }
-
-
-    public Map<String, Object> getParams() {
-        return params;
-    }
-
-    public void setParams(Map<String, Object> params) {
-        this.params = params;
-    }
 
 
     public int getToConsumerId() {
@@ -93,4 +49,14 @@ public class ConsumerEventDataMsg implements ByteMsgObj{
     public void setToConsumerId(int toConsumerId) {
         this.toConsumerId = toConsumerId;
     }
+
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
 }

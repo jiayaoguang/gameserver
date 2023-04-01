@@ -6,7 +6,7 @@ import org.jyg.gameserver.core.event.Event;
 /**
  * create by jiayaoguang on 2022/11/27
  */
-public class ChannelConnectEvent implements Event {
+public class ChannelConnectEvent extends Event {
 
     private final Channel channel;
 

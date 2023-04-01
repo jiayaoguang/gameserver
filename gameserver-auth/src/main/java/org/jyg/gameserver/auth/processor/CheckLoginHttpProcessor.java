@@ -1,5 +1,6 @@
 package org.jyg.gameserver.auth.processor;
 
+import cn.hutool.core.util.RandomUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -10,6 +11,8 @@ import org.jyg.gameserver.core.util.Logs;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 //import org.jyg.gameserver.core.util.redis.RedisCacheClient;
 
 
@@ -21,6 +24,8 @@ public class CheckLoginHttpProcessor extends HttpProcessor {
 //	private final RedisCacheClient redisCacheClient;
 
 	private final JsonMapper jsonMapper = new JsonMapper();
+
+	private Random random = new Random();
 
 
 	public CheckLoginHttpProcessor() {
@@ -47,9 +52,10 @@ public class CheckLoginHttpProcessor extends HttpProcessor {
 			}
 			return;
 		}
+		int chooseExecutorId = random.nextInt();
 
 
-		getContext().getSingleThreadExecutorManager(request.getRequestid()).execute(()->{
+		getContext().getSingleThreadExecutorManager(chooseExecutorId).execute(()->{
 
 			String token = null;
 			try {

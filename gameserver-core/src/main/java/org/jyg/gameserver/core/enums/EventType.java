@@ -3,6 +3,7 @@ package org.jyg.gameserver.core.enums;
 /**
  * created by jiayaoguang at 2017年12月12日
  */
+@Deprecated
 public enum EventType {
 
 	UNKNOWN(0),

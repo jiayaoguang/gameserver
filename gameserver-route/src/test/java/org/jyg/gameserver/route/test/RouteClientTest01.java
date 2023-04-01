@@ -1,6 +1,7 @@
 package org.jyg.gameserver.route.test;
 
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.TcpClient;
@@ -20,7 +21,7 @@ public class RouteClientTest01
 
 
 			@Override
-			public void process(Session session, EventData<ChatReplyMsgObj> event) {
+			public void process(Session session, MsgEvent<ChatReplyMsgObj> event) {
 
 			}
 		};

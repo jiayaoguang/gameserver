@@ -1,6 +1,7 @@
 package org.jyg.gameserver.core.processor;
 
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.msg.ReadIdleMsgObj;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.AllUtil;
@@ -16,7 +17,7 @@ public class ReadOutTimeProcessor extends ByteMsgObjProcessor<ReadIdleMsgObj> {
     }
 
     @Override
-    public void process(Session session, EventData<ReadIdleMsgObj> event) {
+    public void process(Session session, MsgEvent<ReadIdleMsgObj> event) {
 
 //        getConsumer().getChannelManager().getSession()
 

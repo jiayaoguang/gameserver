@@ -1,7 +1,7 @@
 package org.jyg.gameserver.core.consumer;
 
 import com.google.protobuf.MessageLite;
-import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.ConsumerDefaultEvent;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.util.Logs;
@@ -24,7 +24,9 @@ public abstract class MQPushGameConsumer extends MpscQueueGameConsumer {
 
 
     @Override
-    protected void processDefaultEvent(int eventId , EventData eventData) {
+    public void processDefaultEvent(ConsumerDefaultEvent eventData) {
+
+        int eventId = eventData.getEventId();
 
         int msgId = 0;
 

@@ -1,30 +1,21 @@
 package org.jyg.gameserver.core.consumer;
 
-import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.anno.InvokeName;
 import org.jyg.gameserver.core.data.EventData;
-import org.jyg.gameserver.core.data.EventExtData;
 import org.jyg.gameserver.core.data.RemoteInvokeData;
-import org.jyg.gameserver.core.enums.EventType;
-import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
-import org.jyg.gameserver.core.event.Event;
-import org.jyg.gameserver.core.event.GameEventListener;
-import org.jyg.gameserver.core.event.EventManager;
+import org.jyg.gameserver.core.event.*;
 import org.jyg.gameserver.core.intercept.OnlyLocalHttpMsgInterceptor;
+import org.jyg.gameserver.core.invoke.IRemoteInvoke;
 import org.jyg.gameserver.core.manager.*;
-import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.processor.*;
-import org.jyg.gameserver.core.session.LocalSession;
-import org.jyg.gameserver.core.session.MQSession;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.timer.DelayCloseTimer;
 import org.jyg.gameserver.core.timer.TimerManager;
 import org.jyg.gameserver.core.util.*;
-import org.jyg.gameserver.core.invoke.IRemoteInvoke;
 import org.slf4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
@@ -174,37 +165,25 @@ public abstract class GameConsumer {
 //        publicEvent(evenType, data, channel, 0);
 //    }
 
-    public void publicEvent(EventType evenType, Object data, Channel channel, int eventId){
-        publicEvent(evenType, data, channel, eventId , EventData.EMPTY_EVENT_EXT_DATA);
-    }
+//    public void publicEvent(EventType evenType, Object data, Channel channel, int eventId){
+//        publicEvent(evenType, data, channel, eventId , EventData.EMPTY_EVENT_EXT_DATA);
+//    }
 
-    public void publicEventToMain(int targetConsumerId,EventType evenType, Object data, Channel channel, int eventId , EventExtData eventExtData , ResultHandler resultHandler){
-        long requestId;
-        if(resultHandler != null){
-            requestId = registerCallBackMethod(resultHandler);
-        }else {
-            requestId = eventExtData.requestId;
-        }
+//    public void publicEventToMain(int targetConsumerId,EventType evenType, Object data, Channel channel, int eventId , EventExtData eventExtData , ResultHandler resultHandler){
+//        long requestId;
+//        if(resultHandler != null){
+//            requestId = registerCallBackMethod(resultHandler);
+//        }else {
+//            requestId = eventExtData.requestId;
+//        }
+//
+//        getGameContext().getConsumerManager().publicEvent(targetConsumerId, evenType, data, channel, eventId, new EventExtData(getId(), requestId, eventExtData.childChooseId));
+//    }
 
-        getGameContext().getConsumerManager().publicEvent(targetConsumerId, evenType, data, channel, eventId, new EventExtData(getId(), requestId, eventExtData.childChooseId));
-    }
+//    public void publicCallBackEvent(int targetConsumerId, Object data,  long requestId ){
+//        getGameContext().getConsumerManager().publicEvent(targetConsumerId, new ResultReturnEvent(requestId , 0 , data));
+//    }
 
-    public void publicCallBackEvent(int targetConsumerId, Object data,  long requestId ){
-        getGameContext().getConsumerManager().publicEvent(targetConsumerId, EventType.RESULT_CALL_BACK, data, null, 0, new EventExtData(0, requestId));
-    }
-
-
-    public void publicEvent(EventType evenType, Object data, Channel channel, int eventId , EventExtData eventExtData) {
-
-        EventData<Object> event = new EventData<>();
-        event.setChannel(channel);
-        event.setEventType(evenType);
-        event.setData(data);
-        event.setEventId(eventId);
-        event.setEventExtData(eventExtData);
-
-        publicEvent(event);
-    }
 
 
     public abstract void publicEvent(EventData<?> eventData);
@@ -266,37 +245,29 @@ public abstract class GameConsumer {
     }
 
 
-
-    /**
-     * 处理普通socket事件
-     *
-     * @param session session
-     * @param event   event
-     */
-    public void processEventMsg(Session session, EventData<?> event) {
-//		MessageLite msg = event.getData();
-        Processor processor = protoProcessorMap.get(event.getEventId());
+    public void processEventMsg(Session session, MsgEvent<?> event) {
+        Processor processor = protoProcessorMap.get(event.getMsgId());
 
         if (processor == null) {
-            String name = event.getData() == null ? "null" :event.getData().getClass().getSimpleName();
+            String name = event.getMsgData() == null ? "null" :event.getMsgData().getClass().getSimpleName();
 
             processor = this.unknownProcessor;
             if(processor == null){
-                Logs.DEFAULT_LOGGER.info("processor not found, eventid : {} , msg : {}" , event.getEventId() , name);
+                Logs.DEFAULT_LOGGER.info("processor not found, msgId : {} , msg : {}" , event.getMsgId() , name);
                 return;
             }
         }
 
         String msgName;
-        if(event.getData() != null){
-            msgName = event.getData().getClass().getCanonicalName();
+        if(event.getMsgData() != null){
+            msgName = event.getMsgData().getClass().getCanonicalName();
         }else {
             msgName = "unknown";
         }
 
         if(!processor.checkIntercepts(session , event)){
 
-            Logs.DEFAULT_LOGGER.info("refuse processor msgId {} , msgName {}", event.getEventId(),msgName);
+            Logs.DEFAULT_LOGGER.info("refuse processor msgId {} , msgName {}", event.getMsgId(),msgName);
             return;
         }
 
@@ -307,16 +278,19 @@ public abstract class GameConsumer {
 
 
 
-    protected void processDefaultEvent(int eventId , EventData eventData) {
 
 
+
+    public void processDefaultEvent(ConsumerDefaultEvent eventData) {
+
+        Logs.DEFAULT_LOGGER.error("not override this method");
     }
 
 
 
-    public void processHttpEvent(EventData<Request> event) {
+    public void processHttpEvent(HttpRequestEvent event) {
 
-        HttpProcessor httpProcessor = getHttpProcessor(event.getData().noParamUri());
+        HttpProcessor httpProcessor = getHttpProcessor(event.getMsgData().noParamUri());
 
         if(!httpProcessor.checkIntercepts(null , event)){
             Logs.DEFAULT_LOGGER.info("refuse httpProcessor path {}", httpProcessor.getPath());
@@ -486,7 +460,12 @@ public abstract class GameConsumer {
             doEvent(event);
             long costMill = (System.nanoTime() - startNano)/1000000L;
             if(costMill > 10){
-                Logs.DEFAULT_LOGGER.error("{} event  cost more time {} data : {}",getClass().getSimpleName(), costMill, (event.getData() == null? "null" : event.getData().getClass().getSimpleName()));
+                if(event.getEvent() instanceof MsgEvent){
+                    MsgEvent msgEvent = (MsgEvent)event.getEvent();
+                    Logs.DEFAULT_LOGGER.error("{} event  cost more time {} data : {}",getClass().getSimpleName(), costMill, (msgEvent.getMsgData() == null? "null" :msgEvent.getMsgData().getClass().getSimpleName()));
+                }else {
+                    Logs.DEFAULT_LOGGER.error("{} event  cost more time {} data : {}",getClass().getSimpleName(), costMill, (event.getEvent() == null? "null" : event.getEvent().getClass().getSimpleName()));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -509,104 +488,7 @@ public abstract class GameConsumer {
 
 
     protected void doEvent(EventData event) {
-        switch (event.getEventType()) {
-
-//			case CLIENT_SOCKET_CONNECT_ACTIVE:
-//				dispatcher.as_on_client_active(event);
-//				break;
-//			case CLIENT_SOCKET_CONNECT_INACTIVE:
-//				dispatcher.as_on_client_inactive(event);
-//				break;
-
-            case SOCKET_CONNECT_ACTIVE:
-//				dispatcher.as_on_inner_server_active(event);
-                if (isMainConsumer()) {
-                    channelManager.doLink(event.getChannel());
-                }else {
-                    Logs.DEFAULT_LOGGER.error("event SOCKET_CONNECT_ACTIVE only in DefaultConsumer");
-                }
-                break;
-            case SOCKET_CONNECT_INACTIVE:
-                if (isMainConsumer()) {
-                    channelManager.doUnlink(event.getChannel());
-                }else {
-                    Logs.DEFAULT_LOGGER.error("event SOCKET_CONNECT_INACTIVE only in DefaultConsumer");
-                }
-                break;
-
-            case HTTP_MESSAGE_COME:
-                ((Request) event.getData()).setRequestid(allocateRequestId());
-                this.processHttpEvent(event);
-                break;
-//            case ON_MESSAGE_COME:
-//				dispatcher.webSocketProcess(event);
-//				break;
-            case REMOTE_MSG_COME:{
-                Session session = null;
-                if (isMainConsumer()) {
-                    session = channelManager.getSession(event.getChannel());
-                }
-                this.processEventMsg(session, event);
-                break;
-            }
-            case MQ_MSG_COME:{
-                Session session = new MQSession(event.getFromConsumerId(), gameContext);
-                this.processEventMsg(session, event);
-                break;
-            }
-
-
-            case DEFAULT_EVENT:
-                processDefaultEvent(event.getEventId() ,event);
-                break;
-            case RESULT_CALL_BACK:
-                resultHandlerManager.onCallBack(event.getEventExtData().requestId, event.getEventId(), event.getData());
-                break;
-
-            case CLIENT_SOCKET_CONNECT_ACTIVE:
-                if (isMainConsumer()) {
-                    channelManager.doTcpClientLink(event.getChannel());
-                }else {
-                    Logs.DEFAULT_LOGGER.error("event CLIENT_SOCKET_CONNECT_ACTIVE only in DefaultConsumer");
-                }
-                break;
-            case CLIENT_SOCKET_CONNECT_INACTIVE:
-                if (isMainConsumer()) {
-                    channelManager.doTcpClientUnlink(event.getChannel());
-                }else {
-                    Logs.DEFAULT_LOGGER.error("event SOCKET_CONNECT_INACTIVE only in DefaultConsumer");
-                }
-                break;
-
-            case LOCAL_MSG_COME:{
-                Session session = new LocalSession(event.getFromConsumerId(), gameContext);
-                this.processEventMsg(session, event);
-                break;
-            }
-            case REMOTE_UNKNOWN_MSG_COME:{
-                if(unknownMsgHandler != null){
-                    Session session = null;
-                    if (isMainConsumer()) {
-                        session = channelManager.getSession(event.getChannel());
-                    }
-                    unknownMsgHandler.process(session, event.getEventId(), (byte[]) event.getData());
-                }else {
-                    Logs.CONSUMER.error(" unknown msgId {} from channel {}", event.getEventId(), AllUtil.getChannelRemoteAddr(event.getChannel()));
-                }
-                break;
-            }
-            case PUBLISH_EVENT:
-                Object data = event.getData();
-                if(data instanceof Event){
-                    getEventManager().publishEvent((((Event)data)));
-                }else {
-                    Logs.CONSUMER.error("publish event fail , data type : {} not event ",data.getClass().getName());
-                }
-                break;
-
-            default:
-                throw new IllegalArgumentException("unknown channelEventType <" + event.getEventType() + ">");
-        }
+        getEventManager().publishEvent(event.getEvent());
     }
 
 
@@ -713,6 +595,9 @@ public abstract class GameConsumer {
         }
     }
 
+    public UnknownMsgHandler getUnknownMsgHandler() {
+        return unknownMsgHandler;
+    }
 
     public void setUnknownMsgHandler(UnknownMsgHandler unknownMsgHandler) {
         this.unknownMsgHandler = unknownMsgHandler;
@@ -722,5 +607,10 @@ public abstract class GameConsumer {
     public void setUnknownProcessor(AbstractProcessor<Object> unknownProcessor) {
         this.unknownProcessor = unknownProcessor;
         this.unknownProcessor.setGameConsumer(this);
+    }
+
+
+    public ResultHandlerManager getResultHandlerManager() {
+        return resultHandlerManager;
     }
 }

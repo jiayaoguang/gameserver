@@ -1,6 +1,6 @@
 package org.jyg.gameserver.test.tcp.ws;
 
-import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
@@ -18,9 +18,9 @@ public class DrawWsServer {
 
         gameServerBootstrap.getGameContext().getMainGameConsumer().addProcessor(new ByteMsgObjProcessor<DrawMsg>(DrawMsg.class) {
             @Override
-            public void process(Session session, EventData<DrawMsg> data) {
+            public void process(Session session, MsgEvent<DrawMsg> data) {
                 for (Session otherSession : getGameConsumer().getChannelManager().getSessions()) {
-                    otherSession.writeMessage(data.getData());
+                    otherSession.writeMessage(data.getMsgData());
                 }
 
             }

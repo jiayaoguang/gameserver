@@ -8,6 +8,7 @@ import org.jyg.gameserver.core.processor.HttpProcessor;
 import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.core.util.TokenUtil;
 
+import java.util.Random;
 import java.util.Set;
 
 //import org.jyg.gameserver.core.util.redis.RedisCacheClient;
@@ -18,6 +19,9 @@ import java.util.Set;
 public class LoginHttpProcessor extends HttpProcessor {
 
 //	private final RedisCacheClient redisCacheClient;
+
+
+	private Random random = new Random();
 
 	public LoginHttpProcessor() {
 //		this.redisCacheClient = redisCacheClient;
@@ -38,7 +42,7 @@ public class LoginHttpProcessor extends HttpProcessor {
 
 		String token = TokenUtil.getToken();
 
-		getContext().getSingleThreadExecutorManager(request.getRequestid()).execute(()->{
+		getContext().getSingleThreadExecutorManager(random.nextInt()).execute(()->{
 
 			String setResult = null;
 			try {

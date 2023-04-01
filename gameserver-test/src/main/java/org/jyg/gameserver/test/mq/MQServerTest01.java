@@ -1,9 +1,10 @@
 package org.jyg.gameserver.test.mq;
 
 import org.jyg.gameserver.core.consumer.RabbitMQPushGameConsumer;
-import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.MQMsgEvent;
 import org.jyg.gameserver.core.net.RabbitMQConnector;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
+import org.jyg.gameserver.core.session.MQSession;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.test.proto.MsgChat;
@@ -64,9 +65,11 @@ public class MQServerTest01 {
         bootstrap.addConnector(new RabbitMQConnector(bootstrap.getGameContext(), 0, QUEUE_NAME, EXCHANGE_NAME));
         bootstrap.start();
 
+        MQMsgEvent mqMsgEvent = new MQMsgEvent( 105 ,MsgChat.newBuilder().setContent("1111").setId(1).build(),new MQSession( 0 , bootstrap.getGameContext() ));
 
-        bootstrap.getGameContext().getConsumerManager().publicEvent(mqConsumer.getId() , EventType.DEFAULT_EVENT  , MsgChat.newBuilder().setContent("1111").setId(1).build(),0);
-        bootstrap.getGameContext().getConsumerManager().publicEvent(mqConsumer.getId() , EventType.DEFAULT_EVENT  , MsgChat.newBuilder().setContent("1111").setId(1).build(),0);
+
+        bootstrap.getGameContext().getConsumerManager().publicEvent(mqConsumer.getId() , mqMsgEvent);
+        bootstrap.getGameContext().getConsumerManager().publicEvent(mqConsumer.getId() , mqMsgEvent);
 
 
 

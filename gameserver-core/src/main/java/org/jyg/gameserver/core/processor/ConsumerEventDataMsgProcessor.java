@@ -2,8 +2,9 @@ package org.jyg.gameserver.core.processor;
 
 import org.jyg.gameserver.core.consumer.ResultHandler;
 import org.jyg.gameserver.core.data.EventData;
-import org.jyg.gameserver.core.data.EventExtData;
-import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.ConsumerDefaultEvent;
+import org.jyg.gameserver.core.event.MsgEvent;
+import org.jyg.gameserver.core.event.ResultReturnEvent;
 import org.jyg.gameserver.core.msg.ConsumerEventDataMsg;
 import org.jyg.gameserver.core.msg.ConsumerEventDataReturnMsg;
 import org.jyg.gameserver.core.session.Session;
@@ -16,19 +17,19 @@ public class ConsumerEventDataMsgProcessor extends ByteMsgObjProcessor<ConsumerE
 
 
     @Override
-    public void process(Session session, EventData<ConsumerEventDataMsg> event) {
-        ConsumerEventDataMsg eventDataMsg = event.getData();
+    public void process(Session session, MsgEvent<ConsumerEventDataMsg> event) {
+        ConsumerEventDataMsg eventDataMsg = event.getMsgData();
 
         EventData<Object> fromRemoteEventData = new EventData<>();
         fromRemoteEventData.setEventId(eventDataMsg.getEventId());
-        fromRemoteEventData.setData(eventDataMsg.getData());
-        fromRemoteEventData.setEventType(eventDataMsg.getEventType());
 
-        long remoteRequestId = eventDataMsg.getRequestId();
+        fromRemoteEventData.setEvent(eventDataMsg.getEvent());
 
+        final long remoteRequestId = eventDataMsg.getEvent().getRequestId();
+        final int fromConsumerId = eventDataMsg.getEvent().getFromConsumerId();
+        final int toConsumerId = eventDataMsg.getToConsumerId();
 
-
-        if(eventDataMsg.getFromConsumerId() == getGameConsumer().getId()){
+        if(fromConsumerId == getGameConsumer().getId()){
             if(remoteRequestId > 0){
                 Logs.DEFAULT_LOGGER.error("remoteRequestId > 0");
                 return;
@@ -36,26 +37,28 @@ public class ConsumerEventDataMsgProcessor extends ByteMsgObjProcessor<ConsumerE
         }
 
 
-        if(eventDataMsg.getToConsumerId() == eventDataMsg.getFromConsumerId()){
+        if(eventDataMsg.getToConsumerId() == fromConsumerId){
             Logs.DEFAULT_LOGGER.error("ToConsumerId == FromConsumerId");
             return;
         }
 
 
         long  localRequestId = 0;
-        if(eventDataMsg.getEventType() != EventType.RESULT_CALL_BACK){
+        if(! (eventDataMsg.getEvent() instanceof ResultReturnEvent)){
             localRequestId = getGameConsumer().registerCallBackMethod(new ResultHandler() {
                 @Override
                 public void call(int eventId, Object data) {
 
                     ConsumerEventDataReturnMsg returnEventDataMsg = new ConsumerEventDataReturnMsg();
 
-                    returnEventDataMsg.setToConsumerId(eventDataMsg.getFromConsumerId());
-                    returnEventDataMsg.setFromConsumerId(eventDataMsg.getToConsumerId());
-                    returnEventDataMsg.setEventType(EventType.RESULT_CALL_BACK);
-                    returnEventDataMsg.setEventId(eventId);
-                    returnEventDataMsg.setData(data);
-                    returnEventDataMsg.setRequestId(eventDataMsg.getRequestId());
+                    returnEventDataMsg.setToConsumerId(fromConsumerId);
+                    returnEventDataMsg.setFromConsumerId(toConsumerId);
+
+                    ResultReturnEvent resultReturnEvent = new ResultReturnEvent(remoteRequestId , eventId , data);
+
+                    resultReturnEvent.setFromConsumerId(eventDataMsg.getToConsumerId());
+
+                    returnEventDataMsg.setResultReturnEvent(resultReturnEvent);
 
                     session.writeMessage(returnEventDataMsg);
 
@@ -65,9 +68,16 @@ public class ConsumerEventDataMsgProcessor extends ByteMsgObjProcessor<ConsumerE
             localRequestId = remoteRequestId;
         }
 
-        fromRemoteEventData.setEventExtData(new EventExtData(getGameConsumer().getId(), localRequestId, eventDataMsg.getChildChooseId(), eventDataMsg.getParams()));
 
-        getContext().getConsumerManager().publicEvent( eventDataMsg.getToConsumerId() ,fromRemoteEventData  );
+        fromRemoteEventData.setChildChooseId(eventDataMsg.getChildChooseId());
+//        fromRemoteEventData.setParams(eventDataMsg.getParams());
+
+        eventDataMsg.getEvent().setRequestId(localRequestId);
+
+        fromRemoteEventData.getEvent().setFromConsumerId(getGameConsumer().getId());
+
+
+        getContext().getConsumerManager().publicEvent(eventDataMsg.getToConsumerId(), fromRemoteEventData );
 
     }
 }

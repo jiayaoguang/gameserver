@@ -1,11 +1,9 @@
 package org.jyg.gameserver.example.ygserver;
 
-import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.example.ygserver.msg.CSCreateMotionMsg;
-import org.jyg.gameserver.example.ygserver.msg.ChatReplyJson;
-import org.jyg.gameserver.example.ygserver.msg.ChatRequestJson;
 import org.jyg.gameserver.example.ygserver.msg.SCCreateMotionMsg;
 
 /**
@@ -15,9 +13,9 @@ public class CreateMotionProcessor extends ByteMsgObjProcessor<CSCreateMotionMsg
 
 
     @Override
-    public void process(Session session, EventData<CSCreateMotionMsg> eventData) {
+    public void process(Session session, MsgEvent<CSCreateMotionMsg> eventData) {
 
-        CSCreateMotionMsg msg = eventData.getData();
+        CSCreateMotionMsg msg = eventData.getMsgData();
 
         Player player = session.getSessionObject();
 

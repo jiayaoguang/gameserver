@@ -1,6 +1,5 @@
 package org.jyg.gameserver.core.handle;
 
-import org.jyg.gameserver.core.enums.EventType;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -26,7 +25,7 @@ public class InnerSocketHandler extends ChannelInboundHandlerAdapter {
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "在线");
 
-		gameContext.getConsumerManager().publicEventToDefault(EventType.PUBLISH_EVENT, new ChannelConnectEvent(ctx.channel()), ctx.channel() , 0);
+		gameContext.getConsumerManager().publicEvent(gameContext.getMainConsumerId(), new ChannelConnectEvent(ctx.channel()));
 		
 		super.channelActive(ctx);
 	}
@@ -36,7 +35,7 @@ public class InnerSocketHandler extends ChannelInboundHandlerAdapter {
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "掉线");
 
-		gameContext.getConsumerManager().publicEventToDefault(EventType.PUBLISH_EVENT, new ChannelDisconnectEvent(ctx.channel()), ctx.channel() , 0);
+		gameContext.getConsumerManager().publicEvent(gameContext.getMainConsumerId(), new ChannelDisconnectEvent(ctx.channel()));
 		
 		super.channelInactive(ctx);
 	}

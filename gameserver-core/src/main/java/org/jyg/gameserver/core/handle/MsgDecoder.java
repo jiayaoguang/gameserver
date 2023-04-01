@@ -5,10 +5,11 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.NormalMsgEvent;
+import org.jyg.gameserver.core.event.UnknownMsgEvent;
+import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.GameContext;
-import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.util.Logs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +78,9 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
                 if(readableBytes > 0){
                     frame.getBytes(frame.readerIndex(), dstBytes);
                 }
-                gameContext.getConsumerManager().publicEventToDefault(EventType.REMOTE_UNKNOWN_MSG_COME, dstBytes, ctx.channel(), msgId );
+
+                UnknownMsgEvent unknownMsgEvent = new UnknownMsgEvent( msgId , dstBytes , ctx.channel() );
+                gameContext.getConsumerManager().publicEvent(gameContext.getMainConsumerId(), unknownMsgEvent);
 
                 return null;
             }
@@ -101,7 +104,9 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
                 throw e;
             }
 
-            gameContext.getConsumerManager().publicEventToDefault(EventType.REMOTE_MSG_COME, msgObj, ctx.channel(), msgId);
+            NormalMsgEvent normalMsgEvent = new NormalMsgEvent(msgId , msgObj , ctx.channel());
+
+            gameContext.getConsumerManager().publicEvent(gameContext.getMainConsumerId(),normalMsgEvent);
 
 
         }catch (Exception e){

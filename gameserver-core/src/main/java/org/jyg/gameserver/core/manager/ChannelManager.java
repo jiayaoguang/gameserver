@@ -15,6 +15,7 @@ import java.util.*;
 
 /**
  * create by jiayaoguang on 2020/5/3
+ * TODO 改名 ，改方法名
  */
 public class ChannelManager implements Lifecycle {
 

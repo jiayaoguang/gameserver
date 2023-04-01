@@ -1,6 +1,7 @@
 package org.jyg.gameserver.route.processor;
 
-import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.InnerMsgEvent;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.DefaultMsg;
 import org.jyg.gameserver.core.msg.route.RouteReplyMsg;
@@ -13,11 +14,11 @@ public class RouteReplyMsgProcessor extends ByteMsgObjProcessor<RouteReplyMsg> {
     }
 
     @Override
-    public void process(Session session, EventData<RouteReplyMsg> event) {
+    public void process(Session session, MsgEvent<RouteReplyMsg> event) {
 
-        Session clientSession = this.getGameConsumer().getChannelManager().getSession(event.getData().getSessionId());
+        Session clientSession = this.getGameConsumer().getChannelManager().getSession(event.getMsgData().getSessionId());
 
-        int msgId = event.getData().getMsgId();
+        int msgId = event.getMsgData().getMsgId();
 
         AbstractMsgCodec msgCodec = getContext().getMsgCodec(msgId);
 
@@ -25,19 +26,19 @@ public class RouteReplyMsgProcessor extends ByteMsgObjProcessor<RouteReplyMsg> {
         if(msgCodec == null){
             DefaultMsg defaultMsg = new DefaultMsg();
             defaultMsg.setMsgId(msgId);
-            defaultMsg.setMsgData(event.getData().getData());
+            defaultMsg.setMsgData(event.getMsgData().getData());
             clientSession.writeMessage(defaultMsg);
 
             return;
         }
 
         try {
-            Object msgObj =  msgCodec.decode(event.getData().getData());
+            Object msgObj =  msgCodec.decode(event.getMsgData().getData());
 
-            EventData eventData = new EventData();
-            eventData.setData(msgObj);
 
-            getGameConsumer().processEventMsg( clientSession , eventData );
+            InnerMsgEvent innerMsgEvent = new InnerMsgEvent(msgId , msgObj);
+
+            getGameConsumer().processEventMsg(clientSession, innerMsgEvent);
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }

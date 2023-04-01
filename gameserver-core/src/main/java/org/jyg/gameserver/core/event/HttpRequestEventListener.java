@@ -21,7 +21,7 @@ public class HttpRequestEventListener implements GameEventListener<HttpRequestEv
     public void onEvent(HttpRequestEvent httpRequestEvent) {
 
 
-        gameConsumer.processHttpEvent( httpRequestEvent.getEventData());
+        gameConsumer.processHttpEvent( httpRequestEvent);
 
 //        new ChannelMsgEventListener(null ,new EventData<>());
 

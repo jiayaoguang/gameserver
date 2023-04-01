@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.processor;
 
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.RemoteInvokeReturnData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.session.Session;
 
 /**
@@ -15,9 +16,9 @@ public class RemoteInvokeReturnProcessor extends ByteMsgObjProcessor<RemoteInvok
     }
 
     @Override
-    public void process(Session session, EventData<RemoteInvokeReturnData> event) {
+    public void process(Session session, MsgEvent<RemoteInvokeReturnData> event) {
 
-        RemoteInvokeReturnData returnData = event.getData();
+        RemoteInvokeReturnData returnData = event.getMsgData();
 
 
     }

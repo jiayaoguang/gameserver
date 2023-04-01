@@ -2,6 +2,7 @@ package org.jyg.gameserver.example.ygserver;
 
 import org.apache.logging.log4j.core.config.Configurator;
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.TcpClient;
@@ -38,7 +39,7 @@ public class YgGameClient {
         client.getGameContext().getMainGameConsumer().addProcessor(new ByteMsgObjProcessor<LoginReplyMsg>(LoginReplyMsg.class) {
 
             @Override
-            public void process(Session session, EventData<LoginReplyMsg> event) {
+            public void process(Session session, MsgEvent<LoginReplyMsg> event) {
                 getGameConsumer().getTimerManager().addUnlimitedTimer( 5 * 1000L, () -> {
                     ChatRequestJson chatRequestJson = new ChatRequestJson();
                     chatRequestJson.setContent("hello world");

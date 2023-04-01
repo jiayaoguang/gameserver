@@ -1,6 +1,7 @@
 package org.jyg.gameserver.test.tcp.jsonMsg;
 
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.msg.PingByteMsg;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
@@ -27,8 +28,8 @@ public class JsonClientTest01 {
 
         ByteMsgObjProcessor<JsonServerTest01.ChatMsgObj> chatProcessor = new ByteMsgObjProcessor<JsonServerTest01.ChatMsgObj>(JsonServerTest01.ChatMsgObj.class) {
             @Override
-            public void process(Session session, EventData<JsonServerTest01.ChatMsgObj> event) {
-                Logs.DEFAULT_LOGGER.info(" ========================= receive reply json " + event.getData().getConetnt());
+            public void process(Session session, MsgEvent<JsonServerTest01.ChatMsgObj> event) {
+                Logs.DEFAULT_LOGGER.info(" ========================= receive reply json " + event.getMsgData().getConetnt());
 //                session.writeMessage(chatMsgObj);
             }
         };

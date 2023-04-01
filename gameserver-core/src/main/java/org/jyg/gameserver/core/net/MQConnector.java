@@ -1,8 +1,9 @@
 package org.jyg.gameserver.core.net;
 
-import org.jyg.gameserver.core.data.EventExtData;
-import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.MQMsgEvent;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
+import org.jyg.gameserver.core.session.MQSession;
+import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 
@@ -11,14 +12,16 @@ import java.util.Arrays;
 public abstract class MQConnector extends AbstractConnector {
 
 
-    private int mqPushConsumerId;
+    private final int mqPushConsumerId;
+
+    private final Session mqSession;
 
 
 
     public MQConnector(GameContext gameContext, int mqPushConsumerId ) {
         super(gameContext);
         this.mqPushConsumerId = mqPushConsumerId;
-
+        this.mqSession = new MQSession(mqPushConsumerId, gameContext);
     }
 
 
@@ -53,7 +56,9 @@ public abstract class MQConnector extends AbstractConnector {
             return;
         }
 
-        getGameContext().getConsumerManager().publicEvent(gameContext.getMainConsumerId(), EventType.MQ_MSG_COME, msgObj, null, msgId, new EventExtData(mqPushConsumerId, 0L));
+        MQMsgEvent mqMsgEvent = new MQMsgEvent(msgId , msgObj  ,mqSession );
+
+        getGameContext().getConsumerManager().publicEvent(gameContext.getMainConsumerId(), mqMsgEvent);
 
     }
 

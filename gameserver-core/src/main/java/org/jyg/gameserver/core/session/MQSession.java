@@ -1,6 +1,6 @@
 package org.jyg.gameserver.core.session;
 
-import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.ConsumerDefaultEvent;
 import org.jyg.gameserver.core.util.GameContext;
 
 public class MQSession extends Session {
@@ -32,7 +32,7 @@ public class MQSession extends Session {
 
     @Override
     protected void writeObjMessage(Object msgObj) {
-        gameContext.getConsumerManager().publicEvent(mqPushConsumerId , EventType.DEFAULT_EVENT ,msgObj , 0);
+        gameContext.getConsumerManager().publicEvent(mqPushConsumerId , new ConsumerDefaultEvent(0, msgObj));
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.jyg.gameserver.route.processor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.route.RouteMsg;
 import org.jyg.gameserver.core.processor.AbstractProcessor;
@@ -23,11 +24,11 @@ public class RouteMsgToGameMsgProcessor extends AbstractProcessor<Object> {
     }
 
     @Override
-    public void process(Session session, EventData<Object> event) {
+    public void process(Session session, MsgEvent<Object> event) {
 
 
-        Object msgData = event.getData();
-        int msgId = event.getEventId();
+        Object msgData = event.getMsgData();
+        int msgId = event.getMsgId();
 
 
         AbstractMsgCodec msgCodec = getContext().getMsgCodec(msgId);

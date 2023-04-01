@@ -1,6 +1,6 @@
 package org.jyg.gameserver.core.msg;
 
-import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.ResultReturnEvent;
 
 import java.util.Map;
 
@@ -11,37 +11,19 @@ public class ConsumerEventDataReturnMsg implements ByteMsgObj{
 
     private int toConsumerId;;
 
-    private EventType eventType;
-
-    private int eventId;
 
     private int fromConsumerId;
-    private long requestId;
 
     private String childChooseId;
 
 
-    private Object data;
-
+    private ResultReturnEvent resultReturnEvent;
 
     private Map<String, Object> params;
 
-    public EventType getEventType() {
-        return eventType;
-    }
-
-    public void setEventType(EventType eventType) {
-        this.eventType = eventType;
-    }
 
 
-    public int getEventId() {
-        return eventId;
-    }
 
-    public void setEventId(int eventId) {
-        this.eventId = eventId;
-    }
 
     public int getFromConsumerId() {
         return fromConsumerId;
@@ -51,13 +33,6 @@ public class ConsumerEventDataReturnMsg implements ByteMsgObj{
         this.fromConsumerId = fromConsumerId;
     }
 
-    public long getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(long requestId) {
-        this.requestId = requestId;
-    }
 
     public String getChildChooseId() {
         return childChooseId;
@@ -65,15 +40,6 @@ public class ConsumerEventDataReturnMsg implements ByteMsgObj{
 
     public void setChildChooseId(String childChooseId) {
         this.childChooseId = childChooseId;
-    }
-
-
-    public Object getData() {
-        return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
     }
 
 
@@ -92,5 +58,14 @@ public class ConsumerEventDataReturnMsg implements ByteMsgObj{
 
     public void setToConsumerId(int toConsumerId) {
         this.toConsumerId = toConsumerId;
+    }
+
+
+    public ResultReturnEvent getResultReturnEvent() {
+        return resultReturnEvent;
+    }
+
+    public void setResultReturnEvent(ResultReturnEvent resultReturnEvent) {
+        this.resultReturnEvent = resultReturnEvent;
     }
 }

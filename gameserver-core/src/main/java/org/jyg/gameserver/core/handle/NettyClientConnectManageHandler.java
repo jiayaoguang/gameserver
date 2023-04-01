@@ -6,7 +6,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import org.jyg.gameserver.core.constant.MsgIdConst;
-import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.InnerChannelConnectEvent;
+import org.jyg.gameserver.core.event.InnerChannelDisconnectEvent;
+import org.jyg.gameserver.core.event.NormalMsgEvent;
 import org.jyg.gameserver.core.msg.PingByteMsg;
 import org.jyg.gameserver.core.msg.ReadIdleMsgObj;
 import org.jyg.gameserver.core.util.AllUtil;
@@ -32,22 +34,26 @@ public class NettyClientConnectManageHandler extends ChannelDuplexHandler {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception { // (5)
+        super.channelActive(ctx);
         Channel incoming = ctx.channel();
         Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "在线");
 
-        gameContext.getConsumerManager().publicEventToDefault(EventType.CLIENT_SOCKET_CONNECT_ACTIVE, null, ctx.channel(), 0);
+        InnerChannelConnectEvent innerChannelConnectEvent = new InnerChannelConnectEvent(incoming);
 
-        super.channelActive(ctx);
+        gameContext.getConsumerManager().publicEvent(gameContext.getMainConsumerId(), innerChannelConnectEvent);
+
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception { // (6)
+        super.channelInactive(ctx);
         Channel incoming = ctx.channel();
         Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "掉线");
 
-        gameContext.getConsumerManager().publicEventToDefault(EventType.CLIENT_SOCKET_CONNECT_INACTIVE, null, ctx.channel(), 0);
+        InnerChannelDisconnectEvent innerChannelDisconnectEvent = new InnerChannelDisconnectEvent(incoming);
 
-        super.channelInactive(ctx);
+        gameContext.getConsumerManager().publicEvent(gameContext.getMainConsumerId(), innerChannelDisconnectEvent);
+
     }
 
 
@@ -59,7 +65,8 @@ public class NettyClientConnectManageHandler extends ChannelDuplexHandler {
                 final String remoteAddress = AllUtil.getChannelRemoteAddr(ctx.channel());
                 Logs.DEFAULT_LOGGER.warn("NETTY CLIENT PIPELINE: IDLE outtime [{}]", remoteAddress);
             } else if (event.state().equals(IdleState.READER_IDLE)) {
-                gameContext.getConsumerManager().publicEventToDefault(EventType.REMOTE_MSG_COME, READ_IDLE_OBJ, ctx.channel(), MsgIdConst.READ_OUTTIME);
+                NormalMsgEvent normalMsgEvent = new NormalMsgEvent(MsgIdConst.READ_OUTTIME  , READ_IDLE_OBJ , ctx.channel());
+                gameContext.getConsumerManager().publicEvent(gameContext.getMainConsumerId(),normalMsgEvent);
             } else if (event.state().equals(IdleState.WRITER_IDLE)) {
 //                context.getConsumerManager().publicEventToDefault(EventType.BYTE_OBJ_MSG_COME, READ_IDLE_OBJ, ctx.channel(), MsgIdConst.WRITE_OUTTIME);
 

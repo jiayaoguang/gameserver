@@ -3,6 +3,8 @@ package org.jyg.gameserver.core.processor;
 import io.netty.channel.Channel;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.HttpRequestEvent;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
 import org.jyg.gameserver.core.session.Session;
@@ -24,8 +26,9 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 	}
 
 	@Override
-	public final void process(Session session, EventData<Request> event) {
-		process(event.getData() ,event.getChannel());
+	public final void process(Session session, MsgEvent<Request> event) {
+		HttpRequestEvent httpRequestEvent = (HttpRequestEvent)event;
+		process(event.getMsgData() ,httpRequestEvent.getChannel());
 	}
 
 	public final void process(Request request ,Channel channel) {

@@ -9,6 +9,7 @@ import org.jyg.gameserver.core.util.ConfigUtil;
 import org.jyg.gameserver.db.ConsumerDBManager;
 import org.jyg.gameserver.db.DBConfig;
 import org.jyg.gameserver.db.DBGameConsumer;
+import org.jyg.gameserver.db.util.CreateTableUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,9 @@ public class DBTest {
         if(dbConfig == null){
             throw new IllegalArgumentException();
         }
+
+//        CreateTableUtil.createTable(Maik.class);
+
         DBGameConsumer consumer = new DBGameConsumer(dbConfig);
         consumer.setId(100);
         consumer.tryAddTableInfo(Maik.class);
@@ -58,7 +62,7 @@ public class DBTest {
 
             GameConsumer con = event.getGameConsumer();
 
-            int id = 31;
+            int id = 33;
 
             Maik maik = new Maik();
             maik.setId(id);

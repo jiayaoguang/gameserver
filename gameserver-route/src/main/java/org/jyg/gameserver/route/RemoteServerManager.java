@@ -1,7 +1,7 @@
 package org.jyg.gameserver.route;
 
 import com.google.protobuf.MessageLite;
-import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.InnerMsgEvent;
 import org.jyg.gameserver.core.manager.Lifecycle;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.util.GameContext;
@@ -31,11 +31,20 @@ public class RemoteServerManager implements Lifecycle {
 
 
     public void sendRemoteMsg(MessageLite message){
-        this.gameContext.getConsumerManager().publicEvent(remoteConsumerId , EventType.UNKNOWN , message ,0);
+        InnerMsgEvent innerMsgEvent = new InnerMsgEvent( 0,message );
+
+        this.gameContext.getConsumerManager().publicEvent(remoteConsumerId, innerMsgEvent);
     }
 
+
+    /**
+     * TODO 改为 publicEvent
+     */
     public void sendRemoteMsg(ByteMsgObj message){
-        this.gameContext.getConsumerManager().publicEvent(remoteConsumerId , EventType.UNKNOWN , message ,0);
+
+        InnerMsgEvent innerMsgEvent = new InnerMsgEvent( 0,message  );
+
+        this.gameContext.getConsumerManager().publicEvent(remoteConsumerId , innerMsgEvent);
     }
 
 

@@ -1,6 +1,7 @@
 package org.jyg.gameserver.core.intercept;
 
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.AllUtil;
@@ -10,14 +11,10 @@ import org.jyg.gameserver.core.util.AllUtil;
  */
 public class OnlyLocalHttpMsgInterceptor implements MsgInterceptor<Request> {
 
-    public final boolean intercept(Session session, EventData<Request> eventData) {
-        return filter(eventData);
-    }
+    public final boolean intercept(Session session, MsgEvent<Request> eventData) {
 
 
-    public boolean filter(EventData<Request> eventData) {
-
-        String remoteAddr = AllUtil.getChannelRemoteAddr(eventData.getChannel());
+        String remoteAddr = session.getRemoteAddr();
         if (remoteAddr.startsWith("127.0.0.1")) {
             return true;
         }

@@ -1,7 +1,7 @@
 package org.jyg.gameserver.db;
 
 import org.jyg.gameserver.core.consumer.MpscQueueGameConsumer;
-import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.ConsumerDefaultEvent;
 import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.db.data.ExecSqlInfo;
 import org.jyg.gameserver.db.type.TypeHandler;
@@ -112,18 +112,20 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
 
 
     @Override
-    protected void processDefaultEvent(int eventId, EventData eventData) {
+    public void processDefaultEvent(ConsumerDefaultEvent event) {
 
-        if(eventData.getData() == null){
+        int eventId = event.getEventId();
+
+        if(event.getData() == null){
             Logs.DB.error("DB eventData.getData() == null");
             return;
         }
 
-        Class<?> dbEntityClazz = eventData.getData().getClass();
+        Class<?> dbEntityClazz = event.getData().getClass();
 
 
-        if(eventData.getData() instanceof ExecSqlInfo){
-            ExecSqlInfo execSqlInfo = (ExecSqlInfo) eventData.getData();
+        if(event.getData() instanceof ExecSqlInfo){
+            ExecSqlInfo execSqlInfo = (ExecSqlInfo) event.getData();
             dbEntityClazz = execSqlInfo.getDbEntityClazz();
         }
 
@@ -139,24 +141,19 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
 
 
         boolean needReturn;
-        if (eventData.getEventExtData() != null && eventData.getEventExtData().requestId != 0) {
+        if ( event.getRequestId() != 0) {
             needReturn = true;
         } else {
             needReturn = false;
         }
 
-        Map<String, Object> params = null;
-        if (eventData.getEventExtData() != null) {
-            params = eventData.getEventExtData().params;
-        }
-
-
+        Map<String, Object> params = event.getParams();
 
 
         PrepareSQLAndParams prepareSQLAndParams = null;
 
-        if(eventData.getData() instanceof ExecSqlInfo){
-            ExecSqlInfo execSqlInfo = (ExecSqlInfo) eventData.getData();
+        if(event.getData() instanceof ExecSqlInfo){
+            ExecSqlInfo execSqlInfo = (ExecSqlInfo) event.getData();
             prepareSQLAndParams = new PrepareSQLAndParams(execSqlInfo.getPrepareSql() , execSqlInfo.getParams() , execSqlInfo.getSqlExecuteType());
         }else {
 
@@ -166,11 +163,11 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
                 return;
             }
             try {
-                prepareSQLAndParams = sqlBuilder.createSqlInfo(sqlKeyWord, eventData.getData(), tableInfo, params);
+                prepareSQLAndParams = sqlBuilder.createSqlInfo(sqlKeyWord, event.getData(), tableInfo, params);
             } catch (Exception e) {
                 e.printStackTrace();
                 if (needReturn) {
-                    eventReturn(eventData.getEventExtData().fromConsumerId, 100, eventData.getEventExtData().requestId);
+                    eventReturn(event.getFromConsumerId(), 100, event.getRequestId());
                 }
                 return;
             }
@@ -199,7 +196,7 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
             exception.printStackTrace();
             if (needReturn) {
                 //eventId 1 : 报错
-                eventReturn(eventData.getEventExtData().fromConsumerId, null, eventData.getEventExtData().requestId, DBErrorCode.EXCEPTION);
+                eventReturn(event.getFromConsumerId(), null, event.getRequestId(), DBErrorCode.EXCEPTION);
             }
             return;
         }
@@ -211,7 +208,7 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
         }
 
         if (needReturn) {
-            eventReturn(eventData.getEventExtData().fromConsumerId, returnData, eventData.getEventExtData().requestId, returnEventId);
+            eventReturn(event.getFromConsumerId(), returnData, event.getRequestId(), returnEventId);
         }
     }
 

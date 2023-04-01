@@ -1,9 +1,9 @@
 package org.jyg.gameserver.example.ygserver;
 
 import org.jyg.gameserver.core.consumer.ResultHandler;
-import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.event.DisconnectEvent;
 import org.jyg.gameserver.core.event.GameEventListener;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.session.SessionState;
@@ -24,13 +24,13 @@ public class LoginProcessor extends ByteMsgObjProcessor<LoginRequestMsg> {
     }
 
     @Override
-    public void process(Session session, EventData<LoginRequestMsg> event) {
+    public void process(Session session, MsgEvent<LoginRequestMsg> event) {
         ConsumerDBManager consumerDBManager = getGameConsumer().getInstanceManager().getInstance(ConsumerDBManager.class);
 
-        LoginRequestMsg loginRequestMsg = event.getData();
+        LoginRequestMsg loginRequestMsg = event.getMsgData();
 
         PlayerDB playerDB = new PlayerDB();
-        playerDB.setName(event.getData().getName());
+        playerDB.setName(event.getMsgData().getName());
 
         if(session.getSessionState() == SessionState.WAIT_REPLY){
             return;

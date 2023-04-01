@@ -1,7 +1,8 @@
 package org.jyg.gameserver.core.consumer;
 
 import org.jyg.gameserver.core.data.EventData;
-import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.ResultReturnEvent;
+import org.jyg.gameserver.core.util.Logs;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
@@ -67,8 +68,14 @@ public class ConsumerFuture {
                 e.printStackTrace();
             }
 
-            if( object.getEventExtData().requestId == requestId && object.getEventType() == EventType.RESULT_CALL_BACK){
-                return object.getData();
+            if( object.getEvent().getRequestId() == requestId ){
+
+                if(object.getEvent() instanceof ResultReturnEvent){
+                    return ((ResultReturnEvent)object.getEvent()).getData();
+                }else {
+                    Logs.DEFAULT_LOGGER.error("return object.getEvent() not instanceof ResultReturnEvent");
+                    return null;
+                }
             }
         }
 

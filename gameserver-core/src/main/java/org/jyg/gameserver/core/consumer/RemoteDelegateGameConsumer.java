@@ -3,6 +3,7 @@ package org.jyg.gameserver.core.consumer;
 import io.netty.util.internal.shaded.org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.RemoteConsumerInfo;
+import org.jyg.gameserver.core.event.ConsumerDefaultEvent;
 import org.jyg.gameserver.core.msg.ConsumerEventDataMsg;
 import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.util.GameContext;
@@ -66,7 +67,7 @@ public class RemoteDelegateGameConsumer extends DelegateGameConsumer{
             return false;
         }
 
-        if(eventData.getFromConsumerId() == getId()){
+        if(eventData.getEvent().getFromConsumerId() == getId()){
             try{
                 onReciveEvent(eventData);
             }catch (Exception e){
@@ -78,17 +79,18 @@ public class RemoteDelegateGameConsumer extends DelegateGameConsumer{
 
         try{
             ConsumerEventDataMsg consumerEventDataMsg = new ConsumerEventDataMsg();
-            consumerEventDataMsg.setEventType(eventData.getEventType());
-            consumerEventDataMsg.setData(eventData.getData());
+
             consumerEventDataMsg.setToConsumerId(getId());
             consumerEventDataMsg.setEventId(eventData.getEventId());
 
-            if(eventData.getEventExtData() != null){
-                consumerEventDataMsg.setChildChooseId(eventData.getEventExtData().childChooseId);
-                consumerEventDataMsg.setRequestId(eventData.getEventExtData().requestId);
-                consumerEventDataMsg.setFromConsumerId(eventData.getEventExtData().fromConsumerId);
-                consumerEventDataMsg.setParams(eventData.getEventExtData().params);
-            }
+            consumerEventDataMsg.setEvent(eventData.getEvent());
+
+            consumerEventDataMsg.setChildChooseId(eventData.getChildChooseId());
+
+//            consumerEventDataMsg.getEvent().setRequestId(eventData.getEvent().getRequestId());
+//            consumerEventDataMsg.getEvent().setFromConsumerId(eventData.getEvent().getFromConsumerId());
+//            consumerEventDataMsg.getEvent().setParams(eventData.getParams());
+
 
             if(!this.tcpClient.isConnectAvailable()){
                 Logs.DEFAULT_LOGGER.error("DelegateGameConsumer remote consumer {} ip {} port {} connect unavailable, reconnect" ,remoteConsumerInfo.getConsumerId() , remoteConsumerInfo.getIp(), remoteConsumerInfo.getPort());

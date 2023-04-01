@@ -6,9 +6,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import org.jyg.gameserver.core.constant.MsgIdConst;
-import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.event.ChannelConnectEvent;
 import org.jyg.gameserver.core.event.ChannelDisconnectEvent;
+import org.jyg.gameserver.core.event.NormalMsgEvent;
 import org.jyg.gameserver.core.msg.PingByteMsg;
 import org.jyg.gameserver.core.msg.ReadIdleMsgObj;
 import org.jyg.gameserver.core.util.AllUtil;
@@ -47,7 +47,7 @@ public class NettyConnectManageHandler extends ChannelDuplexHandler {
         }
 
 
-        gameContext.getConsumerManager().publicEventToDefault(EventType.PUBLISH_EVENT,  new ChannelConnectEvent(ctx.channel()), ctx.channel(), 0);
+        gameContext.getConsumerManager().publicEvent(gameContext.getMainConsumerId(), new ChannelConnectEvent(ctx.channel()));
 
         super.channelActive(ctx);
     }
@@ -57,7 +57,7 @@ public class NettyConnectManageHandler extends ChannelDuplexHandler {
         Channel incoming = ctx.channel();
         Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + " offline");
 
-        gameContext.getConsumerManager().publicEventToDefault(EventType.PUBLISH_EVENT, new ChannelDisconnectEvent(ctx.channel()), ctx.channel(), 0);
+        gameContext.getConsumerManager().publicEvent(gameContext.getMainConsumerId(), new ChannelDisconnectEvent(ctx.channel()));
 
         super.channelInactive(ctx);
     }
@@ -71,7 +71,8 @@ public class NettyConnectManageHandler extends ChannelDuplexHandler {
                 final String remoteAddress = AllUtil.getChannelRemoteAddr(ctx.channel());
                 Logs.DEFAULT_LOGGER.warn("NETTY CLIENT PIPELINE: IDLE outtime [{}]", remoteAddress);
             } else if (event.state().equals(IdleState.READER_IDLE)) {
-                gameContext.getConsumerManager().publicEventToDefault(EventType.REMOTE_MSG_COME, READ_IDLE_OBJ, ctx.channel(), MsgIdConst.READ_OUTTIME);
+                NormalMsgEvent normalMsgEvent = new NormalMsgEvent( MsgIdConst.READ_OUTTIME, READ_IDLE_OBJ , ctx.channel());
+                gameContext.getConsumerManager().publicEvent(gameContext.getMainConsumerId(),normalMsgEvent);
             } else if (event.state().equals(IdleState.WRITER_IDLE)) {
 //                context.getConsumerManager().publicEventToDefault(EventType.BYTE_OBJ_MSG_COME, READ_IDLE_OBJ, ctx.channel(), MsgIdConst.WRITE_OUTTIME);
 

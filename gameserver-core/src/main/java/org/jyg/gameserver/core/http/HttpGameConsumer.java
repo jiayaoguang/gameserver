@@ -4,8 +4,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import org.jyg.gameserver.core.consumer.MpscQueueGameConsumer;
-import org.jyg.gameserver.core.data.EventData;
-import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.ConsumerDefaultEvent;
 import org.jyg.gameserver.core.event.ExecutableEvent;
 import org.jyg.gameserver.core.startup.HttpClient;
 import org.jyg.gameserver.core.util.CallBackEvent;
@@ -37,7 +36,9 @@ public class HttpGameConsumer extends MpscQueueGameConsumer {
 
 
     @Override
-    protected void processDefaultEvent(int eventId, EventData eventData) {
+    public void processDefaultEvent(ConsumerDefaultEvent eventData) {
+
+        int eventId = eventData.getEventId();
 
 
         HttpRequestData httpRequestData = (HttpRequestData) eventData.getData();
@@ -51,7 +52,7 @@ public class HttpGameConsumer extends MpscQueueGameConsumer {
                     public void onFailure(Call call, IOException e) {
                         callBackEvent.setSuccess(false);
                         callBackEvent.setData(e);
-                        HttpGameConsumer.this.publicEvent(EventType.PUBLISH_EVENT, new ExecutableEvent(callBackEvent::execte), null , eventId);
+                        HttpGameConsumer.this.getGameContext().getConsumerManager().publicEvent(HttpGameConsumer.this.getId(), new ExecutableEvent(callBackEvent::execte));
                     }
 
                     @Override
@@ -59,7 +60,7 @@ public class HttpGameConsumer extends MpscQueueGameConsumer {
                         callBackEvent.setSuccess(true);
                         callBackEvent.setData(response);
 
-                        HttpGameConsumer.this.publicEvent(EventType.PUBLISH_EVENT, new ExecutableEvent(callBackEvent::execte), null , eventId);
+                        HttpGameConsumer.this.getGameContext().getConsumerManager().publicEvent(HttpGameConsumer.this.getId(), new ExecutableEvent(callBackEvent::execte));
                     }
                 });
             } else {
@@ -68,7 +69,7 @@ public class HttpGameConsumer extends MpscQueueGameConsumer {
                     public void onFailure(Call call, IOException e) {
                         callBackEvent.setSuccess(false);
                         callBackEvent.setData(e);
-                        HttpGameConsumer.this.publicEvent(EventType.PUBLISH_EVENT, new ExecutableEvent(callBackEvent::execte), null , eventId);
+                        HttpGameConsumer.this.getGameContext().getConsumerManager().publicEvent(HttpGameConsumer.this.getId(), new ExecutableEvent(callBackEvent::execte));
                     }
 
                     @Override
@@ -76,7 +77,7 @@ public class HttpGameConsumer extends MpscQueueGameConsumer {
                         callBackEvent.setSuccess(true);
                         callBackEvent.setData(response);
 
-                        HttpGameConsumer.this.publicEvent(EventType.PUBLISH_EVENT, new ExecutableEvent(callBackEvent::execte), null , eventId);
+                        HttpGameConsumer.this.getGameContext().getConsumerManager().publicEvent(HttpGameConsumer.this.getId(), new ExecutableEvent(callBackEvent::execte));
                     }
                 });
             }

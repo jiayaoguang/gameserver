@@ -1,6 +1,7 @@
 package org.jyg.gameserver.route.test;
 
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
@@ -19,8 +20,8 @@ public class RouteLinkServerTest01
 
 		ByteMsgObjProcessor<ChatMsgObj> chatProcessor = new ByteMsgObjProcessor<ChatMsgObj>() {
 			@Override
-			public void process(Session session, EventData<ChatMsgObj> event) {
-				AllUtil.println("channel :" + session.getRemoteAddr() + " , get chat msg : " + event.getData().getContent());
+			public void process(Session session, MsgEvent<ChatMsgObj> event) {
+				AllUtil.println("channel :" + session.getRemoteAddr() + " , get chat msg : " + event.getMsgData().getContent());
 			}
 
 

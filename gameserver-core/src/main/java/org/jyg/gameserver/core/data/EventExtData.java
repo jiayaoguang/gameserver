@@ -5,8 +5,10 @@ import java.util.Map;
 /**
  * create by jiayaoguang on 2021/5/15
  */
+@Deprecated
 public class EventExtData {
 
+    @Deprecated
     public final int fromConsumerId;
     public final long requestId;
     public final String childChooseId;
@@ -16,11 +18,6 @@ public class EventExtData {
 
     public EventExtData(int fromConsumerId, long requestId) {
         this(fromConsumerId, requestId, "", null);
-    }
-
-
-    public EventExtData(int fromConsumerId, long requestId, Map<String, Object> params) {
-        this(fromConsumerId, requestId, "", params);
     }
 
 

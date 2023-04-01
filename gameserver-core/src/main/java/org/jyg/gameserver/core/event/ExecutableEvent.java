@@ -1,6 +1,6 @@
 package org.jyg.gameserver.core.event;
 
-public class ExecutableEvent implements Event {
+public class ExecutableEvent extends Event {
 
 
     private final Runnable runnable;

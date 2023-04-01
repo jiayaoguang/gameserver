@@ -1,13 +1,11 @@
 package org.jyg.gameserver.core.consumer;
 
 import cn.hutool.core.collection.CollectionUtil;
-import io.netty.channel.Channel;
 import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.consumer.choose.ChildChooser;
 import org.jyg.gameserver.core.consumer.choose.ModChildChooser;
 import org.jyg.gameserver.core.data.EventData;
-import org.jyg.gameserver.core.data.EventExtData;
-import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.util.Logs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,21 +88,14 @@ public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
 
     @Override
     public void publicEvent(EventData<?> eventData) {
-        EventExtData eventExtData = eventData.getEventExtData();
-        if (eventExtData == null) {
-            throw new RuntimeException("eventExtData == null");
-        }
 
 
-        int childConsumerIndex = 0;
+//        int childConsumerIndex = 0;
 
-        String childChooseKey = eventExtData.childChooseId;
+        String childChooseKey = eventData.getChildChooseId();
         if(StringUtils.isEmpty(childChooseKey)){
-            if( eventData.getData() != null){
-                childChooseKey = eventData.getData().getClass().getSimpleName();
-            }else {
-                throw new IllegalArgumentException();
-            }
+            childChooseKey = String.valueOf(eventData.getEventId());
+            Logs.DEFAULT_LOGGER.warn("Suggest assigning values to field childChooseKey");
         }
 
         GameConsumer childGameConsumer = childChooser.choose(childChooseKey , childConsumerList);

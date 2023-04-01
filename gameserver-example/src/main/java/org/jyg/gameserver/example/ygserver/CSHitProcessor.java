@@ -1,6 +1,6 @@
 package org.jyg.gameserver.example.ygserver;
 
-import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.timer.ITimerHandler;
@@ -9,8 +9,6 @@ import org.jyg.gameserver.example.ygserver.msg.PlayerFrameMsg;
 import org.jyg.gameserver.example.ygserver.msg.SCHitMsg;
 import org.jyg.gameserver.example.ygserver.msg.SCUpdatePlayerScoreMsg;
 
-import java.util.Map;
-
 public class CSHitProcessor extends ByteMsgObjProcessor<CSHitMsg> {
 
     public CSHitProcessor() {
@@ -18,7 +16,7 @@ public class CSHitProcessor extends ByteMsgObjProcessor<CSHitMsg> {
     }
 
     @Override
-    public void process(Session session, EventData<CSHitMsg> event) {
+    public void process(Session session, MsgEvent<CSHitMsg> event) {
 
         RoomManager roomManager = getGameConsumer().getInstanceManager().getInstance(RoomManager.class);
         Player player = session.getSessionObject();
@@ -36,7 +34,7 @@ public class CSHitProcessor extends ByteMsgObjProcessor<CSHitMsg> {
 
         String killMsg = roomPlayer.getPlayer().getPlayerDB().getName() + " Kill > ";
 
-        RoomPlayer hitRoomPlayer = room.getRoomPlayerMap().get(event.getData().getHitTargetId());
+        RoomPlayer hitRoomPlayer = room.getRoomPlayerMap().get(event.getMsgData().getHitTargetId());
         SCHitMsg scHitMsg = new SCHitMsg();
         if(hitRoomPlayer != null){
             hitRoomPlayer.setDeadCount(hitRoomPlayer.getDeadCount()+1);

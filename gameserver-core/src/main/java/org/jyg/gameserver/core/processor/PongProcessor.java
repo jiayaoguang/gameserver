@@ -1,6 +1,7 @@
 package org.jyg.gameserver.core.processor;
 
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.msg.PongByteMsg;
 import org.jyg.gameserver.core.session.Session;
 
@@ -14,8 +15,8 @@ public class PongProcessor extends ByteMsgObjProcessor<PongByteMsg> {
     }
 
     @Override
-    public void process(Session session, EventData<PongByteMsg> event) {
+    public void process(Session session, MsgEvent<PongByteMsg> event) {
 
-        int i = 0;
+        //do nothing
     }
 }

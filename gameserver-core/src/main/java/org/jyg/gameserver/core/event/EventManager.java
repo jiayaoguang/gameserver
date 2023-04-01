@@ -1,9 +1,9 @@
 package org.jyg.gameserver.core.event;
 
 import org.jyg.gameserver.core.consumer.GameConsumer;
-import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.listener.*;
 import org.jyg.gameserver.core.manager.Lifecycle;
-import org.jyg.gameserver.core.util.GameContext;
+import org.jyg.gameserver.core.util.Logs;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -28,9 +28,18 @@ public class EventManager implements Lifecycle {
         addEventListener(new ExecutableEventListener());
         addEventListener(new ChannelConnectEventListener(gameConsumer.getChannelManager()));
         addEventListener(new ChannelDisconnectEventListener(gameConsumer.getChannelManager()));
-        addEventListener(new ChannelMsgEventListener(gameConsumer));
+//        addEventListener(new ChannelMsgEventListener(gameConsumer));
         addEventListener(new HttpRequestEventListener(gameConsumer));
 
+        addEventListener(new ResultReturnEventListener(gameConsumer));
+        addEventListener(new InnerChannelConnectEventListener(gameConsumer.getChannelManager()));
+        addEventListener(new InnerChannelDisconnectEventListener(gameConsumer.getChannelManager()));
+        addEventListener(new ConsumerDefaultEventListener(gameConsumer));
+
+        addEventListener(new NormalMsgEventListener(gameConsumer));
+        addEventListener(new MQMsgEventListener(gameConsumer));
+        addEventListener(new InnerMsgEventListener(gameConsumer));
+        addEventListener(new UnknownMsgEventListener(gameConsumer));
     }
 
     @Override
@@ -44,6 +53,11 @@ public class EventManager implements Lifecycle {
 
 
     public void publishEvent(Event event){
+
+        if(event == null){
+            Logs.DEFAULT_LOGGER.error("event == null");
+            return;
+        }
 
         List<GameEventListener<? extends Event>> eventListeners = eventListMap.get(event.getClass());
         if(eventListeners == null || eventListeners.isEmpty()){
@@ -71,13 +85,14 @@ public class EventManager implements Lifecycle {
 
     }
 
-    public void publishEventToConsumer(GameContext gameContext, int targetConsumerId , Event event){
-        gameContext.getConsumerManager().publicEvent(targetConsumerId , EventType.PUBLISH_EVENT, event , 0 );
-    }
+//    public void publishEventToConsumer(GameContext gameContext, int targetConsumerId , Event event){
+//        gameContext.getConsumerManager().publicEvent(targetConsumerId , EventType.PUBLISH_EVENT, event , 0 );
+//    }
 
 
 
     public void addEventListener(GameEventListener<? extends Event> eventListener){
+
 
         Type superClass = eventListener.getClass().getGenericInterfaces()[0];
         if (superClass instanceof Class<?>) { // sanity check, should never happen
@@ -85,10 +100,17 @@ public class EventManager implements Lifecycle {
         }
 
         Type _type = ((ParameterizedType) superClass).getActualTypeArguments()[0];
+        try {
 
-        Class<? extends Event> eventClazz = (Class<? extends Event>) _type;
+            Class<? extends Event> eventClazz = (Class<? extends Event>) _type;
 
-        addEventListener(eventClazz , eventListener);
+            addEventListener(eventClazz , eventListener);
+        }catch (Exception e){
+            e.printStackTrace();
+
+            String s = _type.getTypeName();
+            int i = 0;
+        }
     }
 
 

@@ -47,6 +47,8 @@ public abstract class Timer implements Comparable<Timer>{
 //		this.startTime = startTime;
 
 		this.triggerTime = firstExecTime;
+
+
 	}
 
 

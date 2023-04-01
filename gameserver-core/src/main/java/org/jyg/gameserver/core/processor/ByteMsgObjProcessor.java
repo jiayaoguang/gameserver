@@ -1,6 +1,7 @@
 package org.jyg.gameserver.core.processor;
 
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.session.Session;
 
@@ -34,7 +35,7 @@ public abstract class ByteMsgObjProcessor<T extends ByteMsgObj> extends Abstract
     }
 
     @Override
-    public abstract void process(Session session, EventData<T> event);
+    public abstract void process(Session session, MsgEvent<T> event);
 
     public Class<? extends ByteMsgObj> getByteMsgObjClazz() {
         return byteMsgObjClazz;

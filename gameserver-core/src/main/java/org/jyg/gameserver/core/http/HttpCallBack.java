@@ -3,9 +3,7 @@ package org.jyg.gameserver.core.http;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.event.ExecutableEvent;
-import org.jyg.gameserver.core.util.CallBackEvent;
 import org.jyg.gameserver.core.util.GameContext;
 
 import java.io.IOException;
@@ -31,8 +29,7 @@ public class HttpCallBack implements Callback {
                 callback.onFailure(call,e);
         }));
 
-        gameContext.getConsumerManager().publicEvent(fromConsumerId, EventType.PUBLISH_EVENT,
-                executableEvent, 0);
+        gameContext.getConsumerManager().publicEvent(fromConsumerId, executableEvent);
 
     }
 
@@ -49,9 +46,7 @@ public class HttpCallBack implements Callback {
         }));
 
 
-
-        gameContext.getConsumerManager().publicEvent(fromConsumerId, EventType.PUBLISH_EVENT,
-                responseExecutableEvent, 0);
+        gameContext.getConsumerManager().publicEvent(fromConsumerId, responseExecutableEvent);
 
     }
 }

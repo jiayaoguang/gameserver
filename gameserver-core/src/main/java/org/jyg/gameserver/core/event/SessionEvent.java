@@ -2,7 +2,7 @@ package org.jyg.gameserver.core.event;
 
 import org.jyg.gameserver.core.session.Session;
 
-public abstract class SessionEvent implements Event {
+public abstract class SessionEvent extends Event {
 
     private final Session session;
 

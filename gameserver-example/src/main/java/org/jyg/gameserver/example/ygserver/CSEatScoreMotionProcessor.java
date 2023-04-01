@@ -1,6 +1,6 @@
 package org.jyg.gameserver.example.ygserver;
 
-import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.Logs;
@@ -13,9 +13,9 @@ public class CSEatScoreMotionProcessor extends ByteMsgObjProcessor<CSEatScoreMot
 
 
     @Override
-    public void process(Session session, EventData<CSEatScoreMotionMsg> eventData) {
+    public void process(Session session, MsgEvent<CSEatScoreMotionMsg> eventData) {
 
-        CSEatScoreMotionMsg msg = eventData.getData();
+        CSEatScoreMotionMsg msg = eventData.getMsgData();
 
         Player player = session.getSessionObject();
 

@@ -3,6 +3,8 @@ package org.jyg.gameserver.core.consumer;
 import com.google.protobuf.MessageLite;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.RemoteConsumerInfo;
+import org.jyg.gameserver.core.event.Event;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.util.GameContext;
@@ -122,33 +124,64 @@ public class RemoteGameConsumer extends ShareThreadGameConsumers {
 //        }
 //    }
 
+//    @Override
+//    public void onReciveEvent(EventData<?> event) {
+//        if(!isConnectAvailable()){
+//            tcpClient.checkConnect();
+//        }
+//
+//        Object data = event.getData();
+//        if(event.getEvent() instanceof MsgEvent){
+//            if(isConnectAvailable()){
+//                if(data instanceof ByteMsgObj){
+//                    tcpClient.write((ByteMsgObj)data);
+//                }else if(data instanceof MessageLite){
+//                    tcpClient.write((MessageLite)data);
+//                }else {
+//                    logger.error(" publicEvent fail , unknow date type {} ", data.getClass().getCanonicalName());
+//                }
+//            }else {
+//                logger.error(" publicEvent fail , isConnectAvailable false ");
+//            }
+//        }else {
+//
+//        }
+//
+//        try{
+//            update();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//
+//    }
+
+
     @Override
-    public void onReciveEvent(EventData<?> event) {
+    protected void doEvent(EventData eventData) {
         if(!isConnectAvailable()){
             tcpClient.checkConnect();
         }
 
-        Object data = event.getData();
-
-        if(isConnectAvailable()){
-            if(data instanceof ByteMsgObj){
-                tcpClient.write((ByteMsgObj)data);
-            }else if(data instanceof MessageLite){
-                tcpClient.write((MessageLite)data);
+        Event event = eventData.getEvent();
+        if(event instanceof MsgEvent){
+            if(isConnectAvailable()){
+                Object data = ((MsgEvent<?>) event).getMsgData();
+                if(data instanceof ByteMsgObj){
+                    tcpClient.write((ByteMsgObj)data);
+                }else if(data instanceof MessageLite){
+                    tcpClient.write((MessageLite)data);
+                }else {
+                    logger.error(" publicEvent fail , unknow date type {} ", data.getClass().getCanonicalName());
+                }
             }else {
-                logger.error(" publicEvent fail , unknow date type {} ", data.getClass().getCanonicalName());
+                logger.error(" publicEvent fail , isConnectAvailable false ");
             }
         }else {
-            logger.error(" publicEvent fail , isConnectAvailable false ");
-        }
-
-        try{
-            update();
-        }catch (Exception e){
-            e.printStackTrace();
+            getEventManager().publishEvent(eventData.getEvent());
         }
 
     }
+
 
     private boolean isConnectAvailable(){
         return tcpClient.isConnectAvailable();

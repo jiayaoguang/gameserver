@@ -1,5 +1,7 @@
 package org.jyg.gameserver.test.db.proxy;
 
+import org.jyg.gameserver.core.consumer.GameConsumer;
+import org.jyg.gameserver.core.consumer.MpscQueueGameConsumer;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.ConfigUtil;
 import org.jyg.gameserver.db.ConsumerDBManager;
@@ -19,11 +21,15 @@ public class DBProxy {
         DBConfig dbConfig = new DBConfig();
         dbConfig.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC");
         dbConfig.setUsername("root");
-        dbConfig.setPassword("123456");
+        dbConfig.setPassword("123654asd");
 
 
+        GameConsumer gameConsumer = new MpscQueueGameConsumer();
+        gameConsumer.setId(101);
 
-        GameServerBootstrap gameServerBootstrap = new GameServerBootstrap();
+
+        GameServerBootstrap gameServerBootstrap = new GameServerBootstrap(gameConsumer);
+//        gameServerBootstrap.getDefaultConsumer().setId(2);
         gameServerBootstrap.addTcpConnector(8888);
 
         DBGameConsumer consumer = new DBGameConsumer(dbConfig);

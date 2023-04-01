@@ -1,6 +1,7 @@
 package org.jyg.gameserver.core.intercept;
 
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.AllUtil;
 
@@ -19,7 +20,7 @@ public class NotWhiteIpInterceptor implements MsgInterceptor<Object> {
         this.whiteIpSet.add("127.0.0.1");
     }
 
-    public final boolean intercept(Session session, EventData<Object> eventData) {
+    public final boolean intercept(Session session, MsgEvent<Object> eventData) {
 
         String addr = session.getRemoteAddr();
 

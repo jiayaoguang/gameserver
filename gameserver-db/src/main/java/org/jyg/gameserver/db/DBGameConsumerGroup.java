@@ -1,10 +1,8 @@
 package org.jyg.gameserver.db;
 
-import io.netty.channel.Channel;
 import org.jyg.gameserver.core.consumer.GameConsumerGroup;
 import org.jyg.gameserver.core.data.EventData;
-import org.jyg.gameserver.core.data.EventExtData;
-import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.ConsumerDefaultEvent;
 import org.jyg.gameserver.core.util.ConfigUtil;
 import org.jyg.gameserver.db.type.TypeHandler;
 
@@ -60,18 +58,26 @@ public class DBGameConsumerGroup extends GameConsumerGroup<DBGameConsumer> {
     }
 
     @Override
-    protected void processDefaultEvent(int eventId , EventData eventData) {
+    public void processDefaultEvent(ConsumerDefaultEvent eventData) {
+
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void publicEvent(EventType evenType, Object data, Channel channel, int eventId, EventExtData eventExtData) {
-        if(!(data instanceof BaseDBEntity)){
-            throw new IllegalArgumentException("db entity must extend BaseDBEntity");
-        }
-        Object cloneData = ((BaseDBEntity) data).clone();
+    public void publicEvent(EventData eventData) {
+//        if(!(data instanceof BaseDBEntity)){
+//            throw new IllegalArgumentException("db entity must extend BaseDBEntity");
+//        }
 
-        super.publicEvent(evenType , cloneData , channel , eventId , eventExtData);
+        if(eventData.getEvent() instanceof ConsumerDefaultEvent){
+            ConsumerDefaultEvent consumerDefaultEvent = (ConsumerDefaultEvent) eventData.getEvent();
+            if(consumerDefaultEvent.getData() instanceof BaseDBEntity){
+                consumerDefaultEvent.setData(((BaseDBEntity) consumerDefaultEvent.getData()).clone());
+            }
+
+        }
+
+        super.publicEvent(eventData);
     }
 
     public void registerTypeHandler(Class<?> clazz , TypeHandler<?> typeHandler){

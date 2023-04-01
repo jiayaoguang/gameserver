@@ -7,6 +7,7 @@ import org.jyg.gameserver.core.session.Session;
 /**
  * create by jiayaoguang on 2022/11/27
  */
+@Deprecated
 public class ChannelMsgEventListener implements GameEventListener<ChannelMsgEvent>{
 
     private final GameConsumer gameConsumer;
@@ -18,14 +19,14 @@ public class ChannelMsgEventListener implements GameEventListener<ChannelMsgEven
 
     @Override
     public void onEvent(ChannelMsgEvent channelMsgEvent) {
-        Session session = gameConsumer.getChannelManager().getSession(channelMsgEvent.getChannel());
-        if(session == null){
-            return;
-        }
-
-        gameConsumer.processEventMsg(session , channelMsgEvent.getEventData());
-
-//        new ChannelMsgEventListener(null ,new EventData<>());
+//        Session session = gameConsumer.getChannelManager().getSession(channelMsgEvent.getChannel());
+//        if(session == null){
+//            return;
+//        }
+//
+//        gameConsumer.processEventMsg(session , channelMsgEvent.getEventData());
+//
+////        new ChannelMsgEventListener(null ,new EventData<>());
 
 
     }

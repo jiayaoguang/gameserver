@@ -1,16 +1,14 @@
 package org.jyg.gameserver.core.handle;
 
-import com.google.protobuf.MessageLite;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
-import org.jyg.gameserver.core.enums.EventType;
 import org.jyg.gameserver.core.event.ChannelConnectEvent;
 import org.jyg.gameserver.core.event.ChannelDisconnectEvent;
+import org.jyg.gameserver.core.event.NormalMsgEvent;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
-import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
@@ -33,12 +31,12 @@ public class WebSocketMsgDecoder extends
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception { // (5)
+		super.channelActive(ctx);
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "在线");
 
-		gameContext.getConsumerManager().publicEventToDefault(EventType.PUBLISH_EVENT, new ChannelConnectEvent(ctx.channel()), ctx.channel() , 0 );
-		
-		super.channelActive(ctx);
+		gameContext.getConsumerManager().publicEvent(gameContext.getMainConsumerId(), new ChannelConnectEvent(ctx.channel()));
+
 	}
 	
 	@Override
@@ -97,9 +95,9 @@ public class WebSocketMsgDecoder extends
 				Logs.DEFAULT_LOGGER.error(" msg decode make exception, msgCodec type : {}  , exception {}", msgCodec.getClass().getSimpleName(), e.getCause());
 				throw e;
 			}
+			NormalMsgEvent normalMsgEvent = new NormalMsgEvent(msgId  , msgObj, ctx.channel());
 
-
-			gameContext.getConsumerManager().publicEventToDefault(EventType.REMOTE_MSG_COME, msgObj, ctx.channel(), msgId);
+			gameContext.getConsumerManager().publicEvent( gameContext.getMainConsumerId() , normalMsgEvent);
 
 //			switch (msgCodec.getMsgType()) {
 //				case PROTO:
@@ -137,12 +135,11 @@ public class WebSocketMsgDecoder extends
 	
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception { // (6)
+		super.channelInactive(ctx);
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "掉线");
 
-		gameContext.getConsumerManager().publicEventToDefault(EventType.PUBLISH_EVENT, new ChannelDisconnectEvent(ctx.channel()), ctx.channel() , 0);
-		
-		super.channelInactive(ctx);
+		gameContext.getConsumerManager().publicEvent(gameContext.getMainConsumerId(), new ChannelDisconnectEvent(ctx.channel()));
 	}
 	
 	//------------------------start-----------------------------

@@ -5,8 +5,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.data.EventData;
-import org.jyg.gameserver.core.data.EventExtData;
-import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.Event;
+import org.jyg.gameserver.core.event.ResultReturnEvent;
 import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 
@@ -63,44 +63,68 @@ public class ConsumerManager implements Lifecycle{
 
     }
 
+    public void publicEvent(int targetConsumerId, Event event){
+        publicEvent(targetConsumerId , event ,"",0L);
+    }
 
-    public void publicEvent(int targetConsumerId, EventType evenType, Object data, Channel channel, int eventId , EventExtData eventExtData ){
+    public void publicEvent(int targetConsumerId, Event event , String childChooseId ){
+        publicEvent(targetConsumerId , event ,"",0L);
+    }
+
+
+    public void publicEvent(int targetConsumerId, Event event , String childChooseId , long requestId){
         GameConsumer gameConsumer = getConsumer(targetConsumerId);
         if(gameConsumer == null){
             Logs.DEFAULT_LOGGER.error("targetConsumer {} not found" , targetConsumerId);
             return;
         }
-        gameConsumer.publicEvent(evenType , data ,channel ,eventId , eventExtData);
+        EventData eventData = new EventData();
+        eventData.setEvent(event);
+        eventData.setChildChooseId(childChooseId );
+
+        gameConsumer.publicEvent(eventData);
 
     }
 
-    public void publicEvent(int targetConsumerId, EventType evenType, Object data, Channel channel, int eventId ){
-        this.publicEvent(targetConsumerId , evenType , data ,channel ,eventId , EventData.EMPTY_EVENT_EXT_DATA);
-    }
-
-    public void publicEventToMain(EventData eventData ){
-        this.publicEvent(gameContext.getMainConsumerId() ,eventData);
-    }
 
 
-    public void publicEventToDefault(EventType evenType, Object data, Channel channel, int eventId ){
-        this.publicEvent(gameContext.getMainConsumerId() , evenType , data ,channel ,eventId , EventData.EMPTY_EVENT_EXT_DATA);
-    }
+//    public void publicEvent(int targetConsumerId, EventType evenType, Object data, Channel channel, int eventId , EventExtData eventExtData ){
+//        GameConsumer gameConsumer = getConsumer(targetConsumerId);
+//        if(gameConsumer == null){
+//            Logs.DEFAULT_LOGGER.error("targetConsumer {} not found" , targetConsumerId);
+//            return;
+//        }
+//        gameConsumer.publicEvent(evenType , data ,channel ,eventId , eventExtData);
+//
+//    }
 
-    public void publicEventToDefault(EventType evenType, Object data, int eventId) {
-        this.publicEvent(gameContext.getMainConsumerId(), evenType, data, null, eventId, EventData.EMPTY_EVENT_EXT_DATA);
-    }
+//    public void publicEvent(int targetConsumerId, EventType evenType, Object data, Channel channel, int eventId ){
+//        this.publicEvent(targetConsumerId , evenType , data ,channel ,eventId , EventData.EMPTY_EVENT_EXT_DATA);
+//    }
 
-    public void publicEvent(int targetConsumerId, EventType evenType, Object data, int eventId ){
-        this.publicEvent(targetConsumerId , evenType , data ,null ,eventId , EventData.EMPTY_EVENT_EXT_DATA);
-    }
+//    public void publicEventToMain(EventData eventData ){
+//        this.publicEvent(gameContext.getMainConsumerId() ,eventData);
+//    }
+
+
+//    public void publicEventToDefault(EventType evenType, Object data, Channel channel, int eventId ){
+//        this.publicEvent(gameContext.getMainConsumerId() , evenType , data ,channel ,eventId , EventData.EMPTY_EVENT_EXT_DATA);
+//    }
+
+//    public void publicEventToDefault(EventType evenType, Object data, int eventId) {
+//        this.publicEvent(gameContext.getMainConsumerId(), evenType, data, null, eventId, EventData.EMPTY_EVENT_EXT_DATA);
+//    }
+
+//    public void publicEvent(int targetConsumerId, EventType evenType, Object data, int eventId ){
+//        this.publicEvent(targetConsumerId , evenType , data ,null ,eventId , EventData.EMPTY_EVENT_EXT_DATA);
+//    }
 
     public void publicCallBackEvent(int targetConsumerId, Object data, long requestId ,int eventId){
         if(requestId == 0){
             Logs.DEFAULT_LOGGER.error("publicCallBackEvent requestId == 0");
             return;
         }
-        this.publicEvent(targetConsumerId , EventType.RESULT_CALL_BACK, data ,null ,eventId , new EventExtData( 0 , requestId));
+        publicEvent(targetConsumerId, new ResultReturnEvent(requestId, eventId, data));
     }
 
 

@@ -1,6 +1,7 @@
 package org.jyg.gameserver.core.processor;
 
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.msg.PingByteMsg;
 import org.jyg.gameserver.core.msg.PongByteMsg;
 import org.jyg.gameserver.core.session.Session;
@@ -17,7 +18,7 @@ public class PingProcessor extends ByteMsgObjProcessor<PingByteMsg> {
     }
 
     @Override
-    public void process(Session session, EventData<PingByteMsg> event) {
+    public void process(Session session, MsgEvent<PingByteMsg> event) {
 
         session.writeMessage(pongByteMsg);
 

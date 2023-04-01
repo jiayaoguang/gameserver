@@ -2,7 +2,7 @@ package org.jyg.gameserver.core.event;
 
 import org.jyg.gameserver.core.consumer.GameConsumer;
 
-public class ConsumerThreadStartEvent implements Event{
+public class ConsumerThreadStartEvent extends Event{
 
     private final GameConsumer gameConsumer;
 

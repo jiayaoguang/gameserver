@@ -1,6 +1,6 @@
 package org.jyg.gameserver.example.ygserver;
 
-import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.example.ygserver.msg.ChatReplyJson;
@@ -16,12 +16,12 @@ public class ChatRequestProcessor extends ByteMsgObjProcessor<ChatRequestJson> {
     }
 
     @Override
-    public void process(Session session, EventData<ChatRequestJson> eventData) {
+    public void process(Session session, MsgEvent<ChatRequestJson> eventData) {
 
         PlayerDB playerDB = session.getSessionObject();
 
         ChatReplyJson chatReplyJson = new ChatReplyJson();
-        chatReplyJson.setContent(eventData.getData().getContent());
+        chatReplyJson.setContent(eventData.getMsgData().getContent());
         chatReplyJson.setPlayerId(playerDB.getId());
         chatReplyJson.setSendPlayerName(playerDB.getName());
 

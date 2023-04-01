@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.processor;
 
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.intercept.MsgInterceptor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.GameContext;
@@ -29,12 +30,12 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 		interceptors.add(msgInterceptor);
 	}
 
-	public boolean checkIntercepts(Session session , EventData eventData){
+	public boolean checkIntercepts(Session session , MsgEvent event){
 		if(interceptors.size() == 0){
 			return true;
 		}
 		for(MsgInterceptor<?> msgInterceptor : interceptors){
-			if(!msgInterceptor.intercept(session , eventData)){
+			if(!msgInterceptor.intercept(session , event)){
 				return false;
 			}
 		}
@@ -48,7 +49,7 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 	}
 
 
-	public abstract void process(Session session , EventData<T> event);
+	public abstract void process(Session session , MsgEvent<T> event);
 
 
 	public GameConsumer getGameConsumer() {

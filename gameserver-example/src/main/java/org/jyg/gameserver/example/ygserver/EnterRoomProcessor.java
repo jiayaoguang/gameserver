@@ -1,6 +1,7 @@
 package org.jyg.gameserver.example.ygserver;
 
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.db.ConsumerDBManager;
@@ -13,7 +14,7 @@ public class EnterRoomProcessor extends ByteMsgObjProcessor<CSEnterRoomMsg> {
     }
 
     @Override
-    public void process(Session session, EventData<CSEnterRoomMsg> event) {
+    public void process(Session session, MsgEvent<CSEnterRoomMsg> event) {
 
 
         RoomManager roomManager = this.getGameConsumer().getInstanceManager().getInstance(RoomManager.class);

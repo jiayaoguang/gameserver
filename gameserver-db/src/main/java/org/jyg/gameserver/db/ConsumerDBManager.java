@@ -2,8 +2,7 @@ package org.jyg.gameserver.db;
 
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.consumer.ResultHandler;
-import org.jyg.gameserver.core.data.EventExtData;
-import org.jyg.gameserver.core.enums.EventType;
+import org.jyg.gameserver.core.event.ConsumerDefaultEvent;
 import org.jyg.gameserver.core.manager.Lifecycle;
 import org.jyg.gameserver.db.data.ExecSqlInfo;
 
@@ -33,41 +32,52 @@ public class ConsumerDBManager implements Lifecycle {
 
 
     public void insert(BaseDBEntity dbEntity) {
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, dbEntity, null, BDEventConst.INSERT
-                , new EventExtData(0, 0L, dbEntity.getClass().getSimpleName()));
+
+        ConsumerDefaultEvent consumerDefaultEvent = new ConsumerDefaultEvent(BDEventConst.INSERT, dbEntity);
+
+        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, dbEntity.getClass().getSimpleName());
     }
 
     public void insert(BaseDBEntity dbEntity, String childChooseId) {
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, dbEntity, null, BDEventConst.INSERT
-                , new EventExtData(0, 0L, childChooseId));
+
+        ConsumerDefaultEvent consumerDefaultEvent = new ConsumerDefaultEvent(BDEventConst.INSERT, dbEntity);
+
+        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, childChooseId);
     }
 
     public void delete(BaseDBEntity dbEntity, String childChooseId) {
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, dbEntity, null, BDEventConst.DELETE
-                , new EventExtData(0, 0L, childChooseId));
+        ConsumerDefaultEvent consumerDefaultEvent = new ConsumerDefaultEvent(BDEventConst.DELETE, dbEntity);
+        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, childChooseId);
 
     }
 
     public void delete(BaseDBEntity dbEntity){
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, dbEntity, null, BDEventConst.DELETE
-                , new EventExtData(0, 0L, dbEntity.getClass().getSimpleName()));
+        ConsumerDefaultEvent consumerDefaultEvent = new ConsumerDefaultEvent(BDEventConst.DELETE, dbEntity);
+        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, dbEntity.getClass().getSimpleName());
     }
 
     public void update(BaseDBEntity dbEntity, String childChooseId) {
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, dbEntity, null, BDEventConst.UPDATE
-                , new EventExtData(0, 0L, childChooseId));
+
+        ConsumerDefaultEvent consumerDefaultEvent = new ConsumerDefaultEvent(BDEventConst.UPDATE, dbEntity);
+
+        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, childChooseId);
     }
 
     public void update(BaseDBEntity dbEntity) {
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, dbEntity, null, BDEventConst.UPDATE
-                , new EventExtData(0, 0L, dbEntity.getClass().getSimpleName()));
+        ConsumerDefaultEvent consumerDefaultEvent = new ConsumerDefaultEvent(BDEventConst.UPDATE, dbEntity);
+        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, dbEntity.getClass().getSimpleName());
     }
 
 
     public long select(BaseDBEntity dbEntity, ResultHandler onSelectResult, String childChooseId) {
         long requestId = gameConsumer.registerCallBackMethod(onSelectResult);
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, dbEntity, null, BDEventConst.SELECT
-                , new EventExtData(gameConsumer.getId(), requestId, childChooseId));
+        ConsumerDefaultEvent consumerDefaultEvent = new ConsumerDefaultEvent(BDEventConst.SELECT, dbEntity);
+        consumerDefaultEvent.setFromConsumerId(gameConsumer.getId());
+        consumerDefaultEvent.setEventId(BDEventConst.SELECT);
+        consumerDefaultEvent.setData(dbEntity);
+        consumerDefaultEvent.setRequestId(requestId);
+
+        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent ,childChooseId );
         return requestId;
     }
 
@@ -80,8 +90,15 @@ public class ConsumerDBManager implements Lifecycle {
         long requestId = gameConsumer.registerCallBackMethod(onSelectResult);
         Map<String , Object> params = new HashMap<>();
         params.put("field" , fieldName);
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, dbEntity, null, BDEventConst.SELECT_BY_FIELD
-                , new EventExtData(gameConsumer.getId(), requestId, childChooseId,params));
+
+        ConsumerDefaultEvent consumerDefaultEvent = new ConsumerDefaultEvent(BDEventConst.SELECT, dbEntity);
+        consumerDefaultEvent.setFromConsumerId(gameConsumer.getId());
+        consumerDefaultEvent.setEventId(BDEventConst.SELECT);
+        consumerDefaultEvent.setData(dbEntity);
+        consumerDefaultEvent.setRequestId(requestId);
+        consumerDefaultEvent.setParams(params);
+
+        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, childChooseId );
         return requestId;
     }
 
@@ -106,8 +123,14 @@ public class ConsumerDBManager implements Lifecycle {
     public long execSql(Class<?> dbEntityClazz, String prepareSql , List<Object> paramValues , SqlExecuteType executeType, String childChooseId, ResultHandler onQueryResult) {
         long requestId = gameConsumer.registerCallBackMethod(onQueryResult);
         ExecSqlInfo execSqlInfo = new ExecSqlInfo(prepareSql ,paramValues , dbEntityClazz , executeType);
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, EventType.DEFAULT_EVENT, execSqlInfo, null, 0
-                , new EventExtData(gameConsumer.getId(), requestId, childChooseId));
+
+        ConsumerDefaultEvent consumerDefaultEvent = new ConsumerDefaultEvent();
+        consumerDefaultEvent.setFromConsumerId(gameConsumer.getId());
+        consumerDefaultEvent.setEventId(0);
+        consumerDefaultEvent.setData(execSqlInfo);
+        consumerDefaultEvent.setRequestId(requestId);
+
+        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, childChooseId );
         return requestId;
     }
 
