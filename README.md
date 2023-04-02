@@ -14,7 +14,7 @@ Maven
 ## 简介
 * 这是一个通用游戏服务器框架
 * 服务器以consumer 为运行单位,consumer 可以本地运行和调用,也可远程调用
-* consumer可以再单独的线程运行，也可以多个consumer运行在一个线程
+* consumer可以在单独的线程运行，也可以多个consumer运行在一个线程
 
 ## Features
 * 消息支持 protobuf、json、自定义 的数据类型，支持压缩、加密操作
