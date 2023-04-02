@@ -5,7 +5,7 @@ import org.jyg.gameserver.core.consumer.RemoteGameConsumer;
 import org.jyg.gameserver.core.event.ConnectEvent;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
 import org.jyg.gameserver.core.event.DisconnectEvent;
-import org.jyg.gameserver.core.event.GameEventListener;
+import org.jyg.gameserver.core.event.listener.GameEventListener;
 import org.jyg.gameserver.core.msg.route.RouteClientSessionConnectMsg;
 import org.jyg.gameserver.core.msg.route.RouteClientSessionDisconnectMsg;
 import org.jyg.gameserver.core.msg.route.RouteRegisterMsg;

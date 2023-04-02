@@ -1,11 +1,12 @@
-package org.jyg.gameserver.core.event;
+package org.jyg.gameserver.core.event.listener;
 
+import org.jyg.gameserver.core.event.ChannelDisconnectEvent;
 import org.jyg.gameserver.core.manager.ChannelManager;
 
 /**
  * create by jiayaoguang on 2022/11/27
  */
-public class ChannelDisconnectEventListener implements GameEventListener<ChannelDisconnectEvent>{
+public class ChannelDisconnectEventListener implements GameEventListener<ChannelDisconnectEvent> {
 
     private final ChannelManager channelManager;
 

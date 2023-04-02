@@ -1,7 +1,6 @@
 package org.jyg.gameserver.core.event.listener;
 
 import org.jyg.gameserver.core.consumer.GameConsumer;
-import org.jyg.gameserver.core.event.GameEventListener;
 import org.jyg.gameserver.core.event.UnknownMsgEvent;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.AllUtil;

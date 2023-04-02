@@ -1,7 +1,6 @@
 package org.jyg.gameserver.core.event.listener;
 
 import org.jyg.gameserver.core.event.ChannelConnectEvent;
-import org.jyg.gameserver.core.event.GameEventListener;
 import org.jyg.gameserver.core.manager.ChannelManager;
 
 /**

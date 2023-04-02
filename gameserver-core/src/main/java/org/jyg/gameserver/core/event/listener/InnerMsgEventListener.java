@@ -1,12 +1,7 @@
 package org.jyg.gameserver.core.event.listener;
 
 import org.jyg.gameserver.core.consumer.GameConsumer;
-import org.jyg.gameserver.core.event.GameEventListener;
 import org.jyg.gameserver.core.event.InnerMsgEvent;
-import org.jyg.gameserver.core.event.NormalMsgEvent;
-import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.util.AllUtil;
-import org.jyg.gameserver.core.util.Logs;
 
 public class InnerMsgEventListener implements GameEventListener<InnerMsgEvent> {
     private final GameConsumer gameConsumer;

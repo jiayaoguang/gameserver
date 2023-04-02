@@ -4,7 +4,7 @@ import org.jyg.gameserver.core.consumer.AbstractQueueGameConsumer;
 import org.jyg.gameserver.core.consumer.ConsumerFuture;
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
-import org.jyg.gameserver.core.event.GameEventListener;
+import org.jyg.gameserver.core.event.listener.GameEventListener;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.ConfigUtil;

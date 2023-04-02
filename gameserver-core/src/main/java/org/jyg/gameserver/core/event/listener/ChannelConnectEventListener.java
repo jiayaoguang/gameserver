@@ -1,11 +1,12 @@
-package org.jyg.gameserver.core.event;
+package org.jyg.gameserver.core.event.listener;
 
+import org.jyg.gameserver.core.event.ChannelConnectEvent;
 import org.jyg.gameserver.core.manager.ChannelManager;
 
 /**
  * create by jiayaoguang on 2022/11/27
  */
-public class ChannelConnectEventListener implements GameEventListener<ChannelConnectEvent>{
+public class ChannelConnectEventListener implements GameEventListener<ChannelConnectEvent> {
 
     private final ChannelManager channelManager;
 

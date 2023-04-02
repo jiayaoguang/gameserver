@@ -1,7 +1,6 @@
 package org.jyg.gameserver.core.event.listener;
 
 import org.jyg.gameserver.core.consumer.GameConsumer;
-import org.jyg.gameserver.core.event.GameEventListener;
 import org.jyg.gameserver.core.event.ResultReturnEvent;
 
 public class ResultReturnEventListener implements GameEventListener<ResultReturnEvent> {

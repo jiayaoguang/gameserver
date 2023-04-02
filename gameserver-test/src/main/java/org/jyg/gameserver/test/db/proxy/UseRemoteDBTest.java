@@ -2,7 +2,7 @@ package org.jyg.gameserver.test.db.proxy;
 
 import org.jyg.gameserver.core.consumer.*;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
-import org.jyg.gameserver.core.event.GameEventListener;
+import org.jyg.gameserver.core.event.listener.GameEventListener;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.db.ConsumerDBManager;

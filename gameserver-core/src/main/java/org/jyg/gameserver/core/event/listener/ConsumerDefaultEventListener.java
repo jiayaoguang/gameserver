@@ -2,7 +2,6 @@ package org.jyg.gameserver.core.event.listener;
 
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.event.ConsumerDefaultEvent;
-import org.jyg.gameserver.core.event.GameEventListener;
 
 public class ConsumerDefaultEventListener implements GameEventListener<ConsumerDefaultEvent> {
     private final GameConsumer gameConsumer;

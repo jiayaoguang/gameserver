@@ -2,7 +2,7 @@ package org.jyg.gameserver.example.ygserver;
 
 import org.jyg.gameserver.core.consumer.ResultHandler;
 import org.jyg.gameserver.core.event.DisconnectEvent;
-import org.jyg.gameserver.core.event.GameEventListener;
+import org.jyg.gameserver.core.event.listener.GameEventListener;
 import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;

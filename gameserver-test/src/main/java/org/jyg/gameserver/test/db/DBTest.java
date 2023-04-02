@@ -2,14 +2,13 @@ package org.jyg.gameserver.test.db;
 
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
-import org.jyg.gameserver.core.event.GameEventListener;
+import org.jyg.gameserver.core.event.listener.GameEventListener;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.ConfigUtil;
 import org.jyg.gameserver.db.ConsumerDBManager;
 import org.jyg.gameserver.db.DBConfig;
 import org.jyg.gameserver.db.DBGameConsumer;
-import org.jyg.gameserver.db.util.CreateTableUtil;
 
 import java.util.ArrayList;
 import java.util.List;

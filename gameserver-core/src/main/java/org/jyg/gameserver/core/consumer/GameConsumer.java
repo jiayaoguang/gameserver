@@ -7,6 +7,7 @@ import org.jyg.gameserver.core.anno.InvokeName;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.event.*;
+import org.jyg.gameserver.core.event.listener.GameEventListener;
 import org.jyg.gameserver.core.intercept.OnlyLocalHttpMsgInterceptor;
 import org.jyg.gameserver.core.invoke.IRemoteInvoke;
 import org.jyg.gameserver.core.manager.*;
