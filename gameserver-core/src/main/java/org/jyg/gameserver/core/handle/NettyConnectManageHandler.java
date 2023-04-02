@@ -13,6 +13,7 @@ import org.jyg.gameserver.core.msg.PingByteMsg;
 import org.jyg.gameserver.core.msg.ReadIdleMsgObj;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.GameContext;
+import org.jyg.gameserver.core.util.IpUtil;
 import org.jyg.gameserver.core.util.Logs;
 
 /**
@@ -38,7 +39,7 @@ public class NettyConnectManageHandler extends ChannelDuplexHandler {
         Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + " online");
 
         if(!gameContext.getServerConfig().isOpenConnect()){
-            String ip = AllUtil.getChannelRemoteIp(incoming);
+            String ip = IpUtil.getChannelRemoteIp(incoming);
             if(!gameContext.getServerConfig().getWhiteIpSet().contains(ip)){
                 incoming.close();
                 Logs.DEFAULT_LOGGER.warn("connect forbidden, ip {} not in openConnect list " , ip);

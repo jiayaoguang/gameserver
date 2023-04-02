@@ -2,10 +2,12 @@ package org.jyg.gameserver.core.processor;
 
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.HttpRequestEvent;
 import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.intercept.MsgInterceptor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.GameContext;
+import org.jyg.gameserver.core.util.Logs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +33,7 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 	}
 
 	public boolean checkIntercepts(Session session , MsgEvent event){
-		if(interceptors.size() == 0){
+		if(interceptors.isEmpty()){
 			return true;
 		}
 		for(MsgInterceptor<?> msgInterceptor : interceptors){

@@ -8,6 +8,8 @@ import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.event.*;
 import org.jyg.gameserver.core.event.listener.GameEventListener;
+import org.jyg.gameserver.core.intercept.HttpWhiteIpInterceptor;
+import org.jyg.gameserver.core.intercept.WhiteIpInterceptor;
 import org.jyg.gameserver.core.intercept.OnlyLocalHttpMsgInterceptor;
 import org.jyg.gameserver.core.invoke.IRemoteInvoke;
 import org.jyg.gameserver.core.manager.*;
@@ -263,12 +265,11 @@ public abstract class GameConsumer {
         if(event.getMsgData() != null){
             msgName = event.getMsgData().getClass().getCanonicalName();
         }else {
-            msgName = "unknown";
+            msgName = "unknown_"+event.getMsgId();
         }
 
         if(!processor.checkIntercepts(session , event)){
-
-            Logs.DEFAULT_LOGGER.info("refuse processor msgId {} , msgName {}", event.getMsgId(),msgName);
+            Logs.DEFAULT_LOGGER.error(" session {} forbid access msg {} " , session.getRemoteAddr() , msgName);
             return;
         }
 
@@ -294,7 +295,8 @@ public abstract class GameConsumer {
         HttpProcessor httpProcessor = getHttpProcessor(event.getMsgData().noParamUri());
 
         if(!httpProcessor.checkIntercepts(null , event)){
-            Logs.DEFAULT_LOGGER.info("refuse httpProcessor path {}", httpProcessor.getPath());
+            Logs.DEFAULT_LOGGER.info("channel {} forbid access http path {} close it", IpUtil.getChannelRemoteIp(event.getChannel()), httpProcessor.getPath());
+            event.getChannel().close();
             return;
         }
 

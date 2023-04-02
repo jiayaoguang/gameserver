@@ -13,6 +13,8 @@ import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.data.ServerConfig;
 import org.jyg.gameserver.core.handle.NettyHandlerFactory;
+import org.jyg.gameserver.core.intercept.HttpWhiteIpInterceptor;
+import org.jyg.gameserver.core.intercept.WhiteIpInterceptor;
 import org.jyg.gameserver.core.manager.*;
 import org.jyg.gameserver.core.msg.*;
 import org.jyg.gameserver.core.msg.route.*;
@@ -75,6 +77,11 @@ public class GameContext{
 //    private final ClockManager clockManager = new ClockManager();
 
 
+    private WhiteIpInterceptor whiteIpInterceptor;
+
+    private HttpWhiteIpInterceptor httpWhiteIpInterceptor;
+
+
     public GameContext(GameConsumer mainGameConsumer) {
         this(mainGameConsumer,DEFAULT_CONFIG_FILE_NAME );
     }
@@ -114,6 +121,13 @@ public class GameContext{
         this.instanceManager.putInstance(this);
         this.instanceManager.putInstance(this.eventLoopGroupManager);
         this.instanceManager.putInstance(this.consumerManager);
+
+        this.whiteIpInterceptor = new WhiteIpInterceptor();
+        this.whiteIpInterceptor.addWhiteIps(this.serverConfig.getWhiteIpSet());
+        this.httpWhiteIpInterceptor = new HttpWhiteIpInterceptor();
+        this.httpWhiteIpInterceptor.addWhiteIps(this.serverConfig.getWhiteIpSet());
+
+
 
 
         initCommonProcessor();
@@ -265,8 +279,10 @@ public class GameContext{
 
         getMainGameConsumer().addProcessor(new LoadClassesHttpProcessor());
         getMainGameConsumer().addProcessor(new RedefineClassesHttpProcessor());
+        SysInfoHttpProcessor sysInfoHttpProcessor = new SysInfoHttpProcessor();
+        sysInfoHttpProcessor.addMsgInterceptor(this.httpWhiteIpInterceptor);
 
-        getMainGameConsumer().addProcessor(new SysInfoHttpProcessor());
+        getMainGameConsumer().addProcessor(sysInfoHttpProcessor);
 
 
         getMainGameConsumer().addProcessor(new RouteMsgProcessor());
