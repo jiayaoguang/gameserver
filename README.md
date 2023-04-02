@@ -1,32 +1,39 @@
 ## 游戏服务器  <font color=#f1986d size=3>更新中...</font>
 ![Java CI](https://github.com/jiayaoguang/gameserver/workflows/Java%20CI/badge.svg)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
+![Maven](https://img.shields.io/maven-central/v/com.github.jiayaoguang/gameserver-core.svg)
 ------
 Maven 
 
     <dependency>
         <groupId>com.github.jiayaoguang</groupId>
         <artifactId>gameserver-core</artifactId>
-        <version>0.0.2</version>
+        <version>0.0.3</version>
     </dependency>
 
+## 简介
+* 这是一个通用游戏服务器框架
+* 服务器以consumer 为运行单位,consumer 可以本地运行和调用,也可远程调用
+* consumer可以再单独的线程运行，也可以多个consumer运行在一个线程
 
-* core模块- 主要的网络库
-* db模块- sql数据库持久化异步封装
-* example模块- 一个完整的例子
-* 其他模块- 测试用
+## Features
+* 消息支持 protobuf、json、自定义 的数据类型，支持压缩、加密操作
+* 网页http 请求
+* 轻量级远程调用、依赖注入
+* 不重启更新
+* mysql对象关系映射及异步存储
+* 定时事件
+* 消息转发代理
+
+
 
 [服务器示例项目](https://github.com/jiayaoguang/gameserver/tree/main/gameserver-example)
 [客户端示例项目](https://github.com/jiayaoguang/gameclient)
 	
-服务器主要采用了netty4.1.19.Final框架处理socket连接,
-使用protobuf3.5.1作为发送消息序列化格式,
-使用disruptor3.3.2框架去做端口消息的多线程同步
 
-能够处理http，protobuf , json/自定义字节数组 类型的数据
 
 构建处理 protoBuf数据的服务器例子:
->
+
     public class PingServer {
         public static void main(String[] args) throws Exception {
             GameServerBootstrap bootstarp = new GameServerBootstrap();
@@ -48,7 +55,7 @@ Maven
     }
 
 http例子代码:
->
+
     public class HttpServerDemo01
     {
         public static void main ( String[] args ) throws Exception 
