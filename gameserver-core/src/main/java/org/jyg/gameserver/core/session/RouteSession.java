@@ -13,9 +13,9 @@ public class RouteSession extends Session {
     private final GameContext gameContext;
 
     private String remoteAddr;
-    public RouteSession(GameContext gameContext, Session routeServerSession, long sessionId){
-        this(gameContext, routeServerSession , sessionId , null);
-    }
+//    public RouteSession(GameContext gameContext, Session routeServerSession, long sessionId){
+//        this(gameContext, routeServerSession , sessionId , null);
+//    }
     public RouteSession(GameContext gameContext, Session routeServerSession, long sessionId, String remoteAddr) {
         super(sessionId);
         this.routeServerSession = routeServerSession;
