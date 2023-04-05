@@ -1,4 +1,4 @@
-## 游戏服务器  <font color=#f1986d size=3>更新中...</font>
+##   <font color=#f1986d size=3>游戏服务器</font>
 ![Java CI](https://github.com/jiayaoguang/gameserver/workflows/Java%20CI/badge.svg)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 ![Maven](https://img.shields.io/maven-central/v/com.github.jiayaoguang/gameserver-core.svg)
@@ -28,7 +28,7 @@ Maven
 
 
 
-[服务器示例项目](https://github.com/jiayaoguang/gameserver/tree/main/gameserver-example)
+[服务器示例项目](https://github.com/jiayaoguang/gameserver/tree/main/gameserver-example) |
 [客户端示例项目](https://github.com/jiayaoguang/gameclient)
 	
 

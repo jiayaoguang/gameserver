@@ -4,7 +4,7 @@
 
 	<groupId>com.github.jiayaoguang</groupId>
 	<artifactId>gameserver</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>${revision}</version>
 	<packaging>pom</packaging>
 	<name>gameserver</name>
 	<description>gameserver是一个游戏服务器框架，让游戏服务器开发更简单。</description>
@@ -12,9 +12,9 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!--<gameserver.version>0.0.1-SNAPSHOT</gameserver.version>-->
 		<netty.version>4.1.65.Final</netty.version>
 		<maven.test.skip>true</maven.test.skip>
+		<revision>0.1.0-SNAPSHOT</revision>
 	</properties>
 
 	<licenses>
@@ -36,7 +36,7 @@
 		<url>git@github.com:jiayaoguang/gameserver.git</url>
 		<connection>scm:git:git@github.com:jiayaoguang/gameserver.git</connection>
 		<developerConnection>scm:git:https://github.com/:jiayaoguang/gameserver.git</developerConnection>
-		<tag>gameserver-0.0.1</tag>
+		<tag>gameserver</tag>
 	</scm>
 
 	<build>
@@ -159,9 +159,7 @@
 	<modules>
 		<module>gameserver-core</module>
 		<module>gameserver-db</module>
-		<module>gameserver-auth</module>
-<!--		<module>gameserver-center</module>-->
-<!--		<module>gameserver-scene</module>-->
+<!--		<module>gameserver-auth</module>-->
 		<module>gameserver-proto</module>
 		<module>gameserver-util</module>
 		<module>gameserver-test</module>
