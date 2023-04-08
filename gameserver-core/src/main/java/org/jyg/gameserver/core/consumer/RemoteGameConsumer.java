@@ -8,29 +8,30 @@ import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.util.GameContext;
-import org.jyg.gameserver.core.util.Logs;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.LockSupport;
 
 /**
  * create by jiayaoguang on 2020/5/24
  */
-public class RemoteGameConsumer extends ShareThreadGameConsumers {
+public class RemoteGameConsumer extends MpscQueueGameConsumer {
 
 
+    /**
+     * TODO 考虑要不要去掉
+     */
+    @Deprecated
     private final TcpClient tcpClient;
 
-    private final List<RemoteDelegateGameConsumer> remoteDelegateGameConsumers = new ArrayList<>();
 
     private final Map<String,TcpClient> tcpClientMap = new LinkedHashMap<>(1024,0.75f);
 
     public RemoteGameConsumer(GameContext gameContext, String remoteHost , int port) {
-        super(gameContext);
+        this.setGameContext(gameContext);
 
         String addr = remoteHost + ":"+ port;
         TcpClient tcpClient = tcpClientMap.get(addr);
@@ -39,11 +40,18 @@ public class RemoteGameConsumer extends ShareThreadGameConsumers {
             tcpClientMap.put(addr,tcpClient);
         }
         this.tcpClient = tcpClient;
+        this.setConsumerThread(new QueueConsumerThread(this));
     }
 
     public RemoteGameConsumer(GameContext gameContext) {
-        super(gameContext);
-        this.tcpClient = null;
+        this(gameContext,null);
+    }
+
+
+    private RemoteGameConsumer(GameContext gameContext,TcpClient tcpClient) {
+        this.setGameContext(gameContext);
+        this.tcpClient = tcpClient;
+        this.setConsumerThread(new QueueConsumerThread(this));
     }
 
 //    public RemoteGameConsumer(TcpClient tcpClient) {
@@ -196,27 +204,29 @@ public class RemoteGameConsumer extends ShareThreadGameConsumers {
     }
 
     public void addRemoteConsumerInfo(RemoteConsumerInfo remoteConsumerInfo){
-        if(isStart){
+        if(isStart()){
             throw new IllegalStateException();
         }
 
+        TcpClient tcpClient = getOrCreateTcpClient(remoteConsumerInfo.getIp() ,remoteConsumerInfo.getPort());
 
+        RemoteDelegateGameConsumer remoteDelegateGameConsumer = new RemoteDelegateGameConsumer(getGameContext() , this.getConsumerThread(),tcpClient , remoteConsumerInfo);
+        getGameContext().getConsumerManager().addConsumer(remoteDelegateGameConsumer);
+    }
+
+
+    private TcpClient getOrCreateTcpClient(String ip,int port){
         GameContext gameContext = getGameContext();
         if(gameContext == null){
             throw new IllegalArgumentException("gameContext == null");
         }
-
-
-        String addr = remoteConsumerInfo.getIp() + ":"+remoteConsumerInfo.getPort();
+        String addr = ip + ":"+port;
         TcpClient tcpClient = tcpClientMap.get(addr);
         if(tcpClient == null){
-            tcpClient = gameContext.createTcpClient(remoteConsumerInfo.getIp(),remoteConsumerInfo.getPort());
+            tcpClient = gameContext.createTcpClient(ip,port);
             tcpClientMap.put(addr,tcpClient);
         }
-
-
-        RemoteDelegateGameConsumer remoteDelegateGameConsumer = new RemoteDelegateGameConsumer(getGameContext(),tcpClient , remoteConsumerInfo);
-        addRemoteConsumerInfo(remoteDelegateGameConsumer);
+        return tcpClient;
     }
 
 

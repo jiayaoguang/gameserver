@@ -30,7 +30,7 @@ public class UseRemoteDBTest {
 
         gameServerBootstrap.getGameContext().getConsumerManager().addConsumer(consumer);
         gameServerBootstrap.getGameContext().getMainGameConsumer().getInstanceManager()
-                .putInstance(new ConsumerDBManager(gameServerBootstrap.getGameContext().getMainGameConsumer() , 100));
+                .putInstance(new ConsumerDBManager(gameServerBootstrap.getGameContext().getMainGameConsumer() , DBProxy.DB_CONSUMER_ID));
 
         gameServerBootstrap.getGameContext().getMainGameConsumer().getEventManager().addEventListener(new DBProxyTestConsumerThreadStartEventListener() );
 
@@ -46,12 +46,12 @@ public class UseRemoteDBTest {
 
             GameConsumer con = event.getGameConsumer();
 
-            int id = 33;
+            int id = 36;
 
             Maik maik = new Maik();
             maik.setId(id);
-            maik.setContent("hello_world_31");
-//            con.getInstanceManager().getInstance(ConsumerDBManager.class).insert(maik);
+            maik.setContent("hello_world_36");
+            con.getInstanceManager().getInstance(ConsumerDBManager.class).insert(maik);
 
             List<Object> params = new ArrayList<>();
             params.add(id);
@@ -70,7 +70,7 @@ public class UseRemoteDBTest {
             ConsumerFuture consumerFuture = new ConsumerFuture(requestId ,(AbstractQueueGameConsumer)con  );
 
             Object result = consumerFuture.waitForResult(10 * 1000L);
-            AllUtil.println("result _ waitForResult");
+            AllUtil.println("result _ waitForResult " + result);
             if(result instanceof List){
                 List list = (List) result;
                 if(list.size() >0 &&list.get(0) instanceof Maik){

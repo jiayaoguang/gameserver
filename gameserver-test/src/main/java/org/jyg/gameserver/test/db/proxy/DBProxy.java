@@ -21,7 +21,7 @@ public class DBProxy {
         DBConfig dbConfig = new DBConfig();
         dbConfig.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC");
         dbConfig.setUsername("root");
-        dbConfig.setPassword("123654asd");
+        dbConfig.setPassword("123456");
 
 
         GameConsumer gameConsumer = new MpscQueueGameConsumer();

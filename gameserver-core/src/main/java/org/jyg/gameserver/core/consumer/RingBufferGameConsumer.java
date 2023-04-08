@@ -24,7 +24,6 @@ public class RingBufferGameConsumer extends GameConsumer {
     private static final int BUFFER_SIZE = 1024 * 64;
     private RingBuffer<EventData<Object>> ringBuffer;
 
-    private boolean isStart = false;
 
 
     public RingBufferGameConsumer() {
@@ -35,10 +34,7 @@ public class RingBufferGameConsumer extends GameConsumer {
 
     @Override
     public synchronized void doStart() {
-        if(this.isStart){
-            return;
-        }
-        this.isStart = true;
+
 
         EventFactory<EventData<Object>> eventFactory = EventData::new;
 

@@ -34,12 +34,14 @@ public abstract class GameConsumer {
 
     private final HttpProcessor notFoundHttpProcessor = new NotFoundHttpProcessor();
 
-    protected volatile boolean isStart = false;
+    protected volatile boolean start = false;
 
     private GameContext gameContext;
 
     private Thread thread;
 
+
+    private volatile boolean stop = false;
 
 
 
@@ -124,10 +126,10 @@ public abstract class GameConsumer {
 
     public final synchronized void start(){
         beforeStart();
-        if(isStart){
+        if(start){
             throw new IllegalStateException("already start");
         }
-        this.isStart = true;
+        this.start = true;
         this.instanceManager.start();
         doStart();
     }
@@ -145,10 +147,12 @@ public abstract class GameConsumer {
 //    }
 
     public final synchronized void stop(){
-        if(!isStart){
+        if(!start){
             return;
         }
-        isStart = false;
+        start = false;
+
+        setStop(true);
 
         instanceManager.stop();
 
@@ -521,7 +525,7 @@ public abstract class GameConsumer {
 
 
     public void setAllHttpLocalPermission(){
-        if(isStart){
+        if(start){
             throw new UnsupportedOperationException("already start");
         }
 
@@ -549,5 +553,22 @@ public abstract class GameConsumer {
 
     public ResultHandlerManager getResultHandlerManager() {
         return resultHandlerManager;
+    }
+
+
+    public boolean isStop() {
+        return stop;
+    }
+
+    public void setStop(boolean stop) {
+        this.stop = stop;
+    }
+
+    public boolean isStart() {
+        return start;
+    }
+
+    public void setStart(boolean start) {
+        this.start = start;
     }
 }

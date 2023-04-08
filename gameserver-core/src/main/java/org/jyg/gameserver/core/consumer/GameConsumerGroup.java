@@ -15,8 +15,6 @@ import java.util.List;
  */
 public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
 
-    private volatile boolean isStart = false;
-
     private final List<T> childConsumerList = new ArrayList<>();
 
 
@@ -51,7 +49,6 @@ public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
             throw new IllegalArgumentException("isEmpty(childConsumerList)");
         }
 
-        isStart = true;
         int nextId = 1;
         for (GameConsumer childGameConsumer : childConsumerList) {
             if(childGameConsumer.getId() == 0){
@@ -113,7 +110,7 @@ public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
     }
 
     public synchronized void addChildConsumer(T consumer) {
-        if (isStart) {
+        if (isStart()) {
             throw new RuntimeException("already start");
         }
         childConsumerList.add(consumer);
@@ -132,9 +129,6 @@ public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
 //    }
 
 
-    protected boolean isStart() {
-        return isStart;
-    }
 
 
     public ChildChooser getChildChooser() {

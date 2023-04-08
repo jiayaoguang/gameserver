@@ -332,7 +332,7 @@ public class GameContext{
 
     public synchronized void start() {
         if(isStart){
-            AllUtil.println(" already start .... ");
+//            AllUtil.println(" already start .... ");
             return;
         }
 

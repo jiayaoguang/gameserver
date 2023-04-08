@@ -3,17 +3,20 @@ package org.jyg.gameserver.core.consumer;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.util.Logs;
 
-import java.util.Queue;
 import java.util.concurrent.locks.LockSupport;
 
 /**
  * create by jiayaoguang on 2020/5/1
  */
+@Deprecated
 public abstract class SingleThreadGameConsumer extends GameConsumer {
+
+
+    private static final int MAX_CONTINUE_POLL_NULL_NUM = 100_000_000;
 
     private Thread consumerThread;
 
-    private volatile boolean isStop = false;
+    private int continuePollNullNum = 0;
 
 
 
@@ -40,7 +43,7 @@ public abstract class SingleThreadGameConsumer extends GameConsumer {
     public void doStop() {
 
 
-        isStop = true;
+
         if(consumerThread != null){
             for (int i = 0; consumerThread.isAlive(); i++) {
                 if(i > 1000){
@@ -84,7 +87,7 @@ public abstract class SingleThreadGameConsumer extends GameConsumer {
         onThreadStart();
 
         int pollNullNum = 0;
-        for (;!isStop;){
+        for (;!isStop();){
 
             EventData<?> object = pollEvent();
             if(object == null) {
@@ -113,7 +116,35 @@ public abstract class SingleThreadGameConsumer extends GameConsumer {
     }
 
 
-    public boolean isStop() {
-        return isStop;
+
+    protected void updateConsumer() {
+
+        for(;;){
+            EventData<?> object = pollEvent();
+            if(object == null) {
+                if(continuePollNullNum < MAX_CONTINUE_POLL_NULL_NUM){
+                    continuePollNullNum++;
+                }
+                return;
+            }
+
+            continuePollNullNum = 0;
+            try {
+                onReciveEvent(object);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+    }
+
+
+    public int getContinuePollNullNum() {
+        return continuePollNullNum;
+    }
+
+    public void clearContinuePollNullNum() {
+        this.continuePollNullNum = 0;
     }
 }

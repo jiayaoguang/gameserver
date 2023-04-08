@@ -12,6 +12,7 @@ import java.util.concurrent.locks.LockSupport;
 /**
  * create by jiayaoguang on 2022/11/27
  */
+@Deprecated
 public class ShareThreadGameConsumers extends MpscQueueGameConsumer {
 
 
@@ -71,7 +72,7 @@ public class ShareThreadGameConsumers extends MpscQueueGameConsumer {
 
 
     public void addRemoteConsumerInfo(DelegateGameConsumer delegateGameConsumer){
-        if(isStart){
+        if(start){
             throw new IllegalStateException();
         }
 
@@ -82,7 +83,6 @@ public class ShareThreadGameConsumers extends MpscQueueGameConsumer {
 
 
 
-    @Override
     protected void run() {
 
         onThreadStart();

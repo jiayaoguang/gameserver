@@ -77,7 +77,7 @@ public class TcpClient extends AbstractBootstrap{
 
 
 	private void doStart(MyChannelInitializer<Channel> channelInitializer){
-		Logs.DEFAULT_LOGGER.info("客户端成功启动...");
+
 		bootstrap.group(getGameContext().getEventLoopGroupManager().getWorkGroup());
 		bootstrap.channel( getGameContext().isUseEpoll() ? EpollSocketChannel.class : NioSocketChannel.class);
 		bootstrap.handler(channelInitializer);
@@ -93,6 +93,7 @@ public class TcpClient extends AbstractBootstrap{
 			connect();
 		}
 
+		Logs.DEFAULT_LOGGER.info("client start success");
 	}
 
 	public Session connect(){
@@ -110,11 +111,11 @@ public class TcpClient extends AbstractBootstrap{
 			throw new RuntimeException(e);
 		}
 
-		if(!channelFuture.isSuccess()){
+		if(channelFuture == null || !channelFuture.isSuccess()){
 			logger.error(" connect fail ");
 			return null;
 		}
-
+		logger.error(" connect ip {} port {} success " , host ,port);
 		isStart = true;
 
 		channel = channelFuture.channel();
