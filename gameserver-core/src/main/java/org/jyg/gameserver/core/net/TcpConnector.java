@@ -101,11 +101,14 @@ public abstract class TcpConnector extends AbstractConnector {
 		try {
 			serverChannel = bindChannelFuture.sync().channel();
 		} catch (InterruptedException e) {
+			if(Thread.currentThread().isInterrupted()){
+				Thread.currentThread().interrupt();
+			}
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 
-		Logs.DEFAULT_LOGGER.info("正在开启端口监听，端口号 :" + port);
+		Logs.DEFAULT_LOGGER.info("正在开启端口监听，端口号 : {}" , port);
 	}
 
 	public void stop() {

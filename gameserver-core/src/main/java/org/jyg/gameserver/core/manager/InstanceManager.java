@@ -73,16 +73,12 @@ public class InstanceManager implements Lifecycle {
 
     public synchronized void putInstance(Class<?> clazz)  {
 
-        try {
-            putInstance(clazz, clazz);
-        } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            throw new IllegalArgumentException(e);
-        }
+        putInstance(clazz, clazz);
 
     }
 
 
-    public synchronized void putInstance(Class<?> supperClazz, Class<?> clazz) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    public synchronized void putInstance(Class<?> supperClazz, Class<?> clazz) {
 
 
         if(isStart){
@@ -99,14 +95,17 @@ public class InstanceManager implements Lifecycle {
         Constructor<?>[] constructors = clazz.getConstructors();
 
         if (constructors.length != 1) {
-            throw new InstantiationException(" constructors.length != 1 : " + constructors.length + " type : " + clazz.getCanonicalName());
+            throw new IllegalArgumentException(" constructors.length != 1 : " + constructors.length + " type : " + clazz.getCanonicalName());
         }
 
         Constructor<?> constructor = constructors[0];
 
-        Object instance = createInstance(constructor);
-
-        putInstance(supperClazz, instance);
+        try {
+            Object instance = createInstance(constructor);
+            putInstance(supperClazz, instance);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new IllegalArgumentException(e);
+        }
 
     }
 

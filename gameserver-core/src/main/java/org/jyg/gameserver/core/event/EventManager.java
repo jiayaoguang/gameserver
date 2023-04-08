@@ -100,17 +100,10 @@ public class EventManager implements Lifecycle {
         }
 
         Type _type = ((ParameterizedType) superClass).getActualTypeArguments()[0];
-        try {
 
-            Class<? extends Event> eventClazz = (Class<? extends Event>) _type;
+        Class<? extends Event> eventClazz = (Class<? extends Event>) _type;
 
-            addEventListener(eventClazz , eventListener);
-        }catch (Exception e){
-            e.printStackTrace();
-
-            String s = _type.getTypeName();
-            int i = 0;
-        }
+        addEventListener(eventClazz , eventListener);
     }
 
 
@@ -137,6 +130,11 @@ public class EventManager implements Lifecycle {
         }
 
         eventListMap.put(eventClazz , newEventList);
+    }
+
+
+    public void clearEventListener(Class<? extends Event> eventClazz) {
+        eventListMap.remove(eventClazz);
     }
 
 }

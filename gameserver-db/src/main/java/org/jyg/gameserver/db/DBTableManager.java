@@ -67,10 +67,10 @@ public class DBTableManager {
         DBTable dbTableAnno = dbEntityClass.getAnnotation(DBTable.class);
         if (dbTableAnno != null) {
             tableInfo.setDbTableAnno(dbTableAnno);
-            tableInfo.setTableName(dbTableAnno.tableName().toLowerCase());
+            tableInfo.setTableName(dbTableAnno.tableName());
             tableInfo.setPrimaryKey(dbTableAnno.primaryKey());
         } else {
-            tableInfo.setTableName(dbEntityClass.getSimpleName().toLowerCase());
+            tableInfo.setTableName(dbEntityClass.getSimpleName());
             tableInfo.setPrimaryKey("id");
         }
 
@@ -115,7 +115,7 @@ public class DBTableManager {
         return tableInfo;
     }
 
-    private TableFieldInfo createTableFieldInfo(Class<?> dbEntityClass, Field dbEntityField) throws NoSuchFieldException, NoSuchMethodException {
+    private TableFieldInfo createTableFieldInfo(Class<?> dbEntityClass, Field dbEntityField){
         TableFieldInfo tableFieldInfo = new TableFieldInfo();
         tableFieldInfo.setClassField(dbEntityField);
         tableFieldInfo.setFieldOperator(new UnsafeFieldOperator<>(dbEntityField));
@@ -126,9 +126,9 @@ public class DBTableManager {
             tableFieldInfo.setDbTableFieldAnno(dbTableFieldAnno);
             String fieldName;
             if(StringUtils.isNotEmpty(dbTableFieldAnno.fieldName())){
-                fieldName = dbTableFieldAnno.fieldName().toLowerCase();
+                fieldName = dbTableFieldAnno.fieldName();
             }else {
-                fieldName = dbEntityField.getName().toLowerCase();
+                fieldName = dbEntityField.getName();
             }
             tableFieldInfo.setTableFieldName(fieldName);
             if (dbTableFieldAnno.fieldType() == TableFieldType.AUTO) {
@@ -143,7 +143,7 @@ public class DBTableManager {
                 tableFieldInfo.setLength(dbTableFieldAnno.fieldType().getDefaultLength());
             }
         } else {
-            tableFieldInfo.setTableFieldName(dbEntityField.getName().toLowerCase());
+            tableFieldInfo.setTableFieldName(dbEntityField.getName());
 
             TableFieldType tableFieldType = getTableFieldType(dbEntityField.getType());
             tableFieldInfo.setFieldType(tableFieldType);
