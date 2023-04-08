@@ -10,7 +10,7 @@ public class MsgIdConst {
     private MsgIdConst() {
     }
 
-    public static final int REMOTE_INVOKE = 1;
+//    public static final int REMOTE_INVOKE = 1;
 
     public static final int READ_OUTTIME = 2;
 

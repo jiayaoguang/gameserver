@@ -10,7 +10,6 @@ import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.jyg.gameserver.core.constant.MsgIdConst;
 import org.jyg.gameserver.core.consumer.GameConsumer;
-import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.data.ServerConfig;
 import org.jyg.gameserver.core.handle.NettyHandlerFactory;
 import org.jyg.gameserver.core.intercept.HttpWhiteIpInterceptor;
@@ -44,7 +43,6 @@ public class GameContext{
 
     private final ConsumerManager consumerManager;
 
-    private final RemoteInvokeManager remoteInvokeManager;
 
 //    private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
@@ -113,7 +111,6 @@ public class GameContext{
 
         this.nettyHandlerFactory = new NettyHandlerFactory(this);
 
-        this.remoteInvokeManager = new RemoteInvokeManager();
 
 
 
@@ -230,7 +227,7 @@ public class GameContext{
         addMsgId2JsonMsgClassMapping(MsgIdConst.READ_OUTTIME , ReadIdleMsgObj.class);
         addByteMsgCodec(new EmptyMsgCodec(new ReadIdleMsgObj()));
 
-        addMsgId2JsonMsgClassMapping(MsgIdConst.REMOTE_INVOKE , RemoteInvokeData.class);
+//        addMsgId2JsonMsgClassMapping(MsgIdConst.REMOTE_INVOKE , RemoteInvokeData.class);
 
         addMsgId2JsonMsgClassMapping(MsgIdConst.PING , PingByteMsg.class);
         addByteMsgCodec(new EmptyMsgCodec(new PingByteMsg()));
@@ -272,7 +269,7 @@ public class GameContext{
 
 
         getMainGameConsumer().addProcessor(new ReadOutTimeProcessor());
-        getMainGameConsumer().addProcessor(new RemoteInvokeProcessor());
+//        getMainGameConsumer().addProcessor(new RemoteInvokeProcessor());
 
         getMainGameConsumer().addProcessor(new PingProcessor());
         getMainGameConsumer().addProcessor(new PongProcessor());
@@ -345,7 +342,6 @@ public class GameContext{
         this.protoClazz2MsgIdMap = Object2IntMaps.unmodifiable(this.protoClazz2MsgIdMap);
         this.msgId2MsgCodecMap = Int2ObjectMaps.unmodifiable(this.msgId2MsgCodecMap);
 
-        this.remoteInvokeManager.scan(getServerConfig().getScanInvokeClassPath());
 
         this.instanceManager.start();
 
@@ -401,10 +397,6 @@ public class GameContext{
         return useEpoll;
     }
 
-
-    public RemoteInvokeManager getRemoteInvokeManager() {
-        return remoteInvokeManager;
-    }
 
 
     public<T> T getInstance(Class<T> tClass){

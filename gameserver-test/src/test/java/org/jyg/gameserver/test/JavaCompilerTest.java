@@ -1,12 +1,13 @@
 package org.jyg.gameserver.test;
 
 import org.junit.Test;
-import org.jyg.gameserver.core.invoke.FileClassLoader;
 import org.jyg.gameserver.core.util.AllUtil;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 /**
  * create by jiayaoguang on 2021/8/1
@@ -21,7 +22,7 @@ public class JavaCompilerTest {
 
         AllUtil.println(num);
 
-        FileClassLoader fileClassLoader = new FileClassLoader("D:/tmp/");
+        ClassLoader fileClassLoader = new URLClassLoader(new URL[]{new URL("file:D:/tmp/")});
         Class clazz = fileClassLoader.loadClass("Player");
         clazz.getMethod("main",String[].class).invoke(null, (Object) new String[]{""});
     }

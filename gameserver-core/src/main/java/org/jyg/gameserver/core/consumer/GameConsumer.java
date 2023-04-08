@@ -3,19 +3,13 @@ package org.jyg.gameserver.core.consumer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.apache.commons.lang3.StringUtils;
-import org.jyg.gameserver.core.anno.InvokeName;
 import org.jyg.gameserver.core.data.EventData;
-import org.jyg.gameserver.core.data.RemoteInvokeData;
 import org.jyg.gameserver.core.event.*;
 import org.jyg.gameserver.core.event.listener.GameEventListener;
-import org.jyg.gameserver.core.intercept.HttpWhiteIpInterceptor;
-import org.jyg.gameserver.core.intercept.WhiteIpInterceptor;
 import org.jyg.gameserver.core.intercept.OnlyLocalHttpMsgInterceptor;
-import org.jyg.gameserver.core.invoke.IRemoteInvoke;
 import org.jyg.gameserver.core.manager.*;
 import org.jyg.gameserver.core.processor.*;
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.timer.DelayCloseTimer;
 import org.jyg.gameserver.core.timer.TimerManager;
 import org.jyg.gameserver.core.util.*;
@@ -392,66 +386,6 @@ public abstract class GameConsumer {
     }
 
 
-    public IRemoteInvoke createRemoteInvoke(Class<? extends IRemoteInvoke> remoteInvokeClass, TcpClient tcpClient) {
-
-        String invokeName;
-
-        InvokeName invokeNameAnno = remoteInvokeClass.getAnnotation(InvokeName.class);
-        if (invokeNameAnno != null) {
-            invokeName = invokeNameAnno.name();
-        } else {
-            invokeName = remoteInvokeClass.getName();
-        }
-
-        return createRemoteInvoke(invokeName , tcpClient);
-    }
-
-
-
-
-    @Deprecated
-    public IRemoteInvoke createRemoteInvoke(final String remoteInvokeName, TcpClient tcpClient) {
-
-        IRemoteInvoke remoteInvoke = new IRemoteInvoke() {
-            @Override
-            public void invoke(GameConsumer consumer, Map<String,Object> paramMap) {
-
-                try {
-
-                    RemoteInvokeData remoteInvokeData = new RemoteInvokeData();
-                    remoteInvokeData.setConsumerId(getId());
-
-                    remoteInvokeData.setInvokeName(remoteInvokeName);
-
-                    remoteInvokeData.setParamMap(paramMap);
-
-                    tcpClient.write(remoteInvokeData);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-        };
-
-        return remoteInvoke;
-    }
-
-
-
-    public void invokeRemoteFunc(final String remoteInvokeName , int targetConsumer,Map<String,Object> paramMap, TcpClient tcpClient) {
-
-
-        RemoteInvokeData remoteInvokeData = new RemoteInvokeData();
-        remoteInvokeData.setConsumerId(getId());
-        remoteInvokeData.setConsumerId(targetConsumer);
-        remoteInvokeData.setInvokeName(remoteInvokeName);
-
-        remoteInvokeData.setParamMap(paramMap);
-
-        tcpClient.write(remoteInvokeData);
-
-    }
 
 
 
