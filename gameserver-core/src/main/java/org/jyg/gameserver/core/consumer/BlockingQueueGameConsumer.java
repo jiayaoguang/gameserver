@@ -7,7 +7,7 @@ import java.util.concurrent.*;
 /**
  * create by jiayaoguang on 2020/5/1
  */
-public class BlockingQueueGameConsumer extends AbstractQueueGameConsumer {
+public class BlockingQueueGameConsumer extends AbstractThreadQueueGameConsumer {
 
 
     public BlockingQueueGameConsumer() {

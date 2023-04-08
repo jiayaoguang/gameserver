@@ -1,6 +1,6 @@
 package org.jyg.gameserver.test.db;
 
-import org.jyg.gameserver.core.consumer.AbstractQueueGameConsumer;
+import org.jyg.gameserver.core.consumer.AbstractThreadQueueGameConsumer;
 import org.jyg.gameserver.core.consumer.ConsumerFuture;
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
@@ -81,7 +81,7 @@ public class DBWaitResultTest {
 
                     });
 
-            ConsumerFuture consumerFuture = new ConsumerFuture(requestId ,(AbstractQueueGameConsumer)con  );
+            ConsumerFuture consumerFuture = new ConsumerFuture(requestId ,(AbstractThreadQueueGameConsumer)con  );
 
             Object result = consumerFuture.waitForResult(10 * 1000L);
             AllUtil.println("result _ waitForResult");

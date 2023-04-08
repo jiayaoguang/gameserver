@@ -1,10 +1,8 @@
 package org.jyg.gameserver.core.consumer;
 
-import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.locks.LockSupport;
 
@@ -16,7 +14,7 @@ public class QueueConsumerThread extends Thread {
     private volatile boolean start = false;
 
 
-    private final List<AbstractQueueGameConsumer> queueGameConsumers = new ArrayList<>();
+    private final List<AbstractThreadQueueGameConsumer> queueGameConsumers = new ArrayList<>();
 
 
     public QueueConsumerThread() {
@@ -24,7 +22,7 @@ public class QueueConsumerThread extends Thread {
     }
 
 
-    public QueueConsumerThread(AbstractQueueGameConsumer firstQueueGameConsumer) {
+    public QueueConsumerThread(AbstractThreadQueueGameConsumer firstQueueGameConsumer) {
         this.setDaemon(false);
         if (firstQueueGameConsumer != null) {
             addQueueConsumer(firstQueueGameConsumer);
@@ -76,7 +74,7 @@ public class QueueConsumerThread extends Thread {
     }
 
 
-    private void runSingleConsumer(AbstractQueueGameConsumer gameConsumer) {
+    private void runSingleConsumer(AbstractThreadQueueGameConsumer gameConsumer) {
 
         for (; ; ) {
 
@@ -109,7 +107,7 @@ public class QueueConsumerThread extends Thread {
 
             int allContinuePollNullCountNum = 0;
 
-            for (AbstractQueueGameConsumer gameConsumer : queueGameConsumers) {
+            for (AbstractThreadQueueGameConsumer gameConsumer : queueGameConsumers) {
                 if (gameConsumer.isStop()) {
                     continue;
                 } else {
@@ -125,7 +123,7 @@ public class QueueConsumerThread extends Thread {
             }
 
             if (allContinuePollNullCountNum > 1000) {
-                for (AbstractQueueGameConsumer gameConsumer : queueGameConsumers) {
+                for (AbstractThreadQueueGameConsumer gameConsumer : queueGameConsumers) {
                     gameConsumer.update();
                     gameConsumer.clearContinuePollNullNum();
                 }
@@ -142,7 +140,7 @@ public class QueueConsumerThread extends Thread {
     }
 
 
-    public void addQueueConsumer(AbstractQueueGameConsumer queueGameConsumer) {
+    public void addQueueConsumer(AbstractThreadQueueGameConsumer queueGameConsumer) {
         queueGameConsumer.setConsumerThread(this);
         if(!queueGameConsumers.contains(queueGameConsumer)){
             queueGameConsumers.add(queueGameConsumer);

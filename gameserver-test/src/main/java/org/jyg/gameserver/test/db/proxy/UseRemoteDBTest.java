@@ -67,7 +67,7 @@ public class UseRemoteDBTest {
 
                     });
 
-            ConsumerFuture consumerFuture = new ConsumerFuture(requestId ,(AbstractQueueGameConsumer)con  );
+            ConsumerFuture consumerFuture = new ConsumerFuture(requestId ,(AbstractThreadQueueGameConsumer)con  );
 
             Object result = consumerFuture.waitForResult(10 * 1000L);
             AllUtil.println("result _ waitForResult " + result);

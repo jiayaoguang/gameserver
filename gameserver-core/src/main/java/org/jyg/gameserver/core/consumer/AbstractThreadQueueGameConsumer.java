@@ -8,8 +8,9 @@ import java.util.concurrent.locks.LockSupport;
 
 /**
  * create by jiayaoguang on 2020/5/1
+ * 单线程队列消费者
  */
-public abstract class AbstractQueueGameConsumer extends GameConsumer {
+public abstract class AbstractThreadQueueGameConsumer extends GameConsumer {
 
     /**
      * 从队列取出值为空的连续次数
@@ -30,7 +31,7 @@ public abstract class AbstractQueueGameConsumer extends GameConsumer {
     /**
      * queue 必须是线程安全的队列
      */
-    protected AbstractQueueGameConsumer(Queue<EventData<?>> queue) {
+    protected AbstractThreadQueueGameConsumer(Queue<EventData<?>> queue) {
         this.queue = queue;
     }
 

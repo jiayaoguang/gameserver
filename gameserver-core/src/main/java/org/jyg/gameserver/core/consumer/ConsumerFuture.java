@@ -14,9 +14,9 @@ public class ConsumerFuture {
 
     private final long requestId;
 
-    private final AbstractQueueGameConsumer gameConsumer;
+    private final AbstractThreadQueueGameConsumer gameConsumer;
 
-    public ConsumerFuture(long requestId, AbstractQueueGameConsumer gameConsumer) {
+    public ConsumerFuture(long requestId, AbstractThreadQueueGameConsumer gameConsumer) {
         this.requestId = requestId;
         this.gameConsumer = gameConsumer;
     }
