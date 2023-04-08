@@ -129,9 +129,11 @@ public abstract class GameConsumer {
         if(start){
             throw new IllegalStateException("already start");
         }
-        this.start = true;
+
         this.instanceManager.start();
         doStart();
+
+        this.start = true;
     }
 
     protected void beforeStart() {

@@ -121,7 +121,7 @@ public class IpUtil {
         int index = addr.lastIndexOf("/");
         int colonIndex = addr.lastIndexOf(":");
 
-        if (index >= 0) {
+        if (colonIndex >= 0) {
             if (colonIndex > index) {
                 return addr.substring(index + 1, colonIndex);
             }else {

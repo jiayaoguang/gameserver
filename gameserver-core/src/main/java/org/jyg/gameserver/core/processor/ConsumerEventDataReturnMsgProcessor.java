@@ -12,7 +12,7 @@ import org.jyg.gameserver.core.util.Logs;
 public class ConsumerEventDataReturnMsgProcessor extends ByteMsgObjProcessor<ConsumerEventDataReturnMsg>{
 
     public ConsumerEventDataReturnMsgProcessor(){
-
+        addMsgInterceptor(new WhiteIpInterceptor());
     }
 
 

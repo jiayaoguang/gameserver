@@ -36,6 +36,7 @@ public abstract class AbstractProcessor<T> implements Processor<T> {
 		if(interceptors.isEmpty()){
 			return true;
 		}
+
 		for(MsgInterceptor<?> msgInterceptor : interceptors){
 			if(!msgInterceptor.intercept(session , event)){
 				return false;

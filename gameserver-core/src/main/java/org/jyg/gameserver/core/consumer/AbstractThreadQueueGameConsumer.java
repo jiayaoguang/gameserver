@@ -50,9 +50,10 @@ public abstract class AbstractThreadQueueGameConsumer extends GameConsumer {
     public void doStart() {
 
         if(consumerThread == null){
-            consumerThread = new QueueConsumerThread(this);
+            consumerThread = new QueueConsumerThread();
             consumerThread.setName(getClass().getSimpleName() + "_" + getId());
         }
+        consumerThread.addQueueConsumer(this);
         if(!consumerThread.isStart()){
             consumerThread.start();
         }
@@ -63,8 +64,15 @@ public abstract class AbstractThreadQueueGameConsumer extends GameConsumer {
         return consumerThread;
     }
 
-    public void setConsumerThread(QueueConsumerThread consumerThread) {
+    public void setConsumerThreadAndAddToThread(QueueConsumerThread consumerThread) {
+        if(isStart()){
+            throw new IllegalStateException("isStart , setConsumerThread fail");
+        }
+        if(this.consumerThread != null){
+            throw new IllegalArgumentException("this.consumerThread != null , setConsumerThread fail");
+        }
         this.consumerThread = consumerThread;
+        this.consumerThread.addQueueConsumer(this);
     }
 
     public int getContinuePollNullNum() {

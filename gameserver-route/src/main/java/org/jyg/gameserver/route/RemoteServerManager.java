@@ -1,9 +1,10 @@
 package org.jyg.gameserver.route;
 
 import com.google.protobuf.MessageLite;
-import org.jyg.gameserver.core.event.InnerMsgEvent;
 import org.jyg.gameserver.core.manager.Lifecycle;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
+import org.jyg.gameserver.core.startup.TcpClient;
+import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.GameContext;
 
 /**
@@ -11,17 +12,21 @@ import org.jyg.gameserver.core.util.GameContext;
  */
 public class RemoteServerManager implements Lifecycle {
 
-    private final int remoteConsumerId;
     private final GameContext gameContext;
-    public RemoteServerManager(GameContext gameContext, int remoteConsumerId) {
-        this.remoteConsumerId = remoteConsumerId;
+
+    private final TcpClient tcpClient;
+
+    public RemoteServerManager(GameContext gameContext , String remoteIp,int remotePort) {
         this.gameContext = gameContext;
+        this.tcpClient = new TcpClient(gameContext , remoteIp , remotePort);
     }
 
 
     @Override
     public void start() {
+        this.tcpClient.start();
 
+        AllUtil.println("this.tcpClient.start();");
     }
 
     @Override
@@ -31,9 +36,13 @@ public class RemoteServerManager implements Lifecycle {
 
 
     public void sendRemoteMsg(MessageLite message){
-        InnerMsgEvent innerMsgEvent = new InnerMsgEvent( 0,message );
 
-        this.gameContext.getConsumerManager().publicEvent(remoteConsumerId, innerMsgEvent);
+        tcpClient.checkConnect();
+
+        if(tcpClient.isConnectAvailable()){
+            tcpClient.write(message);
+        }
+
     }
 
 
@@ -42,9 +51,11 @@ public class RemoteServerManager implements Lifecycle {
      */
     public void sendRemoteMsg(ByteMsgObj message){
 
-        InnerMsgEvent innerMsgEvent = new InnerMsgEvent( 0,message  );
+        tcpClient.checkConnect();
 
-        this.gameContext.getConsumerManager().publicEvent(remoteConsumerId , innerMsgEvent);
+        if(tcpClient.isConnectAvailable()){
+            tcpClient.write(message);
+        }
     }
 
 

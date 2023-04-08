@@ -2,6 +2,7 @@ package org.jyg.gameserver.route;
 
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.consumer.RemoteGameConsumer;
+import org.jyg.gameserver.core.data.RemoteConsumerInfo;
 import org.jyg.gameserver.core.event.ConnectEvent;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
 import org.jyg.gameserver.core.event.DisconnectEvent;
@@ -88,14 +89,17 @@ public class GameRouteBootstarp extends GameServerBootstrap {
 //        this.addTcpConnector(8081);
 
 
+//        RemoteConsumerInfo remoteConsumerInfo = new RemoteConsumerInfo();
+//        remoteConsumerInfo.setIp(routeConfig.getRemoteGameServerIp() );
+//        remoteConsumerInfo.setPort(routeConfig.getRemoteGameServerPort());
+//        int remoteConsumerId = REMOTE_CONSUMER_ID;
+//        remoteConsumerInfo.setConsumerId(remoteConsumerId);
+//
+//        RemoteGameConsumer remoteConsumer = new RemoteGameConsumer(bootstarp.getGameContext(), remoteConsumerInfo);
+//        remoteConsumer.setId(remoteConsumerId);
 
-
-        RemoteGameConsumer remoteConsumer = new RemoteGameConsumer(bootstarp.getGameContext(), routeConfig.getRemoteGameServerIp(), routeConfig.getRemoteGameServerPort());
-        int remoteConsumerId = REMOTE_CONSUMER_ID;
-        remoteConsumer.setId(remoteConsumerId);
-
-        bootstarp.getGameContext().getConsumerManager().addConsumer(remoteConsumer);
-        bootstarp.getGameContext().putInstance(new RemoteServerManager(bootstarp.getGameContext(), remoteConsumerId));
+//        bootstarp.getGameContext().getConsumerManager().addConsumer(remoteConsumer);
+        bootstarp.getDefaultConsumer().putInstance(new RemoteServerManager(bootstarp.getGameContext(), routeConfig.getRemoteGameServerIp(), routeConfig.getRemoteGameServerPort()));
 
 
         bootstarp.addByteMsgObjProcessor(new RouteReplyMsgProcessor());
@@ -110,6 +114,7 @@ public class GameRouteBootstarp extends GameServerBootstrap {
 
 
         bootstarp.getDefaultConsumer().getEventManager().addEventListener(new GameEventListener<ConnectEvent>() {
+            GameConsumer gameConsumer = bootstarp.getDefaultConsumer();
             @Override
             public void onEvent(ConnectEvent event) {
                 Session session = event.getSession();
@@ -121,18 +126,21 @@ public class GameRouteBootstarp extends GameServerBootstrap {
                 routeClientSessionConnectMsg.setSessionId(session.getSessionId());
                 routeClientSessionConnectMsg.setAddr(session.getRemoteAddr());
 
-                bootstarp.getGameContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionConnectMsg);
+                gameConsumer.getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionConnectMsg);
             }
         });
 
 
 
         bootstarp.getDefaultConsumer().getEventManager().addEventListener(new GameEventListener<DisconnectEvent>() {
+
+            GameConsumer gameConsumer = bootstarp.getDefaultConsumer();
+
             @Override
             public void onEvent(DisconnectEvent event) {
                 RouteClientSessionDisconnectMsg routeClientSessionDisconnectMsg = new RouteClientSessionDisconnectMsg();
                 routeClientSessionDisconnectMsg.setSessionId(event.getSession().getSessionId());
-                bootstarp.getGameContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionDisconnectMsg);
+                gameConsumer.getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionDisconnectMsg);
             }
         });
 
@@ -146,18 +154,13 @@ public class GameRouteBootstarp extends GameServerBootstrap {
                 RouteRegisterMsg routeRegisterMsg = new RouteRegisterMsg();
                 routeRegisterMsg.setServerId(con.getGameContext().getServerConfig().getServerId());
 
-                con.getGameContext().getInstance(RemoteServerManager.class).sendRemoteMsg(routeRegisterMsg);
+                event.getGameConsumer().getInstance(RemoteServerManager.class).sendRemoteMsg(routeRegisterMsg);
             }
         });
 
 
 //        bootstarp.registerSocketEvent(ProtoEnum.P_SM_AUTH_RESPONSE_RECEIVE_TOKEN.getEventId(),
 //        		new TokenReceiveSuccessProtoProcessor());
-    }
-
-
-    public RemoteServerManager getRemoteServerManager(){
-        return getGameContext().getInstance(RemoteServerManager.class);
     }
 
 

@@ -18,41 +18,34 @@ import java.util.concurrent.TimeUnit;
 /**
  * create by jiayaoguang on 2020/5/24
  */
-public class RemoteGameConsumer extends MpscQueueGameConsumer {
-
-
-    /**
-     * TODO 考虑要不要去掉
-     */
-    @Deprecated
-    private final TcpClient tcpClient;
+public class RemoteGameConsumer extends RemoteDelegateGameConsumer {
 
 
     private final Map<String,TcpClient> tcpClientMap = new LinkedHashMap<>(1024,0.75f);
 
-    public RemoteGameConsumer(GameContext gameContext, String remoteHost , int port) {
-        this.setGameContext(gameContext);
 
-        String addr = remoteHost + ":"+ port;
-        TcpClient tcpClient = tcpClientMap.get(addr);
-        if(tcpClient == null){
-            tcpClient = gameContext.createTcpClient(remoteHost,port);
-            tcpClientMap.put(addr,tcpClient);
-        }
-        this.tcpClient = tcpClient;
-        this.setConsumerThread(new QueueConsumerThread(this));
+    public RemoteGameConsumer(GameContext gameContext, QueueConsumerThread queueConsumerThread , RemoteConsumerInfo remoteConsumerInfo) {
+        super(gameContext,queueConsumerThread ,gameContext.createTcpClient(remoteConsumerInfo.getIp(),remoteConsumerInfo.getPort()) , remoteConsumerInfo );
+        addTcpClient(getTcpClient());
     }
+    public RemoteGameConsumer(GameContext gameContext , RemoteConsumerInfo remoteConsumerInfo) {
+        super(gameContext,new QueueConsumerThread() ,gameContext.createTcpClient(remoteConsumerInfo.getIp(),remoteConsumerInfo.getPort()) , remoteConsumerInfo );
 
-    public RemoteGameConsumer(GameContext gameContext) {
-        this(gameContext,null);
+        addTcpClient(getTcpClient());
+
     }
 
 
-    private RemoteGameConsumer(GameContext gameContext,TcpClient tcpClient) {
-        this.setGameContext(gameContext);
-        this.tcpClient = tcpClient;
-        this.setConsumerThread(new QueueConsumerThread(this));
+    public RemoteGameConsumer(GameContext gameContext , QueueConsumerThread queueConsumerThread , TcpClient tcpClient, RemoteConsumerInfo remoteConsumerInfo) {
+        super(gameContext,queueConsumerThread ,tcpClient , remoteConsumerInfo );
+        addTcpClient(getTcpClient());
     }
+
+//    public RemoteGameConsumer(GameContext gameContext , TcpClient tcpClient, RemoteConsumerInfo remoteConsumerInfo) {
+//        super(gameContext,new QueueConsumerThread() ,tcpClient , remoteConsumerInfo );
+//    }
+
+
 
 //    public RemoteGameConsumer(TcpClient tcpClient) {
 //        super(tcpClient.getGameContext());
@@ -164,36 +157,8 @@ public class RemoteGameConsumer extends MpscQueueGameConsumer {
 //    }
 
 
-    @Override
-    protected void doEvent(EventData eventData) {
-        if(!isConnectAvailable()){
-            tcpClient.checkConnect();
-        }
-
-        Event event = eventData.getEvent();
-        if(event instanceof MsgEvent){
-            if(isConnectAvailable()){
-                Object data = ((MsgEvent<?>) event).getMsgData();
-                if(data instanceof ByteMsgObj){
-                    tcpClient.write((ByteMsgObj)data);
-                }else if(data instanceof MessageLite){
-                    tcpClient.write((MessageLite)data);
-                }else {
-                    logger.error(" publicEvent fail , unknow date type {} ", data.getClass().getCanonicalName());
-                }
-            }else {
-                logger.error(" publicEvent fail , isConnectAvailable false ");
-            }
-        }else {
-            getEventManager().publishEvent(eventData.getEvent());
-        }
-
-    }
 
 
-    private boolean isConnectAvailable(){
-        return tcpClient.isConnectAvailable();
-    }
 
     public void addRemoteConsumerInfo(int consumerId , String ip , int port){
         RemoteConsumerInfo remoteConsumerInfo = new RemoteConsumerInfo();
@@ -227,6 +192,18 @@ public class RemoteGameConsumer extends MpscQueueGameConsumer {
             tcpClientMap.put(addr,tcpClient);
         }
         return tcpClient;
+    }
+
+
+    public void addTcpClient(TcpClient tcpClient){
+        String ip = tcpClient.getHost();
+        int port = tcpClient.getPort();
+        String addr = ip + ":"+port;
+        TcpClient oldTcpClient = tcpClientMap.get(addr);
+        if(oldTcpClient != null){
+            throw new IllegalArgumentException("oldTcpClient != null");
+        }
+        tcpClientMap.put(addr,tcpClient);
     }
 
 

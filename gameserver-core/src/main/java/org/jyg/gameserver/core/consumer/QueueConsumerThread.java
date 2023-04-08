@@ -17,16 +17,10 @@ public class QueueConsumerThread extends Thread {
     private final List<AbstractThreadQueueGameConsumer> queueGameConsumers = new ArrayList<>();
 
 
+
+
     public QueueConsumerThread() {
-        this(null);
-    }
-
-
-    public QueueConsumerThread(AbstractThreadQueueGameConsumer firstQueueGameConsumer) {
         this.setDaemon(false);
-        if (firstQueueGameConsumer != null) {
-            addQueueConsumer(firstQueueGameConsumer);
-        }
     }
 
     @Override
@@ -140,8 +134,8 @@ public class QueueConsumerThread extends Thread {
     }
 
 
-    public void addQueueConsumer(AbstractThreadQueueGameConsumer queueGameConsumer) {
-        queueGameConsumer.setConsumerThread(this);
+    void addQueueConsumer(AbstractThreadQueueGameConsumer queueGameConsumer) {
+
         if(!queueGameConsumers.contains(queueGameConsumer)){
             queueGameConsumers.add(queueGameConsumer);
         }

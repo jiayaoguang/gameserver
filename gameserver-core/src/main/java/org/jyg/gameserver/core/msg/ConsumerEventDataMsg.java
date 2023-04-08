@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public class ConsumerEventDataMsg implements ByteMsgObj{
 
-    private int toConsumerId;;
+    private int toConsumerId;
 
 
     private int eventId;

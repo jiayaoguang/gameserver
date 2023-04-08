@@ -1,21 +1,16 @@
 package org.jyg.gameserver.core.consumer;
 
-import io.netty.util.internal.shaded.org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.RemoteConsumerInfo;
-import org.jyg.gameserver.core.event.ConsumerDefaultEvent;
 import org.jyg.gameserver.core.msg.ConsumerEventDataMsg;
 import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 
-import java.util.Queue;
-
 /**
  * create by jiayaoguang on 2022/11/12
  */
 public class RemoteDelegateGameConsumer extends MpscQueueGameConsumer{
-    public static final int DEFAULT_QUEUE_SIZE = 256 * 1024;
 
     private final TcpClient tcpClient;
 
@@ -33,14 +28,15 @@ public class RemoteDelegateGameConsumer extends MpscQueueGameConsumer{
         this.setGameContext(gameContext);
         this.remoteConsumerInfo = remoteConsumerInfo;
         this.tcpClient = tcpClient;
-        this.setConsumerThread(queueConsumerThread);
-        queueConsumerThread.addQueueConsumer(this);
+        this.setConsumerThreadAndAddToThread(queueConsumerThread);
+
     }
 
     @Override
     public void doStart() {
         super.doStart();
         tcpClient.start();
+
     }
 
     @Override
@@ -77,15 +73,7 @@ public class RemoteDelegateGameConsumer extends MpscQueueGameConsumer{
 //            consumerEventDataMsg.getEvent().setParams(eventData.getParams());
 
 
-        if (!this.tcpClient.isConnectAvailable()) {
-            Logs.DEFAULT_LOGGER.error("DelegateGameConsumer remote consumer {} ip {} port {} connect unavailable, reconnect", remoteConsumerInfo.getConsumerId(), remoteConsumerInfo.getIp(), remoteConsumerInfo.getPort());
-            tcpClient.connect();
-        }
-        if (this.tcpClient.isConnectAvailable()) {
-            this.tcpClient.write(consumerEventDataMsg);
-        } else {
-            Logs.DEFAULT_LOGGER.error("DelegateGameConsumer send msg fail, remote consumer {} ip {} port {},reconnect fail", remoteConsumerInfo.getConsumerId(), remoteConsumerInfo.getIp(), remoteConsumerInfo.getPort());
-        }
+        wirteMessage(consumerEventDataMsg);
 
 
     }
@@ -94,4 +82,31 @@ public class RemoteDelegateGameConsumer extends MpscQueueGameConsumer{
     public TcpClient getTcpClient() {
         return tcpClient;
     }
+
+
+    public void wirteMessage(Object message){
+//        tcpClient.checkConnect();
+        if (!this.tcpClient.isConnectAvailable()) {
+            Logs.DEFAULT_LOGGER.error("DelegateGameConsumer remote consumer {} ip {} port {} connect unavailable, reconnect", remoteConsumerInfo.getConsumerId(), remoteConsumerInfo.getIp(), remoteConsumerInfo.getPort());
+            tcpClient.connect();
+        }
+//        if(message instanceof MessageLite){
+//            tcpClient.write(message);
+//        }else if(message instanceof ByteMsgObj){
+//            tcpClient.write(message);
+//        }else {
+//            Logs.DEFAULT_LOGGER.error("write message fail , message type {} error",message.getClass().getSimpleName());
+//        }
+
+
+        if (this.tcpClient.isConnectAvailable()) {
+            this.tcpClient.write(message);
+        } else {
+            Logs.DEFAULT_LOGGER.error("DelegateGameConsumer send msg fail, remote consumer {} ip {} port {},reconnect fail", remoteConsumerInfo.getConsumerId(), remoteConsumerInfo.getIp(), remoteConsumerInfo.getPort());
+        }
+
+    }
+
+
+
 }

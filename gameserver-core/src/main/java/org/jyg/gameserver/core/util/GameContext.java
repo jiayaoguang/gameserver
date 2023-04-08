@@ -336,7 +336,7 @@ public class GameContext{
             return;
         }
 
-        this.isStart = true;
+
         this.startTime = System.currentTimeMillis();
 
         this.protoClazz2MsgIdMap = Object2IntMaps.unmodifiable(this.protoClazz2MsgIdMap);
@@ -345,6 +345,7 @@ public class GameContext{
 
         this.instanceManager.start();
 
+        this.isStart = true;
 
 
 

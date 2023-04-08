@@ -1,6 +1,7 @@
 package org.jyg.gameserver.test.db.proxy;
 
 import org.jyg.gameserver.core.consumer.*;
+import org.jyg.gameserver.core.data.RemoteConsumerInfo;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
 import org.jyg.gameserver.core.event.listener.GameEventListener;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
@@ -24,9 +25,15 @@ public class UseRemoteDBTest {
         GameServerBootstrap gameServerBootstrap = new GameServerBootstrap(mainConsumer);
         gameServerBootstrap.addTcpConnector(8889);
 
-        RemoteGameConsumer consumer = new RemoteGameConsumer(gameServerBootstrap.getGameContext());
-        consumer.setId(101);
-        consumer.addRemoteConsumerInfo(DBProxy.DB_CONSUMER_ID , "127.0.0.1" , 8888);
+
+        RemoteConsumerInfo remoteConsumerInfo = new RemoteConsumerInfo();
+        remoteConsumerInfo.setIp("127.0.0.1" );
+        remoteConsumerInfo.setPort(8888);
+        remoteConsumerInfo.setConsumerId(DBProxy.DB_CONSUMER_ID);
+
+        RemoteGameConsumer consumer = new RemoteGameConsumer(gameServerBootstrap.getGameContext() , remoteConsumerInfo);
+//        consumer.setId(101);
+//        consumer.addRemoteConsumerInfo(DBProxy.DB_CONSUMER_ID , "127.0.0.1" , 8888);
 
         gameServerBootstrap.getGameContext().getConsumerManager().addConsumer(consumer);
         gameServerBootstrap.getGameContext().getMainGameConsumer().getInstanceManager()

@@ -5,6 +5,7 @@ import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.event.ConsumerDefaultEvent;
 import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.event.ResultReturnEvent;
+import org.jyg.gameserver.core.intercept.WhiteIpInterceptor;
 import org.jyg.gameserver.core.msg.ConsumerEventDataMsg;
 import org.jyg.gameserver.core.msg.ConsumerEventDataReturnMsg;
 import org.jyg.gameserver.core.session.Session;
@@ -14,6 +15,10 @@ import org.jyg.gameserver.core.util.Logs;
  * create by jiayaoguang on 2022/11/12
  */
 public class ConsumerEventDataMsgProcessor extends ByteMsgObjProcessor<ConsumerEventDataMsg>{
+
+    public ConsumerEventDataMsgProcessor(){
+        addMsgInterceptor(new WhiteIpInterceptor());
+    }
 
 
     @Override
