@@ -112,7 +112,6 @@ public class GameRouteBootstarp extends GameServerBootstrap {
 
 
         bootstarp.getDefaultConsumer().getEventManager().addEventListener(new GameEventListener<ConnectEvent>() {
-            GameConsumer gameConsumer = bootstarp.getDefaultConsumer();
             @Override
             public void onEvent(ConnectEvent event) {
                 Session session = event.getSession();
@@ -124,7 +123,7 @@ public class GameRouteBootstarp extends GameServerBootstrap {
                 routeClientSessionConnectMsg.setSessionId(session.getSessionId());
                 routeClientSessionConnectMsg.setAddr(session.getRemoteAddr());
 
-                gameConsumer.getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionConnectMsg);
+                event.getGameConsumer().getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionConnectMsg);
             }
         });
 
@@ -132,13 +131,12 @@ public class GameRouteBootstarp extends GameServerBootstrap {
 
         bootstarp.getDefaultConsumer().getEventManager().addEventListener(new GameEventListener<DisconnectEvent>() {
 
-            GameConsumer gameConsumer = bootstarp.getDefaultConsumer();
 
             @Override
             public void onEvent(DisconnectEvent event) {
                 RouteClientSessionDisconnectMsg routeClientSessionDisconnectMsg = new RouteClientSessionDisconnectMsg();
                 routeClientSessionDisconnectMsg.setSessionId(event.getSession().getSessionId());
-                gameConsumer.getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionDisconnectMsg);
+                event.getGameConsumer().getInstance(RemoteServerManager.class).sendRemoteMsg(routeClientSessionDisconnectMsg);
             }
         });
 

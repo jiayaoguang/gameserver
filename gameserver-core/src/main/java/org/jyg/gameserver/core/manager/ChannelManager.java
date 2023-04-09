@@ -60,11 +60,11 @@ public class ChannelManager implements Lifecycle {
         return session;
     }
 
-    public <T> void afterConnect(Session session) {
-        gameConsumer.getEventManager().publishEvent(new ConnectEvent(session));
+    public void afterConnect(Session session) {
+        gameConsumer.getEventManager().publishEvent(new ConnectEvent( gameConsumer , session));
     }
 
-    public final <T> void doUnlink(Channel channel) {
+    public final void doUnlink(Channel channel) {
         Session session = channelObjectMap.remove(channel);
         if(channel.isOpen()){
             channel.close();
@@ -72,8 +72,8 @@ public class ChannelManager implements Lifecycle {
         afterDisconnect(session);
     }
 
-    public <T> void afterDisconnect(Session session) {
-        gameConsumer.getEventManager().publishEvent(new DisconnectEvent(session));
+    public void afterDisconnect(Session session) {
+        gameConsumer.getEventManager().publishEvent(new DisconnectEvent(gameConsumer ,session));
     }
 
 
