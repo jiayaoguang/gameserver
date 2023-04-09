@@ -31,7 +31,7 @@ public class UseRemoteDBTest {
         remoteConsumerInfo.setPort(8888);
         remoteConsumerInfo.setConsumerId(DBProxy.DB_CONSUMER_ID);
 
-        RemoteGameConsumer consumer = new RemoteGameConsumer(gameServerBootstrap.getGameContext() , remoteConsumerInfo);
+        RemoteManagerGameConsumer consumer = new RemoteManagerGameConsumer(gameServerBootstrap.getGameContext() , remoteConsumerInfo);
 //        consumer.setId(101);
 //        consumer.addRemoteConsumerInfo(DBProxy.DB_CONSUMER_ID , "127.0.0.1" , 8888);
 

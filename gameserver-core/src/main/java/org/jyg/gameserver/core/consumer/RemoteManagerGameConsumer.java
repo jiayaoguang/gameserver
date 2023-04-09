@@ -1,34 +1,27 @@
 package org.jyg.gameserver.core.consumer;
 
-import com.google.protobuf.MessageLite;
-import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.RemoteConsumerInfo;
-import org.jyg.gameserver.core.event.Event;
-import org.jyg.gameserver.core.event.MsgEvent;
-import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.util.GameContext;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
  * create by jiayaoguang on 2020/5/24
  */
-public class RemoteGameConsumer extends RemoteDelegateGameConsumer {
+public class RemoteManagerGameConsumer extends RemoteDelegateGameConsumer {
 
 
     private final Map<String,TcpClient> tcpClientMap = new LinkedHashMap<>(1024,0.75f);
 
 
-    public RemoteGameConsumer(GameContext gameContext, QueueConsumerThread queueConsumerThread , RemoteConsumerInfo remoteConsumerInfo) {
+    public RemoteManagerGameConsumer(GameContext gameContext, QueueConsumerThread queueConsumerThread , RemoteConsumerInfo remoteConsumerInfo) {
         super(gameContext,queueConsumerThread ,gameContext.createTcpClient(remoteConsumerInfo.getIp(),remoteConsumerInfo.getPort()) , remoteConsumerInfo );
         addTcpClient(getTcpClient());
     }
-    public RemoteGameConsumer(GameContext gameContext , RemoteConsumerInfo remoteConsumerInfo) {
+    public RemoteManagerGameConsumer(GameContext gameContext , RemoteConsumerInfo remoteConsumerInfo) {
         super(gameContext,new QueueConsumerThread() ,gameContext.createTcpClient(remoteConsumerInfo.getIp(),remoteConsumerInfo.getPort()) , remoteConsumerInfo );
 
         addTcpClient(getTcpClient());
@@ -36,7 +29,7 @@ public class RemoteGameConsumer extends RemoteDelegateGameConsumer {
     }
 
 
-    public RemoteGameConsumer(GameContext gameContext , QueueConsumerThread queueConsumerThread , TcpClient tcpClient, RemoteConsumerInfo remoteConsumerInfo) {
+    public RemoteManagerGameConsumer(GameContext gameContext , QueueConsumerThread queueConsumerThread , TcpClient tcpClient, RemoteConsumerInfo remoteConsumerInfo) {
         super(gameContext,queueConsumerThread ,tcpClient , remoteConsumerInfo );
         addTcpClient(getTcpClient());
     }

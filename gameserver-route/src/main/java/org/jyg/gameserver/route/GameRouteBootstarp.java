@@ -1,8 +1,6 @@
 package org.jyg.gameserver.route;
 
 import org.jyg.gameserver.core.consumer.GameConsumer;
-import org.jyg.gameserver.core.consumer.RemoteGameConsumer;
-import org.jyg.gameserver.core.data.RemoteConsumerInfo;
 import org.jyg.gameserver.core.event.ConnectEvent;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
 import org.jyg.gameserver.core.event.DisconnectEvent;
