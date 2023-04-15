@@ -93,7 +93,7 @@ public class ConsumerDBManager implements Lifecycle {
 
         ConsumerDefaultEvent consumerDefaultEvent = new ConsumerDefaultEvent(BDEventConst.SELECT, dbEntity);
         consumerDefaultEvent.setFromConsumerId(gameConsumer.getId());
-        consumerDefaultEvent.setEventId(BDEventConst.SELECT);
+        consumerDefaultEvent.setEventId(BDEventConst.SELECT_BY_FIELD);
         consumerDefaultEvent.setData(dbEntity);
         consumerDefaultEvent.setRequestId(requestId);
         consumerDefaultEvent.setParams(params);
