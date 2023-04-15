@@ -130,13 +130,13 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 			if (!request.uri().endsWith("/")) {
 				request.retain();
 				ctx.fireChannelRead(request);
-				Logs.DEFAULT_LOGGER.info("static :" + request.refCnt());
+//				Logs.DEFAULT_LOGGER.info("static :" + request.refCnt());
 				return;
 			}
 		}
 
 		if (request.method() != GET) {
-			Logs.DEFAULT_LOGGER.info("request.method() != GET :" + request.uri());
+			Logs.DEFAULT_LOGGER.info("request.method() != GET : {}" , request.uri());
 			sendError(ctx, METHOD_NOT_ALLOWED);
 			return;
 		}
@@ -190,62 +190,65 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 			}
 		}
 
-		RandomAccessFile raf;
-		try {
-			raf = new RandomAccessFile(file, "r");
-		} catch (FileNotFoundException ignore) {
+		try(RandomAccessFile raf = new RandomAccessFile(file, "r");){
+
+			long fileLength = raf.length();
+
+			HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
+			HttpUtil.setContentLength(response, fileLength);
+			setContentTypeHeader(response, file);
+			setDateAndCacheHeaders(response, file);
+			if (HttpUtil.isKeepAlive(request)) {
+				response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
+			}
+
+			// Write the initial line and the header.
+			ctx.write(response);
+
+			// Write the content.
+			ChannelFuture sendFileFuture;
+			ChannelFuture lastContentFuture;
+			if (ctx.pipeline().get(SslHandler.class) == null) {
+				sendFileFuture = ctx.write(new DefaultFileRegion(raf.getChannel(), 0, fileLength),
+						ctx.newProgressivePromise());
+				// Write the end marker.
+				lastContentFuture = ctx.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
+			} else {
+				sendFileFuture = ctx.writeAndFlush(new HttpChunkedInput(new ChunkedFile(raf, 0, fileLength, 8192)),
+						ctx.newProgressivePromise());
+				// HttpChunkedInput will write the end marker (LastHttpContent) for us.
+				lastContentFuture = sendFileFuture;
+			}
+
+			sendFileFuture.addListener(new ChannelProgressiveFutureListener() {
+				@Override
+				public void operationProgressed(ChannelProgressiveFuture future, long progress, long total) {
+					if (total < 0) { // total unknown
+						Logs.DEFAULT_LOGGER.info(" {} Transfer progress: {}" ,future.channel() ,  progress);
+					} else {
+						Logs.DEFAULT_LOGGER.info(" {} Transfer progress: {} / {}" ,future.channel() ,  progress , total);
+					}
+				}
+
+				@Override
+				public void operationComplete(ChannelProgressiveFuture future) {
+					Logs.DEFAULT_LOGGER.info( " {} Transfer complete.",future.channel());
+				}
+			});
+
+
+
+			// Decide whether to close the connection or not.
+			if (!HttpUtil.isKeepAlive(request)) {
+				// Close the connection when the whole content is written out.
+				lastContentFuture.addListener(ChannelFutureListener.CLOSE);
+			}
+		}catch (FileNotFoundException ignore) {
 			sendError(ctx, NOT_FOUND);
 			return;
 		}
-		long fileLength = raf.length();
 
-		HttpResponse response = new DefaultHttpResponse(HTTP_1_1, OK);
-		HttpUtil.setContentLength(response, fileLength);
-		setContentTypeHeader(response, file);
-		setDateAndCacheHeaders(response, file);
-		if (HttpUtil.isKeepAlive(request)) {
-			response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
-		}
 
-		// Write the initial line and the header.
-		ctx.write(response);
-
-		// Write the content.
-		ChannelFuture sendFileFuture;
-		ChannelFuture lastContentFuture;
-		if (ctx.pipeline().get(SslHandler.class) == null) {
-			sendFileFuture = ctx.write(new DefaultFileRegion(raf.getChannel(), 0, fileLength),
-					ctx.newProgressivePromise());
-			// Write the end marker.
-			lastContentFuture = ctx.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
-		} else {
-			sendFileFuture = ctx.writeAndFlush(new HttpChunkedInput(new ChunkedFile(raf, 0, fileLength, 8192)),
-					ctx.newProgressivePromise());
-			// HttpChunkedInput will write the end marker (LastHttpContent) for us.
-			lastContentFuture = sendFileFuture;
-		}
-
-		sendFileFuture.addListener(new ChannelProgressiveFutureListener() {
-			@Override
-			public void operationProgressed(ChannelProgressiveFuture future, long progress, long total) {
-				if (total < 0) { // total unknown
-					System.err.println(future.channel() + " Transfer progress: " + progress);
-				} else {
-					System.err.println(future.channel() + " Transfer progress: " + progress + " / " + total);
-				}
-			}
-
-			@Override
-			public void operationComplete(ChannelProgressiveFuture future) {
-				System.err.println(future.channel() + " Transfer complete.");
-			}
-		});
-
-		// Decide whether to close the connection or not.
-		if (!HttpUtil.isKeepAlive(request)) {
-			// Close the connection when the whole content is written out.
-			lastContentFuture.addListener(ChannelFutureListener.CLOSE);
-		}
 	}
 
 	private String getNoParamUri(String uri) {
@@ -312,21 +315,25 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 
 				.append("<ul>").append("<li><a href=\"../\">..</a></li>\r\n");
 
-		for (File f : dir.listFiles()) {
-			if (f.isHidden() || !f.canRead()) {
-				continue;
-			}
+		File[] childFiles = dir.listFiles();
+		if(childFiles != null){
+			for (int i = 0; i < childFiles.length; i++) {
+				File f = childFiles[i];
+				if (f.isHidden() || !f.canRead()) {
+					continue;
+				}
 
 
-			String name = f.getName();
-			if (!ALLOWED_FILE_NAME.matcher(name).matches()) {
-				continue;
-			}
-			if(f.isDirectory()){
-				name += "/";
-			}
+				String name = f.getName();
+				if (!ALLOWED_FILE_NAME.matcher(name).matches()) {
+					continue;
+				}
+				if (f.isDirectory()) {
+					name += "/";
+				}
 
-			buf.append("<li><a href=\"").append(name).append("\">").append(name).append("</a></li>\r\n");
+				buf.append("<li><a href=\"").append(name).append("\">").append(name).append("</a></li>\r\n");
+			}
 		}
 
 		buf.append("</ul></body></html>\r\n");
