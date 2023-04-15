@@ -90,14 +90,12 @@ public class QueueConsumerThread extends Thread {
 
             try {
                 gameConsumer.updateConsumer();
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
 
             if (gameConsumer.getContinuePollNullNum() > 1000) {
-                gameConsumer.update();
                 gameConsumer.clearContinuePollNullNum();
                 LockSupport.parkNanos(1000 * 1000L);
             } else if (gameConsumer.getContinuePollNullNum() > 800) {
@@ -108,6 +106,8 @@ public class QueueConsumerThread extends Thread {
 
 
     private void runAllConsumers() {
+
+
         for (; ; ) {
             int aliveConsumerNum = 0;
 
@@ -130,7 +130,6 @@ public class QueueConsumerThread extends Thread {
 
             if (allContinuePollNullCountNum > 1000) {
                 for (AbstractThreadQueueGameConsumer gameConsumer : queueGameConsumers) {
-                    gameConsumer.update();
                     gameConsumer.clearContinuePollNullNum();
                 }
                 LockSupport.parkNanos(1000 * 1000L);

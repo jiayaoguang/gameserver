@@ -94,22 +94,23 @@ public abstract class AbstractThreadQueueGameConsumer extends GameConsumer {
     protected void updateConsumer() {
 
         for(;;){
-            EventData<?> object = pollEvent();
-            if(object == null) {
-                if(continuePollNullNum < MAX_CONTINUE_POLL_NULL_NUM){
-                    continuePollNullNum++;
-                }
-                return;
-            }
 
-            continuePollNullNum = 0;
-            try {
+                EventData<?> object = pollEvent();
+                if(object == null) {
+                    if(continuePollNullNum < MAX_CONTINUE_POLL_NULL_NUM){
+                        continuePollNullNum++;
+                    }
+
+                    break;
+                }
+
+                continuePollNullNum = 0;
+
                 onReciveEvent(object);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
         }
 
+        update();
 
     }
 

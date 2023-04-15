@@ -412,13 +412,14 @@ public abstract class GameConsumer {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try{
-                update();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
         }
+//        finally {
+//            try{
+//                update();
+//            }catch (Exception e){
+//                e.printStackTrace();
+//            }
+//        }
 
     }
 

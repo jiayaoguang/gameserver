@@ -64,6 +64,7 @@ public class ConsumerFuture {
 
             try {
                 gameConsumer.onReciveEvent(object);
+                gameConsumer.update();
             } catch (Exception e) {
                 e.printStackTrace();
             }
