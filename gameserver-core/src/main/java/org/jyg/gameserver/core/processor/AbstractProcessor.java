@@ -17,51 +17,45 @@ import java.util.List;
 /**
  * created by jiayaoguang at 2017年12月16日
  */
-public abstract class AbstractProcessor<T> implements Processor<T> {
+public abstract class AbstractProcessor<T> {
 
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 //	private Context context;
 
-	private GameConsumer gameConsumer;
+    private GameConsumer gameConsumer;
 
-	private final List<MsgInterceptor<?>> interceptors = new ArrayList<>();
+    private MsgInterceptor<?> interceptor = null;
 
-	@Override
-	public void addMsgInterceptor(MsgInterceptor msgInterceptor){
-		interceptors.add(msgInterceptor);
-	}
+    public void setMsgInterceptor(MsgInterceptor msgInterceptor) {
+        this.interceptor = msgInterceptor;
+    }
 
-	public boolean checkIntercepts(Session session , MsgEvent event){
-		if(interceptors.isEmpty()){
-			return true;
-		}
+    public boolean checkIntercepts(Session session, MsgEvent event) {
 
-		for(MsgInterceptor<?> msgInterceptor : interceptors){
-			if(!msgInterceptor.intercept(session , event)){
-				return false;
-			}
-		}
+        if (interceptor !=null && !this.interceptor.intercept(session, event)) {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
 
-	public GameContext getContext() {
-		return gameConsumer.getGameContext();
-	}
+    public GameContext getContext() {
+        return gameConsumer.getGameContext();
+    }
 
 
-	public abstract void process(Session session , MsgEvent<T> event);
+    public abstract void process(Session session, MsgEvent<T> event);
 
 
-	public GameConsumer getGameConsumer() {
-		return gameConsumer;
-	}
+    public GameConsumer getGameConsumer() {
+        return gameConsumer;
+    }
 
-	public void setGameConsumer(GameConsumer gameConsumer) {
-		this.gameConsumer = gameConsumer;
-	}
+    public void setGameConsumer(GameConsumer gameConsumer) {
+        this.gameConsumer = gameConsumer;
+    }
 
 
 }

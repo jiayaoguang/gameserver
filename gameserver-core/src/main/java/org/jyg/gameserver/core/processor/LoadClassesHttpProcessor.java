@@ -30,13 +30,13 @@ public class LoadClassesHttpProcessor extends HttpProcessor {
         }
 
         List<ClassLoadListener> classLoadListeners = new ArrayList<>();
-        List<Processor<?>> processors = new ArrayList<>();
+        List<AbstractProcessor<?>> processors = new ArrayList<>();
 
 
         for (Class<?> clazz : classList) {
-            if (Processor.class.isAssignableFrom(clazz)) {
+            if (AbstractProcessor.class.isAssignableFrom(clazz)) {
                 try {
-                    Processor<?> processor = (Processor<?>) clazz.newInstance();
+                    AbstractProcessor<?> processor = (AbstractProcessor<?>) clazz.newInstance();
                     processors.add(processor);
                 } catch (InstantiationException | IllegalAccessException e) {
                     throw new RuntimeException(e);
@@ -57,7 +57,7 @@ public class LoadClassesHttpProcessor extends HttpProcessor {
 
         boolean containsProcessor = false;
         StringBuilder conatinsMsg = new StringBuilder();
-        for (Processor<?> processor : processors) {
+        for (AbstractProcessor<?> processor : processors) {
             try {
                 if(getGameConsumer().containsProcessor(processor)){
                     containsProcessor = true;
@@ -93,7 +93,7 @@ public class LoadClassesHttpProcessor extends HttpProcessor {
             }
         }
 
-        for (Processor<?> processor : processors) {
+        for (AbstractProcessor<?> processor : processors) {
             try {
                 getGameConsumer().addProcessor(processor);
                 sendHtmlSb.append("load processor : ").append(processor.getClass().getSimpleName()).append('\n');

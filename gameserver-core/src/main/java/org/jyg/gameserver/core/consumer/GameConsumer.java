@@ -48,7 +48,7 @@ public abstract class GameConsumer {
     private final ChannelManager channelManager;
 
     private final Map<String, HttpProcessor> httpProcessorMap = new HashMap<>(MAP_DEFAULT_SIZE,MAP_DEFAULT_LOADFACTOR);
-    private final Int2ObjectMap<Processor> protoProcessorMap = new Int2ObjectOpenHashMap<>(MAP_DEFAULT_SIZE,MAP_DEFAULT_LOADFACTOR);
+    private final Int2ObjectMap<AbstractProcessor> protoProcessorMap = new Int2ObjectOpenHashMap<>(MAP_DEFAULT_SIZE,MAP_DEFAULT_LOADFACTOR);
 
 
 
@@ -249,7 +249,7 @@ public abstract class GameConsumer {
 
 
     public void processEventMsg(Session session, MsgEvent<?> event) {
-        Processor processor = protoProcessorMap.get(event.getMsgId());
+        AbstractProcessor processor = protoProcessorMap.get(event.getMsgId());
 
         if (processor == null) {
             String name = event.getMsgData() == null ? "null" :event.getMsgData().getClass().getSimpleName();
@@ -314,7 +314,7 @@ public abstract class GameConsumer {
 
 
 
-    public void addProcessor(Processor<?> processor) {
+    public void addProcessor(AbstractProcessor<?> processor) {
         if (processor instanceof ProtoProcessor) {
             ProtoProcessor protoProcessor = (ProtoProcessor) processor;
             int msgId = getGameContext().getMsgIdByProtoClass(protoProcessor.getProtoClass());
@@ -342,7 +342,7 @@ public abstract class GameConsumer {
         logger.error(" unknown processor type  : {} ", processor.getClass());
     }
 
-    public boolean containsProcessor(Processor<?> processor) {
+    public boolean containsProcessor(AbstractProcessor<?> processor) {
         if (processor instanceof ProtoProcessor) {
             ProtoProcessor protoProcessor = (ProtoProcessor) processor;
             int msgId = getGameContext().getMsgIdByProtoClass(protoProcessor.getProtoClass());
@@ -535,7 +535,7 @@ public abstract class GameConsumer {
         OnlyLocalHttpMsgInterceptor onlyLocalHttpMsgFilter = new OnlyLocalHttpMsgInterceptor();
 
         for(HttpProcessor httpProcessor : httpProcessorMap.values()){
-            httpProcessor.addMsgInterceptor(onlyLocalHttpMsgFilter);
+            httpProcessor.setMsgInterceptor(onlyLocalHttpMsgFilter);
         }
     }
 

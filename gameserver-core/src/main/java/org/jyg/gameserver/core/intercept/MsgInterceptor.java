@@ -9,6 +9,11 @@ import org.jyg.gameserver.core.session.Session;
  */
 public interface MsgInterceptor<T>{
 
+    /**
+     * @param session
+     * @param eventData
+     * @return
+     */
     public boolean intercept(Session session , MsgEvent<T> eventData);
 
 }

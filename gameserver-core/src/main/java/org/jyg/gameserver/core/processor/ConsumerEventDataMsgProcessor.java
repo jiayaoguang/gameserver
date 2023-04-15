@@ -2,7 +2,6 @@ package org.jyg.gameserver.core.processor;
 
 import org.jyg.gameserver.core.consumer.ResultHandler;
 import org.jyg.gameserver.core.data.EventData;
-import org.jyg.gameserver.core.event.ConsumerDefaultEvent;
 import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.event.ResultReturnEvent;
 import org.jyg.gameserver.core.intercept.WhiteIpInterceptor;
@@ -17,7 +16,7 @@ import org.jyg.gameserver.core.util.Logs;
 public class ConsumerEventDataMsgProcessor extends ByteMsgObjProcessor<ConsumerEventDataMsg>{
 
     public ConsumerEventDataMsgProcessor(){
-        addMsgInterceptor(new WhiteIpInterceptor());
+        setMsgInterceptor(new WhiteIpInterceptor());
     }
 
 

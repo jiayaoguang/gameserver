@@ -100,9 +100,6 @@ public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
     }
 
 
-    public void initProcessors(ProcessorsInitializer processorsInitializer) {
-        processorsInitializer.initProcessors(this);
-    }
 
     public synchronized void addChildConsumer(T consumer, ProcessorsInitializer processorsInitializer) {
         processorsInitializer.initProcessors(consumer);

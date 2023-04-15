@@ -38,9 +38,9 @@ public class DBConsumerGroupTest {
 
                 GameConsumer consumer = consumerThreadStartEvent.getGameConsumer();
 
-                consumer.getTimerManager().addUnlimitedTimer(1000L,()->{
-                    AllUtil.println(" hello ----------  " + System.currentTimeMillis());
-                });
+//                consumer.getTimerManager().addUnlimitedTimer(1000L,()->{
+//                    AllUtil.println(" hello ----------  " + System.currentTimeMillis());
+//                });
 
 
                 Maik maik = new Maik();
@@ -66,7 +66,7 @@ public class DBConsumerGroupTest {
                 });
 
                 Maik selectByMaikDb = new Maik();
-                selectByMaikDb.setContent("asd");
+                selectByMaikDb.setContent("hello");
                 consumer.getInstanceManager().getInstance(ConsumerDBManager.class).selectBy(selectByMaikDb,"content", new ResultHandler<List<Maik>>() {
                     @Override
                     public void call(int eventId, List<Maik> data) {

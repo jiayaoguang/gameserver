@@ -279,7 +279,7 @@ public class GameContext{
         getMainGameConsumer().addProcessor(new LoadClassesHttpProcessor());
         getMainGameConsumer().addProcessor(new RedefineClassesHttpProcessor());
         SysInfoHttpProcessor sysInfoHttpProcessor = new SysInfoHttpProcessor();
-        sysInfoHttpProcessor.addMsgInterceptor(this.httpWhiteIpInterceptor);
+        sysInfoHttpProcessor.setMsgInterceptor(this.httpWhiteIpInterceptor);
 
         getMainGameConsumer().addProcessor(sysInfoHttpProcessor);
 
