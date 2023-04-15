@@ -68,9 +68,9 @@ public abstract class TcpConnector extends AbstractConnector {
 		// tcp等待三次握手队列的长度
 		serverBootstrap.option(ChannelOption.SO_BACKLOG, 1024);
 
-		if(getGameContext().isUseEpoll()){
-			serverBootstrap.option(EpollChannelOption.TCP_CORK, false);
-		}
+//		if(getGameContext().isUseEpoll()){
+//			serverBootstrap.option(EpollChannelOption.TCP_CORK, false);
+//		}
 
 		serverBootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 
