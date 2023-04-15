@@ -3,6 +3,7 @@ package org.jyg.gameserver.core.manager;
 import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import org.jyg.gameserver.core.consumer.AbstractThreadQueueGameConsumer;
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.event.Event;
@@ -140,12 +141,31 @@ public class ConsumerManager implements Lifecycle{
 
     @Override
     public void stop() {
-        for(GameConsumer gameConsumer : getConsumers()){
-            try{
+        for (GameConsumer gameConsumer : getConsumers()) {
+            try {
                 gameConsumer.stop();
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        
+        for (GameConsumer gameConsumer : getConsumers()) {
+            if (gameConsumer instanceof AbstractThreadQueueGameConsumer) {
+                AbstractThreadQueueGameConsumer queueGameConsumer = (AbstractThreadQueueGameConsumer) gameConsumer;
+                for (int i = 0; i < 1000; i++) {
+                    if (queueGameConsumer.getConsumerThread() == null) {
+                        break;
+                    }
+                    if (!queueGameConsumer.getConsumerThread().isAlive()) {
+                        break;
+                    }
+                    try {
+                        Thread.sleep(10L);
+                    } catch (InterruptedException ignore) {
+                    }
+                }
+            }
+        }
+
     }
 }

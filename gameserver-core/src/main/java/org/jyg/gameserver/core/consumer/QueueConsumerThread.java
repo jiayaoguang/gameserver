@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.consumer;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.util.ArrayList;
@@ -20,8 +21,19 @@ public class QueueConsumerThread extends Thread {
 
 
     public QueueConsumerThread() {
-        this.setDaemon(false);
+        this(null);
     }
+
+
+    public QueueConsumerThread(String name) {
+        this.setDaemon(false);
+        if(StringUtils.isEmpty(name)){
+            this.setName("QueueConsumerThread_"+getId());
+        }else {
+            this.setName(name);
+        }
+    }
+
 
     @Override
     public synchronized void start() {

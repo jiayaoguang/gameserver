@@ -86,16 +86,6 @@ public abstract class AbstractThreadQueueGameConsumer extends GameConsumer {
 
     @Override
     public void doStop() {
-        if(consumerThread != null){
-            for (int i = 0; consumerThread.isAlive(); i++) {
-                if(i > 1000){
-                    Logs.DEFAULT_LOGGER.error( "consumer {} consumerThread stop fail " , getId());
-                    break;
-                }
-
-                LockSupport.parkNanos(10_1000_1000L);
-            }
-        }
         Logs.DEFAULT_LOGGER.info("stop gameConsumer {} id {} success....", this.getClass().getSimpleName() ,getId() );
     }
 

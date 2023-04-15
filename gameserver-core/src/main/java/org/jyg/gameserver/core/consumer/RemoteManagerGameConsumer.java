@@ -21,11 +21,16 @@ public class RemoteManagerGameConsumer extends RemoteDelegateGameConsumer {
         super(gameContext,queueConsumerThread ,gameContext.createTcpClient(remoteConsumerInfo.getIp(),remoteConsumerInfo.getPort()) , remoteConsumerInfo );
         addTcpClient(getTcpClient());
     }
-    public RemoteManagerGameConsumer(GameContext gameContext , RemoteConsumerInfo remoteConsumerInfo) {
-        super(gameContext,new QueueConsumerThread() ,gameContext.createTcpClient(remoteConsumerInfo.getIp(),remoteConsumerInfo.getPort()) , remoteConsumerInfo );
+
+
+    public RemoteManagerGameConsumer(GameContext gameContext , RemoteConsumerInfo remoteConsumerInfo,String consumerThreadName) {
+        super(gameContext,new QueueConsumerThread(consumerThreadName) ,gameContext.createTcpClient(remoteConsumerInfo.getIp(),remoteConsumerInfo.getPort()) , remoteConsumerInfo );
 
         addTcpClient(getTcpClient());
+    }
 
+    public RemoteManagerGameConsumer(GameContext gameContext , RemoteConsumerInfo remoteConsumerInfo) {
+        this(gameContext , remoteConsumerInfo , "RemoteManagerGameConsumer");
     }
 
 
