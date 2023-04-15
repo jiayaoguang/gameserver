@@ -37,7 +37,9 @@ public class GameContext{
     private final EventLoopGroupManager eventLoopGroupManager;
 //    private final ExecutorManager executorManager;
 
-    private volatile boolean isStart = false;
+    private volatile boolean start = false;
+
+    private volatile boolean stop = false;
 
     private final ServerConfig serverConfig = new ServerConfig();
 
@@ -163,7 +165,7 @@ public class GameContext{
 
     public void addMsgId2MsgClassMapping(int msgId, Class<? extends ByteMsgObj> byteMsgObjClazz) {
 
-        if(isStart){
+        if(start){
             throw new IllegalArgumentException("isStart");
         }
 
@@ -201,7 +203,7 @@ public class GameContext{
 
     public void addByteMsgCodec(AbstractByteMsgCodec<?> byteMsgCodec) {
 
-        if (isStart) {
+        if (start) {
             throw new IllegalArgumentException("isStart");
         }
 
@@ -331,7 +333,7 @@ public class GameContext{
     }
 
     public synchronized void start() {
-        if(isStart){
+        if(start){
 //            AllUtil.println(" already start .... ");
             return;
         }
@@ -345,7 +347,7 @@ public class GameContext{
 
         this.instanceManager.start();
 
-        this.isStart = true;
+        this.start = true;
 
 
 
@@ -353,10 +355,14 @@ public class GameContext{
     }
 
     public synchronized void stop() {
-        if(!isStart){
+        if(!start){
+            Logs.DEFAULT_LOGGER.error("use stop method,but not start");
+        }
+        if(this.stop){
             return;
         }
-        isStart = false;
+
+        this.stop = true;
 
         this.instanceManager.stop();
 
@@ -364,7 +370,7 @@ public class GameContext{
     }
 
     public synchronized void loadServerConfig(String configFileName){
-        if(isStart){
+        if(start){
             AllUtil.println(" already start .... ");
             return;
         }
@@ -377,7 +383,11 @@ public class GameContext{
     }
 
     public boolean isStart() {
-        return isStart;
+        return start;
+    }
+
+    public boolean isStop() {
+        return stop;
     }
 
     public ConsumerManager getConsumerManager() {

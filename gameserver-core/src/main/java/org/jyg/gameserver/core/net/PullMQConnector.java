@@ -27,8 +27,8 @@ public abstract class PullMQConnector extends MQConnector {
 
         try {
             Thread.sleep(100L);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (InterruptedException ignore) {
+            // Ignore
         }
 
         if(pollThread.isAlive()){
@@ -52,10 +52,19 @@ public abstract class PullMQConnector extends MQConnector {
     private void run(){
 
 
+        for(;!gameContext.isStart();){
+            try {
+                Thread.sleep(2L);
+            } catch (InterruptedException ignore) {
+                // Ignore
+            }
+        }
+
+
         int pollEmptyCount = 0;
 
 
-        for(; gameContext.isStart();){
+        for(; !gameContext.isStop();){
 
             int pollMsgNum = pollMQMsg();
 
@@ -66,8 +75,8 @@ public abstract class PullMQConnector extends MQConnector {
                     pollEmptyCount = 0;
                     try {
                         Thread.sleep(2L);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    } catch (InterruptedException ignore) {
+                        // Ignore
                     }
                 }
 

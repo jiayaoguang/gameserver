@@ -162,6 +162,7 @@ public class ConsumerManager implements Lifecycle{
                     try {
                         Thread.sleep(10L);
                     } catch (InterruptedException ignore) {
+                        // Ignore
                     }
                 }
             }
