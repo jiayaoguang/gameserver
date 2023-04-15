@@ -12,7 +12,7 @@ import org.jyg.gameserver.core.session.Session;
 public abstract class HttpMsgInterceptor implements MsgInterceptor<Request> {
 
     @Override
-    public final boolean intercept(Session session , MsgEvent<Request> msgEvent){
+    public final boolean checkAccess(Session session , MsgEvent<Request> msgEvent){
         if(msgEvent instanceof HttpRequestEvent){
             return filter((HttpRequestEvent) msgEvent);
         }

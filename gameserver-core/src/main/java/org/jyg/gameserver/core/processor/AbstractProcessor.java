@@ -1,18 +1,12 @@
 package org.jyg.gameserver.core.processor;
 
 import org.jyg.gameserver.core.consumer.GameConsumer;
-import org.jyg.gameserver.core.data.EventData;
-import org.jyg.gameserver.core.event.HttpRequestEvent;
 import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.intercept.MsgInterceptor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.GameContext;
-import org.jyg.gameserver.core.util.Logs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * created by jiayaoguang at 2017年12月16日
@@ -25,19 +19,22 @@ public abstract class AbstractProcessor<T> {
 
     private GameConsumer gameConsumer;
 
+    private boolean enableAccess = true;
+
     private MsgInterceptor<?> interceptor = null;
 
     public void setMsgInterceptor(MsgInterceptor msgInterceptor) {
         this.interceptor = msgInterceptor;
     }
 
-    public boolean checkIntercepts(Session session, MsgEvent event) {
+    public boolean checkAccess(Session session, MsgEvent event) {
 
-        if (interceptor !=null && !this.interceptor.intercept(session, event)) {
-            return false;
+        if (interceptor ==null) {
+            return true;
         }
 
-        return true;
+
+        return this.interceptor.checkAccess(session, event);
     }
 
 
@@ -58,5 +55,12 @@ public abstract class AbstractProcessor<T> {
     }
 
 
+    public void setEnableAccess(boolean enableAccess) {
+        this.enableAccess = enableAccess;
+    }
+
+    public boolean isEnableAccess() {
+        return enableAccess;
+    }
 }
 

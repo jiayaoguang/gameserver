@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.consumer;
 
+import com.google.protobuf.MessageLite;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.apache.commons.lang3.StringUtils;
@@ -8,6 +9,7 @@ import org.jyg.gameserver.core.event.*;
 import org.jyg.gameserver.core.event.listener.GameEventListener;
 import org.jyg.gameserver.core.intercept.OnlyLocalHttpMsgInterceptor;
 import org.jyg.gameserver.core.manager.*;
+import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.processor.*;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.timer.DelayCloseTimer;
@@ -57,8 +59,6 @@ public abstract class GameConsumer {
 
 //    private final List<Consumer> childConsumerList = new ArrayList<>();
 
-    @Deprecated
-    private long requestId = 1;
 
 
     private IdGenerator requestIdGenerator = new IncIdGenerator();
@@ -226,6 +226,31 @@ public abstract class GameConsumer {
         return processor;
     }
 
+
+    public AbstractProcessor getProtoProcessor( Class<? extends MessageLite> protoClass) {
+
+        int msgId = getGameContext().getMsgIdByProtoClass(protoClass);
+        if(msgId <= 0){
+            return null;
+        }
+        return protoProcessorMap.get(msgId);
+    }
+
+    public AbstractProcessor getByteMsgProcessor( Class<? extends ByteMsgObj> protoClass) {
+
+        int msgId = getGameContext().getMsgIdByByteMsgObj(protoClass);
+        if(msgId <= 0){
+            return null;
+        }
+        return protoProcessorMap.get(msgId);
+    }
+
+
+    public AbstractProcessor getProcessor( int msgId) {
+
+        return protoProcessorMap.get(msgId);
+    }
+
     /**
      * 注册普通socket事件
      *
@@ -268,7 +293,14 @@ public abstract class GameConsumer {
             msgName = "unknown_"+event.getMsgId();
         }
 
-        if(!processor.checkIntercepts(session , event)){
+
+        if(!processor.isEnableAccess()){
+            getEventManager().publishEvent(new ForbidAccessMsgEvent(session,event));
+            Logs.DEFAULT_LOGGER.debug(" msg {} disable,forbid access" , msgName);
+            return;
+        }
+
+        if(!processor.checkAccess(session , event)){
             Logs.DEFAULT_LOGGER.error(" session {} forbid access msg {} " , session.getRemoteAddr() , msgName);
             return;
         }
@@ -294,7 +326,7 @@ public abstract class GameConsumer {
 
         HttpProcessor httpProcessor = getHttpProcessor(event.getMsgData().noParamUri());
 
-        if(!httpProcessor.checkIntercepts(null , event)){
+        if(!httpProcessor.checkAccess(null , event)){
             Logs.DEFAULT_LOGGER.info("channel {} forbid access http path {} close it", IpUtil.getChannelRemoteIp(event.getChannel()), httpProcessor.getPath());
             event.getChannel().close();
             return;

@@ -11,7 +11,7 @@ import org.jyg.gameserver.core.util.AllUtil;
  */
 public class OnlyLocalHttpMsgInterceptor implements MsgInterceptor<Request> {
 
-    public final boolean intercept(Session session, MsgEvent<Request> eventData) {
+    public final boolean checkAccess(Session session, MsgEvent<Request> eventData) {
 
 
         String remoteAddr = session.getRemoteAddr();

@@ -5,7 +5,6 @@ import org.jyg.gameserver.core.event.HttpRequestEvent;
 import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.IpUtil;
 
 import java.util.Collection;
@@ -26,15 +25,15 @@ public class HttpWhiteIpInterceptor implements MsgInterceptor<Request> {
     }
 
     @Override
-    public final boolean intercept(Session session , MsgEvent<Request> msgEvent){
+    public final boolean checkAccess(Session session , MsgEvent<Request> msgEvent){
         if(msgEvent instanceof HttpRequestEvent){
-            return filter((HttpRequestEvent) msgEvent);
+            return checkAccess((HttpRequestEvent) msgEvent);
         }
         return false;
     }
 
 
-    public boolean filter(HttpRequestEvent httpRequestEvent){
+    public boolean checkAccess(HttpRequestEvent httpRequestEvent){
         String addr = IpUtil.getChannelRemoteIp(httpRequestEvent.getChannel());
 
         String ip = IpUtil.getIpByAddr(addr);

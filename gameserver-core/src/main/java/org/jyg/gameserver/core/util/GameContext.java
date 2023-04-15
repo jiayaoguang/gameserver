@@ -283,6 +283,8 @@ public class GameContext{
 
         getMainGameConsumer().addProcessor(sysInfoHttpProcessor);
 
+        getMainGameConsumer().addProcessor(new MsgAccessEnableHttpProcessor());
+
 
         getMainGameConsumer().addProcessor(new RouteMsgProcessor());
         getMainGameConsumer().addProcessor(new RouteRegisterMsgProcessor());

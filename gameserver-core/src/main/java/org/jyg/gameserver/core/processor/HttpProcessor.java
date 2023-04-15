@@ -2,7 +2,7 @@ package org.jyg.gameserver.core.processor;
 
 import io.netty.channel.Channel;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.ForbidAccessHttpEvent;
 import org.jyg.gameserver.core.event.HttpRequestEvent;
 import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.net.Request;
@@ -40,6 +40,14 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 			response.write500Error();
 			return;
 		}
+
+
+		if(!this.isEnableAccess()){
+			getGameConsumer().getEventManager().publishEvent(new ForbidAccessHttpEvent(request,response));
+			return;
+		}
+
+
 		long beforeExecNanoTime = System.nanoTime();
 		try {
 			this.service(request, response);

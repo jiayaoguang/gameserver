@@ -1,6 +1,5 @@
 package org.jyg.gameserver.core.intercept;
 
-import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.session.Session;
 
@@ -14,7 +13,7 @@ public interface MsgInterceptor<T>{
      * @param eventData
      * @return
      */
-    public boolean intercept(Session session , MsgEvent<T> eventData);
+    public boolean checkAccess(Session session , MsgEvent<T> eventData);
 
 }
 

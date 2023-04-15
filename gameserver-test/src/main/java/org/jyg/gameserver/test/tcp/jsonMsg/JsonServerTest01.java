@@ -53,7 +53,7 @@ public class JsonServerTest01 {
         bootstarp.getDefaultConsumer().addProcessor(108, chatProcessor);
 
         bootstarp.addTcpService(8088);
-
+        bootstarp.addHttpConnector(80);
         bootstarp.start();
     }
 }

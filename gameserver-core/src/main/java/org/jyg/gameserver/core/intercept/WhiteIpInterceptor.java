@@ -23,7 +23,7 @@ public class WhiteIpInterceptor implements MsgInterceptor<Object> {
         this.whiteIpSet.add("127.0.0.1");
     }
 
-    public final boolean intercept(Session session, MsgEvent<Object> eventData) {
+    public final boolean checkAccess(Session session, MsgEvent<Object> eventData) {
 
         String addr = session.getRemoteAddr();
 
