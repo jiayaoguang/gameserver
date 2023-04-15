@@ -8,6 +8,7 @@ import org.jyg.gameserver.core.event.listener.GameEventListener;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.ConfigUtil;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.db.ConsumerDBManager;
 import org.jyg.gameserver.db.DBConfig;
 import org.jyg.gameserver.db.DBGameConsumer;
@@ -26,7 +27,7 @@ public class DBWaitResultTest {
         GameServerBootstrap gameServerBootstrap = new GameServerBootstrap();
         gameServerBootstrap.addHttpConnector(8088);
 
-        DBConfig dbConfig = ConfigUtil.properties2Object("jyg.properties", DBConfig.class);
+        DBConfig dbConfig = ConfigUtil.properties2Object(GameContext.DEFAULT_CONFIG_FILE_NAME, DBConfig.class);
         if(dbConfig == null){
             throw new IllegalArgumentException();
         }

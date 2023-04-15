@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class GameContext{
 
-    public static final String DEFAULT_CONFIG_FILE_NAME = "jyg.properties";
+    public static final String DEFAULT_CONFIG_FILE_NAME = "ygserver.properties";
 //    private String configFileName = DEFAULT_CONFIG_FILE_NAME;
 
 

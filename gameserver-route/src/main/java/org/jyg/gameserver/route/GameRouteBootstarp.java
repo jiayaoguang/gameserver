@@ -51,7 +51,7 @@ public class GameRouteBootstarp extends GameServerBootstrap {
 
     private void tryInitRouteConfig(){
 
-        RouteConfig routeConfig = ConfigUtil.properties2Object("jyg", RouteConfig.class);
+        RouteConfig routeConfig = ConfigUtil.properties2Object(GameContext.DEFAULT_CONFIG_FILE_NAME, RouteConfig.class);
         if (routeConfig == null) {
             throw new IllegalArgumentException("routeConfig error");
         }

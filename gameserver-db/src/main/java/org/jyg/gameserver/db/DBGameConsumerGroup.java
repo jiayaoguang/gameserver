@@ -4,6 +4,7 @@ import org.jyg.gameserver.core.consumer.GameConsumerGroup;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.event.ConsumerDefaultEvent;
 import org.jyg.gameserver.core.util.ConfigUtil;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.db.type.TypeHandler;
 
 /**
@@ -14,7 +15,7 @@ public class DBGameConsumerGroup extends GameConsumerGroup<DBGameConsumer> {
     private final DBConfig dbConfig;
 
     public DBGameConsumerGroup() {
-        this(ConfigUtil.properties2Object("jyg.properties", DBConfig.class));
+        this(ConfigUtil.properties2Object(GameContext.DEFAULT_CONFIG_FILE_NAME, DBConfig.class));
     }
 
 

@@ -3,6 +3,7 @@ package org.jyg.gameserver.db.util;
 import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.ConfigUtil;
+import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.db.*;
 import org.jyg.gameserver.db.type.TypeHandlerRegistry;
@@ -20,7 +21,7 @@ public class CreateTableUtil {
 
     
     public static void createTable(Class<? extends BaseDBEntity> dbClass) throws SQLException {
-        createTable( ConfigUtil.properties2Object("jyg", DBConfig.class) , dbClass);
+        createTable( ConfigUtil.properties2Object(GameContext.DEFAULT_CONFIG_FILE_NAME, DBConfig.class) , dbClass);
     }
 
     public static void createTable(DBConfig dbConfig ,Class<? extends BaseDBEntity> dbClass) throws SQLException {
@@ -127,7 +128,7 @@ public class CreateTableUtil {
     
 
     public static boolean isTableExist(Class<? extends BaseDBEntity> dbClass) throws Exception {
-        return isTableExist( ConfigUtil.properties2Object("jyg", DBConfig.class) , dbClass);
+        return isTableExist( ConfigUtil.properties2Object(GameContext.DEFAULT_CONFIG_FILE_NAME, DBConfig.class) , dbClass);
     }
 
 
@@ -173,7 +174,7 @@ public class CreateTableUtil {
     
     
     public static void createOrAlterTable(Class<? extends BaseDBEntity> dbClass) throws SQLException {
-        createOrAlterTable(ConfigUtil.properties2Object("jyg", DBConfig.class) , dbClass);
+        createOrAlterTable(ConfigUtil.properties2Object(GameContext.DEFAULT_CONFIG_FILE_NAME, DBConfig.class) , dbClass);
     }
 
 
