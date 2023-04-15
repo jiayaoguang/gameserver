@@ -8,6 +8,7 @@ import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.jyg.gameserver.core.consumer.MQPushGameConsumer;
 import org.jyg.gameserver.core.util.AllUtil;
+import org.jyg.gameserver.core.util.Logs;
 
 public class RocketMQPushGameConsumer extends MQPushGameConsumer {
 
@@ -81,21 +82,16 @@ public class RocketMQPushGameConsumer extends MQPushGameConsumer {
             producer.send(msg, new SendCallback() {
                 @Override
                 public void onSuccess(SendResult sendResult) {
-                    AllUtil.println("send success , msgId :" + sendResult.getMsgId() + " topic : " + msg.getTopic());
+                    Logs.DEFAULT_LOGGER.info("send success , msgId : {} topic {}" , sendResult.getMsgId()  , msg.getTopic());
                 }
 
                 @Override
                 public void onException(Throwable e) {
-                    AllUtil.println("send success , fail ");
-                    e.printStackTrace();
+                    Logs.DEFAULT_LOGGER.info("pushMsg onException , fail " , e);
                 }
             });
-        } catch (MQClientException e) {
-            e.printStackTrace();
-        } catch (RemotingException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (MQClientException | RemotingException | InterruptedException e) {
+            Logs.DEFAULT_LOGGER.error("pushMsg error " , e);
         }
         /*
          * There are different ways to send message, if you don't care about the send result,you can use this way

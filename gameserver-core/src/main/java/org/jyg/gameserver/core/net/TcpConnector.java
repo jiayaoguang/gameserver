@@ -101,7 +101,7 @@ public abstract class TcpConnector extends AbstractConnector {
 		try {
 			serverChannel = bindChannelFuture.sync().channel();
 		} catch (InterruptedException e) {
-			// ignore
+			throw new RuntimeException(e);
 		}
 
 		Logs.DEFAULT_LOGGER.info("start server port success,port : {}" , port);
@@ -112,8 +112,8 @@ public abstract class TcpConnector extends AbstractConnector {
 		if(serverChannel != null){
 			try {
 				serverChannel.close().sync();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			} catch (InterruptedException ignore) {
+				// Ignore
 			}
 		}
 	}

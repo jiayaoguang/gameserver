@@ -55,11 +55,10 @@ public class UdpConnector extends AbstractConnector {
         try {
             serverChannel = bootstrap.bind(port).sync().channel();
         } catch (InterruptedException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
 
-        Logs.DEFAULT_LOGGER.info("bind port : " + port);
+        Logs.DEFAULT_LOGGER.info("bind port : {}" + port);
     }
 
     public Channel getChannel() {
