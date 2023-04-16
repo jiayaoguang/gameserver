@@ -64,6 +64,11 @@ public class RemoteDelegateGameConsumer extends MpscQueueGameConsumer{
 
         consumerEventDataMsg.setChildChooseId(eventData.getChildChooseId());
 
+
+        if(eventData.getEvent().getFromConsumerId() == 0){
+            int i = 0;
+        }
+
 //            consumerEventDataMsg.getEvent().setRequestId(eventData.getEvent().getRequestId());
 //            consumerEventDataMsg.getEvent().setFromConsumerId(eventData.getEvent().getFromConsumerId());
 //            consumerEventDataMsg.getEvent().setParams(eventData.getParams());

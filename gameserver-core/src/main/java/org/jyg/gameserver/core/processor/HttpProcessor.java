@@ -9,6 +9,7 @@ import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.util.AllUtil;
+import org.jyg.gameserver.core.util.IpUtil;
 import org.jyg.gameserver.core.util.Logs;
 
 /**
@@ -41,8 +42,16 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 			return;
 		}
 
+		if(!checkAccessHttp(request , response)){
+			Logs.DEFAULT_LOGGER.info("channel {} forbid access http path {} ", response.getAddr(), getPath());
+			response.writeAndFlush("<h1>forbid access this http path </h1");
+			return;
+		}
+
+
 
 		if(!this.isEnableAccess()){
+			Logs.DEFAULT_LOGGER.debug("channel {} forbid access , http path {} disable", response.getAddr(), getPath());
 			getGameConsumer().getEventManager().publishEvent(new ForbidAccessHttpEvent(request,response));
 			return;
 		}
@@ -57,7 +66,7 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 			logger.error(" make exception {} " , exceptionMsg);
 			response.write500Error(exceptionMsg);
 		}finally {
-			String reomoteAddr = AllUtil.getChannelRemoteAddr(channel);
+			String reomoteAddr = IpUtil.getChannelRemoteAddr(channel);
 			Logs.DEFAULT_LOGGER.info(" exec {} cost {} mills ,ip {}", path, (System.nanoTime() - beforeExecNanoTime) / (1000L * 1000L), reomoteAddr);
 		}
 

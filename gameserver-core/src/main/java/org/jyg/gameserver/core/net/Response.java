@@ -16,6 +16,7 @@ import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.cookie.Cookie;
 import io.netty.handler.codec.http.cookie.ServerCookieEncoder;
 import io.netty.util.CharsetUtil;
+import org.jyg.gameserver.core.util.IpUtil;
 
 /**
  * created by jiayaoguang at 2018年3月20日
@@ -183,5 +184,12 @@ public class Response {
 
 	}
 
-	
+	public String getAddr(){
+		return IpUtil.getChannelRemoteAddr(channel);
+	}
+
+	public String getIp(){
+		return IpUtil.getChannelRemoteIp(channel);
+	}
+
 }

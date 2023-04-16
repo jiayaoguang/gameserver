@@ -52,7 +52,7 @@ public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
         int nextId = 1;
         for (GameConsumer childGameConsumer : childConsumerList) {
             if(childGameConsumer.getId() == 0){
-                childGameConsumer.setId(nextId);
+                childGameConsumer.setId(getId() * 10000 + nextId);
                 nextId++;
             }
             childGameConsumer.setGameContext(getGameContext());

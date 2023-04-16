@@ -1,15 +1,10 @@
 package org.jyg.gameserver.core.processor;
 
-import cn.hutool.core.collection.CollectionUtil;
-import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.jyg.gameserver.core.intercept.WhiteIpInterceptor;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
-import org.jyg.gameserver.core.util.AllUtil;
-import org.jyg.gameserver.core.util.ClassLoadListener;
-import org.jyg.gameserver.core.util.Logs;
 
 import java.lang.management.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,6 +14,7 @@ public class SysInfoHttpProcessor extends HttpProcessor {
 
     public SysInfoHttpProcessor() {
         super("/sysInfo");
+        setMsgInterceptor(new WhiteIpInterceptor());
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.processor;
 
 import org.jyg.gameserver.core.event.InnerMsgEvent;
 import org.jyg.gameserver.core.event.MsgEvent;
+import org.jyg.gameserver.core.intercept.WhiteIpInterceptor;
 import org.jyg.gameserver.core.manager.RouteManager;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.route.RouteMsg;
@@ -12,6 +13,7 @@ import org.jyg.gameserver.core.session.Session;
  */
 public class RouteMsgProcessor extends ByteMsgObjProcessor<RouteMsg> {
     public RouteMsgProcessor() {
+        setMsgInterceptor(new WhiteIpInterceptor());
     }
 
     @Override

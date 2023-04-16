@@ -1,18 +1,20 @@
 package org.jyg.gameserver.core.processor;
 
-import cn.hutool.core.util.NumberUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.jyg.gameserver.core.intercept.WhiteIpInterceptor;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
 
 /**
  * create by jiayaoguang at 2021/8/14
  * 127.0.0.1/msgAccessEnable?msgId=108&enable=false
+ * 127.0.0.1/msgAccessEnable?httpPath=index&enable=false
  */
 public class MsgAccessEnableHttpProcessor extends HttpProcessor {
 
     public MsgAccessEnableHttpProcessor() {
         super("/msgAccessEnable");
+        setMsgInterceptor(new WhiteIpInterceptor());
     }
 
     @Override

@@ -36,7 +36,7 @@ public class NettyConnectManageHandler extends ChannelDuplexHandler {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception { // (5)
         Channel incoming = ctx.channel();
-        Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + " online");
+        Logs.DEFAULT_LOGGER.info("Client: {} online" , incoming.remoteAddress());
 
         if(!gameContext.getServerConfig().isOpenConnect()){
             String ip = IpUtil.getChannelRemoteIp(incoming);
@@ -56,7 +56,8 @@ public class NettyConnectManageHandler extends ChannelDuplexHandler {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception { // (6)
         Channel incoming = ctx.channel();
-        Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + " offline");
+
+        Logs.DEFAULT_LOGGER.info("Client: {} offline" , incoming.remoteAddress());
 
         gameContext.getConsumerManager().publicEvent(gameContext.getMainConsumerId(), new ChannelDisconnectEvent(ctx.channel()));
 

@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.event.*;
 import org.jyg.gameserver.core.event.listener.GameEventListener;
-import org.jyg.gameserver.core.intercept.OnlyLocalHttpMsgInterceptor;
+import org.jyg.gameserver.core.intercept.OnlyLocalMsgInterceptor;
 import org.jyg.gameserver.core.manager.*;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.processor.*;
@@ -326,11 +326,11 @@ public abstract class GameConsumer {
 
         HttpProcessor httpProcessor = getHttpProcessor(event.getMsgData().noParamUri());
 
-        if(!httpProcessor.checkAccess(null , event)){
-            Logs.DEFAULT_LOGGER.info("channel {} forbid access http path {} close it", IpUtil.getChannelRemoteIp(event.getChannel()), httpProcessor.getPath());
-            event.getChannel().close();
-            return;
-        }
+//        if(!httpProcessor.checkAccess(null , event)){
+//            Logs.DEFAULT_LOGGER.info("channel {} forbid access http path {} close it", IpUtil.getChannelRemoteIp(event.getChannel()), httpProcessor.getPath());
+//            event.getChannel().close();
+//            return;
+//        }
 
 
         httpProcessor.process(null, event);
@@ -564,7 +564,7 @@ public abstract class GameConsumer {
             throw new UnsupportedOperationException("already start");
         }
 
-        OnlyLocalHttpMsgInterceptor onlyLocalHttpMsgFilter = new OnlyLocalHttpMsgInterceptor();
+        OnlyLocalMsgInterceptor onlyLocalHttpMsgFilter = new OnlyLocalMsgInterceptor();
 
         for(HttpProcessor httpProcessor : httpProcessorMap.values()){
             httpProcessor.setMsgInterceptor(onlyLocalHttpMsgFilter);

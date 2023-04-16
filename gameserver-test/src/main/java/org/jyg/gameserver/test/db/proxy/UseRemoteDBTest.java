@@ -53,11 +53,11 @@ public class UseRemoteDBTest {
 
             GameConsumer con = event.getGameConsumer();
 
-            int id = 36;
+            int id = 40;
 
             Maik maik = new Maik();
             maik.setId(id);
-            maik.setContent("hello_world_36");
+            maik.setContent("hello_world_"+id);
             con.getInstanceManager().getInstance(ConsumerDBManager.class).insert(maik);
 
             List<Object> params = new ArrayList<>();

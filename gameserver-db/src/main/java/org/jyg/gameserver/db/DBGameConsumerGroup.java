@@ -38,6 +38,7 @@ public class DBGameConsumerGroup extends GameConsumerGroup<DBGameConsumer> {
 //        configuration.setEnvironment(environment);
 //        configuration.addMapper(MybatisDao.class);
 
+        setId(dbConfig.getDbConsumerGroupId());
 
         for(int i=0;i<dbConfig.getDbConsumerNum();i++){
             DBGameConsumer dbConsumer = new DBGameConsumer(dbConfig);
@@ -45,7 +46,7 @@ public class DBGameConsumerGroup extends GameConsumerGroup<DBGameConsumer> {
             addChildConsumer(dbConsumer);
         }
 
-        setId(dbConfig.getDbConsumerGroupId());
+
 
     }
 

@@ -13,7 +13,7 @@ public abstract class Session implements Lifecycle {
 	private final long sessionId;
 	
 
-	private long lastContactMill = 0;
+	private long lastSendMsgTime = 0;
 
 	private SessionState sessionState;
 
@@ -25,7 +25,6 @@ public abstract class Session implements Lifecycle {
 	
 	public Session(long sessionId){
 		this.sessionId = sessionId;
-		setLastContactMill(System.currentTimeMillis());
 	}
 
 	public long getSessionId() {
@@ -44,22 +43,22 @@ public abstract class Session implements Lifecycle {
 	public abstract boolean isOpen();
 
 
-	public long getLastContactMill() {
-		return lastContactMill;
+	public long getLastSendMsgTime() {
+		return lastSendMsgTime;
 	}
 
-	public void setLastContactMill(long lastContactMill) {
-		this.lastContactMill = lastContactMill;
+	public void setLastSendMsgTime(long lastSendMsgTime) {
+		this.lastSendMsgTime = lastSendMsgTime;
 	}
 
 	public void writeMessage( MessageLite message){
 		this.writeObjMessage(message);
 	}
 
-	@Deprecated
-	public void writeWsMessage(String message) {
-		this.writeObjMessage(message);
-	}
+//	@Deprecated
+//	public void writeWsMessage(String message) {
+//		this.writeObjMessage(message);
+//	}
 
 	public void writeMessage( MessageLite.Builder messageBuilder) {
 		this.writeObjMessage(messageBuilder.build());

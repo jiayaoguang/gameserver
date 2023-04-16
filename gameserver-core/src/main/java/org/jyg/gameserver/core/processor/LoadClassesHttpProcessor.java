@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.processor;
 
 import cn.hutool.core.collection.CollectionUtil;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.jyg.gameserver.core.intercept.WhiteIpInterceptor;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
 import org.jyg.gameserver.core.util.ClassLoadListener;
@@ -17,6 +18,7 @@ public class LoadClassesHttpProcessor extends HttpProcessor {
 
     public LoadClassesHttpProcessor() {
         super("/loadClasses");
+        setMsgInterceptor(new WhiteIpInterceptor());
     }
 
     @Override

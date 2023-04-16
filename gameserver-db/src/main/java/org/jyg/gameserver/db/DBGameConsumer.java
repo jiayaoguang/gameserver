@@ -1,5 +1,6 @@
 package org.jyg.gameserver.db;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jyg.gameserver.core.consumer.MpscQueueGameConsumer;
 import org.jyg.gameserver.core.event.ConsumerDefaultEvent;
 import org.jyg.gameserver.core.util.Logs;
@@ -192,11 +193,12 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
             logSql(prepareSQLAndParams.prepareSQL , prepareSQLAndParams.paramValues);
 
         } catch (SQLException | IllegalAccessException | InstantiationException exception) {
-            Logs.DB.info("exec sql : {} make exception" , prepareSQLAndParams.prepareSQL);
-            exception.printStackTrace();
+            String stackTraceMsg = ExceptionUtils.getStackTrace(exception);
+            Logs.DB.error("exec sql : {} make exception : {}" , prepareSQLAndParams.prepareSQL , stackTraceMsg);
+
             if (needReturn) {
                 //eventId 1 : 报错
-                eventReturn(event.getFromConsumerId(), null, event.getRequestId(), DBErrorCode.EXCEPTION);
+                eventReturn(event.getFromConsumerId(), stackTraceMsg, event.getRequestId(), DBErrorCode.EXCEPTION);
             }
             return;
         }

@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.processor;
 
 import cn.hutool.core.io.FileUtil;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.jyg.gameserver.core.intercept.WhiteIpInterceptor;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
 import org.jyg.gameserver.core.util.AllUtil;
@@ -20,6 +21,7 @@ public class RedefineClassesHttpProcessor extends HttpProcessor {
 
     public RedefineClassesHttpProcessor() {
         super("/redefineClasses");
+        setMsgInterceptor(new WhiteIpInterceptor());
     }
 
     @Override

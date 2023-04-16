@@ -41,6 +41,8 @@ public class ConsumerEventDataMsgProcessor extends ByteMsgObjProcessor<ConsumerE
         }
 
 
+
+
         if(eventDataMsg.getToConsumerId() == fromConsumerId){
             Logs.DEFAULT_LOGGER.error("ToConsumerId == FromConsumerId");
             return;
@@ -48,7 +50,11 @@ public class ConsumerEventDataMsgProcessor extends ByteMsgObjProcessor<ConsumerE
 
 
         long  localRequestId = 0;
-        if(! (eventDataMsg.getEvent() instanceof ResultReturnEvent)){
+        /*
+         * 判断 instanceof ResultReturnEvent 条件防止循环发消息
+         * remoteRequestId > 0 表示需要返回数据
+         */
+        if(! (eventDataMsg.getEvent() instanceof ResultReturnEvent) && remoteRequestId > 0){
             localRequestId = getGameConsumer().registerCallBackMethod(new ResultHandler() {
                 @Override
                 public void call(int eventId, Object data) {

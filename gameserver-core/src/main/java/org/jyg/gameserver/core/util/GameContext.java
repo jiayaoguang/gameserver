@@ -12,7 +12,6 @@ import org.jyg.gameserver.core.constant.MsgIdConst;
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.data.ServerConfig;
 import org.jyg.gameserver.core.handle.NettyHandlerFactory;
-import org.jyg.gameserver.core.intercept.HttpWhiteIpInterceptor;
 import org.jyg.gameserver.core.intercept.WhiteIpInterceptor;
 import org.jyg.gameserver.core.manager.*;
 import org.jyg.gameserver.core.msg.*;
@@ -77,9 +76,6 @@ public class GameContext{
 //    private final ClockManager clockManager = new ClockManager();
 
 
-    private WhiteIpInterceptor whiteIpInterceptor;
-
-    private HttpWhiteIpInterceptor httpWhiteIpInterceptor;
 
 
     public GameContext(GameConsumer mainGameConsumer) {
@@ -121,11 +117,6 @@ public class GameContext{
         this.instanceManager.putInstance(this.eventLoopGroupManager);
         this.instanceManager.putInstance(this.consumerManager);
 
-        this.whiteIpInterceptor = new WhiteIpInterceptor();
-        this.whiteIpInterceptor.addWhiteIps(this.serverConfig.getWhiteIpSet());
-        this.httpWhiteIpInterceptor = new HttpWhiteIpInterceptor();
-        this.httpWhiteIpInterceptor.addWhiteIps(this.serverConfig.getWhiteIpSet());
-
 
 
 
@@ -157,6 +148,7 @@ public class GameContext{
         this.protoClazz2MsgIdMap.put(defaultInstance.getClass(), msgId);
         this.msgId2MsgCodecMap.put(msgId ,protoMsgCodec );
     }
+
 
     @Deprecated
     public void addMsgId2JsonMsgClassMapping(int msgId, Class<? extends ByteMsgObj> byteMsgObjClazz) {
@@ -278,9 +270,8 @@ public class GameContext{
 
         getMainGameConsumer().addProcessor(new LoadClassesHttpProcessor());
         getMainGameConsumer().addProcessor(new RedefineClassesHttpProcessor());
-        SysInfoHttpProcessor sysInfoHttpProcessor = new SysInfoHttpProcessor();
-        sysInfoHttpProcessor.setMsgInterceptor(this.httpWhiteIpInterceptor);
 
+        SysInfoHttpProcessor sysInfoHttpProcessor = new SysInfoHttpProcessor();
         getMainGameConsumer().addProcessor(sysInfoHttpProcessor);
 
         getMainGameConsumer().addProcessor(new MsgAccessEnableHttpProcessor());
@@ -459,5 +450,40 @@ public class GameContext{
         return mainGameConsumer.getId();
     }
 
+
+
+    public void addAllowRouteIp(String ip){
+        {
+            AbstractProcessor<RouteMsg> msgProcessor = getMainGameConsumer().getByteMsgProcessor(RouteMsg.class);
+            if(msgProcessor != null && msgProcessor.getInterceptor() != null && msgProcessor.getInterceptor() instanceof WhiteIpInterceptor){
+                WhiteIpInterceptor whiteIpInterceptor = (WhiteIpInterceptor) msgProcessor.getInterceptor();
+                whiteIpInterceptor.addWhiteIp(ip);
+            }
+        }
+
+        {
+            AbstractProcessor<RouteRegisterMsg> msgProcessor = getMainGameConsumer().getByteMsgProcessor(RouteRegisterMsg.class);
+            if(msgProcessor != null && msgProcessor.getInterceptor() != null && msgProcessor.getInterceptor() instanceof WhiteIpInterceptor){
+                WhiteIpInterceptor whiteIpInterceptor = (WhiteIpInterceptor) msgProcessor.getInterceptor();
+                whiteIpInterceptor.addWhiteIp(ip);
+            }
+        }
+
+        {
+            AbstractProcessor<RouteClientSessionConnectMsg> msgProcessor = getMainGameConsumer().getByteMsgProcessor(RouteClientSessionConnectMsg.class);
+            if(msgProcessor != null && msgProcessor.getInterceptor() != null && msgProcessor.getInterceptor() instanceof WhiteIpInterceptor){
+                WhiteIpInterceptor whiteIpInterceptor = (WhiteIpInterceptor) msgProcessor.getInterceptor();
+                whiteIpInterceptor.addWhiteIp(ip);
+            }
+        }
+
+        {
+            AbstractProcessor<RouteClientSessionDisconnectMsg> msgProcessor = getMainGameConsumer().getByteMsgProcessor(RouteClientSessionDisconnectMsg.class);
+            if(msgProcessor != null && msgProcessor.getInterceptor() != null && msgProcessor.getInterceptor() instanceof WhiteIpInterceptor){
+                WhiteIpInterceptor whiteIpInterceptor = (WhiteIpInterceptor) msgProcessor.getInterceptor();
+                whiteIpInterceptor.addWhiteIp(ip);
+            }
+        }
+    }
 
 }

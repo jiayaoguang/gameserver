@@ -136,7 +136,7 @@ public class ChannelManager implements Lifecycle {
                 it.remove();
                 continue;
             }
-            if ((session.getLastContactMill() + 60 * 1000L) < System.currentTimeMillis()) {
+            if ((session.getLastSendMsgTime() + 60 * 1000L) < System.currentTimeMillis()) {
                 channel.close();
                 it.remove();
                 Logs.DEFAULT_LOGGER.info("移除超时的channel" + channel);
