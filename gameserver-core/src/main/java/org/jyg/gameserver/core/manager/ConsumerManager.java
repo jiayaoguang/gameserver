@@ -65,15 +65,10 @@ public class ConsumerManager implements Lifecycle{
     }
 
     public void publicEvent(int targetConsumerId, Event event){
-        publicEvent(targetConsumerId , event ,"",0L);
+        publicEvent(targetConsumerId , event ,"");
     }
 
     public void publicEvent(int targetConsumerId, Event event , String childChooseId ){
-        publicEvent(targetConsumerId , event ,"",0L);
-    }
-
-
-    public void publicEvent(int targetConsumerId, Event event , String childChooseId , long requestId){
         GameConsumer gameConsumer = getConsumer(targetConsumerId);
         if(gameConsumer == null){
             Logs.DEFAULT_LOGGER.error("targetConsumer {} not found" , targetConsumerId);
@@ -82,6 +77,7 @@ public class ConsumerManager implements Lifecycle{
         EventData eventData = new EventData();
         eventData.setEvent(event);
         eventData.setChildChooseId(childChooseId );
+
 
         gameConsumer.publicEvent(eventData);
 

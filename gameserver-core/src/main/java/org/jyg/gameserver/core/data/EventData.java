@@ -19,9 +19,8 @@ public class EventData<T>{
 	private int eventId;
 
 
-	public String childChooseId;
+	private String childChooseId;
 
-	public Map<String, Object> params;
 
 
 	public EventData() {
@@ -57,12 +56,5 @@ public class EventData<T>{
 		this.childChooseId = childChooseId;
 	}
 
-	public Map<String, Object> getParams() {
-		return params;
-	}
-
-	public void setParams(Map<String, Object> params) {
-		this.params = params;
-	}
 }
 
