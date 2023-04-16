@@ -91,7 +91,8 @@ public abstract class AbstractThreadQueueGameConsumer extends GameConsumer {
 
 
 
-    protected void updateConsumer() {
+    @Override
+    protected void update() {
 
         for(;;){
 
@@ -110,7 +111,7 @@ public abstract class AbstractThreadQueueGameConsumer extends GameConsumer {
 
         }
 
-        update();
+        getTimerManager().updateTimer();
 
     }
 

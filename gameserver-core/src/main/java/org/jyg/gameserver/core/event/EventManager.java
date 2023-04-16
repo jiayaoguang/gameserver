@@ -137,4 +137,10 @@ public class EventManager implements Lifecycle {
         eventListMap.remove(eventClazz);
     }
 
+
+    public List<GameEventListener<? extends Event>> getEventListeners(Class<? extends Event> eventClazz) {
+        List<GameEventListener<? extends Event>> eventListeners = eventListMap.get(eventClazz);
+        return eventListeners != null ? new ArrayList<>(eventListeners) : new ArrayList<>();
+    }
+
 }

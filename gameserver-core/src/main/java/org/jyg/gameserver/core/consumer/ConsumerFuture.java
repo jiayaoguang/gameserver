@@ -50,7 +50,7 @@ public class ConsumerFuture {
                 pollNullNum++;
 
                 if (pollNullNum > 1000) {
-                    gameConsumer.update();
+                    gameConsumer.getTimerManager().updateTimer();
                     pollNullNum = 0;
                     LockSupport.parkNanos(1000 * 1000L);
                 } else if (pollNullNum > 800) {
@@ -64,7 +64,7 @@ public class ConsumerFuture {
 
             try {
                 gameConsumer.onReciveEvent(object);
-                gameConsumer.update();
+                gameConsumer.getTimerManager().updateTimer();
             } catch (Exception e) {
                 e.printStackTrace();
             }

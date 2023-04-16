@@ -89,7 +89,7 @@ public class QueueConsumerThread extends Thread {
             }
 
             try {
-                gameConsumer.updateConsumer();
+                gameConsumer.update();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -120,7 +120,7 @@ public class QueueConsumerThread extends Thread {
                     aliveConsumerNum++;
                 }
                 try {
-                    gameConsumer.updateConsumer();
+                    gameConsumer.update();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
