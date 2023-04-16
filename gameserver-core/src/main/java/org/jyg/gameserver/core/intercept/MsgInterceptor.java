@@ -10,11 +10,6 @@ import org.jyg.gameserver.core.session.Session;
  */
 public interface MsgInterceptor<T>{
 
-    /**
-     * @param session
-     * @param eventData
-     * @return
-     */
     public boolean checkAccess(Session session , MsgEvent<T> eventData);
 
     public boolean checkAccessHttp(Request request , Response response);
