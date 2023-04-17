@@ -116,12 +116,12 @@ public class ConsumerManager implements Lifecycle{
 //        this.publicEvent(targetConsumerId , evenType , data ,null ,eventId , EventData.EMPTY_EVENT_EXT_DATA);
 //    }
 
-    public void publicCallBackEvent(int targetConsumerId, Object data, long requestId ,int eventId){
-        if(requestId == 0){
+    public void publicCallBackEvent(int targetConsumerId, Object data, long originRequestId ,int eventId){
+        if(originRequestId == 0){
             Logs.DEFAULT_LOGGER.error("publicCallBackEvent requestId == 0");
             return;
         }
-        publicEvent(targetConsumerId, new ResultReturnEvent(requestId, eventId, data));
+        publicEvent(targetConsumerId, new ResultReturnEvent(originRequestId, eventId, data));
     }
 
 

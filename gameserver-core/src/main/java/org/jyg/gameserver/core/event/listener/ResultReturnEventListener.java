@@ -13,7 +13,7 @@ public class ResultReturnEventListener implements GameEventListener<ResultReturn
     @Override
     public void onEvent(ResultReturnEvent resultReturnEvent) {
 
-        gameConsumer.getResultHandlerManager().onCallBack(resultReturnEvent.getRequestId(),resultReturnEvent.getEventId(),resultReturnEvent.getData());
+        gameConsumer.getResultHandlerManager().onCallBack(resultReturnEvent.getReturnToConsumerRequestId(),resultReturnEvent.getEventId(),resultReturnEvent.getData());
 
     }
 }
