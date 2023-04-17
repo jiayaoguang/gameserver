@@ -1,10 +1,13 @@
 package org.jyg.gameserver.core.consumer;
 
 import cn.hutool.core.collection.CollectionUtil;
+import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.consumer.choose.ChildChooser;
 import org.jyg.gameserver.core.consumer.choose.ModChildChooser;
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.event.ResultReturnEvent;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.util.ArrayList;
@@ -13,12 +16,15 @@ import java.util.List;
 /**
  * create by jiayaoguang on 2021/5/15
  */
-public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
+public class GameConsumerGroup<T extends GameConsumer> extends MpscQueueGameConsumer {
 
     private final List<T> childConsumerList = new ArrayList<>();
 
 
     private ChildChooser childChooser = new ModChildChooser();
+
+
+    private final IntSet childIdSet = new IntLinkedOpenHashSet(32);
 
 
     public GameConsumerGroup(){
@@ -43,7 +49,7 @@ public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
 
     @Override
     public void doStart() {
-
+        super.doStart();
 
         if(CollectionUtil.isEmpty(childConsumerList)){
             throw new IllegalArgumentException("isEmpty(childConsumerList)");
@@ -56,7 +62,7 @@ public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
                 nextId++;
             }
             childGameConsumer.setGameContext(getGameContext());
-
+            childIdSet.add(childGameConsumer.getId());
         }
 
         for (GameConsumer childGameConsumer : childConsumerList) {
@@ -83,11 +89,32 @@ public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
 
 
 
+//    @Override
+//    public void publicEvent(EventData<?> eventData) {
+//
+//
+////        int childConsumerIndex = 0;
+//
+//        String childChooseKey = eventData.getChildChooseId();
+//        if(StringUtils.isEmpty(childChooseKey)){
+//            childChooseKey = String.valueOf(eventData.getEventId());
+//            Logs.DEFAULT_LOGGER.warn("Suggest assigning values to field childChooseKey");
+//        }
+//
+//        GameConsumer childGameConsumer = childChooser.choose(childChooseKey , childConsumerList);
+//        childGameConsumer.publicEvent(eventData);
+//    }
+
+
+
     @Override
-    public void publicEvent(EventData<?> eventData) {
+    protected void onReciveEvent(EventData<?> eventData) {
 
+        if(eventData.getEvent() instanceof ResultReturnEvent || childIdSet.contains(eventData.getEvent().getFromConsumerId())){
 
-//        int childConsumerIndex = 0;
+            super.onReciveEvent(eventData);
+            return;
+        }
 
         String childChooseKey = eventData.getChildChooseId();
         if(StringUtils.isEmpty(childChooseKey)){
@@ -95,10 +122,21 @@ public class GameConsumerGroup<T extends GameConsumer> extends GameConsumer {
             Logs.DEFAULT_LOGGER.warn("Suggest assigning values to field childChooseKey");
         }
 
+        if(eventData.getEvent().getRequestId() != 0){
+            long originRequestId = eventData.getEvent().getRequestId();
+            int fromConsumerId = eventData.getEvent().getFromConsumerId();
+
+            eventData.getEvent().setFromConsumerId(getId());
+
+            long requestId = registerCallBackMethod((eventId, data) -> eventReturn(fromConsumerId , data , originRequestId));
+
+            eventData.getEvent().setRequestId(requestId);
+
+        }
+
         GameConsumer childGameConsumer = childChooser.choose(childChooseKey , childConsumerList);
         childGameConsumer.publicEvent(eventData);
     }
-
 
 
     public synchronized void addChildConsumer(T consumer, ProcessorsInitializer processorsInitializer) {
