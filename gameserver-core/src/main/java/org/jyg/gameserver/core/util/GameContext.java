@@ -1,7 +1,6 @@
 package org.jyg.gameserver.core.util;
 
 import com.google.protobuf.MessageLite;
-import com.sun.istack.internal.Nullable;
 import io.netty.channel.epoll.Epoll;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
@@ -396,7 +395,7 @@ public class GameContext{
     }
 
 
-    @Nullable public<T> T getInstance(Class<T> tClass){
+    public<T> T getInstance(Class<T> tClass){
         return instanceManager.getInstance(tClass);
     }
 
