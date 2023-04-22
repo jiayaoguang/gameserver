@@ -1,5 +1,6 @@
 package org.jyg.gameserver.test.tcp.asyn;
 
+import org.jyg.gameserver.core.manager.SingleThreadExecutorManagerPool;
 import org.jyg.gameserver.core.processor.ProtoProcessor;
 import org.jyg.gameserver.core.session.Session;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
@@ -16,6 +17,8 @@ public class AsynServerTest01
 {
     public static void main( String[] args ) throws Exception{
         GameServerBootstrap bootstarp = new GameServerBootstrap();
+
+		bootstarp.getGameContext().getInstanceManager().putInstance(SingleThreadExecutorManagerPool.class);
 
 		PingProcessor pingProcessor = new PingProcessor();
 		System.out.println(pingProcessor.getProtoClassName());
@@ -35,7 +38,7 @@ public class AsynServerTest01
 		@Override
 		public void process(Session session, p_sm_scene.p_sm_scene_request_ping msg) {
 			System.out.println("step 1 : ok , i see ping , will exec asyn event ,current thread : "+ Thread.currentThread().getName());
-			getContext().getSingleThreadExecutorManager(session.getSessionId()).execute(new TestAsynCallEvent(),
+			getContext().getInstanceManager().getInstance(SingleThreadExecutorManagerPool.class).getSingleThreadExecutorManager(session.getSessionId()).execute(new TestAsynCallEvent(),
 			new TestCallBackEvent());
 		}
 

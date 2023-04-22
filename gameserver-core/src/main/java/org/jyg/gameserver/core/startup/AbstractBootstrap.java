@@ -24,7 +24,9 @@ public abstract class AbstractBootstrap implements Lifecycle {
 
     private final GameContext gameContext;
 
-    protected volatile boolean isStart = false;
+    protected volatile boolean start = false;
+
+    private volatile boolean stop = false;
 
     public AbstractBootstrap() {
         this(new MpscQueueGameConsumer());
@@ -69,7 +71,7 @@ public abstract class AbstractBootstrap implements Lifecycle {
 
 
     public void addHttpProcessor(HttpProcessor processor) {
-        if (isStart) {
+        if (start) {
             throw new IllegalArgumentException(" registerHttpProcessor fail ,server is start ");
         }
         String path = processor.getPath();
@@ -86,14 +88,14 @@ public abstract class AbstractBootstrap implements Lifecycle {
     }
 
     public void addMsgId2ProtoMapping(int eventId, Class<? extends MessageLite> protoClazz)  {
-        if (isStart) {
+        if (start) {
             throw new IllegalArgumentException(" registerHttpProcessor fail ,server is start ");
         }
         this.gameContext.addMsgId2ProtoMapping(eventId, protoClazz);
     }
 
     public void addMsgId2ProtoMapping(int eventId, MessageLite defaultInstance)  {
-        if (isStart) {
+        if (start) {
             throw new IllegalArgumentException(" registerHttpProcessor fail ,server is start ");
         }
         this.gameContext.addMsgId2ProtoMapping(eventId, defaultInstance);
@@ -118,16 +120,20 @@ public abstract class AbstractBootstrap implements Lifecycle {
 
         beforeStart();
 
-        if (isStart) {
+        if (start) {
 //            throw new IllegalStateException("server is already start");
             logger.error("server is already start ");
             return;
         }
 
-        isStart = true;
+
+        addStopHook();
+
         gameContext.start();
 
         doStart();
+
+        start = true;
 
     }
 
@@ -140,9 +146,13 @@ public abstract class AbstractBootstrap implements Lifecycle {
     protected abstract void doStart();
 
     public final synchronized void stop(){
+        if(this.stop){
+            return;
+        }
 
         gameContext.stop();
         doStop();
+        this.stop = true;
     }
 
 
@@ -153,6 +163,9 @@ public abstract class AbstractBootstrap implements Lifecycle {
 
     public void addStopHook(){
         Runtime.getRuntime().addShutdownHook(new Thread(()->{
+            if(stop){
+                return;
+            }
             Logs.DEFAULT_LOGGER.info("exec stop shutdownHook");
             stop();
         }));

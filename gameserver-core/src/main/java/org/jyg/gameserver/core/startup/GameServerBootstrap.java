@@ -43,7 +43,7 @@ public class GameServerBootstrap extends AbstractBootstrap {
 
 
     public void addConnector(Connector connector) {
-        if (isStart) {
+        if (start) {
             logger.error("oprete fail,server is already start ");
             return;
         }

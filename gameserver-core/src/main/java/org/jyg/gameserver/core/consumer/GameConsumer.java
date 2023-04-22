@@ -277,10 +277,10 @@ public abstract class GameConsumer {
         AbstractProcessor processor = protoProcessorMap.get(event.getMsgId());
 
         if (processor == null) {
-            String name = event.getMsgData() == null ? "null" :event.getMsgData().getClass().getSimpleName();
 
             processor = this.unknownProcessor;
             if(processor == null){
+                String name = event.getMsgData() == null ? "null" :event.getMsgData().getClass().getSimpleName();
                 Logs.DEFAULT_LOGGER.info("processor not found, msgId : {} , msg : {}" , event.getMsgId() , name);
                 return;
             }
@@ -499,7 +499,7 @@ public abstract class GameConsumer {
         instanceManager.putInstance(obj.getClass(),obj);
     }
 
-    public void putInstance(Class<?> clazz ) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+    public void putInstance(Class<?> clazz ) {
         instanceManager.putInstance(clazz);
     }
 

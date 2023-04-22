@@ -107,6 +107,9 @@ public class QueueConsumerThread extends Thread {
 
     private void runAllConsumers() {
 
+        final int yieldNeedPollNullNum = 800 * queueGameConsumers.size();
+        final int parkNeedPollNullNum = 1000 * queueGameConsumers.size();
+
 
         for (; ; ) {
             int aliveConsumerNum = 0;
@@ -128,12 +131,12 @@ public class QueueConsumerThread extends Thread {
 
             }
 
-            if (allContinuePollNullCountNum > 1000) {
+            if (allContinuePollNullCountNum > parkNeedPollNullNum) {
                 for (AbstractThreadQueueGameConsumer gameConsumer : queueGameConsumers) {
                     gameConsumer.clearContinuePollNullNum();
                 }
                 LockSupport.parkNanos(1000 * 1000L);
-            } else if (allContinuePollNullCountNum > 800) {
+            } else if (allContinuePollNullCountNum > yieldNeedPollNullNum) {
                 Thread.yield();
             }
 

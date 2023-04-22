@@ -3,6 +3,7 @@ package org.jyg.gameserver.db;
 import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.field.UnsafeFieldOperator;
 import org.jyg.gameserver.core.util.AllUtil;
+import org.jyg.gameserver.core.util.ClassUtil;
 import org.jyg.gameserver.db.anno.DBTable;
 import org.jyg.gameserver.db.anno.DBTableField;
 import org.jyg.gameserver.db.anno.DBTableFieldIgnore;
@@ -86,7 +87,7 @@ public class DBTableManager {
                 continue;
             }
             //忽略静态字段
-            if (AllUtil.isStatic(field)) {
+            if (ClassUtil.isStatic(field)) {
                 continue;
             }
 

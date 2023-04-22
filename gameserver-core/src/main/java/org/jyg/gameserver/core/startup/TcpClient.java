@@ -116,7 +116,7 @@ public class TcpClient extends AbstractBootstrap{
 			return null;
 		}
 		logger.error(" connect ip {} port {} success " , host ,port);
-		isStart = true;
+		start = true;
 
 		channel = channelFuture.channel();
 

@@ -1,6 +1,7 @@
 package org.jyg.gameserver.core.util;
 
 import com.google.protobuf.MessageLite;
+import com.sun.istack.internal.Nullable;
 import io.netty.channel.epoll.Epoll;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
@@ -47,9 +48,6 @@ public class GameContext{
 
 //    private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
-    //TODO I think ...
-    @Deprecated
-    private final SingleThreadExecutorManagerPool singleThreadExecutorManagerPool;
 
     private Object2IntMap<Class<? extends MessageLite>> protoClazz2MsgIdMap = new Object2IntOpenHashMap<>(1024,0.5f);
     private Int2ObjectMap<AbstractMsgCodec<?>> msgId2MsgCodecMap = new Int2ObjectOpenHashMap<>(1024,0.5f);
@@ -103,7 +101,6 @@ public class GameContext{
 
         this.eventLoopGroupManager = new EventLoopGroupManager(useEpoll , serverConfig.getNettyIOThreadNum());
 //        this.executorManager = new ExecutorManager(10, defaultConsumer);
-        this.singleThreadExecutorManagerPool = new SingleThreadExecutorManagerPool(mainGameConsumer);
         this.consumerManager = new ConsumerManager(this);
         this.consumerManager.addConsumer(mainGameConsumer);
 
@@ -321,9 +318,6 @@ public class GameContext{
     }
 
 
-    public ExecutorManager getSingleThreadExecutorManager(long playerUid) {
-        return singleThreadExecutorManagerPool.getSingleThreadExecutorManager(playerUid);
-    }
 
     public synchronized void start() {
         if(start){
@@ -355,16 +349,16 @@ public class GameContext{
             return;
         }
 
-        this.stop = true;
 
         this.instanceManager.stop();
+        this.stop = true;
 
 
     }
 
     public synchronized void loadServerConfig(String configFileName){
         if(start){
-            AllUtil.println(" already start .... ");
+            Logs.DEFAULT_LOGGER.warn(" already start .... ");
             return;
         }
         ConfigUtil.properties2Object(configFileName, serverConfig);
@@ -402,8 +396,7 @@ public class GameContext{
     }
 
 
-
-    public<T> T getInstance(Class<T> tClass){
+    @Nullable public<T> T getInstance(Class<T> tClass){
         return instanceManager.getInstance(tClass);
     }
 

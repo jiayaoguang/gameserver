@@ -7,6 +7,7 @@ import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.msg.ProtostuffMsgCodec;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.db.util.CreateTableUtil;
+import org.jyg.gameserver.db.util.GenDBProxy;
 import org.jyg.gameserver.test.db.Maik;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEvent;
@@ -131,6 +132,14 @@ public class JygTest02 {
         String sql = CreateTableUtil.getCreateTableSql(Maik.class);
         AllUtil.println(sql);
     }
+
+
+
+    @Test
+    public void testCreateDBProxy(){
+        GenDBProxy.genDBProxyFile(Maik.class,"src/main/java");
+    }
+
 
 
 }

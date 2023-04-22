@@ -3,6 +3,7 @@ package org.jyg.gameserver.core.manager;
 import cn.hutool.core.io.FileUtil;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.ClassRedefineUtil;
+import org.jyg.gameserver.core.util.Logs;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -58,7 +59,7 @@ public class ClassLoadManager {
 
             String className = ClassRedefineUtil.readClassName(FileUtil.readBytes(childClassFile));
 
-            AllUtil.println("find class: "+className);
+            Logs.DEFAULT_LOGGER.info("find class: "+className);
             try {
                 Class<?> c = urlClassLoader.loadClass(className);
                 classList.add(c);

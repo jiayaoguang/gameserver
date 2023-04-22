@@ -261,16 +261,6 @@ public class AllUtil {
     }
 
 
-    public static Type getClassGenericType(Class<Object> clazz){
-        Type superClass = clazz.getGenericSuperclass();
-        if (superClass instanceof Class<?>) { // sanity check, should never happen
-            throw new IllegalArgumentException("Internal error: TypeReference constructed without actual type information");
-        }
-
-        Type _type = ((ParameterizedType) superClass).getActualTypeArguments()[0];
-
-        return _type;
-    }
 
 
 
