@@ -63,10 +63,29 @@ public class ConsumerDBManager implements Lifecycle {
         gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, childChooseId);
     }
 
+    public void updateField(BaseDBEntity dbEntity , String objFieldName) {
+        updateField(dbEntity, dbEntity.getClass().getSimpleName());
+    }
+
+
+
+
+    public void updateField(BaseDBEntity dbEntity , String objFieldName , String childChooseId) {
+
+        ConsumerDefaultEvent consumerDefaultEvent = new ConsumerDefaultEvent(BDEventConst.UPDATE_FIELD, dbEntity);
+
+        Map<String,Object> params = new HashMap<>();
+        params.put("fieldName" , objFieldName);
+        consumerDefaultEvent.setParams(params);
+
+        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, childChooseId);
+    }
+
     public void update(BaseDBEntity dbEntity) {
         ConsumerDefaultEvent consumerDefaultEvent = new ConsumerDefaultEvent(BDEventConst.UPDATE, dbEntity);
         gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, dbEntity.getClass().getSimpleName());
     }
+
 
 
     public long select(BaseDBEntity dbEntity, ResultHandler onSelectResult, String childChooseId) {

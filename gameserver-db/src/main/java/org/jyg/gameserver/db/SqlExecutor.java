@@ -85,7 +85,7 @@ public class SqlExecutor {
             switch (prepareSQLAndParams.sqlExecuteType) {
                 case QUERY_ONE: {
                     List<Object> returnList = executeQuery(dbEntityClass, tableInfo, preparedStatement);
-                    if (returnList.size() == 0) {
+                    if (returnList.isEmpty()) {
                         return null;
                     }
                     return returnList.get(0);

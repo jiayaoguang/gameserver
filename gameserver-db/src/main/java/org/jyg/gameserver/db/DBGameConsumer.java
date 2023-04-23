@@ -2,6 +2,7 @@ package org.jyg.gameserver.db;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jyg.gameserver.core.consumer.MpscQueueGameConsumer;
+import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.event.ConsumerDefaultEvent;
 import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.db.data.ExecSqlInfo;
@@ -31,6 +32,8 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
 
     private final DBTableManager dbTableManager;
 
+    private final boolean needCloneDBEntity;
+
 
 //    public DBConsumer() {
 //        this(null);
@@ -38,15 +41,21 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
 //    }
 
     public DBGameConsumer(DBConfig dbConfig) {
+
+        this(dbConfig , true);
+    }
+
+    protected DBGameConsumer(DBConfig dbConfig , boolean needCloneDBEntity) {
         this.dbConfig = dbConfig;
         this.sqlKeyWord = new MySQLUpperKey();
         this.dataSource = new SimpleDataSource(dbConfig);
         this.typeHandlerRegistry = new TypeHandlerRegistry();
         this.sqlExecutor = new SqlExecutor(dataSource , typeHandlerRegistry);
         this.dbTableManager = new DBTableManager(typeHandlerRegistry);
+        this.needCloneDBEntity = needCloneDBEntity;
         init();
-
     }
+
 
     private void init() {
         addSQLBuilder(BDEventConst.INSERT, new InsertSQLBuilder());
@@ -55,7 +64,7 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
         addSQLBuilder(BDEventConst.SELECT, new SelectSQLBuilder());
 
         addSQLBuilder(BDEventConst.SELECT_BY_FIELD, new SelectByFieldSQLBuilder());
-
+        addSQLBuilder(BDEventConst.UPDATE_FIELD, new UpdateFieldSQLBuilder());
 
 //        registerTypeHandler(new StringTypeHandler());
 //
@@ -70,6 +79,26 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
 
 
     }
+
+
+    @Override
+    public void publicEvent(EventData eventData) {
+//        if(!(data instanceof BaseDBEntity)){
+//            throw new IllegalArgumentException("db entity must extend BaseDBEntity");
+//        }
+        if(needCloneDBEntity){
+            if(eventData.getEvent() instanceof ConsumerDefaultEvent){
+                ConsumerDefaultEvent consumerDefaultEvent = (ConsumerDefaultEvent) eventData.getEvent();
+                if(consumerDefaultEvent.getData() instanceof BaseDBEntity){
+                    consumerDefaultEvent.setData(((BaseDBEntity) consumerDefaultEvent.getData()).clone());
+                }
+            }
+        }
+
+        super.publicEvent(eventData);
+    }
+
+
 
     public void registerTypeHandler(Class<?> clazz , TypeHandler<?> typeHandler) {
         typeHandlerRegistry.registerTypeHandler(clazz,typeHandler);

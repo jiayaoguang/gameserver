@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.*;
 
 /**
  * create by jiayaoguang on 2023/4/21
@@ -57,5 +58,47 @@ public class ClassUtil {
     public static boolean isStatic(Field field){
         return Modifier.isStatic(field.getModifiers());
     }
+
+
+    public static List<Field> getClassObjectFields(Class<?> clazz){
+
+        List<Field> classObjectFields = new ArrayList<>();
+
+
+        for(Class<?> superClass : getSuperClasses(clazz)){
+            Field[] superClassFields = superClass.getDeclaredFields();
+            for(Field field : superClassFields){
+                if(isStatic(field)){
+                    continue;
+                }
+                classObjectFields.add(field);
+            }
+        }
+
+
+        Field[] fields = clazz.getDeclaredFields();
+        for(Field field : fields){
+            if(isStatic(field)){
+                continue;
+            }
+            classObjectFields.add(field);
+        }
+
+
+        return classObjectFields;
+    }
+
+
+    public static Queue<Class<?>> getSuperClasses(Class<?> clazz){
+        Deque<Class<?>> superClasses = new ArrayDeque<>(5);
+        Class<?> superClass = clazz.getSuperclass();
+
+        for(;superClass != null;){
+            superClasses.addLast(superClass);
+            superClass = superClass.getSuperclass();
+        }
+        return superClasses;
+    }
+
 
 }

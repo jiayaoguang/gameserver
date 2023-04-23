@@ -4,15 +4,12 @@ import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
 import org.jyg.gameserver.core.event.listener.GameEventListener;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
-import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.ConfigUtil;
 import org.jyg.gameserver.core.util.GameContext;
+import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.db.ConsumerDBManager;
 import org.jyg.gameserver.db.DBConfig;
 import org.jyg.gameserver.db.DBGameConsumer;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * create by jiayaoguang on 2021/5/15
@@ -34,7 +31,7 @@ public class DBTest {
 
         DBGameConsumer consumer = new DBGameConsumer(dbConfig);
         consumer.setId(100);
-        consumer.tryAddTableInfo(Maik.class);
+        consumer.tryAddTableInfo(MaikDB.class);
 
         gameServerBootstrap.getGameContext().getConsumerManager().addConsumer(consumer);
         gameServerBootstrap.getGameContext().getMainGameConsumer().getInstanceManager()
@@ -62,26 +59,35 @@ public class DBTest {
 
             GameConsumer con = event.getGameConsumer();
 
-            int id = 33;
+            int id = 48;
 
-            Maik maik = new Maik();
+            MaikDB maik = new MaikDB();
             maik.setId(id);
             maik.setContent("hello_world_31");
+            maik.setAge(1000);
+            maik.setPay(false);
             con.getInstanceManager().getInstance(ConsumerDBManager.class).insert(maik);
 
-            List<Object> params = new ArrayList<>();
-            params.add(id);
 
 
-            con.getInstanceManager().getInstance(ConsumerDBManager.class)
-                    .execQuerySql(Maik.class ,"select * from maik where id = ?;", params , (eventId , data)->{
 
-                        List<Maik> maiks = (List<Maik>)data;
-                        for( Maik maik1 : maiks ){
-                            AllUtil.println("query result : " + maik1.getContent());
-                        }
+            con.getInstanceManager().getInstance(ConsumerDBManager.class).select(maik, (eventId, data) -> {
+                MaikDB maik1 = (MaikDB)data;
+                Logs.DEFAULT_LOGGER.info("select result : id {} content {} , pay {}" ,maik1.getId(), maik1.getContent() , maik1.isPay());
+            });
 
-                    });
+
+            maik.setPay(true);
+
+            con.getInstanceManager().getInstance(ConsumerDBManager.class).updateField(maik , "pay");
+
+            con.getInstanceManager().getInstance(ConsumerDBManager.class).select(maik, (eventId, data) -> {
+                MaikDB maik1 = (MaikDB)data;
+                Logs.DEFAULT_LOGGER.info("select result : id {} content {} , pay {}" ,maik1.getId(), maik1.getContent() , maik1.isPay());
+            });
+
+
+
         }
     }
 

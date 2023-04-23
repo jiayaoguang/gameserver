@@ -23,7 +23,7 @@ public class ${className}${suffix} {
     public void ${filedInfo.setMethodName} (${filedInfo.fieldType} ${filedInfo.fieldName}){
         dbEntity.${filedInfo.setMethodName}(${filedInfo.fieldName});
         <#if filedInfo.needUpdate=="true" >
-        consumerDBManager.update(dbEntity);
+        consumerDBManager.updateField(this.dbEntity , "${filedInfo.fieldName}");
         </#if>
     }
 
@@ -32,6 +32,11 @@ public class ${className}${suffix} {
     }
 
 </#list>
+
+
+    public ${className} getDBEntity(){
+        return dbEntity;
+    }
 
 
 

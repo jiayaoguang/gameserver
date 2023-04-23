@@ -20,11 +20,11 @@ public class CreateTableUtil {
     }
 
     
-    public static void createTable(Class<? extends BaseDBEntity> dbClass) throws SQLException {
+    public static void createTable(Class<? extends BaseDBEntity> dbClass) {
         createTable( ConfigUtil.properties2Object(GameContext.DEFAULT_CONFIG_FILE_NAME, DBConfig.class) , dbClass);
     }
 
-    public static void createTable(DBConfig dbConfig ,Class<? extends BaseDBEntity> dbClass) throws SQLException {
+    public static void createTable(DBConfig dbConfig ,Class<? extends BaseDBEntity> dbClass) {
 
 //        DBConfig dbConfig = ConfigUtil.properties2Object("jyg", DBConfig.class);
 
@@ -38,6 +38,9 @@ public class CreateTableUtil {
 
             statement.execute(sql);
 
+        }catch (Exception e){
+            Logs.DEFAULT_LOGGER.error("execute create table fail , sql {}",sql);
+            e.printStackTrace();
         }
 
 

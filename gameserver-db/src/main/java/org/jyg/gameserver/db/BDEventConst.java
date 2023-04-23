@@ -19,4 +19,7 @@ public class BDEventConst {
 
     public static final int SELECT_BY_FIELD = 5;
 
+
+    public static final int UPDATE_FIELD = 6;
+
 }

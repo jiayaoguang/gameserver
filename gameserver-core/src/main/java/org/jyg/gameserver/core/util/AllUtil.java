@@ -184,39 +184,10 @@ public class AllUtil {
 
 
 
-    public static boolean isStatic(Field field){
-        return Modifier.isStatic(field.getModifiers());
-    }
 
-
+    @Deprecated
     public static List<Field> getClassObjectFields(Class<?> clazz){
-
-        List<Field> classObjectFields = new ArrayList<>();
-
-        Field[] fields = clazz.getDeclaredFields();
-        for(Field field : fields){
-            if(isStatic(field)){
-                continue;
-            }
-            classObjectFields.add(field);
-        }
-
-
-        Class<?> superClass = clazz.getSuperclass();
-
-        for(;superClass != null;){
-            Field[] superCalssFields = superClass.getDeclaredFields();
-            for(Field field : superCalssFields){
-                if(isStatic(field)){
-                    continue;
-                }
-                classObjectFields.add(field);
-            }
-            superClass = superClass.getSuperclass();
-        }
-
-
-        return classObjectFields;
+        return ClassUtil.getClassObjectFields(clazz);
     }
 
     /**

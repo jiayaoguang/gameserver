@@ -33,7 +33,7 @@ public class DBWaitResultTest {
         }
         DBGameConsumer consumer = new DBGameConsumer(dbConfig);
         consumer.setId(100);
-        consumer.tryAddTableInfo(Maik.class);
+        consumer.tryAddTableInfo(MaikDB.class);
 
         gameServerBootstrap.getGameContext().getConsumerManager().addConsumer(consumer);
         gameServerBootstrap.getGameContext().getMainGameConsumer().getInstanceManager()
@@ -63,7 +63,7 @@ public class DBWaitResultTest {
 
             int id = 33;
 
-            Maik maik = new Maik();
+            MaikDB maik = new MaikDB();
             maik.setId(id);
             maik.setContent("hello_world_31");
             con.getInstanceManager().getInstance(ConsumerDBManager.class).insert(maik);
@@ -73,10 +73,10 @@ public class DBWaitResultTest {
 
 
            long requestId =  con.getInstanceManager().getInstance(ConsumerDBManager.class)
-                    .execQuerySql(Maik.class ,"select * from maik where id = ?;", params , (eventId , data)->{
+                    .execQuerySql(MaikDB.class ,"select * from maik where id = ?;", params , (eventId , data)->{
 
-                        List<Maik> maiks = (List<Maik>)data;
-                        for( Maik maik1 : maiks ){
+                        List<MaikDB> maiks = (List<MaikDB>)data;
+                        for( MaikDB maik1 : maiks ){
                             AllUtil.println("query result : " + maik1.getContent());
                         }
 
@@ -88,8 +88,8 @@ public class DBWaitResultTest {
             AllUtil.println("result _ waitForResult");
             if(result instanceof  List){
                 List list = (List) result;
-                if(list.size() >0 &&list.get(0) instanceof Maik){
-                    Maik maik1 = (Maik)list.get(0);
+                if(list.size() >0 &&list.get(0) instanceof MaikDB){
+                    MaikDB maik1 = (MaikDB)list.get(0);
                     AllUtil.println("waitForResult : " + maik1.getContent());
                 }
             }

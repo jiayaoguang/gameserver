@@ -24,7 +24,7 @@ public class DBConsumerGroupTest {
 
         DBGameConsumerGroup dbConsumerGroup = new DBGameConsumerGroup();
 //        consumerGroup.setId(100);
-        dbConsumerGroup.tryAddTableInfo(Maik.class);
+        dbConsumerGroup.tryAddTableInfo(MaikDB.class);
 
         gameServerBootstrap.getGameContext().getConsumerManager().addConsumer(dbConsumerGroup);
 
@@ -43,7 +43,7 @@ public class DBConsumerGroupTest {
 //                });
 
 
-                Maik maik = new Maik();
+                MaikDB maik = new MaikDB();
                 maik.setId(23);
                 maik.setContent("jjjjj");
 
@@ -56,7 +56,7 @@ public class DBConsumerGroupTest {
                 consumer.getInstanceManager().getInstance(ConsumerDBManager.class).select(maik, new ResultHandler() {
                     @Override
                     public void call(int eventId, Object data) {
-                        AllUtil.println(Thread.currentThread().getName() + " : "+ ((Maik)data).getContent());
+                        AllUtil.println(Thread.currentThread().getName() + " : "+ ((MaikDB)data).getContent());
                     }
 
 //                @Override
@@ -65,13 +65,13 @@ public class DBConsumerGroupTest {
 //                }
                 });
 
-                Maik selectByMaikDb = new Maik();
+                MaikDB selectByMaikDb = new MaikDB();
                 selectByMaikDb.setContent("hello");
-                consumer.getInstanceManager().getInstance(ConsumerDBManager.class).selectBy(selectByMaikDb,"content", new ResultHandler<List<Maik>>() {
+                consumer.getInstanceManager().getInstance(ConsumerDBManager.class).selectBy(selectByMaikDb,"content", new ResultHandler<List<MaikDB>>() {
                     @Override
-                    public void call(int eventId, List<Maik> data) {
+                    public void call(int eventId, List<MaikDB> data) {
 
-                        for(Maik maik1 : data){
+                        for(MaikDB maik1 : data){
                             AllUtil.println(Thread.currentThread().getName() + " : "+ (maik1).getContent() + " _ " + maik1.getId());
                         }
 

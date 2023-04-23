@@ -41,7 +41,7 @@ public class DBGameConsumerGroup extends GameConsumerGroup<DBGameConsumer> {
         setId(dbConfig.getDbConsumerGroupId());
 
         for(int i=0;i<dbConfig.getDbConsumerNum();i++){
-            DBGameConsumer dbConsumer = new DBGameConsumer(dbConfig);
+            DBGameConsumer dbConsumer = new DBGameConsumer(dbConfig , false);
 //            dbConsumer.setDbConfig(dbConfig);
             addChildConsumer(dbConsumer);
         }

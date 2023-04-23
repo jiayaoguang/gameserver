@@ -7,7 +7,7 @@ import org.jyg.gameserver.core.event.listener.GameEventListener;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.db.ConsumerDBManager;
-import org.jyg.gameserver.test.db.Maik;
+import org.jyg.gameserver.test.db.MaikDB;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +55,7 @@ public class UseRemoteDBTest {
 
             int id = 40;
 
-            Maik maik = new Maik();
+            MaikDB maik = new MaikDB();
             maik.setId(id);
             maik.setContent("hello_world_"+id);
             con.getInstanceManager().getInstance(ConsumerDBManager.class).insert(maik);
@@ -65,10 +65,10 @@ public class UseRemoteDBTest {
 
 
             long requestId =  con.getInstanceManager().getInstance(ConsumerDBManager.class)
-                    .execQuerySql(Maik.class ,"select * from maik where id = ?;", params , (eventId , data)->{
+                    .execQuerySql(MaikDB.class ,"select * from maik where id = ?;", params , (eventId , data)->{
 
-                        List<Maik> maiks = (List<Maik>)data;
-                        for( Maik maik1 : maiks ){
+                        List<MaikDB> maiks = (List<MaikDB>)data;
+                        for( MaikDB maik1 : maiks ){
                             AllUtil.println("query result : " + maik1.getContent());
                         }
 
@@ -80,8 +80,8 @@ public class UseRemoteDBTest {
             AllUtil.println("result _ waitForResult " + result);
             if(result instanceof List){
                 List list = (List) result;
-                if(list.size() >0 &&list.get(0) instanceof Maik){
-                    Maik maik1 = (Maik)list.get(0);
+                if(list.size() >0 &&list.get(0) instanceof MaikDB){
+                    MaikDB maik1 = (MaikDB)list.get(0);
                     AllUtil.println("waitForResult : " + maik1.getContent());
                 }
             }

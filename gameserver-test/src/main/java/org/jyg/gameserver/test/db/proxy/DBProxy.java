@@ -3,11 +3,10 @@ package org.jyg.gameserver.test.db.proxy;
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.consumer.MpscQueueGameConsumer;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
-import org.jyg.gameserver.core.util.ConfigUtil;
 import org.jyg.gameserver.db.ConsumerDBManager;
 import org.jyg.gameserver.db.DBConfig;
 import org.jyg.gameserver.db.DBGameConsumer;
-import org.jyg.gameserver.test.db.Maik;
+import org.jyg.gameserver.test.db.MaikDB;
 
 /**
  * create by jiayaoguang on 2022/11/13
@@ -34,7 +33,7 @@ public class DBProxy {
 
         DBGameConsumer consumer = new DBGameConsumer(dbConfig);
         consumer.setId(DB_CONSUMER_ID);
-        consumer.tryAddTableInfo(Maik.class);
+        consumer.tryAddTableInfo(MaikDB.class);
 
         gameServerBootstrap.getGameContext().getConsumerManager().addConsumer(consumer);
         gameServerBootstrap.getGameContext().getMainGameConsumer().getInstanceManager()

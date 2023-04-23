@@ -3,8 +3,7 @@ package org.jyg.gameserver.test;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.matcher.ElementMatchers;
-import org.jyg.gameserver.core.util.AllUtil;
-import org.jyg.gameserver.test.db.Maik;
+import org.jyg.gameserver.test.db.MaikDB;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -18,7 +17,7 @@ public class ByteBuddyTest02 {
     public static void main(String[] args) throws Exception {
 
 
-        Maik source = create(Maik.class);
+        MaikDB source = create(MaikDB.class);
 
 
 //        Advice.to(BytebuddyTest.LoggerAdvisor.class);
