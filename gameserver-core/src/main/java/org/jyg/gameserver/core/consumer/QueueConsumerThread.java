@@ -107,8 +107,8 @@ public class QueueConsumerThread extends Thread {
 
     private void runAllConsumers() {
 
-        final int yieldNeedPollNullNum = 800 * queueGameConsumers.size();
-        final int parkNeedPollNullNum = 1000 * queueGameConsumers.size();
+        final int yieldNeedPollNullNum = 50 * queueGameConsumers.size();
+        final int parkNeedPollNullNum = 100 * queueGameConsumers.size();
 
 
         for (; ; ) {

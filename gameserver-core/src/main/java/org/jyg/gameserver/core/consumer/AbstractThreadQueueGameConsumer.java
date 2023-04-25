@@ -93,8 +93,8 @@ public abstract class AbstractThreadQueueGameConsumer extends GameConsumer {
 
     @Override
     protected void update() {
-
-        for(;;){
+        //单次update最多处理100条事件
+        for(int i = 0;i < 100;i++){
 
                 EventData<?> object = pollEvent();
                 if(object == null) {
