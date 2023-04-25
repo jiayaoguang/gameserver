@@ -107,14 +107,14 @@ public class QueueConsumerThread extends Thread {
 
     private void runAllConsumers() {
 
-        final int yieldNeedPollNullNum = 50 * queueGameConsumers.size();
-        final int parkNeedPollNullNum = 100 * queueGameConsumers.size();
+        final int yieldNeedPollNullNum = 50;
+        final int parkNeedPollNullNum = 100;
 
 
         for (; ; ) {
             int aliveConsumerNum = 0;
 
-            int allContinuePollNullCountNum = 0;
+            int minContinuePollNullCountNum = Integer.MAX_VALUE;
 
             for (AbstractThreadQueueGameConsumer gameConsumer : queueGameConsumers) {
                 if (gameConsumer.isStop()) {
@@ -125,18 +125,18 @@ public class QueueConsumerThread extends Thread {
                 try {
                     gameConsumer.update();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Logs.CONSUMER.error("update make exception : ",e);
                 }
-                allContinuePollNullCountNum += gameConsumer.getContinuePollNullNum();
+                minContinuePollNullCountNum = Math.min(gameConsumer.getContinuePollNullNum() , minContinuePollNullCountNum) ;
 
             }
 
-            if (allContinuePollNullCountNum > parkNeedPollNullNum) {
+            if (minContinuePollNullCountNum > parkNeedPollNullNum) {
                 for (AbstractThreadQueueGameConsumer gameConsumer : queueGameConsumers) {
                     gameConsumer.clearContinuePollNullNum();
                 }
                 LockSupport.parkNanos(1000 * 1000L);
-            } else if (allContinuePollNullCountNum > yieldNeedPollNullNum) {
+            } else if (minContinuePollNullCountNum > yieldNeedPollNullNum) {
                 Thread.yield();
             }
 
