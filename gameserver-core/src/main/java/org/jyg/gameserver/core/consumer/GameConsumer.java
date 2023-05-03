@@ -85,7 +85,7 @@ public abstract class GameConsumer {
     public GameConsumer() {
         this.instanceManager = new InstanceManager();
 
-        instanceManager.putInstance(this);
+        instanceManager.putInstance(GameConsumer.class , this);
 
         this.timerManager = new TimerManager();
         this.channelManager = new ChannelManager(this);
