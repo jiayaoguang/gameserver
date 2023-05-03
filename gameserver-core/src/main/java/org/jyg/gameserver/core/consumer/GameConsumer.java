@@ -295,12 +295,13 @@ public abstract class GameConsumer {
 
 
         if(!processor.isEnableAccess()){
-            getEventManager().publishEvent(new ForbidAccessMsgEvent(session,event));
+            getEventManager().publishEvent(new DisableAccessMsgEvent(session,event));
             Logs.DEFAULT_LOGGER.debug(" msg {} disable,forbid access" , msgName);
             return;
         }
 
         if(!processor.checkAccess(session , event)){
+            getEventManager().publishEvent(new ForbidAccessMsgEvent(session,event));
             Logs.DEFAULT_LOGGER.error(" session {} forbid access msg {} " , session.getRemoteAddr() , msgName);
             return;
         }
@@ -332,8 +333,13 @@ public abstract class GameConsumer {
 //            return;
 //        }
 
+        if(httpProcessor == null){
+            Logs.DEFAULT_LOGGER.info("channel {} access http path {} not found", IpUtil.getChannelRemoteIp(event.getChannel()), event.getMsgData().noParamUri());
+        }else {
+            httpProcessor.process(null, event);
+        }
 
-        httpProcessor.process(null, event);
+
         //20 秒后关闭
         timerManager.addTimer(new DelayCloseTimer(event.getChannel(), 20 * 1000L));
     }

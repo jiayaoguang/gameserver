@@ -40,6 +40,9 @@ public class EventManager implements Lifecycle {
         addEventListener(new MQMsgEventListener(gameConsumer));
         addEventListener(new InnerMsgEventListener(gameConsumer));
         addEventListener(new UnknownMsgEventListener(gameConsumer));
+
+        addEventListener(new DisableAccessHttpEventListener());
+        addEventListener(new ForbidAccessHttpEventListener());
     }
 
     @Override

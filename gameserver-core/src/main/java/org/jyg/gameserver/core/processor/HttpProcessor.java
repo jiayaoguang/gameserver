@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.processor;
 
 import io.netty.channel.Channel;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.jyg.gameserver.core.event.DisableAccessHttpEvent;
 import org.jyg.gameserver.core.event.ForbidAccessHttpEvent;
 import org.jyg.gameserver.core.event.HttpRequestEvent;
 import org.jyg.gameserver.core.event.MsgEvent;
@@ -43,8 +44,8 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 		}
 
 		if(!checkAccessHttp(request , response)){
+			getGameConsumer().getEventManager().publishEvent(new ForbidAccessHttpEvent(request,response));
 			Logs.DEFAULT_LOGGER.info("channel {} forbid access http path {} ", response.getAddr(), getPath());
-			response.writeAndFlush("<h1>forbid access this http path </h1");
 			return;
 		}
 
@@ -52,7 +53,7 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 
 		if(!this.isEnableAccess()){
 			Logs.DEFAULT_LOGGER.debug("channel {} forbid access , http path {} disable", response.getAddr(), getPath());
-			getGameConsumer().getEventManager().publishEvent(new ForbidAccessHttpEvent(request,response));
+			getGameConsumer().getEventManager().publishEvent(new DisableAccessHttpEvent(request,response));
 			return;
 		}
 
