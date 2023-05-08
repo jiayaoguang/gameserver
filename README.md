@@ -24,7 +24,7 @@ Maven
 * mysql对象关系映射及异步存储
 * 定时事件
 * 消息转发代理
-* ip白名单
+* 消息传递支持 MQ,socket , websocket
 
 
 
