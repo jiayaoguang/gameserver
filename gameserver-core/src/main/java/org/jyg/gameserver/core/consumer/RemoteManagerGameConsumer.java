@@ -17,14 +17,14 @@ public class RemoteManagerGameConsumer extends RemoteDelegateGameConsumer {
     private final Map<String,TcpClient> tcpClientMap = new LinkedHashMap<>(1024,0.75f);
 
 
-    public RemoteManagerGameConsumer(GameContext gameContext, QueueConsumerThread queueConsumerThread , RemoteConsumerInfo remoteConsumerInfo) {
+    public RemoteManagerGameConsumer(GameContext gameContext, PollMoreNullWaitQueueConsumerThread queueConsumerThread , RemoteConsumerInfo remoteConsumerInfo) {
         super(gameContext,queueConsumerThread ,gameContext.createTcpClient(remoteConsumerInfo.getIp(),remoteConsumerInfo.getPort()) , remoteConsumerInfo );
         addTcpClient(getTcpClient());
     }
 
 
     public RemoteManagerGameConsumer(GameContext gameContext , RemoteConsumerInfo remoteConsumerInfo,String consumerThreadName) {
-        super(gameContext,new QueueConsumerThread(consumerThreadName) ,gameContext.createTcpClient(remoteConsumerInfo.getIp(),remoteConsumerInfo.getPort()) , remoteConsumerInfo );
+        super(gameContext,new PollMoreNullWaitQueueConsumerThread(consumerThreadName) ,gameContext.createTcpClient(remoteConsumerInfo.getIp(),remoteConsumerInfo.getPort()) , remoteConsumerInfo );
 
         addTcpClient(getTcpClient());
     }
@@ -34,7 +34,7 @@ public class RemoteManagerGameConsumer extends RemoteDelegateGameConsumer {
     }
 
 
-    public RemoteManagerGameConsumer(GameContext gameContext , QueueConsumerThread queueConsumerThread , TcpClient tcpClient, RemoteConsumerInfo remoteConsumerInfo) {
+    public RemoteManagerGameConsumer(GameContext gameContext , PollMoreNullWaitQueueConsumerThread queueConsumerThread , TcpClient tcpClient, RemoteConsumerInfo remoteConsumerInfo) {
         super(gameContext,queueConsumerThread ,tcpClient , remoteConsumerInfo );
         addTcpClient(getTcpClient());
     }

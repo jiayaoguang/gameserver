@@ -10,17 +10,12 @@ import java.util.concurrent.locks.LockSupport;
 /**
  * create by jiayaoguang on 2023/4/8
  */
-public class QueueConsumerThread extends Thread {
+public abstract class QueueConsumerThread extends Thread {
 
     private volatile boolean start = false;
 
 
-    private final List<AbstractThreadQueueGameConsumer> queueGameConsumers = new ArrayList<>();
-
-    private final int yieldNeedPollNullNum = 50;
-    private final int parkNeedPollNullNum = 100;
-
-
+    protected final List<AbstractThreadQueueGameConsumer> queueGameConsumers = new ArrayList<>();
 
 
     public QueueConsumerThread() {
@@ -83,7 +78,7 @@ public class QueueConsumerThread extends Thread {
     }
 
 
-    private void runSingleConsumer(AbstractThreadQueueGameConsumer gameConsumer) {
+    protected void runSingleConsumer(AbstractThreadQueueGameConsumer gameConsumer) {
 
 
 
@@ -93,6 +88,8 @@ public class QueueConsumerThread extends Thread {
                 break;
             }
 
+            beforeUpdate();
+
             try {
                 gameConsumer.update();
             } catch (Exception e) {
@@ -100,25 +97,19 @@ public class QueueConsumerThread extends Thread {
             }
 
 
-            if (gameConsumer.getContinuePollNullNum() > parkNeedPollNullNum) {
-                gameConsumer.clearContinuePollNullNum();
-                LockSupport.parkNanos(1000 * 1000L);
-            } else if (gameConsumer.getContinuePollNullNum() > yieldNeedPollNullNum) {
-                Thread.yield();
-            }
+            afterUpdateApplyWait();
         }
     }
 
 
-    private void runAllConsumers() {
 
-
+    protected void runAllConsumers() {
 
 
         for (; ; ) {
             int aliveConsumerNum = 0;
 
-            int minContinuePollNullCountNum = Integer.MAX_VALUE;
+            beforeUpdate();
 
             for (AbstractThreadQueueGameConsumer gameConsumer : queueGameConsumers) {
                 if (gameConsumer.isStop()) {
@@ -131,26 +122,22 @@ public class QueueConsumerThread extends Thread {
                 } catch (Exception e) {
                     Logs.CONSUMER.error("update make exception : ",e);
                 }
-                minContinuePollNullCountNum = Math.min(gameConsumer.getContinuePollNullNum() , minContinuePollNullCountNum) ;
 
-            }
-
-            if (minContinuePollNullCountNum > parkNeedPollNullNum) {
-                for (AbstractThreadQueueGameConsumer gameConsumer : queueGameConsumers) {
-                    gameConsumer.clearContinuePollNullNum();
-                }
-                LockSupport.parkNanos(1000 * 1000L);
-            } else if (minContinuePollNullCountNum > yieldNeedPollNullNum) {
-                Thread.yield();
             }
 
 
             if (aliveConsumerNum == 0) {
                 break;
             }
+
+            afterUpdateApplyWait();
+
         }
     }
 
+
+    protected abstract void beforeUpdate();
+    protected abstract void afterUpdateApplyWait();
 
     void addQueueConsumer(AbstractThreadQueueGameConsumer queueGameConsumer) {
 
@@ -158,6 +145,11 @@ public class QueueConsumerThread extends Thread {
             queueGameConsumers.add(queueGameConsumer);
         }
     }
+
+    protected List<AbstractThreadQueueGameConsumer> getQueueGameConsumers() {
+        return queueGameConsumers;
+    }
+
 
     public boolean isStart() {
         return start;

@@ -86,12 +86,12 @@ public class TimerManager implements Lifecycle {
         for (Timer timer; ; ) {
             timer = timerQueue.peek();
             if (timer == null) {
-                return;
+                break;
             }
 
 
             if (timer.getTriggerTime() > thisLoopStartTime) {
-                return;
+                break;
             }
 
             timerQueue.poll();
@@ -128,11 +128,14 @@ public class TimerManager implements Lifecycle {
 
             onceExecuteNum++;
 
-            if(onceExecuteNum > 1000){
-                Logs.DEFAULT_LOGGER.warn(" once Execute timer more {} " , onceExecuteNum);
+            if(onceExecuteNum > 10000){
                 break;
             }
 
+        }
+
+        if(onceExecuteNum > 1000){
+            Logs.DEFAULT_LOGGER.warn(" once Execute timer more {} " , onceExecuteNum);
         }
 
     }

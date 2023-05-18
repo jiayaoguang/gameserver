@@ -4,7 +4,6 @@ import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.util.Queue;
-import java.util.concurrent.locks.LockSupport;
 
 /**
  * create by jiayaoguang on 2020/5/1
@@ -50,7 +49,7 @@ public abstract class AbstractThreadQueueGameConsumer extends GameConsumer {
     public void doStart() {
 
         if(consumerThread == null){
-            consumerThread = new QueueConsumerThread();
+            consumerThread = new IntervalUpdateQueueConsumerThread();
             consumerThread.setName(getClass().getSimpleName() + "_" + getId());
         }
         consumerThread.addQueueConsumer(this);
@@ -93,25 +92,34 @@ public abstract class AbstractThreadQueueGameConsumer extends GameConsumer {
 
     @Override
     protected void update() {
-        //单次update最多处理100条事件
-        for(int i = 0;i < 100;i++){
+        getTimerManager().updateTimer();
 
-                EventData<?> object = pollEvent();
-                if(object == null) {
-                    if(continuePollNullNum < MAX_CONTINUE_POLL_NULL_NUM){
-                        continuePollNullNum++;
-                    }
+        int oncePollNum = 0;
+        for(;oncePollNum < 100000;){
 
-                    break;
+            EventData<?> object = pollEvent();
+            if(object == null) {
+                if(continuePollNullNum < MAX_CONTINUE_POLL_NULL_NUM){
+                    continuePollNullNum++;
                 }
 
-                continuePollNullNum = 0;
+                break;
+            }
 
-                onReciveEvent(object);
+            continuePollNullNum = 0;
+
+            onReciveEvent(object);
+
+            oncePollNum ++;
 
         }
 
-        getTimerManager().updateTimer();
+
+        if(oncePollNum > 10000){
+            Logs.CONSUMER.error("CONSUMER {} oncePollNum {} > 10000 ",getId(),oncePollNum);
+        }
+
+
 
     }
 
