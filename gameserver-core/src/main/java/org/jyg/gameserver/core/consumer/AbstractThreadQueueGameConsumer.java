@@ -3,6 +3,7 @@ package org.jyg.gameserver.core.consumer;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.util.Logs;
 
+import java.util.ArrayDeque;
 import java.util.Queue;
 
 /**
@@ -25,6 +26,12 @@ public abstract class AbstractThreadQueueGameConsumer extends GameConsumer {
 
 
     private QueueConsumerThread consumerThread;
+
+
+    /**
+     * 用于暂存从生产者poll到的事件的队列
+     */
+    private final Queue<EventData<?>> tempEventQueue = new ArrayDeque<>(2048);
 
 
     /**
@@ -97,8 +104,8 @@ public abstract class AbstractThreadQueueGameConsumer extends GameConsumer {
         int oncePollNum = 0;
         for(;oncePollNum < 100000;){
 
-            EventData<?> object = pollEvent();
-            if(object == null) {
+            EventData<?> eventData = pollEvent();
+            if(eventData == null) {
                 if(continuePollNullNum < MAX_CONTINUE_POLL_NULL_NUM){
                     continuePollNullNum++;
                 }
@@ -108,10 +115,19 @@ public abstract class AbstractThreadQueueGameConsumer extends GameConsumer {
 
             continuePollNullNum = 0;
 
-            onReciveEvent(object);
+            tempEventQueue.offer(eventData);
 
             oncePollNum ++;
 
+        }
+
+
+        for( ;!tempEventQueue.isEmpty(); ){
+            EventData<?> eventData = tempEventQueue.poll();
+            if(eventData == null){
+                continue;
+            }
+            onReciveEvent(eventData);
         }
 
 
