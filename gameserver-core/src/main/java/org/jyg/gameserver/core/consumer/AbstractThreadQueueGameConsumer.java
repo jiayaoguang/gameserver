@@ -102,7 +102,7 @@ public abstract class AbstractThreadQueueGameConsumer extends GameConsumer {
         getTimerManager().updateTimer();
 
         int oncePollNum = 0;
-        for(;oncePollNum < 100000;){
+        for(;oncePollNum < 20000;){
 
             EventData<?> eventData = pollEvent();
             if(eventData == null) {
