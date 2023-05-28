@@ -7,6 +7,7 @@ import org.jyg.gameserver.core.msg.DefaultMsg;
 import org.jyg.gameserver.core.msg.route.RouteReplyMsg;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.session.Session;
+import org.jyg.gameserver.core.util.Logs;
 
 public class RouteReplyMsgProcessor extends ByteMsgObjProcessor<RouteReplyMsg> {
     public RouteReplyMsgProcessor() {
@@ -17,6 +18,11 @@ public class RouteReplyMsgProcessor extends ByteMsgObjProcessor<RouteReplyMsg> {
     public void process(Session session, MsgEvent<RouteReplyMsg> event) {
 
         Session clientSession = this.getGameConsumer().getChannelManager().getSession(event.getMsgData().getSessionId());
+
+        if(clientSession == null){
+            Logs.DEFAULT_LOGGER.error("clientSession == null ， id {}" ,event.getMsgData().getSessionId() );
+            return;
+        }
 
         int msgId = event.getMsgData().getMsgId();
 

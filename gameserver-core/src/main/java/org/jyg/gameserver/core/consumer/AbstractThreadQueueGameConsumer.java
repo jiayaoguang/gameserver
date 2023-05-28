@@ -102,9 +102,9 @@ public abstract class AbstractThreadQueueGameConsumer extends GameConsumer {
         getTimerManager().updateTimer();
 
         int oncePollNum = 0;
-        for(;oncePollNum < 20000;){
+        for(EventData<?> eventData ;oncePollNum < 20000;){
 
-            EventData<?> eventData = pollEvent();
+           eventData = pollEvent();
             if(eventData == null) {
                 if(continuePollNullNum < MAX_CONTINUE_POLL_NULL_NUM){
                     continuePollNullNum++;
@@ -122,11 +122,8 @@ public abstract class AbstractThreadQueueGameConsumer extends GameConsumer {
         }
 
 
-        for( ;!tempEventQueue.isEmpty(); ){
-            EventData<?> eventData = tempEventQueue.poll();
-            if(eventData == null){
-                continue;
-            }
+        for(EventData<?> eventData  ;!tempEventQueue.isEmpty(); ){
+            eventData = tempEventQueue.poll();
             onReciveEvent(eventData);
         }
 

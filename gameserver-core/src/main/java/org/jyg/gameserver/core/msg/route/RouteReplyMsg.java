@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.msg.route;
 
+import io.protostuff.Tag;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 
 /**
@@ -7,11 +8,11 @@ import org.jyg.gameserver.core.msg.ByteMsgObj;
  */
 public class RouteReplyMsg implements ByteMsgObj {
 
-
+    @Tag(1)
     private int msgId;
-
+    @Tag(2)
     private long sessionId;
-
+    @Tag(3)
     private byte[] data;
 
 

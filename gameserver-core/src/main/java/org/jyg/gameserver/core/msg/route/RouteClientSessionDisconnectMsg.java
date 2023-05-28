@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.msg.route;
 
+import io.protostuff.Tag;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 
 /**
@@ -7,7 +8,7 @@ import org.jyg.gameserver.core.msg.ByteMsgObj;
  */
 public class RouteClientSessionDisconnectMsg implements ByteMsgObj {
 
-
+    @Tag(1)
     private long sessionId;
 
 
