@@ -1,8 +1,10 @@
 package org.jyg.gameserver.core.event.listener;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.data.InvokeMethodInfo;
 import org.jyg.gameserver.core.event.InvokeMethodEvent;
+import org.jyg.gameserver.core.util.Logs;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -32,10 +34,8 @@ public class InvokeMethodEventListener implements GameEventListener<InvokeMethod
                 gameConsumer.eventReturn(invokeMethodEvent.getFromConsumerId() , returnObj , invokeMethodEvent.getRequestId());
             }
 
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            Logs.DEFAULT_LOGGER.error("invokeMethod {} make exception {}" , invokeMethodEvent.getMethodUniqueName(), ExceptionUtils.getStackTrace(e));
         }
 
     }
