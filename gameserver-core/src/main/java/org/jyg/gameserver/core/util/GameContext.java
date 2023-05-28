@@ -146,10 +146,10 @@ public class GameContext{
     }
 
 
-    @Deprecated
-    public void addMsgId2JsonMsgClassMapping(int msgId, Class<? extends ByteMsgObj> byteMsgObjClazz) {
-        addMsgId2MsgClassMapping(msgId , byteMsgObjClazz);
-    }
+//    @Deprecated
+//    public void addMsgId2JsonMsgClassMapping(int msgId, Class<? extends ByteMsgObj> byteMsgObjClazz) {
+//        addMsgId2MsgClassMapping(msgId , byteMsgObjClazz);
+//    }
 
     public void addMsgId2MsgClassMapping(int msgId, Class<? extends ByteMsgObj> byteMsgObjClazz) {
 
@@ -195,15 +195,6 @@ public class GameContext{
             throw new IllegalArgumentException("isStart");
         }
 
-//        if(msgId2MsgCodecMap.containsKey(byteMsgCodec.getMsgId())){
-//            throw new IllegalArgumentException("msgId2MsgCodecMap.containsKey(MsgId())" + byteMsgCodec.getMsgId());
-//        }
-
-
-        if(!msgObjClazz2MsgIdMap.containsKey(byteMsgCodec.getByteMsgClass())){
-//            throw new IllegalArgumentException(" addByteMsgCodec fail, !msgObjClazz2MsgIdMap.containsKey(byteMsgCodec.getByteMsgClass())" + byteMsgCodec.getByteMsgClass());
-            Logs.DEFAULT_LOGGER.info("already contains {} , msgCodec , replace it",byteMsgCodec.getByteMsgClass().getSimpleName());
-        }
 
         int msgId = msgObjClazz2MsgIdMap.getInt(byteMsgCodec.getByteMsgClass());
 
@@ -214,15 +205,14 @@ public class GameContext{
 
     private void initCommonProcessor(){
 
-        addMsgId2JsonMsgClassMapping(MsgIdConst.READ_OUTTIME , ReadIdleMsgObj.class);
+        addMsgId2MsgClassMapping(MsgIdConst.READ_OUTTIME , ReadIdleMsgObj.class);
         addByteMsgCodec(new EmptyMsgCodec(new ReadIdleMsgObj()));
 
-//        addMsgId2JsonMsgClassMapping(MsgIdConst.REMOTE_INVOKE , RemoteInvokeData.class);
 
-        addMsgId2JsonMsgClassMapping(MsgIdConst.PING , PingByteMsg.class);
+        addMsgId2MsgClassMapping(MsgIdConst.PING , PingByteMsg.class);
         addByteMsgCodec(new EmptyMsgCodec(new PingByteMsg()));
 
-        addMsgId2JsonMsgClassMapping(MsgIdConst.PONG , PongByteMsg.class);
+        addMsgId2MsgClassMapping(MsgIdConst.PONG , PongByteMsg.class);
         addByteMsgCodec(new EmptyMsgCodec(new PongByteMsg()));
 
         addMsgId2MsgClassMapping(MsgIdConst.ROUTE_MSG_ID , RouteMsg.class);

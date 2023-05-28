@@ -27,7 +27,7 @@ public class DrawWsServer {
 
         });
 
-        gameServerBootstrap.getGameContext().addMsgId2JsonMsgClassMapping(200,DrawMsg.class);
+        gameServerBootstrap.getGameContext().addMsgId2MsgClassMapping(200,DrawMsg.class);
 
         gameServerBootstrap.addHttpConnector(8080);
         gameServerBootstrap.addWebSocketConnector(9998);

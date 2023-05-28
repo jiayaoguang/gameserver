@@ -25,12 +25,12 @@ public class YgGameClient {
 //		client.addMsgId2ProtoMapping(3, p_scene_sm_chat.getDefaultInstance());
 //		client.addMsgId2ProtoMapping(4, p_sm_scene_chat.getDefaultInstance());
 
-        client.getGameContext().addMsgId2JsonMsgClassMapping(108, LoginRequestMsg.class);
-        client.getGameContext().addMsgId2JsonMsgClassMapping(109, LoginReplyMsg.class);
-        client.getGameContext().addMsgId2JsonMsgClassMapping(110, ChatRequestJson.class);
-        client.getGameContext().addMsgId2JsonMsgClassMapping(111, ChatReplyJson.class);
+        client.getGameContext().addMsgId2MsgClassMapping(108, LoginRequestMsg.class);
+        client.getGameContext().addMsgId2MsgClassMapping(109, LoginReplyMsg.class);
+        client.getGameContext().addMsgId2MsgClassMapping(110, ChatRequestJson.class);
+        client.getGameContext().addMsgId2MsgClassMapping(111, ChatReplyJson.class);
 
-        client.getGameContext().addMsgId2JsonMsgClassMapping(120, SCPlayerJoinMsg.class);
+        client.getGameContext().addMsgId2MsgClassMapping(120, SCPlayerJoinMsg.class);
 
         client.getDefaultConsumer().addProcessor( new ChatReplyProcessor());
 
