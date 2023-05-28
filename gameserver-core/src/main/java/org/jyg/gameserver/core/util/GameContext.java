@@ -195,6 +195,10 @@ public class GameContext{
             throw new IllegalArgumentException("isStart");
         }
 
+        if(!msgObjClazz2MsgIdMap.containsKey(byteMsgCodec.getByteMsgClass())){
+            throw new IllegalArgumentException("msgClass not set msgid : " + byteMsgCodec.getByteMsgClass());
+        }
+
 
         int msgId = msgObjClazz2MsgIdMap.getInt(byteMsgCodec.getByteMsgClass());
 
