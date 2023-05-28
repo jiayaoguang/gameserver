@@ -25,6 +25,7 @@ Maven
 * 定时事件
 * 消息转发代理
 * 消息传递支持 MQ,socket , websocket
+* 远程方法调用 , [example](https://github.com/jiayaoguang/gameserver/blob/main/gameserver-test/src/main/java/org/jyg/gameserver/test/invoke/InvokeMethodHttpServerDemo01.java)
 
 
 
