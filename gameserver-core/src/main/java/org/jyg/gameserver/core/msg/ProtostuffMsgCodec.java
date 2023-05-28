@@ -13,7 +13,7 @@ public class ProtostuffMsgCodec extends AbstractByteMsgCodec<ByteMsgObj> {
 
     private final Schema schema;
 
-    private final int buffSize;
+    private final ThreadLocal<LinkedBuffer> bufferThreadLocal;
 
 
     public ProtostuffMsgCodec(Class<? extends ByteMsgObj> byteMsgClass) {
@@ -23,13 +23,15 @@ public class ProtostuffMsgCodec extends AbstractByteMsgCodec<ByteMsgObj> {
     public ProtostuffMsgCodec(Class<? extends ByteMsgObj> byteMsgClass , int buffSize) {
         super(byteMsgClass);
         this.schema = RuntimeSchema.getSchema(byteMsgClass);
-        this.buffSize = buffSize;
+
+        this.bufferThreadLocal = ThreadLocal.withInitial(() -> LinkedBuffer.allocate(buffSize));
+
     }
 
     @Override
     public byte[] encode(ByteMsgObj obj) throws Exception {
 
-        LinkedBuffer buffer = LinkedBuffer.allocate(buffSize);
+        LinkedBuffer buffer = bufferThreadLocal.get();
         try {
             return ProtobufIOUtil.toByteArray(obj, schema, buffer);
         } catch (Exception e) {
@@ -42,7 +44,7 @@ public class ProtostuffMsgCodec extends AbstractByteMsgCodec<ByteMsgObj> {
     @Override
     public ByteMsgObj decode(byte[] bytes) throws Exception {
         try {
-            ByteMsgObj message = (ByteMsgObj) getByteMsgClass().newInstance();
+            ByteMsgObj message = getByteMsgClass().newInstance();
             ProtobufIOUtil.mergeFrom(bytes, message, schema);
             return message;
         } catch (Exception e) {
