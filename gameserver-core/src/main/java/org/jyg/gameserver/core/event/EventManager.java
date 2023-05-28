@@ -43,6 +43,9 @@ public class EventManager implements Lifecycle {
 
         addEventListener(new DisableAccessHttpEventListener());
         addEventListener(new ForbidAccessHttpEventListener());
+
+
+        addEventListener(new InvokeMethodEventListener(gameConsumer));
     }
 
     @Override

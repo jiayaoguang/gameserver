@@ -6,7 +6,9 @@ import org.jyg.gameserver.core.util.Logs;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -177,6 +179,11 @@ public class InstanceManager implements Lifecycle {
     public <T> T getInstance(Class<T> clazz) {
 
         return (T) instanceMap.get(clazz);
+    }
+
+
+    List<Object> getAllInstance(){
+        return new ArrayList<>(instanceMap.values());
     }
 
 

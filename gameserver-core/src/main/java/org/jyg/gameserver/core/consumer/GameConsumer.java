@@ -82,6 +82,9 @@ public abstract class GameConsumer {
     private AbstractProcessor<Object> unknownProcessor;
 
 
+    private RemoteMethodInvokeManager remoteMethodInvokeManager;
+
+
     public GameConsumer() {
         this.instanceManager = new InstanceManager();
 
@@ -94,14 +97,17 @@ public abstract class GameConsumer {
         this.eventManager = new EventManager(this);
 
 
-        instanceManager.putInstance(this.timerManager);
-        instanceManager.putInstance(this.channelManager);
-        instanceManager.putInstance(this.classLoadManager);
-        instanceManager.putInstance(this.resultHandlerManager);
-        instanceManager.putInstance(this.eventManager);
+        this.instanceManager.putInstance(this.timerManager);
+        this.instanceManager.putInstance(this.channelManager);
+        this.instanceManager.putInstance(this.classLoadManager);
+        this.instanceManager.putInstance(this.resultHandlerManager);
+        this.instanceManager.putInstance(this.eventManager);
 
         this.instanceManager.putInstance(new RouteManager());
 
+        this.instanceManager.putInstance(RemoteMethodInvokeManager.class);
+
+        this.remoteMethodInvokeManager = this.instanceManager.getInstance(RemoteMethodInvokeManager.class);
 
     }
 
@@ -611,5 +617,10 @@ public abstract class GameConsumer {
 
     public void setStart(boolean start) {
         this.start = start;
+    }
+
+
+    public RemoteMethodInvokeManager getRemoteMethodInvokeManager() {
+        return remoteMethodInvokeManager;
     }
 }
