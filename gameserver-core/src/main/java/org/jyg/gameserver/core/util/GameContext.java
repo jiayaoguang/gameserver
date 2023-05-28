@@ -317,7 +317,7 @@ public class GameContext{
 //            AllUtil.println(" already start .... ");
             return;
         }
-
+        this.start = true;
 
         this.startTime = System.currentTimeMillis();
 
@@ -327,7 +327,9 @@ public class GameContext{
 
         this.instanceManager.start();
 
-        this.start = true;
+
+
+        this.addStopHook();
 
 
 
@@ -471,5 +473,17 @@ public class GameContext{
             }
         }
     }
+
+
+    public void addStopHook(){
+        Runtime.getRuntime().addShutdownHook(new Thread(()->{
+            if(stop){
+                return;
+            }
+            Logs.DEFAULT_LOGGER.info("exec stop shutdownHook");
+            stop();
+        }));
+    }
+
 
 }

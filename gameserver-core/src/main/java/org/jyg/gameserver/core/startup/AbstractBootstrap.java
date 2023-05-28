@@ -118,7 +118,6 @@ public abstract class AbstractBootstrap implements Lifecycle {
 
     public final synchronized void start(){
 
-        beforeStart();
 
         if (start) {
 //            throw new IllegalStateException("server is already start");
@@ -126,14 +125,14 @@ public abstract class AbstractBootstrap implements Lifecycle {
             return;
         }
 
+        beforeStart();
 
-        addStopHook();
+        start = true;
 
         gameContext.start();
 
         doStart();
 
-        start = true;
 
     }
 
@@ -161,14 +160,6 @@ public abstract class AbstractBootstrap implements Lifecycle {
     }
 
 
-    public void addStopHook(){
-        Runtime.getRuntime().addShutdownHook(new Thread(()->{
-            if(stop){
-                return;
-            }
-            Logs.DEFAULT_LOGGER.info("exec stop shutdownHook");
-            stop();
-        }));
-    }
+
 
 }
