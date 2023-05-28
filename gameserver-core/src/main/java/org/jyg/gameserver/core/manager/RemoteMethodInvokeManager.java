@@ -75,7 +75,7 @@ public class RemoteMethodInvokeManager implements Lifecycle{
 
 
         for (Class parameterType : method.getParameterTypes()) {
-            sb.append('+').append(parameterType.getName());
+            sb.append(';').append(parameterType.getName());
         }
 
         return sb.toString();
