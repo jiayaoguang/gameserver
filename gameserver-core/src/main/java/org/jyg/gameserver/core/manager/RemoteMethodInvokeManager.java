@@ -75,7 +75,7 @@ public class RemoteMethodInvokeManager implements Lifecycle{
 
         StringBuilder sb = new StringBuilder();
         if(!GameConsumer.class.isAssignableFrom(remoteMethodClazz)){
-            sb.append(remoteMethodClazz.getName()).append(';');
+            sb.append(remoteMethodClazz.getName()).append('#');
         }
 
         sb.append(method.getName());
