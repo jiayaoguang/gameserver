@@ -8,7 +8,7 @@ Maven
     <dependency>
         <groupId>com.github.jiayaoguang</groupId>
         <artifactId>gameserver-core</artifactId>
-        <version>0.1.0.230416_beta</version>
+        <version>0.1.1</version>
     </dependency>
 
 ## 简介

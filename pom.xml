@@ -14,7 +14,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<netty.version>4.1.65.Final</netty.version>
 		<maven.test.skip>true</maven.test.skip>
-		<revision>0.1.1</revision>
+		<revision>0.1.2-SNAPSHOT</revision>
 	</properties>
 
 	<licenses>
