@@ -8,6 +8,9 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>gameserver-example</artifactId>
+	<version>${revision}</version>
+	<packaging>jar</packaging>
+
 	<name>gameserver-example</name>
 	<url>http://maven.apache.org</url>
 	<properties>
@@ -26,30 +29,30 @@
 			</plugin>
 
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.2.0</version>
-				<configuration>
-					<createDependencyReducedPom>true</createDependencyReducedPom>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<transformers>
-								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<!-- 主类的全限定名 -->
-									<mainClass>org.jyg.gameserver.example.ygserver.YgGameServer</mainClass>
-								</transformer>
-							</transformers>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>org.apache.maven.plugins</groupId>-->
+<!--				<artifactId>maven-shade-plugin</artifactId>-->
+<!--				<version>3.2.0</version>-->
+<!--				<configuration>-->
+<!--					<createDependencyReducedPom>true</createDependencyReducedPom>-->
+<!--				</configuration>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<phase>package</phase>-->
+<!--						<goals>-->
+<!--							<goal>shade</goal>-->
+<!--						</goals>-->
+<!--						<configuration>-->
+<!--							<transformers>-->
+<!--								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">-->
+<!--									&lt;!&ndash; 主类的全限定名 &ndash;&gt;-->
+<!--									<mainClass>org.jyg.gameserver.example.ygserver.YgGameServer</mainClass>-->
+<!--								</transformer>-->
+<!--							</transformers>-->
+<!--						</configuration>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
 
 		</plugins>
 	</build>

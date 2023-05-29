@@ -9,6 +9,7 @@
 	</parent>
 
 	<artifactId>gameserver-core</artifactId>
+	<version>${revision}</version>
 	<packaging>jar</packaging>
 
 	<name>gameserver-core</name>
@@ -28,6 +29,8 @@
 					<maxmem>2048m</maxmem>
 				</configuration>
 			</plugin>
+
+
 
 			<!--<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>

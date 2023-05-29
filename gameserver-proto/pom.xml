@@ -8,6 +8,10 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>gameserver-proto</artifactId>
+	<version>${revision}</version>
+	<packaging>jar</packaging>
+
+
 	<name>gameserver-proto</name>
 	<url>http://maven.apache.org</url>
 	<properties>
