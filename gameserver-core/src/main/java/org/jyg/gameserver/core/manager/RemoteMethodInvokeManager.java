@@ -4,6 +4,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.annotaion.RemoteMethod;
 import org.jyg.gameserver.core.consumer.GameConsumer;
+import org.jyg.gameserver.core.consumer.MpscQueueGameConsumer;
 import org.jyg.gameserver.core.consumer.ResultHandler;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.InvokeMethodInfo;
@@ -44,8 +45,8 @@ public class RemoteMethodInvokeManager implements Lifecycle{
     private void findClassRemoteMethods(Object remoteMethodInstance){
 
 
-
-        for(Method method : remoteMethodInstance.getClass().getMethods()){
+        Class<?> remoteMethodClazz = remoteMethodInstance.getClass();
+        for(Method method : remoteMethodClazz.getMethods()){
             RemoteMethod remoteMethodAnno = method.getAnnotation(RemoteMethod.class);
             if(remoteMethodAnno == null){
                 continue;
@@ -54,27 +55,33 @@ public class RemoteMethodInvokeManager implements Lifecycle{
 
             if(StringUtils.isNotEmpty(remoteMethodAnno.uname())){
                 if(invokeMethodMap.containsKey(remoteMethodAnno.uname())){
-                    throw new IllegalArgumentException("dumplicate remoteMethod : " + remoteMethodAnno.uname());
+                    throw new IllegalArgumentException("duplicate remoteMethod : " + remoteMethodAnno.uname());
                 }
                 invokeMethodMap.put(remoteMethodAnno.uname(),new InvokeMethodInfo(method ,remoteMethodInstance ));
             }
 
 
-            String methodName = createMethodUniqueName(method);
+            String methodName = createMethodUniqueName(remoteMethodClazz,method);
             if(invokeMethodMap.containsKey(methodName)){
-                throw new IllegalArgumentException("dumplicate remoteMethod : " + methodName);
+                throw new IllegalArgumentException("duplicate remoteMethod : " + methodName);
             }
             invokeMethodMap.put(methodName,new InvokeMethodInfo(method ,remoteMethodInstance ));
 
         }
     }
 
-    public String createMethodUniqueName(Method method){
+    public String createMethodUniqueName(Class<?> remoteMethodClazz, Method method){
+
+
         StringBuilder sb = new StringBuilder();
+        if(GameConsumer.class.isAssignableFrom(remoteMethodClazz)){
+            sb.append(remoteMethodClazz.getName()).append(';');
+        }
+
         sb.append(method.getName());
 
 
-        for (Class parameterType : method.getParameterTypes()) {
+        for (Class<?> parameterType : method.getParameterTypes()) {
             sb.append(';').append(parameterType.getName());
         }
 
