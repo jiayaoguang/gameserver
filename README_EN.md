@@ -1,4 +1,4 @@
-##   <font color=#f1986d size=3>游戏服务器</font>
+##   <font color=#f1986d size=3>gameserver</font>
 ![Java CI](https://github.com/jiayaoguang/gameserver/workflows/Java%20CI/badge.svg)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 ![Maven](https://img.shields.io/maven-central/v/com.github.jiayaoguang/gameserver-core.svg)
@@ -11,40 +11,41 @@ Maven
         <version>0.1.1</version>
     </dependency>
 
-### [english introduction](https://github.com/jiayaoguang/gameserver/blob/main/README_EN.md)
+## Introduction
 
-## 简介
-* 这是一个通用游戏服务器框架
-* 服务器以consumer 为运行单位,consumer 可以本地运行和调用,也可远程调用
-* consumer可以在单独的线程运行，也可以多个consumer运行在一个线程
-* 不同的consumer通信支持远程方法调用并异步返回，也可以通过发布事件的方法通信
+* This is a universal game server framework
+* The server runs on a consumer basis, which can be run and called locally or remotely
+* Consumers can run on a separate thread, or multiple consumers can run on a single thread
+* Different consumer communication supports remote method calls and asynchronous returns, as well as communication through methods that publish events
+
 
 ## Features
-* 消息支持 protobuf、json、自定义 的数据类型，支持压缩、加密操作
-* 网页http 请求
-* 轻量级远程调用、依赖注入
-* 不重启更新
-* mysql对象关系映射及异步存储
-* 定时事件
-* 消息转发代理,添加消息转发代理服务器无需修改代码，只需让客户端改为连接转发代理服务器即可
-* 消息传递支持 MQ,socket , websocket
-* 远程方法调用 , [example](https://github.com/jiayaoguang/gameserver/blob/main/gameserver-test/src/main/java/org/jyg/gameserver/test/invoke/InvokeMethodHttpServerDemo01.java)
+
+* Message support for protobuf, JSON, custom data types, compression, encryption operations
+* Website HTTP request
+* Lightweight remote invocation, dependency injection
+* Do not restart updates
+* MySQL Object Relationship Mapping and Asynchronous Storage
+*Timed event
+* Message forwarding proxy, adding a message forwarding proxy server does not require modifying the code, just changing the client to connect to the forwarding proxy server is enough
+* Message passing supports MQ, socket, and websocket
+* Remote method call , [example](https://github.com/jiayaoguang/gameserver/blob/main/gameserver-test/src/main/java/org/jyg/gameserver/test/invoke/InvokeMethodHttpServerDemo01.java)
 
 
 
-[服务器示例项目](https://github.com/jiayaoguang/gameserver/tree/main/gameserver-example) |
-[客户端示例项目](https://github.com/jiayaoguang/gameclient)
+[server example](https://github.com/jiayaoguang/gameserver/tree/main/gameserver-example) |
+[unity client example](https://github.com/jiayaoguang/gameclient)
 
 
 
-构建处理 protoBuf数据的服务器例子:
+deal protoBuf example:
 
     public class PingServer {
         public static void main(String[] args) throws Exception {
             GameServerBootstrap bootstarp = new GameServerBootstrap();
             bootstarp.registerSocketEvent(101, new PingProcessor());
             bootstarp.registerSendEventIdByProto(102, p_test.p_scene_sm_response_pong.class);
-            //开端口服务
+            //add tcp port
             bootstarp.addTcpConnector(8080);
             bootstarp.start();
         }
@@ -59,7 +60,7 @@ Maven
         }
     }
 
-http例子代码:
+http example:
 
     public class HttpServerDemo01
     {
@@ -85,7 +86,7 @@ http例子代码:
         }
     }
 
-更多例子请在[test](https://github.com/jiayaoguang/gameserver/tree/master/gameserver-test/src/main/java/org/jyg/gameserver/test)包查看
+more example in [test](https://github.com/jiayaoguang/gameserver/tree/master/gameserver-test/src/main/java/org/jyg/gameserver/test)
 
 ----------
 ## License
