@@ -4,6 +4,7 @@ import org.jyg.gameserver.core.consumer.*;
 import org.jyg.gameserver.core.data.RemoteConsumerInfo;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
 import org.jyg.gameserver.core.event.listener.GameEventListener;
+import org.jyg.gameserver.core.exception.RequestTimeoutException;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.db.ConsumerDBManager;
@@ -76,7 +77,12 @@ public class UseRemoteDBTest {
 
             ConsumerFuture consumerFuture = new ConsumerFuture(requestId ,(AbstractThreadQueueGameConsumer)con  );
 
-            Object result = consumerFuture.waitForResult(10 * 1000L);
+            Object result = null;
+            try {
+                result = consumerFuture.waitForResult(10 * 1000L);
+            } catch (RequestTimeoutException e) {
+                throw new RuntimeException(e);
+            }
             AllUtil.println("result _ waitForResult " + result);
             if(result instanceof List){
                 List list = (List) result;

@@ -8,6 +8,7 @@ import org.jyg.gameserver.core.consumer.ResultHandler;
 import org.jyg.gameserver.core.data.RemoteConsumerInfo;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
 import org.jyg.gameserver.core.event.listener.GameEventListener;
+import org.jyg.gameserver.core.exception.RequestTimeoutException;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
 import org.jyg.gameserver.core.processor.HttpProcessor;
@@ -45,10 +46,15 @@ public class SyncInvokeMethodServerDemo01
 //                consumerThreadStartEvent.getGameConsumer().getRemoteMethodInvokeManager().invokeRemoteMethod(10086 , "sayHello" , new Object[0]);
 
                 Object[] plusParams = {1,2};
-                Object result = consumerThreadStartEvent.getGameConsumer().getRemoteMethodInvokeManager().invokeRemoteMethodAndWait(10086, "plus", plusParams);
+                try {
+                    Object result = consumerThreadStartEvent.getGameConsumer().getRemoteMethodInvokeManager().invokeRemoteMethodAndWait(10086, "plus", plusParams);
+                    Logs.DEFAULT_LOGGER.info("Synchronous non blocking get result : {} " , result);
+                } catch (RequestTimeoutException e) {
+                    throw new RuntimeException(e);
+                }
 
 
-                Logs.DEFAULT_LOGGER.info("Synchronous non blocking get result : {} " , result);
+
 
             }
         });

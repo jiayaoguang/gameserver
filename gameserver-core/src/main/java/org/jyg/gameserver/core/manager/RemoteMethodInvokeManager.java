@@ -7,6 +7,7 @@ import org.jyg.gameserver.core.consumer.*;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.InvokeMethodInfo;
 import org.jyg.gameserver.core.event.InvokeMethodEvent;
+import org.jyg.gameserver.core.exception.RequestTimeoutException;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -142,7 +143,7 @@ public class RemoteMethodInvokeManager implements Lifecycle{
     /**
      * 非阻塞同步调用
      */
-    public Object invokeRemoteMethodAndWait(int targetConsumerId , String methodUname , Object... methodParams){
+    public Object invokeRemoteMethodAndWait(int targetConsumerId , String methodUname , Object... methodParams) throws RequestTimeoutException {
         long requestId = gameConsumer.allocateRequestId();
         this.invokeRemoteMethod(targetConsumerId, requestId , methodUname , methodParams );
         return new ConsumerFuture(requestId , (AbstractThreadQueueGameConsumer) gameConsumer).waitForResult();
