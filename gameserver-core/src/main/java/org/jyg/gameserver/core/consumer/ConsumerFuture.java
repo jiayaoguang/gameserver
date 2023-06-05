@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.consumer;
 
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.event.ResultReturnEvent;
+import org.jyg.gameserver.core.exception.RequestTimeoutException;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.util.concurrent.TimeUnit;
@@ -26,58 +27,60 @@ public class ConsumerFuture {
     }
 
 
-    public Object waitForResult(){
-        return waitForResult(20*1000L);
+    public Object waitForResult() throws RequestTimeoutException {
+        return waitForResult(2*1000L);
     }
 
 
-    public Object waitForResult(long maxWaitMills){
+    public Object waitForResult(long maxWaitMills) throws RequestTimeoutException {
 
 
-        long timeoutNanoTime = System.nanoTime() + TimeUnit.MINUTES.toNanos(maxWaitMills);
+        long timeoutNanoTime = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(maxWaitMills);
 
         int pollNullNum = 0;
 
+
+        QueueConsumerThread queueConsumerThread = gameConsumer.getConsumerThread();
+
+
         for (;!gameConsumer.isStop();){
 
-
-            if( timeoutNanoTime <=  System.nanoTime()){
-                throw new RuntimeException("waitForResult timeout");
-            }
-
-            EventData<?> object = gameConsumer.pollEvent();
-            if(object == null) {
-                pollNullNum++;
-
-                if (pollNullNum > 1000) {
-                    gameConsumer.getTimerManager().updateTimer();
-                    pollNullNum = 0;
-                    LockSupport.parkNanos(1000 * 1000L);
-                } else if (pollNullNum > 800) {
-                    Thread.yield();
+            for(AbstractThreadQueueGameConsumer oneGameConsumer : queueConsumerThread.queueGameConsumers ){
+                if( timeoutNanoTime <=  System.nanoTime()){
+                    throw new RequestTimeoutException("waitForResult timeout");
                 }
 
-                continue;
-            }
+                EventData<?> object = oneGameConsumer.pollEvent();
+                if(object == null) {
+                    pollNullNum++;
 
-            pollNullNum = 0;
+                    if (pollNullNum > 100) {
+                        oneGameConsumer.getTimerManager().updateTimer();
+                        pollNullNum = 0;
+                        LockSupport.parkNanos(1000 * 1000L);
+                    } else if (pollNullNum > 50) {
+                        Thread.yield();
+                    }
 
-            try {
-                gameConsumer.onReciveEvent(object);
-                gameConsumer.getTimerManager().updateTimer();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                    continue;
+                }
 
-            if( object.getEvent().getRequestId() == requestId ){
+                pollNullNum = 0;
 
+                try {
+                    oneGameConsumer.getTimerManager().updateTimer();
+                    oneGameConsumer.onReciveEvent(object);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 if(object.getEvent() instanceof ResultReturnEvent){
-                    return ((ResultReturnEvent)object.getEvent()).getData();
-                }else {
-                    Logs.DEFAULT_LOGGER.error("return object.getEvent() not instanceof ResultReturnEvent");
-                    return null;
+                    ResultReturnEvent resultReturnEvent = (ResultReturnEvent)object.getEvent();
+                    if( resultReturnEvent.getReturnToConsumerRequestId() == requestId ){
+                        return ((ResultReturnEvent)object.getEvent()).getData();
+                    }
                 }
             }
+
         }
 
         return null;

@@ -29,7 +29,9 @@ Maven
 *Timed event
 * Message forwarding proxy, adding a message forwarding proxy server does not require modifying the code, just changing the client to connect to the forwarding proxy server is enough
 * Message passing supports MQ, socket, and websocket
-* Remote method call , [example](https://github.com/jiayaoguang/gameserver/blob/main/gameserver-test/src/main/java/org/jyg/gameserver/test/invoke/InvokeMethodHttpServerDemo01.java)
+* Remote method call , [example](https://github.com/jiayaoguang/gameserver/blob/main/gameserver-test/src/main/java/org/jyg/gameserver/test/invoke/InvokeMethodHttpServerDemo01.java) , Synchronous non blocking call
+[example](https://github.com/jiayaoguang/gameserver/blob/main/gameserver-test/src/main/java/org/jyg/gameserver/test/invoke/SyncInvokeMethodServerDemo01.java)
+
 
 
 

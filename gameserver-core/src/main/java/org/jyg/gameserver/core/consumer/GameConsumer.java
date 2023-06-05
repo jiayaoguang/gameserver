@@ -481,7 +481,7 @@ public abstract class GameConsumer {
 
 
 
-    private long allocateRequestId() {
+    public long allocateRequestId() {
         return requestIdGenerator.nextId();
     }
 

@@ -28,7 +28,7 @@ Maven
 * 定时事件
 * 消息转发代理,添加消息转发代理服务器无需修改代码，只需让客户端改为连接转发代理服务器即可
 * 消息传递支持 MQ,socket , websocket
-* 远程方法调用 , [example](https://github.com/jiayaoguang/gameserver/blob/main/gameserver-test/src/main/java/org/jyg/gameserver/test/invoke/InvokeMethodHttpServerDemo01.java)
+* 远程方法调用  [example](https://github.com/jiayaoguang/gameserver/blob/main/gameserver-test/src/main/java/org/jyg/gameserver/test/invoke/InvokeMethodHttpServerDemo01.java) , 同步非阻塞调用 [example](https://github.com/jiayaoguang/gameserver/blob/main/gameserver-test/src/main/java/org/jyg/gameserver/test/invoke/SyncInvokeMethodServerDemo01.java)
 
 
 

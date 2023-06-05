@@ -3,9 +3,7 @@ package org.jyg.gameserver.core.manager;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.annotaion.RemoteMethod;
-import org.jyg.gameserver.core.consumer.GameConsumer;
-import org.jyg.gameserver.core.consumer.MpscQueueGameConsumer;
-import org.jyg.gameserver.core.consumer.ResultHandler;
+import org.jyg.gameserver.core.consumer.*;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.data.InvokeMethodInfo;
 import org.jyg.gameserver.core.event.InvokeMethodEvent;
@@ -105,12 +103,25 @@ public class RemoteMethodInvokeManager implements Lifecycle{
     }
 
 
-    public void invokeRemoteMethod(int targetConsumerId , String methodUname , Object[] methodParams ){
+    public void invokeRemoteMethod(int targetConsumerId , String methodUname , Object... methodParams ){
         this.invokeRemoteMethod(targetConsumerId , methodUname , methodParams , null);
     }
 
 
     public void invokeRemoteMethod(int targetConsumerId , String methodUname , Object[] methodParams , ResultHandler resultHandler){
+
+        long requestId = 0L;
+
+        if(resultHandler != null){
+            requestId = gameConsumer.registerCallBackMethod(resultHandler);
+        }
+
+        this.invokeRemoteMethod(targetConsumerId, requestId , methodUname , methodParams );
+    }
+
+
+
+    private void invokeRemoteMethod(int targetConsumerId , long requestId , String methodUname , Object[] methodParams ){
 
         EventData eventData = new EventData();
         InvokeMethodEvent invokeMethodEvent = new InvokeMethodEvent();
@@ -119,15 +130,24 @@ public class RemoteMethodInvokeManager implements Lifecycle{
         invokeMethodEvent.setFromConsumerId(gameConsumer.getId());
 
 
-        if(resultHandler != null){
-            long requestId = gameConsumer.registerCallBackMethod(resultHandler);
-            invokeMethodEvent.setRequestId(requestId);
-        }
+        invokeMethodEvent.setRequestId(requestId);
 
 
         eventData.setEvent(invokeMethodEvent);
 
         gameConsumer.getGameContext().getConsumerManager().publicEvent(targetConsumerId, eventData);
     }
+
+
+    /**
+     * 非阻塞同步调用
+     */
+    public Object invokeRemoteMethodAndWait(int targetConsumerId , String methodUname , Object... methodParams){
+        long requestId = gameConsumer.allocateRequestId();
+        this.invokeRemoteMethod(targetConsumerId, requestId , methodUname , methodParams );
+        return new ConsumerFuture(requestId , (AbstractThreadQueueGameConsumer) gameConsumer).waitForResult();
+
+    }
+
 
 }
