@@ -18,6 +18,11 @@ public class ConsumerFuture {
     private final AbstractThreadQueueGameConsumer gameConsumer;
 
     public ConsumerFuture(long requestId, AbstractThreadQueueGameConsumer gameConsumer) {
+
+        if(requestId == 0){
+            throw new IllegalArgumentException("requestId == 0");
+        }
+
         this.requestId = requestId;
         this.gameConsumer = gameConsumer;
     }

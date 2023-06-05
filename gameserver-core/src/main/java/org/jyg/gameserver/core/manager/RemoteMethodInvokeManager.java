@@ -99,12 +99,12 @@ public class RemoteMethodInvokeManager implements Lifecycle{
 
 
     public void invokeRemoteMethod(int targetConsumerId , String methodUname  ){
-        this.invokeRemoteMethod(targetConsumerId , methodUname , ArrayUtils.EMPTY_OBJECT_ARRAY, null);
+        this.invokeRemoteMethod(targetConsumerId ,0L, methodUname , ArrayUtils.EMPTY_OBJECT_ARRAY);
     }
 
 
     public void invokeRemoteMethod(int targetConsumerId , String methodUname , Object... methodParams ){
-        this.invokeRemoteMethod(targetConsumerId , methodUname , methodParams , null);
+        this.invokeRemoteMethod(targetConsumerId ,0L, methodUname , methodParams );
     }
 
 
