@@ -1,7 +1,6 @@
 package org.jyg.gameserver.core.net;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
@@ -145,7 +144,7 @@ public class Response {
 	 */
 	private DefaultFullHttpResponse create500FullHttpResponse(String msg) {
 		return this.createStatuHttpResponse(HttpResponseStatus.INTERNAL_SERVER_ERROR,
-				msg.getBytes(cn.hutool.core.util.CharsetUtil.CHARSET_UTF_8));
+				msg.getBytes(CharsetUtil.UTF_8));
 	}
 	/**
 	 * 创建500错误的http回复

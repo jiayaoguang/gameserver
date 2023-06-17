@@ -1,6 +1,5 @@
 package org.jyg.gameserver.core.consumer;
 
-import cn.hutool.core.collection.CollectionUtil;
 import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import org.apache.commons.lang3.StringUtils;
@@ -51,7 +50,7 @@ public class GameConsumerGroup<T extends GameConsumer> extends MpscQueueGameCons
     public void doStart() {
         super.doStart();
 
-        if(CollectionUtil.isEmpty(childConsumerList)){
+        if(childConsumerList.isEmpty()){
             throw new IllegalArgumentException("isEmpty(childConsumerList)");
         }
 
@@ -74,8 +73,9 @@ public class GameConsumerGroup<T extends GameConsumer> extends MpscQueueGameCons
     @Override
     public void doStop() {
 
-        if (CollectionUtil.isEmpty(childConsumerList)) {
-            throw new RuntimeException(" isEmpty(childConsumerList) ");
+        if ( childConsumerList.isEmpty()) {
+            Logs.CONSUMER.info(" isEmpty(childConsumerList) ");
+            return;
         }
 
         for (GameConsumer childGameConsumer : childConsumerList) {

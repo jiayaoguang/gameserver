@@ -64,7 +64,7 @@ public class ConsumerDBManager implements Lifecycle {
     }
 
     public void updateField(BaseDBEntity dbEntity , String objFieldName) {
-        updateField(dbEntity, dbEntity.getClass().getSimpleName());
+        updateField(dbEntity,objFieldName, dbEntity.getClass().getSimpleName());
     }
 
 
