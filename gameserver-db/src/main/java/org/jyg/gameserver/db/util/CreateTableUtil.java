@@ -9,6 +9,10 @@ import org.jyg.gameserver.db.*;
 import org.jyg.gameserver.db.type.TypeHandlerRegistry;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * create by jiayaoguang at 2021/5/29
@@ -28,7 +32,7 @@ public class CreateTableUtil {
 
 //        DBConfig dbConfig = ConfigUtil.properties2Object("jyg", DBConfig.class);
 
-        String sql = getCreateTableSql(dbClass);
+        String createSql = getCreateTableSql(dbClass);
 
         try(Connection connection = getConn(dbConfig);
             Statement statement = connection.createStatement();
@@ -36,17 +40,17 @@ public class CreateTableUtil {
 
 
 
-            statement.execute(sql);
+            statement.execute(createSql);
 
         }catch (Exception e){
-            Logs.DEFAULT_LOGGER.error("execute create table fail , sql {}",sql);
+            Logs.DEFAULT_LOGGER.error("execute create table fail , sql {}",createSql);
             e.printStackTrace();
         }
 
 
-
-
     }
+
+
 
     public static String getCreateTableSql(Class<? extends BaseDBEntity> dbClass) {
         DBTableManager dbTableManager = new DBTableManager(new TypeHandlerRegistry());
@@ -110,14 +114,14 @@ public class CreateTableUtil {
         }
 
         if (fieldIndexType == FieldIndexType.UNIQUE) {
-            String uniqueSql = "ALTER TABLE `" + tableName + "` ADD UNIQUE ( \n" +
+            String uniqueSql = "ALTER TABLE `unique" + tableName + "` ADD UNIQUE ( \n" +
                     "`" + fieldName + "` \n" +
                     ") ";
             return uniqueSql;
         }
 
         if (fieldIndexType == FieldIndexType.INDEX) {
-            String indexSql = "ALTER TABLE `" + tableName + "` ADD UNIQUE ( \n" +
+            String indexSql = "ALTER TABLE `index_" + tableName + "` ADD INDEX ( \n" +
                     "`" + fieldName + "` \n" +
                     ") ";
             return indexSql;
@@ -195,16 +199,116 @@ public class CreateTableUtil {
         }
         // alter table
 
+        alterTable(dbConfig , dbClass);
 
-        throw new SQLException(" wait implements ,  alter table not support now ");
 
     }
 
+    public static void alterTable(DBConfig dbConfig, Class<? extends BaseDBEntity> dbClass) throws SQLException {
+//        throw new SQLException(" wait implements ,  alter table not support now ");
+        DBTableManager dbTableManager = new DBTableManager(new TypeHandlerRegistry());
+
+        TableInfo tableInfo = dbTableManager.tryAddTableInfo(dbClass);
+
+        String descSql = "DESC " + tableInfo.getTableName() + ";";
+        String queryIndexSql = "SHOW INDEX FROM  " + tableInfo.getTableName() + ";";
+
+        Map<String,String> field2typeMap = new HashMap<>();
+
+        Map<String,String> fieldIndexMap = new HashMap<>();
+
+        try(Connection connection = getConn(dbConfig);
+            Statement statement = connection.createStatement();
+        ){
+
+            ResultSet descResultSet = statement.executeQuery(descSql);
+            while (descResultSet != null && descResultSet.next()){
+                String field = descResultSet.getString(1);
+                String type = descResultSet.getString(2);
+
+                field2typeMap.put(field , type);
+
+            }
+
+            ResultSet queryIndexResultSet = statement.executeQuery(queryIndexSql);
+            while (queryIndexResultSet != null && queryIndexResultSet.next()){
+                String field = queryIndexResultSet.getString("Column_name");
+                fieldIndexMap.put(field , "");
+            }
+
+
+        }
+
+        List<TableFieldInfo> newFiledInfos = new ArrayList<>();
+
+        List<TableFieldInfo> changeTypes = new ArrayList<>();
+
+//        List<TableFieldInfo> changeLens = new ArrayList<>();
+
+        List<TableFieldInfo> needAddIndexFields = new ArrayList<>();
+
+        for(TableFieldInfo tableFieldInfo : tableInfo.getFieldInfoLinkedMap().values()){
+            if(!field2typeMap.containsKey(tableFieldInfo.getTableFieldName())){
+                //新字段
+                newFiledInfos.add(tableFieldInfo);
+            }else {
+                String typeAndLen = field2typeMap.get(tableFieldInfo.getTableFieldName());
+                String type = typeAndLen.substring(0, typeAndLen.indexOf('('));
+                int len = Integer.parseInt(typeAndLen.substring(type.length()+1, typeAndLen.length()-1));
+                if(!tableFieldInfo.getFieldType().getName().equalsIgnoreCase(type)){
+                    changeTypes.add(tableFieldInfo);
+                }else if(tableFieldInfo.getLength() != len) {
+                    changeTypes.add(tableFieldInfo);
+                }
+            }
+
+
+            if(tableFieldInfo.getDbTableFieldAnno()!= null && tableFieldInfo.getDbTableFieldAnno().indexType() != FieldIndexType.NONE){
+
+                if(!fieldIndexMap.containsKey(tableFieldInfo.getTableFieldName())){
+                    needAddIndexFields.add(tableFieldInfo);
+                }
+
+            }
+
+
+        }
+
+        try(Connection connection = getConn(dbConfig);
+            Statement statement = connection.createStatement();
+        ){
+
+            for(TableFieldInfo tableFieldInfo : newFiledInfos ){
+                String addFieldSql = "ALTER TABLE "+ tableInfo.getTableName() +" ADD "+ tableFieldInfo.getTableFieldName() + " "
+                        + tableFieldInfo.getFieldType().getName() +"("+ tableFieldInfo.getLength() +") ";
+                Logs.DB.info("exec add field sql : {} " , addFieldSql );
+                statement.execute(addFieldSql);
+
+            }
+
+            for(TableFieldInfo tableFieldInfo : changeTypes ){
+                String changeSql = "ALTER TABLE `"+ tableInfo.getTableName() +"` CHANGE `"+ tableFieldInfo.getTableFieldName() +"` `"
+                        + tableFieldInfo.getTableFieldName() +"` "+ tableFieldInfo.getFieldType().getName() +"("+ tableFieldInfo.getLength() +") ";
+                Logs.DB.info("exec change field type sql : {} " , changeSql );
+                statement.execute(changeSql);
+
+            }
+
+
+            for(TableFieldInfo tableFieldInfo : needAddIndexFields){
+                if(tableFieldInfo.getDbTableFieldAnno() != null && tableFieldInfo.getDbTableFieldAnno().indexType() != FieldIndexType.NONE){
+                    String indexSql = getIndexSql(tableInfo.getTableName(), tableFieldInfo.getTableFieldName(), tableFieldInfo.getFieldIndexType());
+                    Logs.DB.info("exec indexSql : {} " , indexSql );
+                    statement.execute(indexSql);
+                }
+            }
+
+        }
 
 
 
 
-
+    }
 
 
 }
