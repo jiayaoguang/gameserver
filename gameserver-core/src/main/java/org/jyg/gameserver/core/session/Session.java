@@ -2,8 +2,16 @@ package org.jyg.gameserver.core.session;
 
 import com.google.protobuf.MessageLite;
 import io.netty.channel.Channel;
+import it.unimi.dsi.fastutil.ints.Int2LongMap;
+import it.unimi.dsi.fastutil.ints.Int2LongOpenHashMap;
 import org.jyg.gameserver.core.manager.Lifecycle;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
+
+import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * created by jiayaoguang at 2017年12月6日
@@ -22,6 +30,12 @@ public abstract class Session implements Lifecycle {
 
 
 	private int sessionType;
+
+
+//	private Queue<Long> recentReceiveMsgTimeQueue = new ArrayDeque<>(1024);
+
+	private Int2LongMap lastReceiveMsgTimeMap = new Int2LongOpenHashMap(1024);
+
 	
 	public Session(long sessionId){
 		this.sessionId = sessionId;
@@ -64,6 +78,30 @@ public abstract class Session implements Lifecycle {
 		this.writeObjMessage(messageBuilder.build());
 	}
 
+
+//	protected void recordReceiveMessageTime(){
+//		long now = System.currentTimeMillis();
+//
+//		recentReceiveMsgTimeQueue.offer(now);
+//
+//		long expireRecordTime = now - TimeUnit.MINUTES.toMillis(1);
+//
+//		for(;!recentReceiveMsgTimeQueue.isEmpty() && recentReceiveMsgTimeQueue.peek() > expireRecordTime;){
+//			recentReceiveMsgTimeQueue.poll();
+//		}
+//
+//	}
+
+
+	public void recordReceiveMsgTime(int msgId){
+		long now = System.currentTimeMillis();
+		lastReceiveMsgTimeMap.put(msgId , now);
+	}
+
+
+	public long getMsgLastReceiveTime(int msgId){
+		return lastReceiveMsgTimeMap.getOrDefault(msgId,0L);
+	}
 
 
 	public void writeMessage(ByteMsgObj byteMsgObj){

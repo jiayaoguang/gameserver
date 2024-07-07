@@ -4,6 +4,7 @@ import com.google.protobuf.MessageLite;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.event.*;
 import org.jyg.gameserver.core.event.listener.GameEventListener;
@@ -313,10 +314,15 @@ public abstract class GameConsumer {
         }
 
 //        Logs.DEFAULT_LOGGER.info("process msg {} msgId {}", msgName , event.getEventId());
-        processor.process(session, event);
+        try{
+            processor.process(session, event);
+        }catch (Exception e){
+            Logs.DEFAULT_LOGGER.info("process msg {} make exception : {}", msgName , ExceptionUtils.getStackTrace(e));
+        }finally {
+            session.recordReceiveMsgTime(event.getMsgId());
+        }
+
     }
-
-
 
 
 

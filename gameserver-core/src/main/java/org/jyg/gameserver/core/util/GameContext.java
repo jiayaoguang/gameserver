@@ -486,4 +486,10 @@ public class GameContext{
     }
 
 
+
+    public long getSysTime(){
+        return System.currentTimeMillis();
+    }
+
+
 }
