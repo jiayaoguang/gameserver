@@ -46,6 +46,10 @@ public class EventManager implements Lifecycle {
 
 
         addEventListener(new InvokeMethodEventListener(gameConsumer));
+
+
+        addEventListener(new PublishToClientEventListener(gameConsumer));
+
     }
 
     @Override

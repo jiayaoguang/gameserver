@@ -27,6 +27,9 @@ public class ChannelManager implements Lifecycle {
 
     private long sessionIdInc = 0;
 
+
+    private final Map<Integer, Session> consumerId2sessionMap;
+
     private final GameConsumer gameConsumer;
 
     public ChannelManager(GameConsumer gameConsumer) {
@@ -37,6 +40,8 @@ public class ChannelManager implements Lifecycle {
         this.id2sessionMap = new LinkedHashMap<>(32 , 0.5f);
 
         this.gameConsumer = gameConsumer;
+
+        this.consumerId2sessionMap = new HashMap<>(32 , 0.5f);
     }
 
     //    public <T>void process(LogicEvent<T> event) {
@@ -184,6 +189,14 @@ public class ChannelManager implements Lifecycle {
             session.stop();
         }
 
+    }
+
+
+    public void addConsumerId2sessionMapping(int consumerId,Session session){
+        this.consumerId2sessionMap.put(consumerId,session);
+    }
+    public Session getRemoteConsumerSession(int consumerId){
+        return this.consumerId2sessionMap.get(consumerId);
     }
 
 }

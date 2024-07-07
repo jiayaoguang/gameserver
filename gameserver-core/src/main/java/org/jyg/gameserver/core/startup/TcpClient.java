@@ -1,6 +1,7 @@
 package org.jyg.gameserver.core.startup;
 
 import com.google.protobuf.MessageLite;
+import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.consumer.MpscQueueGameConsumer;
 import org.jyg.gameserver.core.handle.initializer.MyChannelInitializer;
 import org.jyg.gameserver.core.handle.initializer.SocketClientInitializer;
@@ -68,6 +69,12 @@ public class TcpClient extends AbstractBootstrap{
 		this.port = port;
 	}
 
+
+	public TcpClient(GameConsumer gameConsumer, String host, int port) {
+		super(gameConsumer);
+		this.host = host;
+		this.port = port;
+	}
 
 
 	@Override

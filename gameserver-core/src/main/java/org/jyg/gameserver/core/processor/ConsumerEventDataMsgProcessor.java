@@ -48,6 +48,11 @@ public class ConsumerEventDataMsgProcessor extends ByteMsgObjProcessor<ConsumerE
             return;
         }
 
+        if(getGameConsumer().isMainConsumer()){
+            getGameConsumer().getChannelManager().addConsumerId2sessionMapping(fromConsumerId , session);
+        }
+
+
 
         long  localRequestId = 0;
         /*

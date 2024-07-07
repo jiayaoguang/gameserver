@@ -1,12 +1,12 @@
 package org.jyg.gameserver.core.manager;
 
-import io.netty.channel.Channel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import org.jyg.gameserver.core.consumer.AbstractThreadQueueGameConsumer;
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.event.Event;
+import org.jyg.gameserver.core.event.PublishToClientEvent;
 import org.jyg.gameserver.core.event.ResultReturnEvent;
 import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
@@ -55,11 +55,17 @@ public class ConsumerManager implements Lifecycle{
 
 
     public void publicEvent(int targetConsumerId, EventData<?> eventData ){
+
         GameConsumer gameConsumer = getConsumer(targetConsumerId);
         if(gameConsumer == null){
-            Logs.DEFAULT_LOGGER.error("targetConsumer {} not found" , targetConsumerId);
+            EventData<?> wrapperEventData = new EventData<>();
+            wrapperEventData.setEvent(new PublishToClientEvent(eventData , targetConsumerId));
+            gameContext.getMainGameConsumer().publicEvent(wrapperEventData);
+
+//            Logs.DEFAULT_LOGGER.error("targetConsumer {} not found" , targetConsumerId);
             return;
         }
+
         gameConsumer.publicEvent(eventData);
 
     }
