@@ -47,7 +47,7 @@ public abstract class AbstractThreadQueueGameConsumer extends GameConsumer {
     }
 
     @Override
-    public void publicEvent(EventData<?> eventData) {
+    public void publishEvent(EventData<?> eventData) {
         queue.offer(eventData);
     }
 

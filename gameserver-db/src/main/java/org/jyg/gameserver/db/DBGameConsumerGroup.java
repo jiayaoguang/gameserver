@@ -66,7 +66,7 @@ public class DBGameConsumerGroup extends GameConsumerGroup<DBGameConsumer> {
     }
 
     @Override
-    public void publicEvent(EventData eventData) {
+    public void publishEvent(EventData eventData) {
 //        if(!(data instanceof BaseDBEntity)){
 //            throw new IllegalArgumentException("db entity must extend BaseDBEntity");
 //        }
@@ -79,7 +79,7 @@ public class DBGameConsumerGroup extends GameConsumerGroup<DBGameConsumer> {
 
         }
 
-        super.publicEvent(eventData);
+        super.publishEvent(eventData);
     }
 
     public void registerTypeHandler(Class<?> clazz , TypeHandler<?> typeHandler){

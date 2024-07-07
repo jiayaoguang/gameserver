@@ -60,13 +60,13 @@ public class ConsumerManager implements Lifecycle{
         if(gameConsumer == null){
             EventData<?> wrapperEventData = new EventData<>();
             wrapperEventData.setEvent(new PublishToClientEvent(eventData , targetConsumerId));
-            gameContext.getMainGameConsumer().publicEvent(wrapperEventData);
+            gameContext.getMainGameConsumer().publishEvent(wrapperEventData);
 
 //            Logs.DEFAULT_LOGGER.error("targetConsumer {} not found" , targetConsumerId);
             return;
         }
 
-        gameConsumer.publicEvent(eventData);
+        gameConsumer.publishEvent(eventData);
 
     }
 
@@ -85,7 +85,7 @@ public class ConsumerManager implements Lifecycle{
         eventData.setChildChooseId(childChooseId );
 
 
-        gameConsumer.publicEvent(eventData);
+        gameConsumer.publishEvent(eventData);
 
     }
 

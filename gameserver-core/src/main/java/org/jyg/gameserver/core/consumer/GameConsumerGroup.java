@@ -135,7 +135,7 @@ public class GameConsumerGroup<T extends GameConsumer> extends MpscQueueGameCons
         }
 
         GameConsumer childGameConsumer = childChooser.choose(childChooseKey , childConsumerList);
-        childGameConsumer.publicEvent(eventData);
+        childGameConsumer.publishEvent(eventData);
     }
 
 

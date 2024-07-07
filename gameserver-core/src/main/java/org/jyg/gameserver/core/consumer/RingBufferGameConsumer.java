@@ -69,7 +69,7 @@ public class RingBufferGameConsumer extends GameConsumer {
 
 
     @Override
-    public void publicEvent(EventData<?> eventData) {
+    public void publishEvent(EventData<?> eventData) {
         long sequence = this.ringBuffer.next();
         try {
             EventData<Object> event = this.ringBuffer.get(sequence);

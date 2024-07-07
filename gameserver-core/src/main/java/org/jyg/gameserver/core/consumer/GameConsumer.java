@@ -18,7 +18,6 @@ import org.jyg.gameserver.core.timer.TimerManager;
 import org.jyg.gameserver.core.util.*;
 import org.slf4j.Logger;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -195,8 +194,7 @@ public abstract class GameConsumer {
 //    }
 
 
-
-    public abstract void publicEvent(EventData<?> eventData);
+    public abstract void publishEvent(EventData<?> eventData);
 
 
     public GameContext getGameContext() {

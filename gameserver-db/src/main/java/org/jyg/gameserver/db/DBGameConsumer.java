@@ -82,7 +82,7 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
 
 
     @Override
-    public void publicEvent(EventData eventData) {
+    public void publishEvent(EventData eventData) {
 //        if(!(data instanceof BaseDBEntity)){
 //            throw new IllegalArgumentException("db entity must extend BaseDBEntity");
 //        }
@@ -95,7 +95,7 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
             }
         }
 
-        super.publicEvent(eventData);
+        super.publishEvent(eventData);
     }
 
 
