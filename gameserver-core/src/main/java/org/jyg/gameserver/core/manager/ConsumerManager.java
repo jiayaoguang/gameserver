@@ -4,7 +4,9 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import org.jyg.gameserver.core.consumer.AbstractThreadQueueGameConsumer;
 import org.jyg.gameserver.core.consumer.GameConsumer;
+import org.jyg.gameserver.core.consumer.RemoteManagerGameConsumer;
 import org.jyg.gameserver.core.data.EventData;
+import org.jyg.gameserver.core.data.RemoteConsumerInfo;
 import org.jyg.gameserver.core.event.Event;
 import org.jyg.gameserver.core.event.PublishToClientEvent;
 import org.jyg.gameserver.core.event.ResultReturnEvent;
@@ -21,6 +23,9 @@ public class ConsumerManager implements Lifecycle{
 
     private final Int2ObjectMap<GameConsumer> consumerMap = new Int2ObjectLinkedOpenHashMap<>();
     private final GameContext gameContext;
+
+
+    private RemoteManagerGameConsumer remoteManagerGameConsumer;
 
 
     public ConsumerManager(GameContext gameContext) {
@@ -171,4 +176,26 @@ public class ConsumerManager implements Lifecycle{
         }
 
     }
+
+    public void addRemoteConsumer(int consumerId , String ip , int port){
+        RemoteConsumerInfo remoteConsumerInfo = new RemoteConsumerInfo();
+        remoteConsumerInfo.setConsumerId(consumerId);
+        remoteConsumerInfo.setIp(ip);
+        remoteConsumerInfo.setPort(port);
+        addRemoteConsumer(remoteConsumerInfo);
+    }
+
+    public void addRemoteConsumer(RemoteConsumerInfo remoteConsumerInfo) {
+        if (remoteManagerGameConsumer == null) {
+            remoteManagerGameConsumer = new RemoteManagerGameConsumer(gameContext, remoteConsumerInfo);
+//        consumer.setId(101);
+//        consumer.addRemoteConsumerInfo(DBProxy.DB_CONSUMER_ID , "127.0.0.1" , 8888);
+
+            addConsumer(remoteManagerGameConsumer);
+        } else {
+            remoteManagerGameConsumer.addRemoteConsumer(remoteConsumerInfo);
+        }
+    }
+
+
 }

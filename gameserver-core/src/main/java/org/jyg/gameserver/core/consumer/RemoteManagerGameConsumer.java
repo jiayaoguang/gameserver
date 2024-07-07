@@ -158,15 +158,15 @@ public class RemoteManagerGameConsumer extends RemoteDelegateGameConsumer {
 
 
 
-    public void addRemoteConsumerInfo(int consumerId , String ip , int port){
+    public void addRemoteConsumer(int consumerId , String ip , int port){
         RemoteConsumerInfo remoteConsumerInfo = new RemoteConsumerInfo();
         remoteConsumerInfo.setConsumerId(consumerId);
         remoteConsumerInfo.setIp(ip);
         remoteConsumerInfo.setPort(port);
-        addRemoteConsumerInfo(remoteConsumerInfo);
+        addRemoteConsumer(remoteConsumerInfo);
     }
 
-    public void addRemoteConsumerInfo(RemoteConsumerInfo remoteConsumerInfo){
+    public void addRemoteConsumer(RemoteConsumerInfo remoteConsumerInfo){
         if(isStart()){
             throw new IllegalStateException();
         }
