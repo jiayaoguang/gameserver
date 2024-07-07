@@ -10,20 +10,20 @@ import org.jyg.gameserver.core.util.Logs;
 /**
  * create by jiayaoguang on 2022/11/12
  */
-public class RemoteDelegateGameConsumer extends MpscQueueGameConsumer{
+class RemoteDelegateGameConsumer extends MpscQueueGameConsumer{
 
     private final TcpClient tcpClient;
 
     private final RemoteConsumerInfo remoteConsumerInfo;
 
 
-    public RemoteDelegateGameConsumer(GameContext gameContext, QueueConsumerThread queueConsumerThread , RemoteConsumerInfo remoteConsumerInfo) {
+    protected RemoteDelegateGameConsumer(GameContext gameContext, QueueConsumerThread queueConsumerThread , RemoteConsumerInfo remoteConsumerInfo) {
         this(gameContext,queueConsumerThread ,gameContext.createTcpClient(remoteConsumerInfo.getIp(),remoteConsumerInfo.getPort()) , remoteConsumerInfo );
     }
 
 
 
-    public RemoteDelegateGameConsumer(GameContext gameContext , QueueConsumerThread queueConsumerThread , TcpClient tcpClient, RemoteConsumerInfo remoteConsumerInfo) {
+    protected RemoteDelegateGameConsumer(GameContext gameContext , QueueConsumerThread queueConsumerThread , TcpClient tcpClient, RemoteConsumerInfo remoteConsumerInfo) {
         setId(remoteConsumerInfo.getConsumerId());
         this.setGameContext(gameContext);
         this.remoteConsumerInfo = remoteConsumerInfo;
