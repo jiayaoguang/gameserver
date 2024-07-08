@@ -11,7 +11,6 @@ import org.jyg.gameserver.core.exception.RequestTimeoutException;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -136,7 +135,7 @@ public class RemoteMethodInvokeManager implements Lifecycle{
 
         eventData.setEvent(invokeMethodEvent);
 
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(targetConsumerId, eventData);
+        gameConsumer.getGameContext().getConsumerManager().publishcEvent(targetConsumerId, eventData);
     }
 
 

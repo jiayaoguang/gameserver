@@ -4,7 +4,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpRequest;
-import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.event.HttpRequestEvent;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.util.GameContext;
@@ -61,7 +60,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpRequest> 
 
 		HttpRequestEvent httpRequestEvent = new HttpRequestEvent(request , ctx.channel() );
 
-		gameContext.getConsumerManager().publicEvent(gameContext.getMainConsumerId() , httpRequestEvent);
+		gameContext.getConsumerManager().publishcEvent(gameContext.getMainConsumerId() , httpRequestEvent);
 
 		// HttpRequest request = (HttpRequest) msg;
 

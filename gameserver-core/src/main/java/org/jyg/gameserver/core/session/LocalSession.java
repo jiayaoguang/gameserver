@@ -32,7 +32,7 @@ public class LocalSession extends Session {
 
     @Override
     protected void writeObjMessage(Object msgObj) {
-        gameContext.getConsumerManager().publicEvent(fromConsumerId, new ConsumerDefaultEvent(0, msgObj));
+        gameContext.getConsumerManager().publishcEvent(fromConsumerId, new ConsumerDefaultEvent(0, msgObj));
     }
 
     @Override

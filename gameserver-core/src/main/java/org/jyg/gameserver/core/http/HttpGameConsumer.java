@@ -52,7 +52,7 @@ public class HttpGameConsumer extends MpscQueueGameConsumer {
                     public void onFailure(Call call, IOException e) {
                         callBackEvent.setSuccess(false);
                         callBackEvent.setData(e);
-                        HttpGameConsumer.this.getGameContext().getConsumerManager().publicEvent(HttpGameConsumer.this.getId(), new ExecutableEvent(callBackEvent::execte));
+                        HttpGameConsumer.this.getGameContext().getConsumerManager().publishcEvent(HttpGameConsumer.this.getId(), new ExecutableEvent(callBackEvent::execte));
                     }
 
                     @Override
@@ -60,7 +60,7 @@ public class HttpGameConsumer extends MpscQueueGameConsumer {
                         callBackEvent.setSuccess(true);
                         callBackEvent.setData(response);
 
-                        HttpGameConsumer.this.getGameContext().getConsumerManager().publicEvent(HttpGameConsumer.this.getId(), new ExecutableEvent(callBackEvent::execte));
+                        HttpGameConsumer.this.getGameContext().getConsumerManager().publishcEvent(HttpGameConsumer.this.getId(), new ExecutableEvent(callBackEvent::execte));
                     }
                 });
             } else {
@@ -69,7 +69,7 @@ public class HttpGameConsumer extends MpscQueueGameConsumer {
                     public void onFailure(Call call, IOException e) {
                         callBackEvent.setSuccess(false);
                         callBackEvent.setData(e);
-                        HttpGameConsumer.this.getGameContext().getConsumerManager().publicEvent(HttpGameConsumer.this.getId(), new ExecutableEvent(callBackEvent::execte));
+                        HttpGameConsumer.this.getGameContext().getConsumerManager().publishcEvent(HttpGameConsumer.this.getId(), new ExecutableEvent(callBackEvent::execte));
                     }
 
                     @Override
@@ -77,7 +77,7 @@ public class HttpGameConsumer extends MpscQueueGameConsumer {
                         callBackEvent.setSuccess(true);
                         callBackEvent.setData(response);
 
-                        HttpGameConsumer.this.getGameContext().getConsumerManager().publicEvent(HttpGameConsumer.this.getId(), new ExecutableEvent(callBackEvent::execte));
+                        HttpGameConsumer.this.getGameContext().getConsumerManager().publishcEvent(HttpGameConsumer.this.getId(), new ExecutableEvent(callBackEvent::execte));
                     }
                 });
             }

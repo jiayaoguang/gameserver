@@ -35,7 +35,7 @@ public class WebSocketMsgDecoder extends
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "在线");
 
-		gameContext.getConsumerManager().publicEvent(gameContext.getMainConsumerId(), new ChannelConnectEvent(ctx.channel()));
+		gameContext.getConsumerManager().publishcEvent(gameContext.getMainConsumerId(), new ChannelConnectEvent(ctx.channel()));
 
 	}
 	
@@ -97,7 +97,7 @@ public class WebSocketMsgDecoder extends
 			}
 			NormalMsgEvent normalMsgEvent = new NormalMsgEvent(msgId  , msgObj, ctx.channel());
 
-			gameContext.getConsumerManager().publicEvent( gameContext.getMainConsumerId() , normalMsgEvent);
+			gameContext.getConsumerManager().publishcEvent( gameContext.getMainConsumerId() , normalMsgEvent);
 
 //			switch (msgCodec.getMsgType()) {
 //				case PROTO:
@@ -139,7 +139,7 @@ public class WebSocketMsgDecoder extends
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "掉线");
 
-		gameContext.getConsumerManager().publicEvent(gameContext.getMainConsumerId(), new ChannelDisconnectEvent(ctx.channel()));
+		gameContext.getConsumerManager().publishcEvent(gameContext.getMainConsumerId(), new ChannelDisconnectEvent(ctx.channel()));
 	}
 	
 	//------------------------start-----------------------------

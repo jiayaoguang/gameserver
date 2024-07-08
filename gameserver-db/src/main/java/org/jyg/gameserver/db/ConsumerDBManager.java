@@ -35,32 +35,32 @@ public class ConsumerDBManager implements Lifecycle {
 
         ConsumerDefaultEvent consumerDefaultEvent = new ConsumerDefaultEvent(BDEventConst.INSERT, dbEntity);
 
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, dbEntity.getClass().getSimpleName());
+        gameConsumer.getGameContext().getConsumerManager().publishcEvent(dbConsumerId, consumerDefaultEvent, dbEntity.getClass().getSimpleName());
     }
 
     public void insert(BaseDBEntity dbEntity, String childChooseId) {
 
         ConsumerDefaultEvent consumerDefaultEvent = new ConsumerDefaultEvent(BDEventConst.INSERT, dbEntity);
 
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, childChooseId);
+        gameConsumer.getGameContext().getConsumerManager().publishcEvent(dbConsumerId, consumerDefaultEvent, childChooseId);
     }
 
     public void delete(BaseDBEntity dbEntity, String childChooseId) {
         ConsumerDefaultEvent consumerDefaultEvent = new ConsumerDefaultEvent(BDEventConst.DELETE, dbEntity);
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, childChooseId);
+        gameConsumer.getGameContext().getConsumerManager().publishcEvent(dbConsumerId, consumerDefaultEvent, childChooseId);
 
     }
 
     public void delete(BaseDBEntity dbEntity){
         ConsumerDefaultEvent consumerDefaultEvent = new ConsumerDefaultEvent(BDEventConst.DELETE, dbEntity);
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, dbEntity.getClass().getSimpleName());
+        gameConsumer.getGameContext().getConsumerManager().publishcEvent(dbConsumerId, consumerDefaultEvent, dbEntity.getClass().getSimpleName());
     }
 
     public void update(BaseDBEntity dbEntity, String childChooseId) {
 
         ConsumerDefaultEvent consumerDefaultEvent = new ConsumerDefaultEvent(BDEventConst.UPDATE, dbEntity);
 
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, childChooseId);
+        gameConsumer.getGameContext().getConsumerManager().publishcEvent(dbConsumerId, consumerDefaultEvent, childChooseId);
     }
 
     public void updateField(BaseDBEntity dbEntity , String objFieldName) {
@@ -78,12 +78,12 @@ public class ConsumerDBManager implements Lifecycle {
         params.put("fieldName" , objFieldName);
         consumerDefaultEvent.setParams(params);
 
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, childChooseId);
+        gameConsumer.getGameContext().getConsumerManager().publishcEvent(dbConsumerId, consumerDefaultEvent, childChooseId);
     }
 
     public void update(BaseDBEntity dbEntity) {
         ConsumerDefaultEvent consumerDefaultEvent = new ConsumerDefaultEvent(BDEventConst.UPDATE, dbEntity);
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, dbEntity.getClass().getSimpleName());
+        gameConsumer.getGameContext().getConsumerManager().publishcEvent(dbConsumerId, consumerDefaultEvent, dbEntity.getClass().getSimpleName());
     }
 
 
@@ -96,7 +96,7 @@ public class ConsumerDBManager implements Lifecycle {
         consumerDefaultEvent.setData(dbEntity);
         consumerDefaultEvent.setRequestId(requestId);
 
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent ,childChooseId );
+        gameConsumer.getGameContext().getConsumerManager().publishcEvent(dbConsumerId, consumerDefaultEvent ,childChooseId );
         return requestId;
     }
 
@@ -117,7 +117,7 @@ public class ConsumerDBManager implements Lifecycle {
         consumerDefaultEvent.setRequestId(requestId);
         consumerDefaultEvent.setParams(params);
 
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, childChooseId );
+        gameConsumer.getGameContext().getConsumerManager().publishcEvent(dbConsumerId, consumerDefaultEvent, childChooseId );
         return requestId;
     }
 
@@ -149,7 +149,7 @@ public class ConsumerDBManager implements Lifecycle {
         consumerDefaultEvent.setData(execSqlInfo);
         consumerDefaultEvent.setRequestId(requestId);
 
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(dbConsumerId, consumerDefaultEvent, childChooseId );
+        gameConsumer.getGameContext().getConsumerManager().publishcEvent(dbConsumerId, consumerDefaultEvent, childChooseId );
         return requestId;
     }
 

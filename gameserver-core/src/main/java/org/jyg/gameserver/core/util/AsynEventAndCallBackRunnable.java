@@ -28,7 +28,7 @@ public class AsynEventAndCallBackRunnable implements Runnable{
             e.printStackTrace();
             callBackEvent.setSuccess(false);
         }
-        gameConsumer.getGameContext().getConsumerManager().publicEvent(gameConsumer.getId(), new ExecutableEvent(callBackEvent::execte));
+        gameConsumer.getGameContext().getConsumerManager().publishcEvent(gameConsumer.getId(), new ExecutableEvent(callBackEvent::execte));
 
     }
 

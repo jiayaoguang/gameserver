@@ -29,7 +29,7 @@ public class HttpCallBack implements Callback {
                 callback.onFailure(call,e);
         }));
 
-        gameContext.getConsumerManager().publicEvent(fromConsumerId, executableEvent);
+        gameContext.getConsumerManager().publishcEvent(fromConsumerId, executableEvent);
 
     }
 
@@ -46,7 +46,7 @@ public class HttpCallBack implements Callback {
         }));
 
 
-        gameContext.getConsumerManager().publicEvent(fromConsumerId, responseExecutableEvent);
+        gameContext.getConsumerManager().publishcEvent(fromConsumerId, responseExecutableEvent);
 
     }
 }

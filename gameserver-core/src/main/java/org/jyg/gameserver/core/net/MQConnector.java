@@ -58,7 +58,7 @@ public abstract class MQConnector extends AbstractConnector {
 
         MQMsgEvent mqMsgEvent = new MQMsgEvent(msgId , msgObj  ,mqSession );
 
-        getGameContext().getConsumerManager().publicEvent(gameContext.getMainConsumerId(), mqMsgEvent);
+        getGameContext().getConsumerManager().publishcEvent(gameContext.getMainConsumerId(), mqMsgEvent);
 
     }
 
