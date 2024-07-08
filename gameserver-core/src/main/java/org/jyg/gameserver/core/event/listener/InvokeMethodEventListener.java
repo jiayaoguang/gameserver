@@ -23,7 +23,8 @@ public class InvokeMethodEventListener implements GameEventListener<InvokeMethod
         InvokeMethodInfo invokeMethodInfo = gameConsumer.getRemoteMethodInvokeManager().getInvokeMethodInfo(invokeMethodEvent.getMethodUniqueName());
 
         if (invokeMethodInfo == null) {
-            throw new IllegalArgumentException("MethodUniqueName not found : " + invokeMethodEvent.getMethodUniqueName());
+            Logs.DEFAULT_LOGGER.error("MethodUniqueName < {} > not found : " , invokeMethodEvent.getMethodUniqueName());
+            return;
         }
 
 
