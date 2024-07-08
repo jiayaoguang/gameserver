@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.jiayaoguang</groupId>
+	<groupId>io.github.jiayaoguang</groupId>
 	<artifactId>gameserver</artifactId>
 	<version>${revision}</version>
 	<packaging>pom</packaging>
@@ -14,7 +14,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<netty.version>4.1.108.Final</netty.version>
 		<maven.test.skip>true</maven.test.skip>
-		<revision>0.1.2-SNAPSHOT</revision>
+		<revision>0.1.2</revision>
 
 		<!-- This is the minimum supported by Java12+ -->
 		<maven.compiler.source>17</maven.compiler.source>
@@ -80,14 +80,19 @@
 		<profile>
 			<id>release</id>
 			<distributionManagement>
+<!--				<snapshotRepository>-->
+<!--					<id>oss</id>-->
+<!--					<url>https://oss.sonatype.org/content/repositories/snapshots/</url>-->
+<!--				</snapshotRepository>-->
+<!--				<repository>-->
+<!--					<id>oss</id>-->
+<!--					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>-->
+<!--				</repository>-->
+
 				<snapshotRepository>
 					<id>oss</id>
-					<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+					<url>https://central.sonatype.com/</url>
 				</snapshotRepository>
-				<repository>
-					<id>oss</id>
-					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-				</repository>
 			</distributionManagement>
 			<build>
 				<plugins>
@@ -128,17 +133,29 @@
 							<autoVersionSubmodules>true</autoVersionSubmodules>
 						</configuration>-->
 					</plugin>
+<!--					<plugin>-->
+<!--						<groupId>org.sonatype.plugins</groupId>-->
+<!--						<artifactId>nexus-staging-maven-plugin</artifactId>-->
+<!--						<version>1.6.8</version>-->
+<!--						<extensions>true</extensions>-->
+<!--						<configuration>-->
+<!--							<serverId>oss</serverId>-->
+<!--							<nexusUrl>https://oss.sonatype.org/</nexusUrl>-->
+<!--							<autoReleaseAfterClose>true</autoReleaseAfterClose>-->
+<!--						</configuration>-->
+<!--					</plugin>-->
+
 					<plugin>
-						<groupId>org.sonatype.plugins</groupId>
-						<artifactId>nexus-staging-maven-plugin</artifactId>
-						<version>1.6.8</version>
+						<groupId>org.sonatype.central</groupId>
+						<artifactId>central-publishing-maven-plugin</artifactId>
+						<version>0.5.0</version>
 						<extensions>true</extensions>
 						<configuration>
-							<serverId>oss</serverId>
-							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+							<publishingServerId>oss</publishingServerId>
+							<tokenAuth>true</tokenAuth>
 						</configuration>
 					</plugin>
+
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -196,7 +213,7 @@
 	<modules>
 		<module>gameserver-core</module>
 		<module>gameserver-db</module>
-<!--		<module>gameserver-auth</module>-->
+		<module>gameserver-auth</module>
 		<module>gameserver-proto</module>
 		<module>gameserver-util</module>
 		<module>gameserver-test</module>
