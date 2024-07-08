@@ -126,28 +126,28 @@ public class ChannelManager implements Lifecycle {
     /**
      * 检测并移除超时的channel
      */
-    public void removeOutOfTimeChannels() {
-//		System.out.println("检测并移除超时的channel");
-        Iterator<Map.Entry<Channel, Session>> it = channelObjectMap.entrySet().iterator();
-        for (; it.hasNext(); ) {
-            Map.Entry<Channel, Session> entry = it.next();
-            Channel channel = entry.getKey();
-            Session session = entry.getValue();
-            if (!channel.isOpen()) {
-                it.remove();
-                continue;
-            }
-            if (session == null) {
-                it.remove();
-                continue;
-            }
-            if ((session.getLastSendMsgTime() + 60 * 1000L) < System.currentTimeMillis()) {
-                channel.close();
-                it.remove();
-                Logs.DEFAULT_LOGGER.info("移除超时的channel" + channel);
-            }
-        }
-    }
+//    public void removeOutOfTimeChannels() {
+////		System.out.println("检测并移除超时的channel");
+//        Iterator<Map.Entry<Channel, Session>> it = channelObjectMap.entrySet().iterator();
+//        for (; it.hasNext(); ) {
+//            Map.Entry<Channel, Session> entry = it.next();
+//            Channel channel = entry.getKey();
+//            Session session = entry.getValue();
+//            if (!channel.isOpen()) {
+//                it.remove();
+//                continue;
+//            }
+//            if (session == null) {
+//                it.remove();
+//                continue;
+//            }
+//            if ((session.getLastSendMsgTime() + 60 * 1000L) < System.currentTimeMillis()) {
+//                channel.close();
+//                it.remove();
+//                Logs.DEFAULT_LOGGER.info("移除超时的channel" + channel);
+//            }
+//        }
+//    }
 
     private long incAndGetSessionId() {
         sessionIdInc++;

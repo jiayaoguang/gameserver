@@ -21,7 +21,7 @@ public abstract class Session implements Lifecycle {
 	private final long sessionId;
 	
 
-	private long lastSendMsgTime = 0;
+//	private long lastSendMsgTime = 0;
 
 	private SessionState sessionState;
 
@@ -57,13 +57,13 @@ public abstract class Session implements Lifecycle {
 	public abstract boolean isOpen();
 
 
-	public long getLastSendMsgTime() {
-		return lastSendMsgTime;
-	}
-
-	public void setLastSendMsgTime(long lastSendMsgTime) {
-		this.lastSendMsgTime = lastSendMsgTime;
-	}
+//	public long getLastSendMsgTime() {
+//		return lastSendMsgTime;
+//	}
+//
+//	public void setLastSendMsgTime(long lastSendMsgTime) {
+//		this.lastSendMsgTime = lastSendMsgTime;
+//	}
 
 	public void writeMessage( MessageLite message){
 		this.writeObjMessage(message);
