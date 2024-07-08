@@ -113,9 +113,9 @@ public class TcpClient extends AbstractBootstrap{
 		ChannelFuture channelFuture = null;
 		try {
 			channelFuture = bootstrap.connect(host, port).sync();
-		} catch (InterruptedException e) {
-//			e.printStackTrace();
-			throw new RuntimeException(e);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 
 		if(channelFuture == null || !channelFuture.isSuccess()){
