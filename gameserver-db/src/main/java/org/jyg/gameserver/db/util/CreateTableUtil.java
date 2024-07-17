@@ -17,10 +17,10 @@ import java.util.Map;
 /**
  * create by jiayaoguang at 2021/5/29
  */
-public class MyCreateTableUtil {
+public class CreateTableUtil {
 
 
-    private MyCreateTableUtil() {
+    private CreateTableUtil() {
     }
 
 
