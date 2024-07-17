@@ -1,4 +1,4 @@
-package org.jyg.gameserver.db.util;
+package com.sense.gameserver.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.util.AllUtil;
@@ -17,13 +17,13 @@ import java.util.Map;
 /**
  * create by jiayaoguang at 2021/5/29
  */
-public class CreateTableUtil {
+public class MyCreateTableUtil {
 
 
-    private CreateTableUtil() {
+    private MyCreateTableUtil() {
     }
 
-    
+
     public static void createTable(Class<? extends BaseDBEntity> dbClass) {
         createTable( ConfigUtil.properties2Object(GameContext.DEFAULT_CONFIG_FILE_NAME, DBConfig.class) , dbClass);
     }
@@ -36,7 +36,7 @@ public class CreateTableUtil {
 
         try(Connection connection = getConn(dbConfig);
             Statement statement = connection.createStatement();
-            ){
+        ){
 
 
 
@@ -66,7 +66,7 @@ public class CreateTableUtil {
                 tableFieldType = dbTableManager.getTableFieldType(tableFieldInfo.getClassField().getType());
             }
             sqlSB.append(tableFieldInfo.getTableFieldName()).append(" ").append(tableFieldType.name)
-                    .append("(").append(tableFieldInfo.getLength()).append(")").append(" ");
+                    .append("(").append(tableFieldInfo.getLength()).append(")").append(" NOT NULL ");
 
             if (tableFieldInfo.getDbTableFieldAnno() != null && StringUtils.isNotEmpty(tableFieldInfo.getDbTableFieldAnno().comment())) {
                 sqlSB.append("COMMENT").append(" '").append(tableFieldInfo.getDbTableFieldAnno().comment()).append("'");
@@ -114,14 +114,14 @@ public class CreateTableUtil {
         }
 
         if (fieldIndexType == FieldIndexType.UNIQUE) {
-            String uniqueSql = "ALTER TABLE `unique" + tableName + "` ADD UNIQUE ( \n" +
+            String uniqueSql = "ALTER TABLE `" + tableName + "` ADD UNIQUE INDEX `unique_"+ tableName +"_"+ fieldName +" `( \n" +
                     "`" + fieldName + "` \n" +
                     ") ";
             return uniqueSql;
         }
 
         if (fieldIndexType == FieldIndexType.INDEX) {
-            String indexSql = "ALTER TABLE `index_" + tableName + "` ADD INDEX ( \n" +
+            String indexSql = "ALTER TABLE `" + tableName + "` ADD INDEX `index_"+ tableName +"_"+ fieldName +" `( \n" +
                     "`" + fieldName + "` \n" +
                     ") ";
             return indexSql;
@@ -131,8 +131,8 @@ public class CreateTableUtil {
 
 
     }
-    
-    
+
+
 
     public static boolean isTableExist(Class<? extends BaseDBEntity> dbClass) throws Exception {
         return isTableExist( ConfigUtil.properties2Object(GameContext.DEFAULT_CONFIG_FILE_NAME, DBConfig.class) , dbClass);
@@ -144,7 +144,7 @@ public class CreateTableUtil {
 
 
         DBTableManager dbTableManager = new DBTableManager(new TypeHandlerRegistry());
-        
+
 
         TableInfo tableInfo = dbTableManager.tryAddTableInfo(dbClass);
         AllUtil.println("table : " +tableInfo.getTableName());
@@ -178,8 +178,8 @@ public class CreateTableUtil {
 
     }
 
-    
-    
+
+
     public static void createOrAlterTable(Class<? extends BaseDBEntity> dbClass) throws SQLException {
         createOrAlterTable(ConfigUtil.properties2Object(GameContext.DEFAULT_CONFIG_FILE_NAME, DBConfig.class) , dbClass);
     }
@@ -191,7 +191,7 @@ public class CreateTableUtil {
 
 
         TableInfo tableInfo = dbTableManager.tryAddTableInfo(dbClass);
-        
+
 
         if(!isTableExist(dbConfig , dbClass)){
             createTable(dbConfig , dbClass);
@@ -312,3 +312,4 @@ public class CreateTableUtil {
 
 
 }
+
