@@ -1,4 +1,4 @@
-package com.sense.gameserver.util;
+package org.jyg.gameserver.db.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jyg.gameserver.core.util.AllUtil;
