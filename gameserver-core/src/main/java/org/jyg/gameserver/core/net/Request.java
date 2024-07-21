@@ -3,6 +3,8 @@ package org.jyg.gameserver.core.net;
 import java.io.IOException;
 import java.util.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.cookie.Cookie;
 import io.netty.handler.codec.http.cookie.ServerCookieDecoder;
@@ -30,15 +32,32 @@ public class Request {
 
     private boolean isMakeExecption = false;
 
+    private boolean contentTypeJson = false;
+
+    private Map<String,Object> jsonParams;
+
 
     public Request(HttpRequest httpRequest) {
         headers = httpRequest.headers();
         method = httpRequest.method();
+
         init(httpRequest);
     }
 
 
     public String getParameter(String paramName) {
+
+        if(contentTypeJson){
+            if(jsonParams == null){
+                return null;
+            }
+            Object value = jsonParams.get(paramName);
+            if(value == null){
+                return null;
+            }
+            return String.valueOf(value);
+        }
+
         List<String> params = getParameterList(paramName);
         if(params == null || params.isEmpty()){
             return null;
@@ -67,6 +86,11 @@ public class Request {
 
         return headers;
     }
+
+    public Map<String, Object> getJsonParams() {
+        return jsonParams;
+    }
+
 
     @Deprecated
     private String getNoParamPath(HttpRequest httpRequest) {
@@ -145,6 +169,23 @@ public class Request {
             }
 
         }
+
+
+        String contentType = headers.get(HttpHeaderNames.CONTENT_TYPE);
+        if(contentType.contains("json")){
+            contentTypeJson = true;
+
+            for(String key : parametersMap.keySet() ){
+                ObjectMapper objectMapper = new ObjectMapper();
+                try {
+                    jsonParams = objectMapper.readValue(key , HashMap.class);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+        }
+
 
         noParamUri = req.uri();
 
