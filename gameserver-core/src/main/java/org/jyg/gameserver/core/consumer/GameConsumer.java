@@ -443,7 +443,7 @@ public abstract class GameConsumer {
 
 
 
-    protected void onReciveEvent(EventData<?> event) {
+    protected void onReceiveEvent(EventData<?> event) {
 
         // System.out.println(event.getChannel());
         try {

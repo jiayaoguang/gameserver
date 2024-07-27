@@ -124,7 +124,7 @@ public abstract class AbstractThreadQueueGameConsumer extends GameConsumer {
 
         for(EventData<?> eventData  ;!tempEventQueue.isEmpty(); ){
             eventData = tempEventQueue.poll();
-            onReciveEvent(eventData);
+            onReceiveEvent(eventData);
         }
 
 

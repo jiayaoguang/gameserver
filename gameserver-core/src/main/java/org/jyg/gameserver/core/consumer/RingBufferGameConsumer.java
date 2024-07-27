@@ -52,7 +52,7 @@ public class RingBufferGameConsumer extends GameConsumer {
                 new LoopAndSleepWaitStrategy(this::update));
 
 
-        disruptor.handleEventsWith((objectLogicEvent, l, b) -> this.onReciveEvent(objectLogicEvent));
+        disruptor.handleEventsWith((objectLogicEvent, l, b) -> this.onReceiveEvent(objectLogicEvent));
 
 //        disruptor.handleEventsWith(eventConsumer);
 

@@ -108,11 +108,11 @@ public class GameConsumerGroup<T extends GameConsumer> extends MpscQueueGameCons
 
 
     @Override
-    protected void onReciveEvent(EventData<?> eventData) {
+    protected void onReceiveEvent(EventData<?> eventData) {
 
         if(eventData.getEvent() instanceof ResultReturnEvent || childIdSet.contains(eventData.getEvent().getFromConsumerId())){
 
-            super.onReciveEvent(eventData);
+            super.onReceiveEvent(eventData);
             return;
         }
 

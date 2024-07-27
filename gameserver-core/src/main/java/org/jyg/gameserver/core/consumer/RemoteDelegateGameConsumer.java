@@ -50,7 +50,7 @@ class RemoteDelegateGameConsumer extends MpscQueueGameConsumer{
     protected void doEvent(EventData eventData) {
 
         if (eventData.getEvent().getFromConsumerId() == getId()) {
-            onReciveEvent(eventData);
+            onReceiveEvent(eventData);
             Logs.DEFAULT_LOGGER.info("eventData.getFromConsumerId() == getId()");
             return;
         }
