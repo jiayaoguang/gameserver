@@ -34,7 +34,7 @@ public class HttpCallBack implements Callback {
             }
         }));
 
-        gameContext.getConsumerManager().publishcEvent(fromConsumerId, executableEvent);
+        gameContext.getConsumerManager().publishEvent(fromConsumerId, executableEvent);
 
     }
 
@@ -50,7 +50,7 @@ public class HttpCallBack implements Callback {
         }));
 
 
-        gameContext.getConsumerManager().publishcEvent(fromConsumerId, responseExecutableEvent);
+        gameContext.getConsumerManager().publishEvent(fromConsumerId, responseExecutableEvent);
 
     }
 }

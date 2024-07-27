@@ -68,8 +68,8 @@ public class MQServerTest01 {
         MQMsgEvent mqMsgEvent = new MQMsgEvent( 105 ,MsgChat.newBuilder().setContent("1111").setId(1).build(),new MQSession( 0 , bootstrap.getGameContext() ));
 
 
-        bootstrap.getGameContext().getConsumerManager().publishcEvent(mqConsumer.getId() , mqMsgEvent);
-        bootstrap.getGameContext().getConsumerManager().publishcEvent(mqConsumer.getId() , mqMsgEvent);
+        bootstrap.getGameContext().getConsumerManager().publishEvent(mqConsumer.getId() , mqMsgEvent);
+        bootstrap.getGameContext().getConsumerManager().publishEvent(mqConsumer.getId() , mqMsgEvent);
 
 
 

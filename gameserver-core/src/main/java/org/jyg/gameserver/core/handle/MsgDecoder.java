@@ -80,7 +80,7 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
                 }
 
                 UnknownMsgEvent unknownMsgEvent = new UnknownMsgEvent( msgId , dstBytes , ctx.channel() );
-                gameContext.getConsumerManager().publishcEvent(gameContext.getMainConsumerId(), unknownMsgEvent);
+                gameContext.getConsumerManager().publishEvent(gameContext.getMainConsumerId(), unknownMsgEvent);
 
                 return null;
             }
@@ -106,7 +106,7 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
 
             NormalMsgEvent normalMsgEvent = new NormalMsgEvent(msgId , msgObj , ctx.channel());
 
-            gameContext.getConsumerManager().publishcEvent(gameContext.getMainConsumerId(),normalMsgEvent);
+            gameContext.getConsumerManager().publishEvent(gameContext.getMainConsumerId(),normalMsgEvent);
 
 
         }catch (Exception e){

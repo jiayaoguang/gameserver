@@ -60,7 +60,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpRequest> 
 
 		HttpRequestEvent httpRequestEvent = new HttpRequestEvent(request , ctx.channel() );
 
-		gameContext.getConsumerManager().publishcEvent(gameContext.getMainConsumerId() , httpRequestEvent);
+		gameContext.getConsumerManager().publishEvent(gameContext.getMainConsumerId() , httpRequestEvent);
 
 		// HttpRequest request = (HttpRequest) msg;
 

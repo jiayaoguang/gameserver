@@ -135,7 +135,7 @@ public class RemoteMethodInvokeManager implements Lifecycle{
 
         eventData.setEvent(invokeMethodEvent);
 
-        gameConsumer.getGameContext().getConsumerManager().publishcEvent(targetConsumerId, eventData);
+        gameConsumer.getGameContext().getConsumerManager().publishEvent(targetConsumerId, eventData);
     }
 
 

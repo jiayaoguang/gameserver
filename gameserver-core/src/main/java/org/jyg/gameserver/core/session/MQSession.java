@@ -32,7 +32,7 @@ public class MQSession extends Session {
 
     @Override
     protected void writeObjMessage(Object msgObj) {
-        gameContext.getConsumerManager().publishcEvent(mqPushConsumerId , new ConsumerDefaultEvent(0, msgObj));
+        gameContext.getConsumerManager().publishEvent(mqPushConsumerId , new ConsumerDefaultEvent(0, msgObj));
     }
 
     @Override

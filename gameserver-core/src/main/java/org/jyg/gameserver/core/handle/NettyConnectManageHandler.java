@@ -48,7 +48,7 @@ public class NettyConnectManageHandler extends ChannelDuplexHandler {
         }
 
 
-        gameContext.getConsumerManager().publishcEvent(gameContext.getMainConsumerId(), new ChannelConnectEvent(ctx.channel()));
+        gameContext.getConsumerManager().publishEvent(gameContext.getMainConsumerId(), new ChannelConnectEvent(ctx.channel()));
 
         super.channelActive(ctx);
     }
@@ -59,7 +59,7 @@ public class NettyConnectManageHandler extends ChannelDuplexHandler {
 
         Logs.DEFAULT_LOGGER.info("Client: {} offline" , incoming.remoteAddress());
 
-        gameContext.getConsumerManager().publishcEvent(gameContext.getMainConsumerId(), new ChannelDisconnectEvent(ctx.channel()));
+        gameContext.getConsumerManager().publishEvent(gameContext.getMainConsumerId(), new ChannelDisconnectEvent(ctx.channel()));
 
         super.channelInactive(ctx);
     }
@@ -74,7 +74,7 @@ public class NettyConnectManageHandler extends ChannelDuplexHandler {
                 Logs.DEFAULT_LOGGER.warn("NETTY CLIENT PIPELINE: IDLE outtime [{}]", remoteAddress);
             } else if (event.state().equals(IdleState.READER_IDLE)) {
                 NormalMsgEvent normalMsgEvent = new NormalMsgEvent( MsgIdConst.READ_OUTTIME, READ_IDLE_OBJ , ctx.channel());
-                gameContext.getConsumerManager().publishcEvent(gameContext.getMainConsumerId(),normalMsgEvent);
+                gameContext.getConsumerManager().publishEvent(gameContext.getMainConsumerId(),normalMsgEvent);
             } else if (event.state().equals(IdleState.WRITER_IDLE)) {
 //                context.getConsumerManager().publicEventToDefault(EventType.BYTE_OBJ_MSG_COME, READ_IDLE_OBJ, ctx.channel(), MsgIdConst.WRITE_OUTTIME);
 

@@ -16,6 +16,6 @@ public class MyCronJob  implements Job {
 
         MyCronTask myCronTask = (MyCronTask)context.getJobDetail().getJobDataMap().get("cronTask");
         GameContext gameContext = (GameContext)context.getJobDetail().getJobDataMap().get("gameContext");
-        gameContext.getConsumerManager().publishcEvent(myCronTask.getFromConsumerId(), new ExecutableEvent(myCronTask.getRunnable()));
+        gameContext.getConsumerManager().publishEvent(myCronTask.getFromConsumerId(), new ExecutableEvent(myCronTask.getRunnable()));
     }
 }

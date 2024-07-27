@@ -40,7 +40,7 @@ public class NettyClientConnectManageHandler extends ChannelDuplexHandler {
 
         InnerChannelConnectEvent innerChannelConnectEvent = new InnerChannelConnectEvent(incoming);
 
-        gameContext.getConsumerManager().publishcEvent(gameContext.getMainConsumerId(), innerChannelConnectEvent);
+        gameContext.getConsumerManager().publishEvent(gameContext.getMainConsumerId(), innerChannelConnectEvent);
 
     }
 
@@ -52,7 +52,7 @@ public class NettyClientConnectManageHandler extends ChannelDuplexHandler {
 
         InnerChannelDisconnectEvent innerChannelDisconnectEvent = new InnerChannelDisconnectEvent(incoming);
 
-        gameContext.getConsumerManager().publishcEvent(gameContext.getMainConsumerId(), innerChannelDisconnectEvent);
+        gameContext.getConsumerManager().publishEvent(gameContext.getMainConsumerId(), innerChannelDisconnectEvent);
 
     }
 
@@ -66,7 +66,7 @@ public class NettyClientConnectManageHandler extends ChannelDuplexHandler {
                 Logs.DEFAULT_LOGGER.warn("NETTY CLIENT PIPELINE: IDLE outtime [{}]", remoteAddress);
             } else if (event.state().equals(IdleState.READER_IDLE)) {
                 NormalMsgEvent normalMsgEvent = new NormalMsgEvent(MsgIdConst.READ_OUTTIME  , READ_IDLE_OBJ , ctx.channel());
-                gameContext.getConsumerManager().publishcEvent(gameContext.getMainConsumerId(),normalMsgEvent);
+                gameContext.getConsumerManager().publishEvent(gameContext.getMainConsumerId(),normalMsgEvent);
             } else if (event.state().equals(IdleState.WRITER_IDLE)) {
 //                context.getConsumerManager().publicEventToDefault(EventType.BYTE_OBJ_MSG_COME, READ_IDLE_OBJ, ctx.channel(), MsgIdConst.WRITE_OUTTIME);
 

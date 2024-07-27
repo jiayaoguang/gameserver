@@ -92,7 +92,7 @@ public class ConsumerEventDataMsgProcessor extends ByteMsgObjProcessor<ConsumerE
         fromRemoteEventData.getEvent().setFromConsumerId(getGameConsumer().getId());
 
 
-        getContext().getConsumerManager().publishcEvent(eventDataMsg.getToConsumerId(), fromRemoteEventData );
+        getContext().getConsumerManager().publishEvent(eventDataMsg.getToConsumerId(), fromRemoteEventData );
 
     }
 }

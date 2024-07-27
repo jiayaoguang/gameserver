@@ -25,7 +25,7 @@ public class InnerSocketHandler extends ChannelInboundHandlerAdapter {
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "在线");
 
-		gameContext.getConsumerManager().publishcEvent(gameContext.getMainConsumerId(), new ChannelConnectEvent(ctx.channel()));
+		gameContext.getConsumerManager().publishEvent(gameContext.getMainConsumerId(), new ChannelConnectEvent(ctx.channel()));
 		
 		super.channelActive(ctx);
 	}
@@ -35,7 +35,7 @@ public class InnerSocketHandler extends ChannelInboundHandlerAdapter {
 		Channel incoming = ctx.channel();
 		Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "掉线");
 
-		gameContext.getConsumerManager().publishcEvent(gameContext.getMainConsumerId(), new ChannelDisconnectEvent(ctx.channel()));
+		gameContext.getConsumerManager().publishEvent(gameContext.getMainConsumerId(), new ChannelDisconnectEvent(ctx.channel()));
 		
 		super.channelInactive(ctx);
 	}
