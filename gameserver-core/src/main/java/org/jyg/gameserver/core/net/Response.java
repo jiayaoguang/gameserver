@@ -21,8 +21,13 @@ import org.jyg.gameserver.core.util.IpUtil;
  * created by jiayaoguang at 2018年3月20日
  */
 public class Response {
-	
-	
+
+
+	private static final String NOT_FIND_HTML_TEXT = "<html><head></head><body>" +
+			"<div align='center'><h1> %s 404 not found </h1></div>" +
+			"<body></html>";
+
+
 	private String contentType =  "text/html; charset=UTF-8";
 	
 	public static final String CONTENT_TYPE_JSON = "application/json";
@@ -119,7 +124,7 @@ public class Response {
 	 * @param bytes 回复内容
 	 * @return 指定返回码的回复
 	 */
-	private DefaultFullHttpResponse createStatuHttpResponse(HttpResponseStatus responseStatus, byte[] bytes) {
+	private DefaultFullHttpResponse createStatusHttpResponse(HttpResponseStatus responseStatus, byte[] bytes) {
 		ByteBuf content = this.createContent(bytes.length).writeBytes(bytes);
 		DefaultFullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, responseStatus,
 				content);
@@ -143,7 +148,7 @@ public class Response {
 	 * @return 500 error response
 	 */
 	private DefaultFullHttpResponse create500FullHttpResponse(String msg) {
-		return this.createStatuHttpResponse(HttpResponseStatus.INTERNAL_SERVER_ERROR,
+		return this.createStatusHttpResponse(HttpResponseStatus.INTERNAL_SERVER_ERROR,
 				msg.getBytes(CharsetUtil.UTF_8));
 	}
 	/**
@@ -151,9 +156,20 @@ public class Response {
 	 * @return 500 error response
 	 */
 	private DefaultFullHttpResponse create500FullHttpResponse(byte[] byteMsg) {
-		return this.createStatuHttpResponse(HttpResponseStatus.INTERNAL_SERVER_ERROR,
+		return this.createStatusHttpResponse(HttpResponseStatus.INTERNAL_SERVER_ERROR,
 				byteMsg);
 	}
+
+
+	public void write404Error(String msg) {
+		this.channel.writeAndFlush( create404FullHttpResponse(msg) );
+	}
+
+	public DefaultFullHttpResponse create404FullHttpResponse(String msg) {
+		return this.createStatusHttpResponse(HttpResponseStatus.INTERNAL_SERVER_ERROR,
+				msg.getBytes(CharsetUtil.UTF_8));
+	}
+
 
 	public void sendRedirect(String path){
 

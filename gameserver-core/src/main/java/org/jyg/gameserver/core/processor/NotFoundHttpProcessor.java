@@ -42,7 +42,8 @@ public class NotFoundHttpProcessor extends HttpProcessor {
 
 	@Override
 	public void service(Request request, Response response) {
-		response.writeAndFlush(String.format(NOT_FIND_HTML_TEXT , request.noParamUri()));
+		String msg = String.format(NOT_FIND_HTML_TEXT , request.noParamUri());
+		response.write404Error(msg);
 	}
 
 }
