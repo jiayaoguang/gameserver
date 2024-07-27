@@ -1,14 +1,14 @@
 ##   <font color=#f1986d size=3>游戏服务器</font>
 ![Java CI](https://github.com/jiayaoguang/gameserver/workflows/Java%20CI/badge.svg)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
-![Maven](https://img.shields.io/maven-central/v/com.github.jiayaoguang/gameserver-core.svg)
+![Maven](https://img.shields.io/maven-central/v/io.github.jiayaoguang/gameserver-core.svg)
 ------
 Maven
 
     <dependency>
-        <groupId>com.github.jiayaoguang</groupId>
+        <groupId>io.github.jiayaoguang</groupId>
         <artifactId>gameserver-core</artifactId>
-        <version>0.1.1</version>
+        <version>0.1.2</version>
     </dependency>
 
 ### [english introduction](https://github.com/jiayaoguang/gameserver/blob/main/README_EN.md)
