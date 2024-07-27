@@ -76,7 +76,7 @@ public class DBTableManager {
         }
 
 
-        List<Field> allObjectFields = AllUtil.getClassObjectFields(dbEntityClass);
+        List<Field> allObjectFields = ClassUtil.getClassObjectFields(dbEntityClass);
 
 
         LinkedHashMap<String, TableFieldInfo> tableFieldInfoMap = new LinkedHashMap<>();

@@ -160,7 +160,7 @@ public class GameContext{
         AbstractMsgCodec<?> byteMsgCodec = msgId2MsgCodecMap.get(msgId);
 
         if(byteMsgCodec == null){
-            List<Field> fieldList = AllUtil.getClassObjectFields(byteMsgObjClazz);
+            List<Field> fieldList = ClassUtil.getClassObjectFields(byteMsgObjClazz);
             if(fieldList.isEmpty()){
                 byteMsgCodec = new EmptyJsonMsgCodec(byteMsgObjClazz);
             }else {

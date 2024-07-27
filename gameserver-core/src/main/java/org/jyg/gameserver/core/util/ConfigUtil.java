@@ -73,7 +73,7 @@ public class ConfigUtil {
     }
 
     public static void properties2Object(final Properties p, final Object object) {
-        List<Field> fields = AllUtil.getClassObjectFields(object.getClass());
+        List<Field> fields = ClassUtil.getClassObjectFields(object.getClass());
         for (Field field : fields) {
             String fieldName = field.getName();
 

@@ -3,6 +3,7 @@ package org.jyg.gameserver.db.util;
 import cn.hutool.core.io.FileUtil;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.jyg.gameserver.core.util.AllUtil;
+import org.jyg.gameserver.core.util.ClassUtil;
 import org.jyg.gameserver.core.util.FTLLoader;
 import org.jyg.gameserver.db.anno.DBTableFieldIgnore;
 
@@ -48,7 +49,7 @@ public class GenDBProxy {
 
         List<Map<String, String>> fieldInfoMapList = new ArrayList<Map<String, String>>();
 
-        List<Field> fields = AllUtil.getClassObjectFields(clazz);
+        List<Field> fields = ClassUtil.getClassObjectFields(clazz);
         for (Field field : fields) {
             Map<String, String> fieldInfoMap = new HashMap<String, String>();
             fieldInfoMap.put("fieldNote", "hello");

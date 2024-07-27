@@ -162,7 +162,7 @@ public class AllUtil {
 
 
 
-    @Deprecated
+
     public static String getChannelRemoteAddr(final Channel channel) {
         if (null == channel) {
             return "";
@@ -185,10 +185,6 @@ public class AllUtil {
 
 
 
-    @Deprecated
-    public static List<Field> getClassObjectFields(Class<?> clazz){
-        return ClassUtil.getClassObjectFields(clazz);
-    }
 
     /**
      * 获取文件夹里指定后缀名的所有文件
