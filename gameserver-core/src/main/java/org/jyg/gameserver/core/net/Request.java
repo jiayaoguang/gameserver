@@ -30,11 +30,10 @@ public class Request {
 
     private final HttpMethod method;
 
-    private boolean isMakeExecption = false;
+    private boolean isMakeException = false;
 
-    private boolean contentTypeJson = false;
 
-    private Map<String,Object> jsonParams;
+    private Map<String,Object> jsonParams = Collections.EMPTY_MAP;
 
 
     public Request(HttpRequest httpRequest) {
@@ -47,16 +46,6 @@ public class Request {
 
     public String getParameter(String paramName) {
 
-        if(contentTypeJson){
-            if(jsonParams == null){
-                return null;
-            }
-            Object value = jsonParams.get(paramName);
-            if(value == null){
-                return null;
-            }
-            return String.valueOf(value);
-        }
 
         List<String> params = getParameterList(paramName);
         if(params == null || params.isEmpty()){
@@ -89,6 +78,28 @@ public class Request {
 
     public Map<String, Object> getJsonParams() {
         return jsonParams;
+    }
+
+
+    public int getJsonIntParam(String param){
+        return (Integer) jsonParams.get(param);
+    }
+
+    public int getJsonIntParam(String param,int defaultValue){
+        Object value = jsonParams.get(param);
+        if(value == null){
+            return defaultValue;
+        }
+        return (Integer) value;
+    }
+
+
+    public String getJsonStringParam(String param){
+        return (String) jsonParams.get(param);
+    }
+
+    public Object getJsonParam(String param){
+        return jsonParams.get(param);
     }
 
 
@@ -163,7 +174,7 @@ public class Request {
                 //ignore
             } catch (IOException e) {
                 e.printStackTrace();
-                isMakeExecption = true;
+                isMakeException = true;
             } finally {
                 decoder.destroy();
             }
@@ -173,7 +184,7 @@ public class Request {
 
         String contentType = headers.get(HttpHeaderNames.CONTENT_TYPE);
         if(contentType.contains("json")){
-            contentTypeJson = true;
+
 
             for(String key : parametersMap.keySet() ){
                 ObjectMapper objectMapper = new ObjectMapper();
@@ -191,7 +202,7 @@ public class Request {
 
     }
 
-    public boolean isMakeExecption() {
-        return isMakeExecption;
+    public boolean isMakeException() {
+        return isMakeException;
     }
 }
