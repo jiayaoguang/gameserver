@@ -11,17 +11,17 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.jyg.gameserver.core.http.HttpCallBack;
 
 /**
  * created by jiayaoguang at 2018年4月3日
  */
 public class HttpClient {
 
-    // TODO 改为异步
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    OkHttpClient client = new OkHttpClient.Builder().connectTimeout(50, TimeUnit.SECONDS)
-            .readTimeout(50, TimeUnit.SECONDS).writeTimeout(50, TimeUnit.SECONDS).build();
+    OkHttpClient client = new OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(5, TimeUnit.SECONDS).writeTimeout(5, TimeUnit.SECONDS).build();
 
 
     public String get(String url) throws IOException {
@@ -37,6 +37,15 @@ public class HttpClient {
         return request(request);
     }
 
+    public void postAsyn( String url,  String json , HttpCallBack callback) throws IOException {
+
+
+        RequestBody body = RequestBody.create(JSON, json);
+        Request request = new Request.Builder().url(url).post(body).build();
+        requestAsyn(request, callback);
+    }
+
+
     public String post(String url, Map<String, String> params) throws IOException {
         FormBody.Builder formBuilder = new FormBody.Builder();
 
@@ -51,13 +60,13 @@ public class HttpClient {
 
 
     //异步，开线程池阻塞等待响应
-    public void getAsyn(String url, Callback callback) throws IOException {
+    public void getAsyn(String url, HttpCallBack callback) throws IOException {
         Request request = new Request.Builder().url(url).build();
 
         requestAsyn(request, callback);
     }
 
-    public void postAsyn( String url, Map<String, String> params , Callback callback) throws IOException {
+    public void postAsyn( String url, Map<String, String> params , HttpCallBack callback) throws IOException {
 
 //        RequestBody body = RequestBody.create(JSON, json);
 
@@ -73,18 +82,19 @@ public class HttpClient {
     }
 
 
-    public void requestAsyn(Request request, Callback callback) throws IOException {
+    public void requestAsyn(Request request, HttpCallBack callback) throws IOException {
         client.newCall(request).enqueue(callback);
     }
 
     public String request(Request request) throws IOException {
-        Response response = client.newCall(request).execute();
+        try(Response response = client.newCall(request).execute();){
+            if (response.body() == null) {
+                return null;
+            }
 
-        if (response.body() == null) {
-            return null;
+            return response.body().string();
         }
 
-        return response.body().string();
     }
 
 

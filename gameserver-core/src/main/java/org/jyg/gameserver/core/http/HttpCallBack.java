@@ -5,6 +5,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 import org.jyg.gameserver.core.event.ExecutableEvent;
 import org.jyg.gameserver.core.util.GameContext;
+import org.jyg.gameserver.core.util.Logs;
 
 import java.io.IOException;
 
@@ -26,7 +27,11 @@ public class HttpCallBack implements Callback {
     @Override
     public void onFailure(Call call, IOException e) {
         ExecutableEvent executableEvent = new ExecutableEvent((()->{
+            try {
                 callback.onFailure(call,e);
+            } catch (Exception exception) {
+                Logs.DEFAULT_LOGGER.error("httpClient onFailure Exception", exception);
+            }
         }));
 
         gameContext.getConsumerManager().publishcEvent(fromConsumerId, executableEvent);
@@ -37,11 +42,10 @@ public class HttpCallBack implements Callback {
     public void onResponse(Call call, Response response) throws IOException {
 
         ExecutableEvent responseExecutableEvent = new ExecutableEvent((()->{
-            try {
-                callback.onResponse(call,response);
-            } catch (IOException e) {
-                callback.onFailure(call,e);
-                e.printStackTrace();
+            try (response) {
+                callback.onResponse(call, response);
+            } catch (Exception e) {
+                Logs.DEFAULT_LOGGER.error("httpClient onResponse Exception", e);
             }
         }));
 
