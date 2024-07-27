@@ -31,4 +31,6 @@ public @interface DBTableField {
     String comment() default "";
 
     FieldIndexType indexType() default FieldIndexType.NONE;
+
+    String defaultValue() default "";
 }
