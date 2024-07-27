@@ -1,7 +1,5 @@
 package org.jyg.gameserver.core.msg;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -26,9 +24,8 @@ public class EmptyJsonMsgCodec extends AbstractByteMsgCodec<ByteMsgObj> {
     }
 
 
-
     @Override
-    public byte[] encode(ByteMsgObj jsonMsg) throws JsonProcessingException {
+    public byte[] encode(ByteMsgObj jsonMsg) {
         return EMPTY_JSON_BYTES;
     }
 

@@ -1,22 +1,16 @@
 package org.jyg.gameserver.db.type;
 
-import cn.hutool.core.map.MapUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * create by jiayaoguang at 2021/5/17
  */
 public class JsonTypeHandler<T> implements TypeHandler<T> {
-
-    private final JsonMapper jsonMapper = new JsonMapper();
 
     private final Class<T> jsonClazz;
 
@@ -29,12 +23,7 @@ public class JsonTypeHandler<T> implements TypeHandler<T> {
         if(parameter == null){
             strParam = null;
         } else {
-            try {
-                strParam = jsonMapper.writeValueAsString(parameter);
-            } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-                throw new IllegalArgumentException(e);
-            }
+            strParam = JSONObject.toJSONString(parameter);
         }
 
         ps.setString(index , strParam);
@@ -51,13 +40,8 @@ public class JsonTypeHandler<T> implements TypeHandler<T> {
             }
         }
 
-        try {
-            T resultInstance = jsonMapper.readValue(result , jsonClazz);
-            return resultInstance;
-        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-            throw new IllegalArgumentException(e);
-        }
+        T resultInstance = JSONObject.parseObject(result , jsonClazz);
+        return resultInstance;
 
     }
 
@@ -73,13 +57,8 @@ public class JsonTypeHandler<T> implements TypeHandler<T> {
             }
         }
 
-        try {
-            T resultInstance = jsonMapper.readValue(result , jsonClazz);
-            return resultInstance;
-        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-            throw new IllegalArgumentException(e);
-        }
+        T resultInstance = JSONObject.parseObject(result , jsonClazz);
+        return resultInstance;
 
     }
 
@@ -89,11 +68,7 @@ public class JsonTypeHandler<T> implements TypeHandler<T> {
         if(t == null){
             return null;
         }
-        try {
-            return jsonMapper.writeValueAsString(t);
-        } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException(e);
-        }
+        return JSONObject.toJSONString(t);
     }
 
 

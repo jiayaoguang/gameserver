@@ -9,7 +9,6 @@ import org.jyg.gameserver.core.event.MsgEvent;
 import org.jyg.gameserver.core.net.Request;
 import org.jyg.gameserver.core.net.Response;
 import org.jyg.gameserver.core.session.Session;
-import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.IpUtil;
 import org.jyg.gameserver.core.util.Logs;
 
@@ -38,7 +37,7 @@ public abstract class HttpProcessor extends AbstractProcessor<Request> {
 //		Request request = event.getData();
 		Response response = this.createResponse(channel);
 
-		if(request.isMakeExecption()){
+		if(request.isMakeException()){
 			response.write500Error();
 			return;
 		}

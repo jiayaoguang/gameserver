@@ -3,8 +3,8 @@ package org.jyg.gameserver.core.net;
 import java.io.IOException;
 import java.util.*;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import cn.hutool.json.ObjectMapper;
+import com.alibaba.fastjson2.JSONObject;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.cookie.Cookie;
 import io.netty.handler.codec.http.cookie.ServerCookieDecoder;
@@ -185,18 +185,11 @@ public class Request {
         String contentType = headers.get(HttpHeaderNames.CONTENT_TYPE);
         if(contentType.contains("json")){
 
-
-            for(String key : parametersMap.keySet() ){
-                ObjectMapper objectMapper = new ObjectMapper();
-                try {
-                    jsonParams = objectMapper.readValue(key , HashMap.class);
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
+            for(String param : parametersMap.keySet() ){
+                jsonParams = JSONObject.parseObject(param , HashMap.class);
             }
 
         }
-
 
         noParamUri = req.uri();
 

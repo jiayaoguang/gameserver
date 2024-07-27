@@ -115,17 +115,7 @@
 			<version>1.10.13</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.14.2</version>
-		</dependency>
 
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>2.14.2</version>
-		</dependency>
         <dependency>
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
@@ -152,6 +142,13 @@
 			<artifactId>amqp-client</artifactId>
 			<version>5.18.0</version>
 			<scope>provided</scope>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>2.0.52</version>
 		</dependency>
 
 
