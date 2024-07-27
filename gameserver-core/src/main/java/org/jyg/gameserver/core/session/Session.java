@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.ints.Int2LongMap;
 import it.unimi.dsi.fastutil.ints.Int2LongOpenHashMap;
 import org.jyg.gameserver.core.manager.Lifecycle;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
+import org.jyg.gameserver.core.util.Logs;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
@@ -66,7 +67,12 @@ public abstract class Session implements Lifecycle {
 //	}
 
 	public void writeMessage( MessageLite message){
-		this.writeObjMessage(message);
+
+		try{
+			this.writeObjMessage(message);
+		}catch (Exception e){
+			Logs.DEFAULT_LOGGER.error("writeMessage Exception : " , e);
+		}
 	}
 
 //	@Deprecated
@@ -75,7 +81,12 @@ public abstract class Session implements Lifecycle {
 //	}
 
 	public void writeMessage( MessageLite.Builder messageBuilder) {
-		this.writeObjMessage(messageBuilder.build());
+		try{
+			this.writeObjMessage(messageBuilder.build());
+		}catch (Exception e){
+			Logs.DEFAULT_LOGGER.error("writeMessage Exception : " , e);
+		}
+
 	}
 
 
@@ -105,11 +116,15 @@ public abstract class Session implements Lifecycle {
 
 
 	public void writeMessage(ByteMsgObj byteMsgObj){
-		this.writeObjMessage(byteMsgObj);
+		try{
+			this.writeObjMessage(byteMsgObj);
+		}catch (Exception e){
+			Logs.DEFAULT_LOGGER.error("writeMessage Exception : " , e);
+		}
 	}
 
 
-	protected abstract void writeObjMessage(Object msgObj);
+	protected abstract void writeObjMessage(Object msgObj) throws Exception;
 
 
 	public abstract String getRemoteAddr();

@@ -2,6 +2,7 @@ package org.jyg.gameserver.core.session;
 
 import io.netty.channel.Channel;
 import org.jyg.gameserver.core.util.AllUtil;
+import org.jyg.gameserver.core.util.Logs;
 
 public class TcpChannelSession extends Session{
 
@@ -41,7 +42,7 @@ public class TcpChannelSession extends Session{
             try{
                 channel.close();
             }catch (Exception e){
-                e.printStackTrace();
+                Logs.DEFAULT_LOGGER.error("session stop exception {}" , e);
             }
         }
     }
