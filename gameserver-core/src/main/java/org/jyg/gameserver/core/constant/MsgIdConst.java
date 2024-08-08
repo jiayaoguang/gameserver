@@ -21,6 +21,15 @@ public class MsgIdConst {
 
     public static final int PONG = 5;
 
+    /**
+     * 获取服务器时间请求
+     */
+    public static final int GET_SERVER_TIME_REQUEST = 6;
+    /**
+     * 获取服务器时间回复
+     */
+    public static final int GET_SERVER_TIME_RESPONSE = 7;
+
 
     public static final int ROUTE_REGISTER_MSG_ID = 300 ;
     public static final int ROUTE_REGISTER_REPLY_MSG_ID = 301 ;

@@ -246,6 +246,10 @@ public class GameContext{
         addMsgId2MsgClassMapping(MsgIdConst.CONSUMER_EVENT_DATA_RETURN , ConsumerEventDataReturnMsg.class);
         addByteMsgCodec(new ProtostuffMsgCodec(ConsumerEventDataReturnMsg.class));
 
+        addMsgId2MsgClassMapping(MsgIdConst.GET_SERVER_TIME_REQUEST , GetServerTimeRequestMsg.class);
+        addByteMsgCodec(new EmptyMsgCodec(new GetServerTimeRequestMsg()));
+        addMsgId2MsgClassMapping(MsgIdConst.GET_SERVER_TIME_RESPONSE , GetServerTimeResponseMsg.class);
+
 
         getMainGameConsumer().addProcessor(new ConsumerEventDataMsgProcessor());
         getMainGameConsumer().addProcessor(new ConsumerEventDataReturnMsgProcessor());
@@ -274,6 +278,7 @@ public class GameContext{
         getMainGameConsumer().addProcessor(new RouteClientSessionConnectProcessor());
         getMainGameConsumer().addProcessor(new RouteClientSessionDisconnectProcessor());
 
+        getMainGameConsumer().addProcessor(new GetServerTimeProcessor());
     }
 
 
