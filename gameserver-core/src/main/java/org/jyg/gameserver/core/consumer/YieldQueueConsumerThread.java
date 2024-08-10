@@ -11,6 +11,16 @@ public class YieldQueueConsumerThread extends QueueConsumerThread{
 
     private int updateCount = 0;
 
+    public YieldQueueConsumerThread() {
+
+    }
+
+
+    public YieldQueueConsumerThread(String name) {
+        super(name);
+    }
+
+
     @Override
     protected void beforeUpdate() {
         //do nothing
