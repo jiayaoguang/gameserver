@@ -24,7 +24,7 @@ public class RemoteManagerGameConsumer extends RemoteDelegateGameConsumer {
 
 
     public RemoteManagerGameConsumer(GameContext gameContext , RemoteConsumerInfo remoteConsumerInfo,String consumerThreadName) {
-        super(gameContext,new YieldQueueConsumerThread(consumerThreadName) ,gameContext.createTcpClient(remoteConsumerInfo.getIp(),remoteConsumerInfo.getPort()) , remoteConsumerInfo );
+        super(gameContext,new PollMoreNullWaitQueueConsumerThread(consumerThreadName) ,gameContext.createTcpClient(remoteConsumerInfo.getIp(),remoteConsumerInfo.getPort()) , remoteConsumerInfo );
 
         addTcpClient(getTcpClient());
     }

@@ -56,7 +56,7 @@ public abstract class AbstractThreadQueueGameConsumer extends GameConsumer {
     public void doStart() {
 
         if(consumerThread == null){
-            consumerThread = new YieldQueueConsumerThread();
+            consumerThread = new PollMoreNullWaitQueueConsumerThread();
             consumerThread.setName(getClass().getSimpleName() + "_" + getId());
         }
         consumerThread.addQueueConsumer(this);

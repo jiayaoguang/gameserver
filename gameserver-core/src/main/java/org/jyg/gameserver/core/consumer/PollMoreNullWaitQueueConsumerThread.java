@@ -2,7 +2,6 @@ package org.jyg.gameserver.core.consumer;
 
 import org.jyg.gameserver.core.util.Logs;
 
-import javax.naming.OperationNotSupportedException;
 import java.util.concurrent.locks.LockSupport;
 
 /**
@@ -12,8 +11,8 @@ public class PollMoreNullWaitQueueConsumerThread extends QueueConsumerThread {
 
 
 
-    private final int yieldNeedPollNullNum = 50;
-    private final int parkNeedPollNullNum = 100;
+    private static final int YIELD_NEED_POLL_NULL_NUM = 500;
+    private static final int PARK_NEED_POLL_NULL_NUM = 600;
 
 
 
@@ -49,10 +48,10 @@ public class PollMoreNullWaitQueueConsumerThread extends QueueConsumerThread {
             }
 
 
-            if (gameConsumer.getContinuePollNullNum() > parkNeedPollNullNum) {
+            if (gameConsumer.getContinuePollNullNum() > PARK_NEED_POLL_NULL_NUM) {
                 gameConsumer.clearContinuePollNullNum();
                 LockSupport.parkNanos(1000 * 1000L);
-            } else if (gameConsumer.getContinuePollNullNum() > yieldNeedPollNullNum) {
+            } else if (gameConsumer.getContinuePollNullNum() > YIELD_NEED_POLL_NULL_NUM) {
                 Thread.yield();
             }
         }
@@ -88,12 +87,12 @@ public class PollMoreNullWaitQueueConsumerThread extends QueueConsumerThread {
                 break;
             }
 
-            if (minContinuePollNullCountNum > parkNeedPollNullNum) {
+            if (minContinuePollNullCountNum > PARK_NEED_POLL_NULL_NUM) {
                 for (AbstractThreadQueueGameConsumer gameConsumer : queueGameConsumers) {
                     gameConsumer.clearContinuePollNullNum();
                 }
                 LockSupport.parkNanos(1000 * 1000L);
-            } else if (minContinuePollNullCountNum > yieldNeedPollNullNum) {
+            } else if (minContinuePollNullCountNum > YIELD_NEED_POLL_NULL_NUM) {
                 Thread.yield();
             }
 
