@@ -451,15 +451,10 @@ public abstract class GameConsumer {
             doEvent(event);
             long costMill = (System.nanoTime() - startNano)/1000000L;
             if(costMill > 10){
-                if(event.getEvent() instanceof MsgEvent){
-                    MsgEvent msgEvent = (MsgEvent)event.getEvent();
-                    Logs.DEFAULT_LOGGER.error("{} event  cost more time {} data : {}",getClass().getSimpleName(), costMill, (msgEvent.getMsgData() == null? "null" :msgEvent.getMsgData().getClass().getSimpleName()));
-                }else {
-                    Logs.DEFAULT_LOGGER.error("{} event  cost more time {} data : {}",getClass().getSimpleName(), costMill, (event.getEvent() == null? "null" : event.getEvent().getClass().getSimpleName()));
-                }
+                Logs.DEFAULT_LOGGER.error("{} event  cost more time {} data : {}",getClass().getSimpleName(), costMill, (event.getEvent() == null? "null" : event.toString()));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logs.DEFAULT_LOGGER.error("event {} make exception {}" , (event.getEvent() == null? "null" : event.toString()) , ExceptionUtils.getStackTrace(e));
         }
 //        finally {
 //            try{

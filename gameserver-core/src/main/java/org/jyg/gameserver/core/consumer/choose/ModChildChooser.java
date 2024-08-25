@@ -1,6 +1,7 @@
 package org.jyg.gameserver.core.consumer.choose;
 
 import org.jyg.gameserver.core.consumer.GameConsumer;
+import org.jyg.gameserver.core.event.Event;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public class ModChildChooser implements ChildChooser{
 
     @Override
-    public GameConsumer choose(String chooseId, List<? extends GameConsumer> childConsumers) {
+    public GameConsumer choose(String chooseId, Event event, List<? extends GameConsumer> childConsumers) {
 
         int childConsumerIndex = chooseId.hashCode() % childConsumers.size();
 

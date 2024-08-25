@@ -109,11 +109,11 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
     }
 
 
-    public void addSQLBuilder(int eventId, SQLBuilder SQLBuilder) {
+    public void addSQLBuilder(int eventId, SQLBuilder sqlBuilder) {
         if (sqlTextMap.containsKey(eventId)) {
             throw new IllegalArgumentException(" addDBProcessor fail contains eventId " + eventId);
         }
-        sqlTextMap.put(eventId, SQLBuilder);
+        sqlTextMap.put(eventId, sqlBuilder);
     }
 
     public TableInfo tryAddTableInfo(Class<?> dbEntityClass) {
@@ -132,6 +132,7 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
     public void beforeStart() {
         super.beforeStart();
         sqlExecutor.tryConnectIfClose();
+        getTimerManager().addUnlimitedTimer(10 * 1000L, sqlExecutor::execQueryTest);
     }
 
     @Override

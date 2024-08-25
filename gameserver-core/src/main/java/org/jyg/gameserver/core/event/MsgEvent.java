@@ -24,4 +24,9 @@ public abstract class MsgEvent<T> extends Event{
     }
 
 
+    @Override
+    public String toString(){
+        return "MsgEvent msgId : " + msgId + " ,msgType : " + (msgData == null?"null":msgData.getClass().getSimpleName());
+    }
+
 }

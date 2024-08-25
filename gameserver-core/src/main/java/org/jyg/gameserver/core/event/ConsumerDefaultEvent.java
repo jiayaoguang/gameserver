@@ -18,7 +18,6 @@ public class ConsumerDefaultEvent extends Event {
     }
 
 
-
     public ConsumerDefaultEvent(int eventId, Object data, long requestId, int fromConsumerId, Map<String, Object> params) {
         this.eventId = eventId;
         setRequestId(requestId);
@@ -43,6 +42,10 @@ public class ConsumerDefaultEvent extends Event {
         this.eventId = eventId;
     }
 
+    @Override
+    public String toString() {
+        return "MsgEvent eventId : " + eventId + " ,dataType : " + (data == null ? "null" : data.getClass().getSimpleName());
+    }
 
 
 }

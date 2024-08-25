@@ -1,6 +1,7 @@
 package org.jyg.gameserver.core.consumer.choose;
 
 import org.jyg.gameserver.core.consumer.GameConsumer;
+import org.jyg.gameserver.core.event.Event;
 
 import java.util.List;
 
@@ -9,6 +10,6 @@ import java.util.List;
  */
 public interface ChildChooser {
 
-    GameConsumer choose(String chooseId, List<? extends GameConsumer> childConsumers);
+    GameConsumer choose(String chooseId, Event event, List<? extends GameConsumer> childConsumers);
 
 }

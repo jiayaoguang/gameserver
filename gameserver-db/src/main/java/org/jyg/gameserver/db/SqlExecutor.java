@@ -226,24 +226,14 @@ public class SqlExecutor {
 
 
 
-    @Deprecated
-    private void querySqlIdle(){
+    public void execQueryTest(){
         tryConnectIfClose();
 
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
+        try (Statement statement  = connection.createStatement();){
             statement.execute("SELECT 1;");
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }finally {
-            if(statement != null){
-                try {
-                    statement.close();
-                } catch (SQLException exception) {
-                    exception.printStackTrace();
-                }
-            }
+        } catch (Exception e) {
+            Logs.DEFAULT_LOGGER.error("execQueryTest exception ",e);
+            tryConnectIfClose();
         }
 
     }
