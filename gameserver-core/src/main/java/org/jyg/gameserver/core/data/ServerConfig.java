@@ -44,6 +44,10 @@ public class ServerConfig {
 
     private Set<String> whiteIpSet = new LinkedHashSet<>();
 
+    private boolean printRequestMsg = false;
+
+    private boolean printResponseMsg = false;
+
 
     public int getMaxFrameLength() {
         return maxFrameLength;
@@ -135,5 +139,22 @@ public class ServerConfig {
 
     public void setWhiteIpSet(Set<String> whiteIpSet) {
         this.whiteIpSet = whiteIpSet;
+    }
+
+
+    public boolean isPrintRequestMsg() {
+        return printRequestMsg;
+    }
+
+    public void setPrintRequestMsg(boolean printRequestMsg) {
+        this.printRequestMsg = printRequestMsg;
+    }
+
+    public boolean isPrintResponseMsg() {
+        return printResponseMsg;
+    }
+
+    public void setPrintResponseMsg(boolean printResponseMsg) {
+        this.printResponseMsg = printResponseMsg;
     }
 }

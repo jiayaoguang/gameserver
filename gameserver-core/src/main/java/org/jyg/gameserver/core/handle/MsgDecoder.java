@@ -10,6 +10,7 @@ import org.jyg.gameserver.core.event.UnknownMsgEvent;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.GameContext;
+import org.jyg.gameserver.core.util.IpUtil;
 import org.jyg.gameserver.core.util.Logs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +24,12 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
 
     private final GameContext gameContext;
 
+    private final boolean printRequestMsg;
+
     public MsgDecoder(GameContext gameContext) {
         super(gameContext.getServerConfig().getMaxFrameLength(), 0, 4, 0, 4);
         this.gameContext = gameContext;
+        this.printRequestMsg = gameContext.getServerConfig().isPrintRequestMsg();
     }
 
     // @Override
@@ -102,6 +106,10 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
             }catch (Exception e){
                 LOGGER.error(" msg decode make exception, msgCodec type : {}  , exception {}", msgCodec.getClass().getSimpleName(), e.getCause());
                 throw e;
+            }
+
+            if(printRequestMsg){
+                Logs.DEFAULT_LOGGER.info("session {} request msgId {} msg {}", IpUtil.getChannelRemoteIp(ctx.channel()), msgId, msgObj.getClass().getSimpleName());
             }
 
             NormalMsgEvent normalMsgEvent = new NormalMsgEvent(msgId , msgObj , ctx.channel());

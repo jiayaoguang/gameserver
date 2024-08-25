@@ -7,10 +7,7 @@ import org.jyg.gameserver.core.util.Logs;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class EventManager implements Lifecycle {
 
@@ -151,6 +148,35 @@ public class EventManager implements Lifecycle {
     public List<GameEventListener<? extends Event>> getEventListeners(Class<? extends Event> eventClazz) {
         List<GameEventListener<? extends Event>> eventListeners = eventListMap.get(eventClazz);
         return eventListeners != null ? new ArrayList<>(eventListeners) : new ArrayList<>();
+    }
+
+
+    public void removeEventListener(Class<? extends GameEventListener<? extends Event>> eventListenerClazz) {
+        Type superClass = eventListenerClazz.getGenericInterfaces()[0];
+        if (superClass instanceof Class<?>) { // sanity check, should never happen
+            throw new IllegalArgumentException("Internal error: TypeReference constructed without actual type information");
+        }
+
+        Type _type = ((ParameterizedType) superClass).getActualTypeArguments()[0];
+
+        Class<? extends Event> eventClazz = (Class<? extends Event>) _type;
+        removeEventListener(eventClazz, eventListenerClazz);
+    }
+
+
+    public void removeEventListener(Class<? extends Event> eventClazz, Class<? extends GameEventListener<? extends Event>> eventListenerClazz) {
+        List<GameEventListener<? extends Event>> eventListeners = eventListMap.get(eventClazz);
+        if (eventListeners == null || eventListeners.isEmpty()) {
+            return;
+        }
+
+        Iterator<GameEventListener<? extends Event>> gameEventListenerIterator = eventListeners.iterator();
+        for (; gameEventListenerIterator.hasNext(); ) {
+            GameEventListener<? extends Event> gameEventListener = gameEventListenerIterator.next();
+            if (gameEventListener.getClass() == eventListenerClazz) {
+                gameEventListenerIterator.remove();
+            }
+        }
     }
 
 }

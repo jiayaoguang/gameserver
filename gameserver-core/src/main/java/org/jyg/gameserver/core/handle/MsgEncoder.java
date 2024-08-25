@@ -8,6 +8,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.GameContext;
+import org.jyg.gameserver.core.util.IpUtil;
 import org.jyg.gameserver.core.util.Logs;
 
 /**
@@ -19,8 +20,11 @@ public class MsgEncoder extends MessageToByteEncoder<Object> {
 
 	protected final GameContext gameContext;
 
+	private final boolean printResponseMsg;
+
 	public MsgEncoder(GameContext gameContext) {
 		this.gameContext = gameContext;
+		this.printResponseMsg = gameContext.getServerConfig().isPrintResponseMsg();
 	}
 
 
@@ -33,8 +37,13 @@ public class MsgEncoder extends MessageToByteEncoder<Object> {
 			ByteMsgObj byteMsgObj = (ByteMsgObj)msg;
 			AllUtil.writeToBuf(gameContext, byteMsgObj , buf);
 		}else {
-			Logs.DEFAULT_LOGGER.error("unknown msg type : {}" , msg.getClass().getCanonicalName());
+			Logs.DEFAULT_LOGGER.error("encode msg fail , unknown msg type : {}" , msg.getClass().getCanonicalName());
 		}
 //		out.add(buf);
+
+		if(printResponseMsg){
+			Logs.DEFAULT_LOGGER.info("response session {} msg {}", IpUtil.getChannelRemoteIp(ctx.channel()), msg.getClass().getSimpleName());
+		}
+
 	}
 }
