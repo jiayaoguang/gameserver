@@ -8,14 +8,15 @@ import java.util.List;
 /**
  * create by jiayaoguang on 2022/11/20
  */
-public class ModChildChooser implements ChildChooser{
+public class ModChildChooser implements ChildChooser {
 
     @Override
     public GameConsumer choose(String chooseId, Event event, List<? extends GameConsumer> childConsumers) {
 
-        int childConsumerIndex = chooseId.hashCode() % childConsumers.size();
+        int hashCode = chooseId.hashCode();
 
-        GameConsumer childGameConsumer = childConsumers.get(childConsumerIndex);
-        return childGameConsumer;
+        int childConsumerIndex = (hashCode > 0 ? hashCode : -hashCode) % childConsumers.size();
+
+        return childConsumers.get(childConsumerIndex);
     }
 }
