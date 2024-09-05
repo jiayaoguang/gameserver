@@ -49,9 +49,9 @@ public class ServerConfig {
     private boolean printResponseMsg = false;
 
 
-    private int socketRcvBuff = 128 * 1024;
+    private int socketRcvBuff = 64 * 1024;
 
-    private int socketSndBuff = 128 * 1024;
+    private int socketSndBuff = 64 * 1024;
 
     public int getMaxFrameLength() {
         return maxFrameLength;
