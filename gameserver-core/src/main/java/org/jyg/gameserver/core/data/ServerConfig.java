@@ -49,6 +49,10 @@ public class ServerConfig {
     private boolean printResponseMsg = false;
 
 
+    private int socketRcvBuff = 128 * 1024;
+
+    private int socketSndBuff = 128 * 1024;
+
     public int getMaxFrameLength() {
         return maxFrameLength;
     }
@@ -156,5 +160,22 @@ public class ServerConfig {
 
     public void setPrintResponseMsg(boolean printResponseMsg) {
         this.printResponseMsg = printResponseMsg;
+    }
+
+
+    public int getSocketRcvBuff() {
+        return socketRcvBuff;
+    }
+
+    public void setSocketRcvBuff(int socketRcvBuff) {
+        this.socketRcvBuff = socketRcvBuff;
+    }
+
+    public int getSocketSndBuff() {
+        return socketSndBuff;
+    }
+
+    public void setSocketSndBuff(int socketSndBuff) {
+        this.socketSndBuff = socketSndBuff;
     }
 }

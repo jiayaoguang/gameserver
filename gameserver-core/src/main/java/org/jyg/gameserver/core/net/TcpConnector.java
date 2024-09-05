@@ -79,8 +79,17 @@ public abstract class TcpConnector extends AbstractConnector {
 		if(!isHttp){
 			serverBootstrap.childOption(ChannelOption.SO_LINGER, 0);
 		}
-		serverBootstrap.childOption(ChannelOption.SO_RCVBUF, 64 * 1024);
-		serverBootstrap.childOption(ChannelOption.SO_SNDBUF, 64 * 1024);
+
+		if(gameContext.getServerConfig().getSocketRcvBuff() < 1024){
+			throw new IllegalArgumentException("ServerConfig().getSocketRcvBuff() < 1024");
+		}
+
+		if(gameContext.getServerConfig().getSocketSndBuff() < 1024){
+			throw new IllegalArgumentException("ServerConfig().getSocketSndBuff() < 1024");
+		}
+
+		serverBootstrap.childOption(ChannelOption.SO_RCVBUF, gameContext.getServerConfig().getSocketRcvBuff());
+		serverBootstrap.childOption(ChannelOption.SO_SNDBUF, gameContext.getServerConfig().getSocketSndBuff());
 		serverBootstrap.childOption(ChannelOption.SO_KEEPALIVE, false);// maybe useless
 		serverBootstrap.childOption(ChannelOption.TCP_NODELAY, true);
 		serverBootstrap.childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
