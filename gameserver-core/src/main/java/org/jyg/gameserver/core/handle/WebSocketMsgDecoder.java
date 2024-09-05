@@ -5,6 +5,7 @@ import io.netty.channel.*;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jyg.gameserver.core.event.ChannelConnectEvent;
 import org.jyg.gameserver.core.event.ChannelDisconnectEvent;
 import org.jyg.gameserver.core.event.NormalMsgEvent;
@@ -68,7 +69,7 @@ public class WebSocketMsgDecoder extends
 
 
 		try{
-
+			int readableBytes222 = msgbyteBuf.readableBytes();
 			int msgId = msgbyteBuf.readInt();
 //            Logs.DEFAULT_LOGGER.debug("cnf:" + frame.refCnt());
 			AbstractMsgCodec<?> msgCodec = gameContext.getMsgCodec(msgId);
@@ -80,7 +81,7 @@ public class WebSocketMsgDecoder extends
 			int readableBytes = msgbyteBuf.readableBytes();
 
 
-			final byte[] dstBytes = new byte[msgbyteBuf.readableBytes()];;
+			final byte[] dstBytes = new byte[readableBytes];
 			if(readableBytes > 0){
 				msgbyteBuf.getBytes(msgbyteBuf.readerIndex(), dstBytes);
 			}else {
@@ -93,7 +94,7 @@ public class WebSocketMsgDecoder extends
 				msgObj = msgCodec.decode(dstBytes);
 			}catch (Exception e){
 				Logs.DEFAULT_LOGGER.error(" msg decode make exception, msgCodec type : {}  , exception {}", msgCodec.getClass().getSimpleName(), e.getCause());
-				throw e;
+				return;
 			}
 			NormalMsgEvent normalMsgEvent = new NormalMsgEvent(msgId  , msgObj, ctx.channel());
 
@@ -115,15 +116,8 @@ public class WebSocketMsgDecoder extends
 
 
 		}catch (Exception e){
-			e.printStackTrace();
 			final String addrRemote = AllUtil.getChannelRemoteAddr(ctx.channel());
-			ctx.channel().close().addListener(new ChannelFutureListener() {
-				@Override
-				public void operationComplete(ChannelFuture future) throws Exception {
-					Logs.DEFAULT_LOGGER.info("closeChannel: close the connection to remote address[{}] result: {}", addrRemote,
-							future.isSuccess());
-				}
-			});
+			Logs.DEFAULT_LOGGER.error("addrRemote {} ws msg decode make exception {}", addrRemote, ExceptionUtils.getStackTrace(e));
 		} finally {
 
 //            Logs.DEFAULT_LOGGER.info("frame.refCnt() : " + frame.refCnt());

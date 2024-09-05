@@ -24,12 +24,67 @@
 			socket.onmessage = function(event) {
 				//var ta = document.getElementById('responseText');
 				//ta.value = ta.value + '\n' + event.data;
-				var strs;//= new Array(); //定义一数组 
-				strs = event.data.split(","); //字符分割 
-				x = parseInt(strs[0]);
-				y = parseInt(strs[1]);
-				drawLine(x, y);
-				console.log(x + ":" + y)
+
+
+
+				if (event.data instanceof Blob) {
+                    // 创建一个FileReader来读取Blob
+                    var reader = new FileReader();
+
+                    // 定义读取完成后的处理函数
+                    reader.onload = function(e) {
+                        // e.target.result 是一个ArrayBuffer
+                        var arrayBuffer = e.target.result;
+
+                        // 创建一个Uint8Array来访问ArrayBuffer的字节
+                        var byteArray = new Uint8Array(arrayBuffer);
+
+                        // 假设从第四个字节之后是字符串数据
+                        var startIndex = 4; // 字符串数据的起始索引（从0开始计数）
+
+                        // 检查Blob是否有足够的数据来至少包含一个字符
+                        if (byteArray.length > startIndex) {
+                            // 创建一个新的Uint8Array来包含从第四个字节开始的数据
+                            var substringArray = byteArray.subarray(startIndex);
+
+                            // 使用TextDecoder将字节数组解码为字符串（假设是UTF-8编码）
+                            var decoder = new TextDecoder("utf-8");
+                            var stringData = decoder.decode(substringArray);
+                            console.log('byteArray.length:', byteArray.length);
+                            // 打印解析后的字符串
+                            console.log('Parsed string:', stringData);
+                            strs = stringData.split(","); //字符分割
+                            x = parseInt(strs[0]);
+                            y = parseInt(strs[1]);
+                            drawLine(x, y);
+                            console.log(x + ":" + y)
+
+                        } else {
+                            console.error('Blob data does not contain enough bytes for string data.');
+                        }
+                    };
+
+                    // 定义读取错误的处理函数
+                    reader.onerror = function(error) {
+                        console.error('Error reading blob:', error);
+                    };
+
+                    // 读取Blob数据为ArrayBuffer
+                    reader.readAsArrayBuffer(event.data);
+                } else {
+                    // 如果数据不是Blob，可能是字符串或其他类型，你可以在这里处理
+                    console.log('Received data:', event.data);
+                }
+
+
+
+				var strs;//= new Array(); //定义一数组
+				//console.log('Message from server ', event.data);
+				//strs = event.data.split(","); //字符分割
+				//x = parseInt(strs[0]);
+				//y = parseInt(strs[1]);
+				//drawLine(x, y);
+				//console.log(x + ":" + y)
 			};
 			socket.onopen = function(event) {
 				var ta = document.getElementById('responseText');
@@ -48,7 +103,27 @@
 				return;
 			}
 			if (socket.readyState == WebSocket.OPEN) {
-				socket.send(message);
+			    id = 200;
+
+                const encoder = new TextEncoder();
+                const strBytes = encoder.encode(message);
+
+                // 假设ID是32位整数
+                const buffer = new ArrayBuffer(4 + strBytes.length);
+                const view = new DataView(buffer);
+
+
+                // 写入ID（假设是32位无符号整数）
+                view.setUint32(0, id, false); // false 表示大端字节序
+
+                // 复制字符串的字节到buffer中
+                const uint8View = new Uint8Array(buffer);
+                uint8View.set(strBytes, 4);
+
+                // 发送数据
+                socket.send(buffer);
+
+				//socket.send(message);
 			} else {
 				alert("连接没有开启.");
 			}

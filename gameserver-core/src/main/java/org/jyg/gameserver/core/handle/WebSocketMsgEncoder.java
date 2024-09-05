@@ -55,7 +55,9 @@ public class WebSocketMsgEncoder extends MessageToByteEncoder<Object> {
 
                 byte[] msgBytes = msgCodec.encode(cast);
 
-                webSocketFrame = new BinaryWebSocketFrame(Unpooled.wrappedBuffer(msgBytes));
+                webSocketFrame = new BinaryWebSocketFrame();
+                webSocketFrame.content().writeInt(eventId);
+                webSocketFrame.content().writeBytes(msgBytes);
 
                 ctx.write(webSocketFrame, promise);
 
@@ -68,7 +70,7 @@ public class WebSocketMsgEncoder extends MessageToByteEncoder<Object> {
 
                 int eventId = gameContext.getMsgIdByProtoClass(protoClass);
                 if (eventId <= 0) {
-                    Logs.DEFAULT_LOGGER.error("unknow eventid ,class {}" + protoClass.getSimpleName());
+                    Logs.DEFAULT_LOGGER.error("unknow eventid ,class {}" , protoClass.getSimpleName());
                     throw new IllegalArgumentException("unknow eventid "+ protoClass.getSimpleName());
                 }
 
@@ -77,7 +79,7 @@ public class WebSocketMsgEncoder extends MessageToByteEncoder<Object> {
 
 
                 if(msgCodec == null){
-                    Logs.DEFAULT_LOGGER.error("unknow msgCodec ,class {}" + protoClass.getSimpleName());
+                    Logs.DEFAULT_LOGGER.error("unknow msgCodec ,class {}" , protoClass.getSimpleName());
                     throw new IllegalArgumentException("unknow msgCodec "+ protoClass.getSimpleName());
                 }
 

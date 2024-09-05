@@ -5,6 +5,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jyg.gameserver.core.event.NormalMsgEvent;
 import org.jyg.gameserver.core.event.UnknownMsgEvent;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
@@ -105,7 +106,7 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
                 msgObj = msgCodec.decode(dstBytes);
             }catch (Exception e){
                 LOGGER.error(" msg decode make exception, msgCodec type : {}  , exception {}", msgCodec.getClass().getSimpleName(), e.getCause());
-                throw e;
+                return null;
             }
 
             if(printRequestMsg){
@@ -118,15 +119,8 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
 
 
         }catch (Exception e){
-            e.printStackTrace();
             final String addrRemote = AllUtil.getChannelRemoteAddr(ctx.channel());
-            ctx.channel().close().addListener(new ChannelFutureListener() {
-                @Override
-                public void operationComplete(ChannelFuture future) throws Exception {
-                    Logs.DEFAULT_LOGGER.info("closeChannel: close the connection to remote address[{}] result: {}", addrRemote,
-                            future.isSuccess());
-                }
-            });
+            LOGGER.error("addrRemote {} msg decode make exception {}", addrRemote, ExceptionUtils.getStackTrace(e));
         } finally {
 
 //            Logs.DEFAULT_LOGGER.info("frame.refCnt() : " + frame.refCnt());
