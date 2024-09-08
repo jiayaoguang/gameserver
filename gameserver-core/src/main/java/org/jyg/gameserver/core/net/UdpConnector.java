@@ -1,6 +1,6 @@
 package org.jyg.gameserver.core.net;
 
-import org.jyg.gameserver.core.handle.initializer.InnerSocketServerInitializer;
+import org.jyg.gameserver.core.handle.initializer.UdpChannelInitializer;
 import org.jyg.gameserver.core.util.GameContext;
 import org.jyg.gameserver.core.util.Logs;
 import io.netty.bootstrap.Bootstrap;
@@ -45,7 +45,7 @@ public class UdpConnector extends AbstractConnector {
         bootstrap.group(workGroup);
 
         bootstrap.channel(getGameContext().isUseEpoll() ? EpollDatagramChannel.class : NioDatagramChannel.class);
-        bootstrap.handler(new InnerSocketServerInitializer(gameContext));
+        bootstrap.handler(new UdpChannelInitializer(gameContext));
 //        bootstrap.childHandler(initializer);
         bootstrap.option(ChannelOption.SO_BROADCAST, true);
         bootstrap.option(ChannelOption.SO_REUSEADDR, true);
@@ -58,7 +58,7 @@ public class UdpConnector extends AbstractConnector {
             throw new RuntimeException(e);
         }
 
-        Logs.DEFAULT_LOGGER.info("bind port : {}" + port);
+        Logs.DEFAULT_LOGGER.info("bind port : {}" , port);
     }
 
     public Channel getChannel() {

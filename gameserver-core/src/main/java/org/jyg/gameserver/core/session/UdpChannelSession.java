@@ -1,18 +1,31 @@
 package org.jyg.gameserver.core.session;
 
 import io.netty.channel.Channel;
+import io.netty.channel.socket.DatagramPacket;
+import org.jyg.gameserver.core.data.UdpMsgInfo;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.Logs;
 
-public class TcpChannelSession extends Session{
+import java.net.InetSocketAddress;
+
+/**
+ * create by jiayaoguang on 2024/9/8
+ */
+public class UdpChannelSession extends Session{
 
     private final Channel channel;
 
+    private final String host;
+    private final int port;
 
-    public TcpChannelSession(Channel channel, long sessionId){
+
+    public UdpChannelSession(long sessionId, Channel channel, String host, int port) {
         super(sessionId);
         this.channel = channel;
+        this.host = host;
+        this.port = port;
     }
+
 
 
 	/*public void setSessionId(int sessionId) {
@@ -23,7 +36,8 @@ public class TcpChannelSession extends Session{
 
     @Override
     protected void writeObjMessage(Object msgObj) {
-        this.channel.writeAndFlush(msgObj);
+        UdpMsgInfo udpMsgInfo = new UdpMsgInfo(host,port,msgObj);
+        this.channel.writeAndFlush(udpMsgInfo);
     }
 
     @Override
@@ -45,14 +59,14 @@ public class TcpChannelSession extends Session{
 
     @Override
     public String getRemoteAddr(){
-        return AllUtil.getChannelRemoteAddr(channel);
+        return host + ":" + port;
     }
 
     @Override
     public boolean isOpen(){
-        if(channel == null || !channel.isActive()){
-            return false;
-        }
+//        if(channel == null || !channel.isActive()){
+//            return false;
+//        }
         return true;
     }
 

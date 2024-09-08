@@ -38,11 +38,11 @@ public class UDPEchoClient {
             }
         };
 
-        UdpClient client = new UdpClient();
+        UdpClient client = new UdpClient("192.168.1.100", 9001);
 
         client.start();
 
-        Channel channel = client.bind(9003);
+        Channel channel = client.getChannel();
 
 
         channel.writeAndFlush(new io.netty.channel.socket.DatagramPacket(

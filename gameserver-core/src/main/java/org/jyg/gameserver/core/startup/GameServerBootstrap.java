@@ -69,10 +69,6 @@ public class GameServerBootstrap extends AbstractBootstrap {
      *
      * @param port port
      */
-    @Deprecated
-    public void addWebSocketService(int port) {
-        addConnector(new WebSocketConnector(port, getGameContext()));
-    }
 
     public void addWebSocketConnector(int port) {
         addConnector(new WebSocketConnector(port, getGameContext()));
@@ -83,13 +79,14 @@ public class GameServerBootstrap extends AbstractBootstrap {
      *
      * @param port port
      */
-    @Deprecated
-    public void addHttpService(int port) {
-        addConnector(new HttpConnector(port, getGameContext()));
-    }
 
     public void addHttpConnector(int port) {
         addConnector(new HttpConnector(port, getGameContext()));
+    }
+
+
+    public void addUdpConnector(int port) {
+        addConnector(new UdpConnector(port, getGameContext()));
     }
 
 

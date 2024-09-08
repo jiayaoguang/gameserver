@@ -3,6 +3,7 @@ package org.jyg.gameserver.core.handle;
 import com.google.protobuf.MessageLite;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import io.netty.handler.codec.EncoderException;
@@ -17,6 +18,7 @@ import org.jyg.gameserver.core.util.Logs;
 /**
  * create by jiayaoguang on 2022/2/4
  */
+@ChannelHandler.Sharable
 public class WebSocketMsgEncoder extends MessageToByteEncoder<Object> {
 
     protected final GameContext gameContext;

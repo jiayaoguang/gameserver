@@ -19,7 +19,7 @@ public class UnknownMsgEventListener implements GameEventListener<UnknownMsgEven
 
         Session session = gameConsumer.getChannelManager().getSession(event.getChannel());
         if(session == null){
-            Logs.DEFAULT_LOGGER.info("channel {} session not found , ignore msg {}" , AllUtil.getChannelRemoteAddr(event.getChannel()) , event.getMsgId());
+            Logs.DEFAULT_LOGGER.error("channel {} session not found , ignore msg {}" , AllUtil.getChannelRemoteAddr(event.getChannel()) , event.getMsgId());
             return;
         }
 

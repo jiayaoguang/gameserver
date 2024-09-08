@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.event;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.event.listener.*;
 import org.jyg.gameserver.core.manager.Lifecycle;
@@ -37,6 +38,7 @@ public class EventManager implements Lifecycle {
         addEventListener(new MQMsgEventListener(gameConsumer));
         addEventListener(new InnerMsgEventListener(gameConsumer));
         addEventListener(new UnknownMsgEventListener(gameConsumer));
+        addEventListener(new UdpMsgEventListener(gameConsumer));
 
         addEventListener(new DisableAccessHttpEventListener());
         addEventListener(new ForbidAccessHttpEventListener());
@@ -76,7 +78,7 @@ public class EventManager implements Lifecycle {
                 GameEventListener eventListener = eventListeners.get(0);
                 eventListener.onEvent(event);
             }catch (Exception e){
-                e.printStackTrace();
+                Logs.DEFAULT_LOGGER.error("event {} make exception {}" ,event.getClass().getSimpleName(), ExceptionUtils.getStackTrace(e));
             }
             return;
         }
@@ -86,7 +88,7 @@ public class EventManager implements Lifecycle {
             try {
                 eventListener.onEvent(event);
             }catch (Exception e){
-                e.printStackTrace();
+                Logs.DEFAULT_LOGGER.error("event {} make exception {}" ,event.getClass().getSimpleName(), ExceptionUtils.getStackTrace(e));
             }
         }
 
