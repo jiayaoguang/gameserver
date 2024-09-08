@@ -21,8 +21,9 @@ Maven
 
 ## Features
 
+* The TCP communication format with the client is int (length of message body byte array+4) int (message ID) byte [] (message body byte array)
 * Message support for protobuf, JSON, custom data types, compression, encryption operations
-* Website HTTP request
+* support HTTP http tcp udp websocket protocol
 * Lightweight remote invocation, dependency injection
 * Do not restart updates
 * MySQL Object Relationship Mapping and Asynchronous Storage

@@ -20,8 +20,9 @@ Maven
 * 不同的consumer通信支持远程方法调用并异步返回，也可以通过发布事件的方法通信
 
 ## Features
-* 消息支持 protobuf、json、自定义 的数据类型，支持压缩、加密操作
-* 网页http 请求
+* 与客户端的tcp通信格式是 int(消息体字节数组长度+4) int(消息id) byte[](消息体字节数组)
+* 消息体格式支持json protobuf 自定义格式 protobuf、json、自定义 的数据类型，支持压缩、加密操作
+* 支持 http tcp udp websocket 网络协议
 * 轻量级远程调用、依赖注入
 * 不重启更新
 * mysql对象关系映射及异步存储
