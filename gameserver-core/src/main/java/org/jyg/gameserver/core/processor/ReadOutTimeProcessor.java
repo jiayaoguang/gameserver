@@ -13,7 +13,6 @@ import org.jyg.gameserver.core.util.Logs;
 public class ReadOutTimeProcessor extends ByteMsgObjProcessor<ReadIdleMsgObj> {
     public ReadOutTimeProcessor() {
         super(ReadIdleMsgObj.class);
-        setMsgInterceptor(new WhiteIpInterceptor());
     }
 
     @Override

@@ -5,14 +5,11 @@ import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
-import org.jyg.gameserver.core.constant.MsgIdConst;
 import org.jyg.gameserver.core.event.InnerChannelConnectEvent;
 import org.jyg.gameserver.core.event.InnerChannelDisconnectEvent;
-import org.jyg.gameserver.core.event.NormalMsgEvent;
 import org.jyg.gameserver.core.msg.PingByteMsg;
-import org.jyg.gameserver.core.msg.ReadIdleMsgObj;
-import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.GameContext;
+import org.jyg.gameserver.core.util.IpUtil;
 import org.jyg.gameserver.core.util.Logs;
 
 /**
@@ -23,7 +20,7 @@ public class NettyClientConnectManageHandler extends ChannelDuplexHandler {
     private final GameContext gameContext;
 
 
-    private static final ReadIdleMsgObj READ_IDLE_OBJ = new ReadIdleMsgObj();
+//    private static final ReadIdleMsgObj READ_IDLE_OBJ = new ReadIdleMsgObj();
 
     public static final PingByteMsg PING_MSG =  new PingByteMsg();
 
@@ -62,11 +59,12 @@ public class NettyClientConnectManageHandler extends ChannelDuplexHandler {
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent event = (IdleStateEvent) evt;
             if (event.state().equals(IdleState.ALL_IDLE)) {
-                final String remoteAddress = AllUtil.getChannelRemoteAddr(ctx.channel());
+                final String remoteAddress = IpUtil.getChannelRemoteAddr(ctx.channel());
                 Logs.DEFAULT_LOGGER.warn("NETTY CLIENT PIPELINE: IDLE outtime [{}]", remoteAddress);
             } else if (event.state().equals(IdleState.READER_IDLE)) {
-                NormalMsgEvent normalMsgEvent = new NormalMsgEvent(MsgIdConst.READ_OUTTIME  , READ_IDLE_OBJ , ctx.channel());
-                gameContext.getConsumerManager().publishEvent(gameContext.getMainConsumerId(),normalMsgEvent);
+                final String remoteAddress = IpUtil.getChannelRemoteAddr(ctx.channel());
+                Logs.DEFAULT_LOGGER.warn("NETTY CLIENT PIPELINE: read outtime [{}] , close it", remoteAddress);
+                ctx.channel().close();
             } else if (event.state().equals(IdleState.WRITER_IDLE)) {
 //                context.getConsumerManager().publicEventToDefault(EventType.BYTE_OBJ_MSG_COME, READ_IDLE_OBJ, ctx.channel(), MsgIdConst.WRITE_OUTTIME);
 
