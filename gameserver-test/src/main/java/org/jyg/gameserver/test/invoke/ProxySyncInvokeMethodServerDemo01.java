@@ -1,11 +1,11 @@
 package org.jyg.gameserver.test.invoke;
 
+import org.jyg.gameserver.core.annotaion.CallRemoteMethod;
 import org.jyg.gameserver.core.annotaion.RemoteMethod;
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.consumer.MpscQueueGameConsumer;
 import org.jyg.gameserver.core.event.ConsumerThreadStartEvent;
 import org.jyg.gameserver.core.event.listener.GameEventListener;
-import org.jyg.gameserver.core.exception.RequestTimeoutException;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
 import org.jyg.gameserver.core.util.Logs;
 
@@ -30,9 +30,7 @@ public class ProxySyncInvokeMethodServerDemo01
 
         bootstarp.getGameContext().getConsumerManager().addConsumer(beInvokeConsumer);
 
-        bootstarp.addHttpConnector(8080);
-
-        bootstarp.addTcpConnector(9000);
+        bootstarp.addTcpConnector(8091);
 
         bootstarp.getGameContext().getMainGameConsumer().getEventManager().addEventListener(new GameEventListener<ConsumerThreadStartEvent>(){
 
@@ -40,13 +38,7 @@ public class ProxySyncInvokeMethodServerDemo01
             public void onEvent(ConsumerThreadStartEvent consumerThreadStartEvent)  {
 
 
-                InvokeProxyManager invokeProxyManager = new InvokeProxyManager(consumerThreadStartEvent.getGameConsumer());
-                PlusManager beInvokeConsumerProxy = null;
-                try {
-                    beInvokeConsumerProxy = invokeProxyManager.createProxy(PlusManager.class , 10086);
-                } catch (IllegalAccessException | InstantiationException e) {
-                    e.printStackTrace();
-                }
+                PlusManagerProxy beInvokeConsumerProxy = consumerThreadStartEvent.getGameConsumer().getRemoteMethodInvokeManager().createRemoteMethodProxy(PlusManagerProxy.class);
 
                 //发起远程调用
                 int result = beInvokeConsumerProxy.plus(100,200);
@@ -82,7 +74,15 @@ public class ProxySyncInvokeMethodServerDemo01
 
 
 
+    public static interface PlusManagerProxy{
 
+        @CallRemoteMethod(uname="plus",targetConsumerId = 10086)
+        public int plus(int a,int b);
+
+        @CallRemoteMethod(uname="plusAndDouble",targetConsumerId = 10086)
+        public int plusAndDouble(int a,int b);
+
+    }
 
 
 
@@ -95,7 +95,7 @@ public class ProxySyncInvokeMethodServerDemo01
             return a+b;
         }
 
-        @RemoteMethod()
+        @RemoteMethod(uname="plusAndDouble")
         public int plusAndDouble(int a,int b){
             Logs.CONSUMER.info("plusAndDouble : {}", (a + b) * 2);
 

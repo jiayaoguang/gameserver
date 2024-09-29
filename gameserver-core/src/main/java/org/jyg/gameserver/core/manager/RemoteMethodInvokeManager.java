@@ -21,13 +21,16 @@ public class RemoteMethodInvokeManager implements Lifecycle{
 
     private InstanceManager instanceManager;
 
+    private ByteBuddyManager byteBuddyManager;
+
 
     private Map<String, InvokeMethodInfo> invokeMethodMap = new HashMap<>( 256,0.5f);
 
     private GameConsumer gameConsumer;
 
 
-    public RemoteMethodInvokeManager(GameConsumer gameConsumer) {
+    public RemoteMethodInvokeManager(ByteBuddyManager byteBuddyManager, GameConsumer gameConsumer) {
+        this.byteBuddyManager = byteBuddyManager;
         this.gameConsumer = gameConsumer;
         this.instanceManager = gameConsumer.getInstanceManager();
     }
@@ -147,6 +150,20 @@ public class RemoteMethodInvokeManager implements Lifecycle{
         this.invokeRemoteMethod(targetConsumerId, requestId , methodUname , methodParams );
         return new ConsumerFuture(requestId , (AbstractThreadQueueGameConsumer) gameConsumer).waitForResult();
 
+    }
+
+
+    /**
+     * 创建调用远程方法的代理类，
+     * TODO 带返回值的远程方法调用稳定性待测试
+     */
+    public <T> T createRemoteMethodProxy(Class<T> clazz){
+
+        try {
+            return byteBuddyManager.createProxy(clazz,new InvokeRemoteProxy(this));
+        } catch (IllegalAccessException | InstantiationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
