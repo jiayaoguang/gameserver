@@ -104,7 +104,7 @@ public abstract class GameConsumer {
         this.instanceManager.putInstance(this.eventManager);
 
         this.instanceManager.putInstance(new RouteManager());
-        this.instanceManager.putInstance(new ByteBuddyManager());
+        this.instanceManager.putInstance(new ProxyFactoryManager());
 
         this.instanceManager.putInstance(RemoteMethodInvokeManager.class);
 

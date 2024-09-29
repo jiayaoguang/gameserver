@@ -1,24 +1,19 @@
 package org.jyg.gameserver.core.manager;
 
 import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.asm.Advice;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.matcher.ElementMatchers;
-import org.jyg.gameserver.core.util.AllUtil;
-import org.jyg.gameserver.core.util.GameContext;
-
-import java.lang.reflect.Method;
 
 /**
  * create by jiayaoguang at 2021/5/22
  */
-public class ByteBuddyManager {
+public class ProxyFactoryManager {
 
 //    private final GameContext gameContext;
 
     ByteBuddy byteBuddy;
 
-    public ByteBuddyManager() {
+    public ProxyFactoryManager() {
         this.byteBuddy = new ByteBuddy();
     }
 

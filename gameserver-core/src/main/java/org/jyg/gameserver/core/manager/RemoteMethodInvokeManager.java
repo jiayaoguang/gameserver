@@ -21,7 +21,7 @@ public class RemoteMethodInvokeManager implements Lifecycle{
 
     private InstanceManager instanceManager;
 
-    private ByteBuddyManager byteBuddyManager;
+    private ProxyFactoryManager proxyFactoryManager;
 
 
     private Map<String, InvokeMethodInfo> invokeMethodMap = new HashMap<>( 256,0.5f);
@@ -29,8 +29,8 @@ public class RemoteMethodInvokeManager implements Lifecycle{
     private GameConsumer gameConsumer;
 
 
-    public RemoteMethodInvokeManager(ByteBuddyManager byteBuddyManager, GameConsumer gameConsumer) {
-        this.byteBuddyManager = byteBuddyManager;
+    public RemoteMethodInvokeManager(ProxyFactoryManager proxyFactoryManager, GameConsumer gameConsumer) {
+        this.proxyFactoryManager = proxyFactoryManager;
         this.gameConsumer = gameConsumer;
         this.instanceManager = gameConsumer.getInstanceManager();
     }
@@ -160,7 +160,7 @@ public class RemoteMethodInvokeManager implements Lifecycle{
     public <T> T createRemoteMethodProxy(Class<T> clazz){
 
         try {
-            return byteBuddyManager.createProxy(clazz,new InvokeRemoteProxy(this));
+            return proxyFactoryManager.createProxy(clazz,new InvokeRemoteProxy(this));
         } catch (IllegalAccessException | InstantiationException e) {
             throw new RuntimeException(e);
         }
