@@ -55,6 +55,11 @@ public class GameContext{
 
 
 
+    private int stringMsgNameCurrentIndex = 1000000;
+
+
+    private Int2ObjectMap<String> msgId2StringNameMap = new Int2ObjectOpenHashMap<>(1024,0.5f);
+
 
     private final boolean useEpoll;
 
@@ -129,6 +134,18 @@ public class GameContext{
     }
 
 
+
+    public void addMsg(int msgId ,  Class<?> msgClazz) {
+        if(MessageLite.class.isAssignableFrom(msgClazz)){
+            addMsgId2ProtoMapping(msgId , (Class<? extends MessageLite>) msgClazz);
+        }else if(ByteMsgObj.class.isAssignableFrom(msgClazz)){
+            addMsgId2MsgClassMapping(msgId , (Class<? extends ByteMsgObj>) msgClazz);
+        }else {
+            throw new IllegalArgumentException("msgClazz not msg type : " + msgClazz.getName());
+        }
+    }
+
+
     public void addMsgId2ProtoMapping(int msgId, Class<? extends MessageLite> protoClazz) {
         MessageLite defaultInstance = null;
         try {
@@ -146,7 +163,64 @@ public class GameContext{
     }
 
 
-//    @Deprecated
+    public void addMsg(String msgName,  MessageLite defaultInstance) {
+        int msgId = nextStringMsgNameIndex();
+        if(msgId2MsgCodecMap.containsKey(msgId)){
+            throw new RuntimeException("add string msg create msgId error : " + msgName);
+        }
+        addMsgId2ProtoMapping(msgId,defaultInstance);
+    }
+
+
+    public void addMsg(String msgName,  Class<?> msgClazz) {
+        int msgId = nextStringMsgNameIndex();
+        addMsg(msgName,msgId,msgClazz);
+    }
+
+    public void addMsg(String msgName , int msgId,  Class<?> msgClazz) {
+
+        if(msgId2MsgCodecMap.containsKey(msgId)){
+            throw new RuntimeException("add string msg create msgId error : " + msgName);
+        }
+
+
+        if(msgId2StringNameMap.containsValue(msgName)){
+            throw new RuntimeException("duplicate msg name : " + msgName);
+        }
+
+        msgId2StringNameMap.put(msgId,msgName);
+
+        try{
+
+            addMsg(msgId , msgClazz);
+
+        }catch (Exception e){
+            //添加失败，移除映射关系
+            if(getMsgCodec(msgId) == null){
+                msgId2StringNameMap.remove(msgId);
+            }
+            throw e;
+        }
+
+
+    }
+
+
+    public String getMsgNameById(int msgId){
+        return msgId2StringNameMap.get(msgId);
+    }
+
+
+    private int nextStringMsgNameIndex(){
+        stringMsgNameCurrentIndex++;
+        return stringMsgNameCurrentIndex;
+    }
+
+    public void setStringMsgNameCurrentIndex(int stringMsgNameCurrentIndex) {
+        this.stringMsgNameCurrentIndex = stringMsgNameCurrentIndex;
+    }
+
+    //    @Deprecated
 //    public void addMsgId2JsonMsgClassMapping(int msgId, Class<? extends ByteMsgObj> byteMsgObjClazz) {
 //        addMsgId2MsgClassMapping(msgId , byteMsgObjClazz);
 //    }
