@@ -11,7 +11,7 @@ import static java.lang.annotation.ElementType.METHOD;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value={  METHOD})
-public @interface CallRemoteMethod {
+public @interface InvokeRemoteMethod {
 
 
 

@@ -1,6 +1,6 @@
 package org.jyg.gameserver.test.invoke;
 
-import org.jyg.gameserver.core.annotaion.CallRemoteMethod;
+import org.jyg.gameserver.core.annotaion.InvokeRemoteMethod;
 import org.jyg.gameserver.core.annotaion.RemoteMethod;
 import org.jyg.gameserver.core.consumer.GameConsumer;
 import org.jyg.gameserver.core.consumer.MpscQueueGameConsumer;
@@ -76,10 +76,10 @@ public class ProxySyncInvokeMethodServerDemo01
 
     public static interface PlusManagerProxy{
 
-        @CallRemoteMethod(uname="plus",targetConsumerId = 10086)
+        @InvokeRemoteMethod(uname="plus",targetConsumerId = 10086)
         public int plus(int a,int b);
 
-        @CallRemoteMethod(uname="plusAndDouble",targetConsumerId = 10086)
+        @InvokeRemoteMethod(uname="plusAndDouble",targetConsumerId = 10086)
         public int plusAndDouble(int a,int b);
 
     }

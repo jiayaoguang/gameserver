@@ -4,8 +4,7 @@ import net.bytebuddy.implementation.bind.annotation.AllArguments;
 import net.bytebuddy.implementation.bind.annotation.Origin;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import org.apache.commons.lang3.StringUtils;
-import org.jyg.gameserver.core.annotaion.CallRemoteMethod;
-import org.jyg.gameserver.core.exception.RequestTimeoutException;
+import org.jyg.gameserver.core.annotaion.InvokeRemoteMethod;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.lang.reflect.Method;
@@ -36,15 +35,15 @@ public class InvokeRemoteProxy {
         Logs.DEFAULT_LOGGER.debug("intercept method .................... : {}" , method.getName());
 
 
-        CallRemoteMethod callRemoteMethod = method.getAnnotation(CallRemoteMethod.class);
-        if(callRemoteMethod == null){
+        InvokeRemoteMethod invokeRemoteMethod = method.getAnnotation(InvokeRemoteMethod.class);
+        if(invokeRemoteMethod == null){
             Logs.DEFAULT_LOGGER.debug("CallRemoteMethod not exist .................... : {}" , method.getName());
             return null;
         }
 
-        int targetConsumerId = callRemoteMethod.targetConsumerId();
+        int targetConsumerId = invokeRemoteMethod.targetConsumerId();
 
-        String methodUname = callRemoteMethod.uname();
+        String methodUname = invokeRemoteMethod.uname();
 
         if(StringUtils.isEmpty(methodUname)){
             Logs.DEFAULT_LOGGER.debug("CallRemoteMethod methodUname null .................... : {}" , method.getName());
@@ -56,11 +55,7 @@ public class InvokeRemoteProxy {
             return null;
         } else {
 
-            try {
-                return remoteMethodInvokeManager.invokeRemoteMethodAndWait(targetConsumerId, methodUname, arguments);
-            } catch (RequestTimeoutException e) {
-                throw new RuntimeException(e);
-            }
+            return remoteMethodInvokeManager.invokeRemoteMethodAndWait(targetConsumerId, methodUname, arguments);
 
         }
 
