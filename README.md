@@ -86,7 +86,46 @@ http例子代码:
         }
     }
 
-更多例子请在[test](https://github.com/jiayaoguang/gameserver/tree/master/gameserver-test/src/main/java/org/jyg/gameserver/test)包查看
+远程调用:
+    
+
+    //服务器处理逻辑
+    public static class PlusManager {
+        @RemoteMethod(uname = "plus")
+        public int plus(int a, int b) {
+            Logs.CONSUMER.info("plus : {}", (a + b));
+
+            return a + b;
+        }
+    }
+
+
+    //客户端代理接口
+    public static interface PlusManagerProxy {
+
+        @InvokeRemoteMethod(uname = "plus", targetConsumerId = 10086)
+        public InvokeRemoteResultFuture<Integer> plus(int a, int b);
+
+    }
+
+    //客户端创建调用代理
+    PlusManagerProxy beInvokeConsumerProxy = consumerThreadStartEvent.getGameConsumer().getRemoteMethodInvokeManager().createRemoteMethodProxy(PlusManagerProxy.class);
+
+    //客户端发起远程调用
+    InvokeRemoteResultFuture<Integer> resultFuture = beInvokeConsumerProxy.plus(100, 200);
+
+
+    //客户端设置获取结果后的处理逻辑
+    resultFuture.setResultHandler(new ResultHandler<Integer>() {
+        @Override
+        public void call(int eventId, Integer result) {
+            Logs.DEFAULT_LOGGER.info("get plus result : " + result);
+        }
+    });
+
+[远程调用完整代码](https://github.com/jiayaoguang/gameserver/blob/main/gameserver-test/src/main/java/org/jyg/gameserver/test/invoke/ProxyInvokeMethodFutureServerDemo01.java)
+
+更多例子请在 [test](https://github.com/jiayaoguang/gameserver/tree/main/gameserver-test/src/main/java/org/jyg/gameserver/test) 包查看
 
 ----------
 ## License

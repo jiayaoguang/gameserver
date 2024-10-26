@@ -89,7 +89,46 @@ http example:
         }
     }
 
-more example in [test](https://github.com/jiayaoguang/gameserver/tree/master/gameserver-test/src/main/java/org/jyg/gameserver/test)
+
+Remote call:
+
+    //Server processing logic
+    public static class PlusManager {
+        @RemoteMethod(uname = "plus")
+        public int plus(int a, int b) {
+            Logs.CONSUMER.info("plus : {}", (a + b));
+
+            return a + b;
+        }
+    }
+
+
+    //Client proxy interface
+    public static interface PlusManagerProxy {
+
+        @InvokeRemoteMethod(uname = "plus", targetConsumerId = 10086)
+        public InvokeRemoteResultFuture<Integer> plus(int a, int b);
+
+    }
+
+    //Client creates call proxy
+    PlusManagerProxy beInvokeConsumerProxy = consumerThreadStartEvent.getGameConsumer().getRemoteMethodInvokeManager().createRemoteMethodProxy(PlusManagerProxy.class);
+
+    //Client initiates remote call
+    InvokeRemoteResultFuture<Integer> resultFuture = beInvokeConsumerProxy.plus(100, 200);
+
+
+    //The processing logic after obtaining the results through client settings
+    resultFuture.setResultHandler(new ResultHandler<Integer>() {
+        @Override
+        public void call(int eventId, Integer result) {
+            Logs.DEFAULT_LOGGER.info("get plus result : " + result);
+        }
+    });
+
+[Remote call complete code]( https://github.com/jiayaoguang/gameserver/blob/main/gameserver-test/src/main/java/org/jyg/gameserver/test/invoke/ProxyInvokeMethodFutureServerDemo01.java )
+
+more example in [test](https://github.com/jiayaoguang/gameserver/tree/main/gameserver-test/src/main/java/org/jyg/gameserver/test)
 
 ----------
 ## License
