@@ -2,8 +2,8 @@ package org.jyg.gameserver.test;
 
 import cn.hutool.core.util.ZipUtil;
 import io.netty.util.internal.shaded.org.jctools.queues.MpscUnboundedArrayQueue;
+import io.reactivex.rxjava3.internal.queue.MpscLinkedQueue;
 import org.junit.Test;
-import org.jyg.gameserver.core.data.ServerConfig;
 import org.jyg.gameserver.core.util.AllUtil;
 import org.jyg.gameserver.core.util.ExecTimeUtil;
 import org.jyg.gameserver.core.util.IdUtil;
@@ -301,5 +301,62 @@ public class JygTest {
             AllUtil.println(field.getName() + " " + isSTatic);
         }
     }
+
+
+    @Test
+    public void testJc(){
+        MpscLinkedQueue blockingConsumerArrayQueue = new MpscLinkedQueue();
+
+
+
+        MpscUnboundedArrayQueue unboundedArrayQueue = new MpscUnboundedArrayQueue(1000000);
+
+
+        int times = 1000000;
+
+        ExecTimeUtil.exec("blockingConsumerArrayQueue.offer",()->{
+
+            for(int i =0;i<times;i++){
+                blockingConsumerArrayQueue.offer(i);
+            }
+
+        });
+
+
+        ExecTimeUtil.exec("unboundedArrayQueue.offer",()->{
+
+            for(int i =0;i<times;i++){
+                unboundedArrayQueue.offer(i);
+            }
+
+        });
+
+
+        ExecTimeUtil.exec("blockingConsumerArrayQueue.poll",()->{
+
+            for(int i =0;i<times;i++){
+                blockingConsumerArrayQueue.poll();
+            }
+
+        });
+
+
+        ExecTimeUtil.exec("unboundedArrayQueue.poll",()->{
+
+            for(int i =0;i<times;i++){
+                unboundedArrayQueue.poll();
+            }
+
+        });
+
+
+    }
+
+
+    @Test
+    public void testClazz(){
+        System.out.println(Map.class.isAssignableFrom(HashMap.class));
+    }
+
 
 }
