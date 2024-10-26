@@ -26,6 +26,9 @@ public class RemoteMethodInvokeManager implements Lifecycle{
 
     private Map<String, InvokeMethodInfo> invokeMethodMap = new HashMap<>( 256,0.5f);
 
+
+    private final Map<Class<?>, Object> methodProxyMap = new HashMap<>(256,0.5f);
+
     private GameConsumer gameConsumer;
 
 
@@ -157,10 +160,17 @@ public class RemoteMethodInvokeManager implements Lifecycle{
      * 创建调用远程方法的代理类，
      * TODO 带返回值的远程方法调用稳定性待测试
      */
-    public <T> T createRemoteMethodProxy(Class<T> clazz){
+    public <T> T getOrCreateRemoteMethodProxy(Class<T> clazz){
+
+        T t = (T) methodProxyMap.get(clazz);
+        if (t != null) {
+            return t;
+        }
 
         try {
-            return proxyFactoryManager.createProxy(clazz,new InvokeRemoteProxy(this));
+            t = proxyFactoryManager.createProxy(clazz,new InvokeRemoteProxy(this));
+            methodProxyMap.put(clazz,t);
+            return t;
         } catch (IllegalAccessException | InstantiationException e) {
             throw new RuntimeException(e);
         }

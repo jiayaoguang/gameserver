@@ -112,10 +112,10 @@ Remote call:
     }
 
     //Client creates call proxy
-    PlusManagerProxy beInvokeConsumerProxy = consumerThreadStartEvent.getGameConsumer().getRemoteMethodInvokeManager().createRemoteMethodProxy(PlusManagerProxy.class);
+    PlusManagerProxy plusManagerProxy = gameConsumer.getRemoteMethodInvokeManager().getOrCreateRemoteMethodProxy(PlusManagerProxy.class);
 
     //Client initiates remote call
-    InvokeRemoteResultFuture<Integer> resultFuture = beInvokeConsumerProxy.plus(100, 200);
+    InvokeRemoteResultFuture<Integer> resultFuture = plusManagerProxy.plus(100, 200);
 
 
     //The processing logic after obtaining the results through client settings

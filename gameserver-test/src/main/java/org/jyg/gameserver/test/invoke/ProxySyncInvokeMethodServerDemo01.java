@@ -38,7 +38,7 @@ public class ProxySyncInvokeMethodServerDemo01
             public void onEvent(ConsumerThreadStartEvent consumerThreadStartEvent)  {
 
 
-                PlusManagerProxy beInvokeConsumerProxy = consumerThreadStartEvent.getGameConsumer().getRemoteMethodInvokeManager().createRemoteMethodProxy(PlusManagerProxy.class);
+                PlusManagerProxy beInvokeConsumerProxy = consumerThreadStartEvent.getGameConsumer().getRemoteMethodInvokeManager().getOrCreateRemoteMethodProxy(PlusManagerProxy.class);
 
                 //发起远程调用
                 int result = beInvokeConsumerProxy.plus(100,200);

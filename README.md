@@ -109,10 +109,10 @@ http例子代码:
     }
 
     //客户端创建调用代理
-    PlusManagerProxy beInvokeConsumerProxy = consumerThreadStartEvent.getGameConsumer().getRemoteMethodInvokeManager().createRemoteMethodProxy(PlusManagerProxy.class);
+    PlusManagerProxy plusManagerProxy = gameConsumer.getRemoteMethodInvokeManager().getOrCreateRemoteMethodProxy(PlusManagerProxy.class);
 
     //客户端发起远程调用
-    InvokeRemoteResultFuture<Integer> resultFuture = beInvokeConsumerProxy.plus(100, 200);
+    InvokeRemoteResultFuture<Integer> resultFuture = plusManagerProxy.plus(100, 200);
 
 
     //客户端设置获取结果后的处理逻辑

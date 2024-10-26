@@ -40,17 +40,17 @@ public class ProxyInvokeMethodFutureServerDemo01 {
             public void onEvent(ConsumerThreadStartEvent consumerThreadStartEvent) {
 
 
-                PlusManagerProxy beInvokeConsumerProxy = consumerThreadStartEvent.getGameConsumer().getRemoteMethodInvokeManager().createRemoteMethodProxy(PlusManagerProxy.class);
+                PlusManagerProxy plusManagerProxy = consumerThreadStartEvent.getGameConsumer().getRemoteMethodInvokeManager().getOrCreateRemoteMethodProxy(PlusManagerProxy.class);
 
                 //发起远程调用
-                InvokeRemoteResultFuture<Integer> resultFuture = beInvokeConsumerProxy.plus(100, 200);
+                InvokeRemoteResultFuture<Integer> resultFuture = plusManagerProxy.plus(100, 200);
 
 
                 //设置获取结果后的处理逻辑
                 resultFuture.setResultHandler(new ResultHandler<Integer>() {
                     @Override
                     public void call(int eventId, Integer result) {
-                        Logs.DEFAULT_LOGGER.info("get plus result : " + result);
+                        Logs.DEFAULT_LOGGER.info("get plus result : {}" , result);
                     }
                 });
 
