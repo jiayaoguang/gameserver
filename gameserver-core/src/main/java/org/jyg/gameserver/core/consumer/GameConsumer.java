@@ -27,8 +27,6 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class GameConsumer {
 
-    public static final int DEFAULT_QUEUE_SIZE = 1024 * 256;
-
     public static final int MAP_DEFAULT_SIZE = 64;
     public static final float MAP_DEFAULT_LOADFACTOR = 0.5f;
 

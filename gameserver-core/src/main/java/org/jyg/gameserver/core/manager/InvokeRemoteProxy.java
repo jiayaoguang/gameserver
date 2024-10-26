@@ -53,6 +53,15 @@ public class InvokeRemoteProxy {
         if (method.getReturnType() == Void.class) {
             remoteMethodInvokeManager.invokeRemoteMethod(targetConsumerId, methodUname, arguments);
             return null;
+        }else if(method.getReturnType() == InvokeRemoteResultFuture.class){
+            /*
+             * 如果方法返回类型是InvokeRemoteResultFuture
+             * 收到远程处理后的结果后会调用InvokeRemoteResultFuture的ResultHandler
+             * 需要给返回值设置获取结果后的处理逻辑
+             */
+            InvokeRemoteResultFuture invokeRemoteResultFuture = new InvokeRemoteResultFuture();
+            remoteMethodInvokeManager.invokeRemoteMethod(targetConsumerId, methodUname, arguments , invokeRemoteResultFuture.getResultHandlerWrapper());
+            return invokeRemoteResultFuture;
         } else {
 
             return remoteMethodInvokeManager.invokeRemoteMethodAndWait(targetConsumerId, methodUname, arguments);
