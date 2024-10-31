@@ -67,8 +67,8 @@ public class ConfigUtil {
             }
             properties2Object(properties, object);
         } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
+            Logs.DEFAULT_LOGGER.error("make exception : " ,e);
+            throw new IllegalArgumentException(e);
         }
     }
 
