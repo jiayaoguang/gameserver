@@ -71,7 +71,7 @@ public class MsgMergeHandler extends MessageToByteEncoder<Object> {
 //                boolean isSuccess = channelFuture.isSuccess();
 //                AllUtil.println(" send ============== isSuccess : " + isSuccess + "  " + channel.isActive());
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs.DEFAULT_LOGGER.error("make exception : " ,e);
             }finally {
                 cacheBuf = null;
                 onceMergeMsgNum = 0;

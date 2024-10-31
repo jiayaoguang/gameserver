@@ -8,6 +8,8 @@ import org.jyg.gameserver.core.annotaion.InvokeRemoteMethod;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * create by jiayaoguang on 2024/9/29
@@ -32,21 +34,22 @@ public class InvokeRemoteProxy {
     @RuntimeType
     public Object intercept( @AllArguments Object[] arguments, @Origin Method method) throws Exception {
 
-        Logs.DEFAULT_LOGGER.debug("intercept method .................... : {}" , method.getName());
+//        Logs.DEFAULT_LOGGER.debug("intercept method .................... : {}" , method.getName());
 
 
-        InvokeRemoteMethod invokeRemoteMethod = method.getAnnotation(InvokeRemoteMethod.class);
+        InvokeRemoteMethod invokeRemoteMethod  = method.getAnnotation(InvokeRemoteMethod.class);
         if(invokeRemoteMethod == null){
-            Logs.DEFAULT_LOGGER.debug("CallRemoteMethod not exist .................... : {}" , method.getName());
+            Logs.DEFAULT_LOGGER.error("invoke RemoteMethod not exist .................... : {}" , method.getName());
             return null;
         }
+
 
         int targetConsumerId = invokeRemoteMethod.targetConsumerId();
 
         String methodUname = invokeRemoteMethod.uname();
 
         if(StringUtils.isEmpty(methodUname)){
-            Logs.DEFAULT_LOGGER.debug("CallRemoteMethod methodUname null .................... : {}" , method.getName());
+            Logs.DEFAULT_LOGGER.error("invoke RemoteMethod methodUname null .................... : {}" , method.getName());
             return null;
         }
 

@@ -89,7 +89,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpRequest> 
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-		cause.printStackTrace();
+		Logs.DEFAULT_LOGGER.error("make exception : " ,cause);
 		ctx.close();
 	}
 

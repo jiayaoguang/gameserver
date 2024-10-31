@@ -140,7 +140,7 @@ public class AllUtil {
         try {
             msgBytes = msgCodec.encode(byteMsgObj);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logs.DEFAULT_LOGGER.error("make exception : " ,e);
         }
 
         writeToBuf(eventId , buf , msgBytes);

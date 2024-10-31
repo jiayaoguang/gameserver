@@ -3,6 +3,8 @@ package org.jyg.gameserver.core.consumer;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.jyg.gameserver.core.util.Logs;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -93,7 +95,7 @@ public class RabbitMQPushGameConsumer extends MQPushGameConsumer {
 
 
         } catch (IOException | TimeoutException e) {
-            e.printStackTrace();
+            Logs.DEFAULT_LOGGER.error("RabbitMQPushGameConsumer {} createChannel make exception : {} " ,getId() , ExceptionUtils.getStackTrace(e));
         }
     }
 

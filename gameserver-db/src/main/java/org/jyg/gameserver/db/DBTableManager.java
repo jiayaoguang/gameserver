@@ -49,7 +49,7 @@ public class DBTableManager {
         try {
             tableInfo = createTableInfo(dbEntityClass);
         } catch (NoSuchFieldException | NoSuchMethodException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             throw new IllegalArgumentException(e);
         }
         tableInfoMap.put(dbEntityClass, tableInfo);

@@ -61,7 +61,7 @@ public class RocketMQPushGameConsumer extends MQPushGameConsumer {
         try {
             producer.start();
         } catch (MQClientException e) {
-            e.printStackTrace();
+            Logs.DEFAULT_LOGGER.error("make exception : " ,e);
         }
 
 

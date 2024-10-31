@@ -51,8 +51,8 @@ public class RocketMQConnector extends MQConnector {
         try {
             consumer.subscribe(topic, "*");
         } catch (MQClientException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
+//            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         /*
@@ -79,8 +79,7 @@ public class RocketMQConnector extends MQConnector {
         try {
             consumer.start();
         } catch (MQClientException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 

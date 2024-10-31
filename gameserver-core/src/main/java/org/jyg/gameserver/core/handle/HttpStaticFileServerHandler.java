@@ -267,7 +267,7 @@ public class HttpStaticFileServerHandler extends SimpleChannelInboundHandler<Ful
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-		cause.printStackTrace();
+		Logs.DEFAULT_LOGGER.error("make exception : " ,cause);
 		if (ctx.channel().isActive()) {
 			sendError(ctx, INTERNAL_SERVER_ERROR);
 		}

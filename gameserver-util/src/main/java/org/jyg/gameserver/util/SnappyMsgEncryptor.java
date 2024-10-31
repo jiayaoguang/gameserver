@@ -11,8 +11,7 @@ public class SnappyMsgEncryptor implements MsgEncryptor {
         try {
             return org.xerial.snappy.Snappy.compress(originBytes);
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 
@@ -21,8 +20,7 @@ public class SnappyMsgEncryptor implements MsgEncryptor {
         try {
             return org.xerial.snappy.Snappy.uncompress(encryptBytes);
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 }

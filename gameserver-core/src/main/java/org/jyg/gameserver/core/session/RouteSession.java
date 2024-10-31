@@ -3,6 +3,7 @@ package org.jyg.gameserver.core.session;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.route.RouteReplyMsg;
 import org.jyg.gameserver.core.util.GameContext;
+import org.jyg.gameserver.core.util.Logs;
 
 /**
  * create by jiayaoguang on 2022/8/7
@@ -36,13 +37,13 @@ public class RouteSession extends Session {
         int msgId = gameContext.getMsgIdByMsgObj(msgObj);
 
         if(msgId <= 0){
-            throw new IllegalArgumentException("unknow msg obj : " + msgObj);
+            throw new IllegalArgumentException("unknown msg obj : " + msgObj);
         }
         AbstractMsgCodec msgCodec = gameContext.getMsgCodec(msgId);
         try {
             routeReplyMsg.setData(msgCodec.encode(msgObj));
         } catch (Exception e) {
-            e.printStackTrace();
+            Logs.DEFAULT_LOGGER.error("make exception : " ,e);
         }
         routeReplyMsg.setMsgId(msgId);
         routeReplyMsg.setSessionId(getSessionId());

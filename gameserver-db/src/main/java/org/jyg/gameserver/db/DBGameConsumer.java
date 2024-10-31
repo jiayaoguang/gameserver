@@ -190,13 +190,13 @@ public class DBGameConsumer extends MpscQueueGameConsumer {
 
             SQLBuilder sqlBuilder = sqlTextMap.get(eventId);
             if (sqlBuilder == null) {
-                Logs.DEFAULT_LOGGER.error(" unknow db event type {} ", eventId);
+                Logs.DEFAULT_LOGGER.error(" unknown db event type {} ", eventId);
                 return;
             }
             try {
                 prepareSQLAndParams = sqlBuilder.createSqlInfo(sqlKeyWord, event.getData(), tableInfo, params);
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs.DEFAULT_LOGGER.error("make exception : " ,e);
                 if (needReturn) {
                     eventReturn(event.getFromConsumerId(), 100, event.getRequestId());
                 }

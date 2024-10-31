@@ -2,6 +2,7 @@ package org.jyg.gameserver.util.timer.cron;
 
 import org.jyg.gameserver.core.manager.Lifecycle;
 import org.jyg.gameserver.core.util.GameContext;
+import org.jyg.gameserver.core.util.Logs;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
@@ -79,7 +80,7 @@ public class GlobalCronManager implements Lifecycle {
         try {
             sched.shutdown(true);
         } catch (SchedulerException e) {
-            e.printStackTrace();
+            Logs.DEFAULT_LOGGER.error("make exception : " ,e);
         }
     }
 }

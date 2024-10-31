@@ -1,5 +1,7 @@
 package org.jyg.gameserver.core.msg;
 
+import org.jyg.gameserver.core.util.Logs;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -18,7 +20,7 @@ public class EmptyJsonMsgCodec extends AbstractByteMsgCodec<ByteMsgObj> {
         try {
             instance = byteMsgObjClazz.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
+            Logs.DEFAULT_LOGGER.error("make exception : " ,e);
             throw new RuntimeException(e);
         }
     }

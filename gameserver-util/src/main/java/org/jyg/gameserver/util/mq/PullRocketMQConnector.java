@@ -57,8 +57,7 @@ public class PullRocketMQConnector extends PullMQConnector {
         try {
             consumer.subscribe(topic, "*");
         } catch (MQClientException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
 
@@ -73,8 +72,7 @@ public class PullRocketMQConnector extends PullMQConnector {
         try {
             consumer.start();
         } catch (MQClientException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
         super.start();
     }

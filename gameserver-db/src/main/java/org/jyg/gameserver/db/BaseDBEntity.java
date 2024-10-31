@@ -1,5 +1,6 @@
 package org.jyg.gameserver.db;
 
+import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.db.anno.DBTableFieldIgnore;
 
 /**
@@ -49,7 +50,7 @@ public abstract class BaseDBEntity implements Cloneable {
         try {
             return super.clone();
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            Logs.DEFAULT_LOGGER.error("make exception : " ,e);
         }
         return null;
     }

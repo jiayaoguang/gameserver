@@ -13,14 +13,14 @@ public class LastCodec extends MessageToMessageCodec<Object, Object> {
 
 	@Override
 	protected void encode(ChannelHandlerContext ctx, Object msg, List<Object> out) throws Exception {
-		Logs.DEFAULT_LOGGER.info(msg.getClass().getName() + " >>>> msg write");
+		Logs.DEFAULT_LOGGER.info("msg [{}] write" , msg.getClass().getName());
 		out.add(msg);
 
 	}
 
 	@Override
 	protected void decode(ChannelHandlerContext ctx, Object msg, List<Object> out) throws Exception {
-		Logs.DEFAULT_LOGGER.info(msg.getClass().getName() + "<<<< msg read");
+		Logs.DEFAULT_LOGGER.info("msg [{}] read" , msg.getClass().getName());
 		out.add(msg);
 	}
 
@@ -31,7 +31,7 @@ public class LastCodec extends MessageToMessageCodec<Object, Object> {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-		cause.printStackTrace();
+		Logs.DEFAULT_LOGGER.error("make exception : " ,cause);
 		ctx.close();
 	}
 }

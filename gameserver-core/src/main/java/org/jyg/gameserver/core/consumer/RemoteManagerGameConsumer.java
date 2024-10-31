@@ -1,8 +1,10 @@
 package org.jyg.gameserver.core.consumer;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jyg.gameserver.core.data.RemoteConsumerInfo;
 import org.jyg.gameserver.core.startup.TcpClient;
 import org.jyg.gameserver.core.util.GameContext;
+import org.jyg.gameserver.core.util.Logs;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -61,7 +63,7 @@ public class RemoteManagerGameConsumer extends RemoteDelegateGameConsumer {
             try{
                 tcpClient.checkConnect();
             }catch (Exception e){
-                e.printStackTrace();
+                Logs.DEFAULT_LOGGER.error("make exception : " ,e);
             }
         }
 
@@ -71,7 +73,7 @@ public class RemoteManagerGameConsumer extends RemoteDelegateGameConsumer {
                 try{
                     tcpClient.checkConnect();
                 }catch (Exception e){
-                    e.printStackTrace();
+                    Logs.DEFAULT_LOGGER.error("make exception : " ,e);
                 }
 
             }

@@ -33,7 +33,7 @@ public class NettyClientConnectManageHandler extends ChannelDuplexHandler {
     public void channelActive(ChannelHandlerContext ctx) throws Exception { // (5)
         super.channelActive(ctx);
         Channel incoming = ctx.channel();
-        Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "在线");
+        Logs.DEFAULT_LOGGER.info("Client [{}] online" , incoming.remoteAddress() );
 
         InnerChannelConnectEvent innerChannelConnectEvent = new InnerChannelConnectEvent(incoming);
 
@@ -45,7 +45,7 @@ public class NettyClientConnectManageHandler extends ChannelDuplexHandler {
     public void channelInactive(ChannelHandlerContext ctx) throws Exception { // (6)
         super.channelInactive(ctx);
         Channel incoming = ctx.channel();
-        Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "掉线");
+        Logs.DEFAULT_LOGGER.info("Client [{}] offline" , incoming.remoteAddress() );
 
         InnerChannelDisconnectEvent innerChannelDisconnectEvent = new InnerChannelDisconnectEvent(incoming);
 
@@ -65,6 +65,7 @@ public class NettyClientConnectManageHandler extends ChannelDuplexHandler {
                 final String remoteAddress = IpUtil.getChannelRemoteAddr(ctx.channel());
                 Logs.DEFAULT_LOGGER.warn("NETTY CLIENT PIPELINE: read outtime [{}] , close it", remoteAddress);
                 ctx.channel().close();
+                return;
             } else if (event.state().equals(IdleState.WRITER_IDLE)) {
 //                context.getConsumerManager().publicEventToDefault(EventType.BYTE_OBJ_MSG_COME, READ_IDLE_OBJ, ctx.channel(), MsgIdConst.WRITE_OUTTIME);
 
@@ -82,9 +83,9 @@ public class NettyClientConnectManageHandler extends ChannelDuplexHandler {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
             throws Exception {
         Channel incoming = ctx.channel();
-        Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "异常");
+        Logs.DEFAULT_LOGGER.info("Client [{}] exceptionCaught, will close" , incoming.remoteAddress() );
         // 当出现异常就关闭连接
-        cause.printStackTrace();
+        Logs.DEFAULT_LOGGER.error("make exception : " ,cause);
         ctx.close();
 
     }

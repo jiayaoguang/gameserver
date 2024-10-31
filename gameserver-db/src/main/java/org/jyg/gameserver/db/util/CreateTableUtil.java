@@ -51,8 +51,7 @@ public class CreateTableUtil {
 
 
         }catch (Exception e){
-            Logs.DEFAULT_LOGGER.error("execute create table fail , sql {}",createSql);
-            e.printStackTrace();
+            Logs.DEFAULT_LOGGER.error("execute create table fail , make exception {} , sql {}",e.getMessage(),createSql);
         }
 
 

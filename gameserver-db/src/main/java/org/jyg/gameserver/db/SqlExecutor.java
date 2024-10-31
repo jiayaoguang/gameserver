@@ -45,7 +45,7 @@ public class SqlExecutor {
         try {
             isClose = connection.isClosed();
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            Logs.DEFAULT_LOGGER.error("make exception : " ,throwables);
             isClose = true;
         }
 
@@ -56,7 +56,7 @@ public class SqlExecutor {
                 connection = simpleDataSource.getConnection();
                 connection.setAutoCommit(true);
             } catch (SQLException throwables) {
-                throwables.printStackTrace();
+                Logs.DEFAULT_LOGGER.error("make exception : " ,throwables);
             }
         }
 
@@ -68,7 +68,7 @@ public class SqlExecutor {
             try {
                 connection.close();
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs.DEFAULT_LOGGER.error("make exception : " ,e);
             }
         }
     }

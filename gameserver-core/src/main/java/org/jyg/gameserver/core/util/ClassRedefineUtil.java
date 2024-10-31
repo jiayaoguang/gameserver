@@ -87,7 +87,7 @@ public class ClassRedefineUtil {
                 try {
                     dataInputStream.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Logs.DEFAULT_LOGGER.error("make exception : " ,e);
                 }
             }
         }

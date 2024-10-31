@@ -33,7 +33,7 @@ public class NettyConnectManageHandler extends ChannelDuplexHandler {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception { // (5)
         Channel incoming = ctx.channel();
-        Logs.DEFAULT_LOGGER.info("Client: {} online" , incoming.remoteAddress());
+        Logs.DEFAULT_LOGGER.info("Client [{}] online" , incoming.remoteAddress() );
 
         if(!gameContext.getServerConfig().isOpenConnect()){
             String ip = IpUtil.getChannelRemoteIp(incoming);
@@ -54,7 +54,7 @@ public class NettyConnectManageHandler extends ChannelDuplexHandler {
     public void channelInactive(ChannelHandlerContext ctx) throws Exception { // (6)
         Channel incoming = ctx.channel();
 
-        Logs.DEFAULT_LOGGER.info("Client: {} offline" , incoming.remoteAddress());
+        Logs.DEFAULT_LOGGER.info("Client [{}] offline" , incoming.remoteAddress() );
 
         gameContext.getConsumerManager().publishEvent(gameContext.getMainConsumerId(), new ChannelDisconnectEvent(ctx.channel()));
 
@@ -89,9 +89,9 @@ public class NettyConnectManageHandler extends ChannelDuplexHandler {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
             throws Exception {
         Channel incoming = ctx.channel();
-        Logs.DEFAULT_LOGGER.info("Client:" + incoming.remoteAddress() + "异常");
+        Logs.DEFAULT_LOGGER.info("Client [{}] exceptionCaught, will close" , incoming.remoteAddress() );
+        Logs.DEFAULT_LOGGER.error("make exception : " ,cause);
         // 当出现异常就关闭连接
-        cause.printStackTrace();
         ctx.close();
 
     }

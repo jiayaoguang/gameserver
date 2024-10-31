@@ -1,6 +1,7 @@
 package org.jyg.gameserver.core.consumer;
 
 import com.google.protobuf.MessageLite;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jyg.gameserver.core.event.ConsumerDefaultEvent;
 import org.jyg.gameserver.core.msg.AbstractMsgCodec;
 import org.jyg.gameserver.core.msg.ByteMsgObj;
@@ -72,7 +73,7 @@ public abstract class MQPushGameConsumer extends MpscQueueGameConsumer {
             pushMsg(pushMsgBytes);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Logs.DEFAULT_LOGGER.error("mqPushConsumer {} pushMsg {} make exception : {} " ,getId() ,msgId, ExceptionUtils.getStackTrace(e));
             return;
         }
 

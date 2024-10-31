@@ -3,6 +3,7 @@ package org.jyg.gameserver.example.ygserver;
 import org.jyg.gameserver.core.msg.EmptyMsgCodec;
 import org.jyg.gameserver.core.processor.ByteMsgObjProcessor;
 import org.jyg.gameserver.core.startup.GameServerBootstrap;
+import org.jyg.gameserver.core.util.Logs;
 import org.jyg.gameserver.db.ConsumerDBManager;
 import org.jyg.gameserver.db.DBGameConsumerGroup;
 import org.jyg.gameserver.example.ygserver.msg.*;
@@ -135,7 +136,7 @@ public class YgGameServer {
         try {
             bootstarp.start();
         }catch (Exception e){
-            e.printStackTrace();
+            Logs.DEFAULT_LOGGER.error("make exception : " ,e);
             bootstarp.stop();
         }
 

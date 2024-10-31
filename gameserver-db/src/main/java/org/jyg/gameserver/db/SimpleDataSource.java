@@ -1,6 +1,7 @@
 package org.jyg.gameserver.db;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jyg.gameserver.core.util.Logs;
 
 import javax.sql.DataSource;
 import java.io.Closeable;
@@ -24,7 +25,7 @@ public class SimpleDataSource implements DataSource , Closeable {
             try {
                 Class.forName(dbConfig.getDriverClassName());
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                Logs.DEFAULT_LOGGER.error("make exception : " ,e);
             }
         }
 

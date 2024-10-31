@@ -37,7 +37,7 @@ public class FTLLoader {
 	    		return bos.toByteArray();
 	    	}
     	}catch(Exception e) {
-    		e.printStackTrace();
+			Logs.DEFAULT_LOGGER.error("make exception : " ,e);
     	}
     	
     	return null;

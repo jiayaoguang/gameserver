@@ -3,6 +3,7 @@ package org.jyg.gameserver.core.consumer;
 import org.jyg.gameserver.core.data.EventData;
 import org.jyg.gameserver.core.event.ResultReturnEvent;
 import org.jyg.gameserver.core.exception.RequestTimeoutException;
+import org.jyg.gameserver.core.util.Logs;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
@@ -75,7 +76,7 @@ public class ConsumerFuture {
                     oneGameConsumer.getTimerManager().updateTimer();
                     oneGameConsumer.onReceiveEvent(object);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Logs.DEFAULT_LOGGER.error("waitForResult make exception : " , e);
                 }
                 if(object.getEvent() instanceof ResultReturnEvent){
                     ResultReturnEvent resultReturnEvent = (ResultReturnEvent)object.getEvent();

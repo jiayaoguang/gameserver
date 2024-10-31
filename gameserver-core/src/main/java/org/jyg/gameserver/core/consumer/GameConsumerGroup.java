@@ -3,6 +3,7 @@ package org.jyg.gameserver.core.consumer;
 import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jyg.gameserver.core.consumer.choose.ChildChooser;
 import org.jyg.gameserver.core.consumer.choose.ModChildChooser;
 import org.jyg.gameserver.core.data.EventData;
@@ -82,7 +83,7 @@ public class GameConsumerGroup<T extends GameConsumer> extends MpscQueueGameCons
             try {
                 childGameConsumer.stop();
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs.DEFAULT_LOGGER.error("GameConsumerGroup {} stop make exception : {} " ,getId(), ExceptionUtils.getStackTrace(e));
             }
         }
     }

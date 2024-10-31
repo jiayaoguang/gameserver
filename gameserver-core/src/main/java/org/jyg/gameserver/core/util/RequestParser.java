@@ -58,7 +58,7 @@ public class RequestParser {
 			} catch (HttpPostRequestDecoder.EndOfDataDecoderException e1) {
 				//ignore
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logs.DEFAULT_LOGGER.error("make exception : " ,e);
 			}finally {
 				decoder.destroy();
 			}

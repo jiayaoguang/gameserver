@@ -93,7 +93,7 @@ public abstract class QueueConsumerThread extends Thread {
             try {
                 gameConsumer.update();
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs.DEFAULT_LOGGER.error("QueueConsumerThread update make exception : " , e);
             }
 
 

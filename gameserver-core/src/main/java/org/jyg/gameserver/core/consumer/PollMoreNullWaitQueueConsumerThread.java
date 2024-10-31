@@ -1,5 +1,6 @@
 package org.jyg.gameserver.core.consumer;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jyg.gameserver.core.util.Logs;
 
 import java.util.concurrent.locks.LockSupport;
@@ -44,7 +45,7 @@ public class PollMoreNullWaitQueueConsumerThread extends QueueConsumerThread {
             try {
                 gameConsumer.update();
             } catch (Exception e) {
-                e.printStackTrace();
+                Logs.DEFAULT_LOGGER.error("PollMoreNullWaitQueueConsumerThread make exception : " , e);
             }
 
 

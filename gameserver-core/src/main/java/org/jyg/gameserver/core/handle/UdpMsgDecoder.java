@@ -23,8 +23,6 @@ public class UdpMsgDecoder extends SimpleChannelInboundHandler<DatagramPacket> {
     private final boolean printRequestMsg;
 
 
-    int random = RandomUtils.nextInt();
-
     public UdpMsgDecoder(GameContext gameContext) {
 
         this.gameContext = gameContext;
