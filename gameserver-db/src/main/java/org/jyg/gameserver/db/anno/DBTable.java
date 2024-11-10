@@ -26,6 +26,6 @@ public @interface DBTable {
      * 排序规则
      * @return 排序规则
      */
-    String collate() default "utf8mb4_general_ci";
+    String collate() default "utf8mb4_0900_ai_ci";
 
 }

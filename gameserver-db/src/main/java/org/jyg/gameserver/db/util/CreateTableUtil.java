@@ -109,7 +109,7 @@ public class CreateTableUtil {
         if (tableInfo.getDbTableAnno() != null && StringUtils.isNotEmpty(tableInfo.getDbTableAnno().comment())) {
             sqlSB.append(" COMMENT = '").append(tableInfo.getDbTableAnno().comment()).append("'\n");
         }
-        String collate = "utf8mb4_general_ci";
+        String collate = "utf8mb4_0900_ai_ci";
         if(tableInfo.getDbTableAnno() != null && StringUtils.isNotEmpty(tableInfo.getDbTableAnno().collate())){
             collate = tableInfo.getDbTableAnno().collate();
         }
